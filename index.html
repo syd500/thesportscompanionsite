@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sports Companion App</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:       #0B0D0F;
+      --ink-2:     #181B1F;
+      --ink-3:     #262A30;
+      --muted:     #8A8F98;
+      --line:      #2A2E35;
+      --signal:    #F2C230;  /* shield gold */
+      --signal-dim:#C99E1E;
+      --crimson:   #C83A2B;  /* shield red */
+      --navy:      #1B2A4A;  /* shield navy */
+      --amber:     #F2C230;
+      --sky:       #38BDF8;
+      --paper:     #F5F7FA;
+      --white:     #FFFFFF;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--ink);
+      color: var(--white);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 40px;
+      background: rgba(11,13,15,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800; font-size: 1.25rem; letter-spacing: 0.04em;
+      color: var(--white);
+      text-decoration: none;
+    }
+    .nav-logo img { height: 34px; width: auto; }
+    .nav-logo span { color: var(--signal); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      font-size: 0.85rem; font-weight: 500; color: var(--muted);
+      text-decoration: none; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-cta {
+      background: var(--signal); color: var(--ink);
+      font-weight: 600; font-size: 0.85rem;
+      padding: 10px 22px; border-radius: 6px;
+      text-decoration: none; transition: opacity 0.2s;
+    }
+    .nav-cta:hover { opacity: 0.85; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 120px 40px 80px;
+      position: relative; overflow: hidden;
+    }
+    .hero-grid {
+      position: absolute; inset: 0; opacity: 0.06;
+      background-image:
+        linear-gradient(var(--signal) 1px, transparent 1px),
+        linear-gradient(90deg, var(--signal) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+    .hero-glow {
+      position: absolute; top: -200px; right: -200px;
+      width: 700px; height: 700px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(242,194,48,0.10) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-shield {
+      position: absolute; top: 50%; right: 60px; transform: translateY(-50%);
+      width: 320px; opacity: 0.9;
+      filter: drop-shadow(0 30px 60px rgba(0,0,0,0.5));
+    }
+    @media (max-width: 1100px) { .hero-shield { display: none; } }
+    .hero-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.15em;
+      color: var(--signal); text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900; font-size: clamp(3.5rem, 9vw, 7.5rem);
+      line-height: 0.92; letter-spacing: -0.01em;
+      text-transform: uppercase; max-width: 900px;
+    }
+    .hero h1 em {
+      font-style: normal; color: var(--signal);
+      -webkit-text-stroke: 0px;
+    }
+    .hero h1 .outline {
+      -webkit-text-stroke: 2px var(--white);
+      color: transparent;
+    }
+    .hero-sub {
+      margin-top: 28px;
+      font-size: 1.1rem; color: var(--muted);
+      max-width: 520px; line-height: 1.65;
+    }
+    .hero-actions {
+      margin-top: 40px; display: flex; gap: 16px; flex-wrap: wrap;
+    }
+    .btn-primary {
+      background: var(--signal); color: var(--ink);
+      font-weight: 700; font-size: 0.95rem;
+      padding: 14px 32px; border-radius: 6px;
+      text-decoration: none; transition: opacity 0.2s;
+      display: inline-block;
+    }
+    .btn-primary:hover { opacity: 0.85; }
+    .btn-ghost {
+      border: 1px solid var(--line); color: var(--white);
+      font-weight: 500; font-size: 0.95rem;
+      padding: 14px 32px; border-radius: 6px;
+      text-decoration: none; transition: border-color 0.2s;
+      display: inline-block;
+    }
+    .btn-ghost:hover { border-color: var(--muted); }
+
+    .hero-stats {
+      margin-top: 72px;
+      display: flex; gap: 48px; flex-wrap: wrap;
+      border-top: 1px solid var(--line); padding-top: 36px;
+    }
+    .hero-stat-val {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 2.4rem; font-weight: 800; color: var(--white);
+    }
+    .hero-stat-val span { color: var(--signal); }
+    .hero-stat-label {
+      font-size: 0.78rem; color: var(--muted); letter-spacing: 0.06em;
+      text-transform: uppercase; margin-top: 4px;
+    }
+
+    /* ── TICKER ── */
+    .ticker {
+      background: var(--ink-2);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 14px 0; overflow: hidden;
+    }
+    .ticker-track {
+      display: flex; gap: 64px;
+      animation: ticker 28s linear infinite;
+      white-space: nowrap;
+    }
+    .ticker-item {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem; color: var(--muted);
+      display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+    }
+    .ticker-item .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--signal); display: inline-block;
+    }
+    .ticker-item strong { color: var(--white); }
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ── SECTION SHARED ── */
+    section { padding: 100px 40px; }
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.15em;
+      color: var(--signal); text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .section-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800; text-transform: uppercase; line-height: 1;
+      max-width: 700px; margin-bottom: 16px;
+    }
+    .section-body {
+      color: var(--muted); font-size: 1rem; line-height: 1.7;
+      max-width: 540px;
+    }
+
+    /* ── FEATURES ── */
+    #features { background: var(--ink); }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2px; margin-top: 64px;
+      border: 2px solid var(--line); border-radius: 12px; overflow: hidden;
+    }
+    .feature-card {
+      background: var(--ink-2);
+      padding: 36px 32px;
+      transition: background 0.2s;
+    }
+    .feature-card:hover { background: var(--ink-3); }
+    .feature-icon {
+      font-size: 1.8rem; margin-bottom: 18px;
+    }
+    .feature-card h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.4rem; font-weight: 700; text-transform: uppercase;
+      margin-bottom: 10px; letter-spacing: 0.02em;
+    }
+    .feature-card p {
+      font-size: 0.88rem; color: var(--muted); line-height: 1.65;
+    }
+    .feature-tag {
+      display: inline-block; margin-top: 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; padding: 4px 10px; border-radius: 4px;
+    }
+    .tag-new { background: rgba(0,229,160,0.12); color: var(--signal); }
+    .tag-live { background: rgba(245,158,11,0.12); color: var(--amber); }
+    .tag-pro  { background: rgba(56,189,248,0.12); color: var(--sky); }
+
+    /* ── INTERACTIVE FEATURES (Guess the Play / Pitch) ── */
+    #interactive { background: var(--ink-2); }
+    .interactive-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 2px;
+      margin-top: 64px; border-radius: 12px; overflow: hidden;
+      border: 2px solid var(--line);
+    }
+    .int-card {
+      padding: 52px 44px; position: relative; overflow: hidden;
+    }
+    .int-card.football { background: linear-gradient(135deg, #2A1410 0%, var(--ink-2) 100%); }
+    .int-card.baseball { background: linear-gradient(135deg, #1A1F2E 0%, var(--ink-2) 100%); }
+    .int-card-sport {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 7rem; font-weight: 900; text-transform: uppercase;
+      letter-spacing: -0.03em; line-height: 1;
+      opacity: 0.06; position: absolute; bottom: -10px; right: -10px;
+      pointer-events: none;
+    }
+    .int-card-emoji { font-size: 2.5rem; margin-bottom: 20px; }
+    .int-card h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 2rem; font-weight: 800; text-transform: uppercase;
+      margin-bottom: 12px; letter-spacing: 0.02em;
+    }
+    .int-card h3 span { color: var(--signal); }
+    .int-card p {
+      font-size: 0.9rem; color: var(--muted); line-height: 1.65;
+      max-width: 320px; position: relative;
+    }
+    .int-sample {
+      margin-top: 28px; position: relative;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--line); border-radius: 8px;
+      padding: 18px 20px;
+    }
+    .int-sample-q {
+      font-size: 0.8rem; color: var(--muted); margin-bottom: 10px;
+    }
+    .int-sample-options { display: flex; flex-direction: column; gap: 8px; }
+    .int-opt {
+      font-size: 0.82rem; padding: 8px 12px; border-radius: 5px;
+      border: 1px solid var(--line); color: var(--white);
+      cursor: default; transition: background 0.2s, border-color 0.2s;
+    }
+    .int-opt.correct { background: rgba(0,229,160,0.15); border-color: var(--signal); color: var(--signal); }
+    .int-opt.wrong   { background: rgba(255,60,60,0.08); border-color: #ff3c3c44; color: #ff8080; }
+
+    /* ── STATS SHOWCASE ── */
+    #stats { background: var(--ink); }
+    .stats-showcase {
+      margin-top: 64px;
+      display: grid; grid-template-columns: 1fr 1.6fr; gap: 2px;
+      border-radius: 12px; overflow: hidden; border: 2px solid var(--line);
+    }
+    .stats-left {
+      background: var(--ink-2); padding: 40px 36px;
+      display: flex; flex-direction: column; gap: 24px;
+    }
+    .stat-row {
+      display: flex; flex-direction: column; gap: 6px;
+      padding-bottom: 24px; border-bottom: 1px solid var(--line);
+    }
+    .stat-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .stat-row-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem; letter-spacing: 0.1em; color: var(--muted);
+      text-transform: uppercase;
+    }
+    .stat-row-val {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 2rem; font-weight: 800;
+    }
+    .stat-bar-track {
+      height: 4px; background: var(--line); border-radius: 2px; overflow: hidden;
+    }
+    .stat-bar-fill { height: 100%; background: var(--signal); border-radius: 2px; }
+    .stats-right { background: var(--ink-2); padding: 40px 36px; }
+    .stats-right h4 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.1rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.05em; color: var(--muted); margin-bottom: 20px;
+    }
+    .table-head, .table-row {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 8px; align-items: center;
+    }
+    .table-head {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem; letter-spacing: 0.1em; color: var(--muted);
+      text-transform: uppercase; padding-bottom: 12px;
+      border-bottom: 1px solid var(--line); margin-bottom: 12px;
+    }
+    .table-row {
+      padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 0.88rem;
+    }
+    .table-row .player { font-weight: 600; }
+    .table-row .val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem; color: var(--muted);
+    }
+    .table-row .highlight { color: var(--signal); font-weight: 600; }
+
+    /* ── CTA ── */
+    #cta {
+      background: var(--ink-2);
+      border-top: 1px solid var(--line);
+      text-align: center;
+    }
+    #cta .section-title { margin: 0 auto 16px; }
+    #cta .section-body  { margin: 0 auto 40px; }
+    .cta-form {
+      display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+    }
+    .cta-input {
+      background: var(--ink); border: 1px solid var(--line);
+      color: var(--white); font-size: 0.95rem;
+      padding: 14px 20px; border-radius: 6px; width: 280px;
+      outline: none; font-family: 'Inter', sans-serif;
+      transition: border-color 0.2s;
+    }
+    .cta-input::placeholder { color: var(--muted); }
+    .cta-input:focus { border-color: var(--signal); }
+    .cta-note {
+      margin-top: 16px; font-size: 0.78rem; color: var(--muted);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink); border-top: 1px solid var(--line);
+      padding: 40px 40px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 16px;
+    }
+    .footer-logo {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800; font-size: 1.1rem; letter-spacing: 0.04em;
+      color: var(--white);
+    }
+    .footer-logo span { color: var(--signal); }
+    .footer-copy { font-size: 0.78rem; color: var(--muted); }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a {
+      font-size: 0.78rem; color: var(--muted);
+      text-decoration: none; transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--white); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 16px 20px; }
+      .nav-links { display: none; }
+      .hero { padding: 100px 20px 60px; }
+      section { padding: 72px 20px; }
+      .interactive-grid { grid-template-columns: 1fr; }
+      .stats-showcase { grid-template-columns: 1fr; }
+      footer { flex-direction: column; align-items: flex-start; padding: 32px 20px; }
+      .features-grid { grid-template-columns: 1fr; }
+      .int-card { padding: 36px 28px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ticker-track { animation: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo"><img src="assets/logo.png" alt="SSC Shield" />Sports<span>Companion</span></a>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#interactive">Interactive</a></li>
+    <li><a href="#stats">Analytics</a></li>
+  </ul>
+  <a href="#cta" class="nav-cta">Get Early Access</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <img src="assets/logo.png" alt="" class="hero-shield" aria-hidden="true" />
+  <div class="hero-eyebrow">// The analytics platform built for real fans</div>
+  <h1>Sports<br /><em>Deeper</em><br /><span class="outline">Than Ever</span></h1>
+  <p class="hero-sub">
+    Stats that go beyond the box score. Predict plays before they happen. 
+    SportsCompanion gives you the data layer the broadcast never shows you.
+  </p>
+  <div class="hero-actions">
+    <a href="#cta" class="btn-primary">Get Early Access</a>
+    <a href="#features" class="btn-ghost">See Features</a>
+  </div>
+  <div class="hero-stats">
+    <div>
+      <div class="hero-stat-val">40<span>+</span></div>
+      <div class="hero-stat-label">Advanced Stat Categories</div>
+    </div>
+    <div>
+      <div class="hero-stat-val">NFL <span>&</span> MLB</div>
+      <div class="hero-stat-label">Launch Sports</div>
+    </div>
+    <div>
+      <div class="hero-stat-val">Live<span>.</span></div>
+      <div class="hero-stat-label">Real-Time Data</div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <span class="ticker-item"><span class="dot"></span> <strong>Mahomes</strong> — Pass Pressure Rate: 31.2%</span>
+    <span class="ticker-item"><span class="dot"></span> <strong>Ohtani</strong> — Spin Rate (Fastball): 2,312 RPM</span>
+    <span class="ticker-item"><span class="dot"></span> <strong>McCaffrey</strong> — Route Win Rate: 78.4%</span>
+    <span class="ticker-item"><span class="dot"></span> <strong>Cole</strong> — xFIP: 2.91 · K/9: 11.8</span>
+    <span class="ticker-item"><span class="dot"></span> <strong>Jefferson</strong> — Separation at Snap: 2.4 yds</span>
+    <span class="ticker-item"><span class="dot"></span> <strong>Acuña</strong> — Sprint Speed: 30.1 ft/s</span>
+    <!-- Duplicate for seamless loop -->
+    <span class="ticker-item"><span class="dot"></span> <strong>Mahomes</strong> — Pass Pressure Rate: 31.2%</span>
+    <span class="ticker-item"><span class="dot"></span> <strong>Ohtani</strong> — Spin Rate (Fastball): 2,312 RPM</span>
+    <span class="ticker-item"><span class="dot"></span> <strong>McCaffrey</strong> — Route Win Rate: 78.4%</span>
+    <span class="ticker-item"><span class="dot"></span> <strong>Cole</strong> — xFIP: 2.91 · K/9: 11.8</span>
+    <span class="ticker-item"><span class="dot"></span> <strong>Jefferson</strong> — Separation at Snap: 2.4 yds</span>
+    <span class="ticker-item"><span class="dot"></span> <strong>Acuña</strong> — Sprint Speed: 30.1 ft/s</span>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="section-label">// What's inside</div>
+  <h2 class="section-title">Everything the broadcast skips</h2>
+  <p class="section-body">We surface the numbers that actually explain what's happening on the field — not just what already happened.</p>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">📊</div>
+      <h3>Next-Gen Stats</h3>
+      <p>Tracking data, expected values, pressure rates, route grades, spin metrics — the numbers coaches actually use.</p>
+      <span class="feature-tag tag-pro">Deep Analytics</span>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⚡</div>
+      <h3>Live Data Feed</h3>
+      <p>Real-time updates as plays happen. Stats refresh mid-drive, mid-inning — not just at the final whistle.</p>
+      <span class="feature-tag tag-live">Live</span>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔮</div>
+      <h3>Guess the Play</h3>
+      <p>Before the snap, predict the call: run, pass, blitz, screen. Earn points, track your prediction accuracy over time.</p>
+      <span class="feature-tag tag-new">New · NFL</span>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⚾</div>
+      <h3>Guess the Pitch</h3>
+      <p>Every at-bat, guess the pitch type and location before it's thrown. See how your baseball IQ stacks up.</p>
+      <span class="feature-tag tag-new">New · MLB</span>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📈</div>
+      <h3>Player Trends</h3>
+      <p>Visualize rolling averages, hot/cold streaks, and situational splits across any date range you choose.</p>
+      <span class="feature-tag tag-pro">Analytics</span>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🏆</div>
+      <h3>Prediction Leaderboards</h3>
+      <p>Compete against other fans on weekly prediction accuracy. See where your sports knowledge ranks globally.</p>
+      <span class="feature-tag tag-new">New</span>
+    </div>
+  </div>
+</section>
+
+<!-- INTERACTIVE -->
+<section id="interactive">
+  <div class="section-label">// Signature features</div>
+  <h2 class="section-title">Play along in real time</h2>
+  <p class="section-body">These aren't fantasy tools or betting aids — they're pure sports IQ challenges built for the obsessive fan.</p>
+
+  <div class="interactive-grid">
+    <div class="int-card football">
+      <div class="int-card-sport">NFL</div>
+      <div class="int-card-emoji">🏈</div>
+      <h3>Guess the <span>Play</span></h3>
+      <p>3rd & 6 from the opponent's 22. The defense is showing two-high. What does the offense call? Lock in your prediction before the snap.</p>
+      <div class="int-sample">
+        <div class="int-sample-q">2nd & 8 · Own 35 · Q3 · Down by 4</div>
+        <div class="int-sample-options">
+          <div class="int-opt correct">✓ Short Pass — Crossing Route</div>
+          <div class="int-opt">Outside Zone Run</div>
+          <div class="int-opt wrong">✗ Deep Shot</div>
+          <div class="int-opt">QB Draw</div>
+        </div>
+      </div>
+    </div>
+    <div class="int-card baseball">
+      <div class="int-card-sport">MLB</div>
+      <div class="int-card-emoji">⚾</div>
+      <h3>Guess the <span>Pitch</span></h3>
+      <p>Full count, runner on second, left-hand batter. The pitcher loves his slider in this spot. Do you trust the data or your gut?</p>
+      <div class="int-sample">
+        <div class="int-sample-q">0-2 Count · Runner on 1st · 7th Inning</div>
+        <div class="int-sample-options">
+          <div class="int-opt">4-Seam Fastball — Up &amp; In</div>
+          <div class="int-opt correct">✓ Slider — Down &amp; Away</div>
+          <div class="int-opt wrong">✗ Changeup — Middle</div>
+          <div class="int-opt">Curveball — Bounce</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS SHOWCASE -->
+<section id="stats">
+  <div class="section-label">// Advanced analytics</div>
+  <h2 class="section-title">Stats that actually mean something</h2>
+  <p class="section-body">We go beyond yards and ERA. Every metric is explained in plain English so you know exactly what you're looking at.</p>
+
+  <div class="stats-showcase">
+    <div class="stats-left">
+      <div class="stat-row">
+        <div class="stat-row-label">Completion % Above Expected</div>
+        <div class="stat-row-val" style="color: var(--signal)">+8.4%</div>
+        <div class="stat-bar-track"><div class="stat-bar-fill" style="width: 84%"></div></div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-row-label">Pressure-to-Sack Rate</div>
+        <div class="stat-row-val">22.1%</div>
+        <div class="stat-bar-track"><div class="stat-bar-fill" style="width: 62%"></div></div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-row-label">xFIP (Expected FIP)</div>
+        <div class="stat-row-val" style="color: var(--signal)">2.88</div>
+        <div class="stat-bar-track"><div class="stat-bar-fill" style="width: 91%"></div></div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-row-label">Route Win Rate</div>
+        <div class="stat-row-val">76.3%</div>
+        <div class="stat-bar-track"><div class="stat-bar-fill" style="width: 76%"></div></div>
+      </div>
+    </div>
+    <div class="stats-right">
+      <h4>NFL QB Pressure Performance — Week 14</h4>
+      <div class="table-head">
+        <span>Player</span>
+        <span>Under Pressure</span>
+        <span>Passer Rtg</span>
+        <span>EPA/Play</span>
+      </div>
+      <div class="table-row">
+        <span class="player">P. Mahomes</span>
+        <span class="val">34%</span>
+        <span class="val highlight">112.4</span>
+        <span class="val highlight">+0.38</span>
+      </div>
+      <div class="table-row">
+        <span class="player">J. Burrow</span>
+        <span class="val">41%</span>
+        <span class="val">98.1</span>
+        <span class="val">+0.21</span>
+      </div>
+      <div class="table-row">
+        <span class="player">J. Love</span>
+        <span class="val">28%</span>
+        <span class="val">104.7</span>
+        <span class="val">+0.29</span>
+      </div>
+      <div class="table-row">
+        <span class="player">L. Jackson</span>
+        <span class="val">22%</span>
+        <span class="val highlight">119.2</span>
+        <span class="val highlight">+0.44</span>
+      </div>
+      <div class="table-row">
+        <span class="player">C. Stroud</span>
+        <span class="val">37%</span>
+        <span class="val">91.3</span>
+        <span class="val">+0.14</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="section-label">// Early access</div>
+  <h2 class="section-title">Be first in the game</h2>
+  <p class="section-body">Join the waitlist and get priority access when we launch — plus a free month of premium analytics.</p>
+  <div class="cta-form">
+    <input class="cta-input" type="email" placeholder="your@email.com" />
+    <a href="#" class="btn-primary">Join Waitlist</a>
+  </div>
+  <p class="cta-note">No spam. No credit card. Just early access.</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo" style="display:flex;align-items:center;gap:8px;">
+    <img src="assets/logo.png" alt="" style="height:24px;" />
+    Sports<span>Companion</span>
+  </div>
+  <div class="footer-links">
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+    <a href="#">Contact</a>
+  </div>
+  <div class="footer-copy">© 2026 SportsCompanion. All rights reserved.</div>
+</footer>
+
+</body>
+</html>
