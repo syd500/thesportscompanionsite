@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>More Sports — The Sports Companion</title>
+  <link rel="icon" type="image/png" href="/assets/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}:root{--ink:#0B0D0F;--ink-2:#181B1F;--ink-3:#262A30;--muted:#8A8F98;--line:#2A2E35;--gold:#F2C230;--white:#FFFFFF}
+    html{scroll-behavior:smooth}body{font-family:'Inter',sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+    nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;background:rgba(11,13,15,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+    .nav-brand{display:flex;align-items:center;gap:8px;padding:0 20px;text-decoration:none;border-right:1px solid var(--line);height:56px;flex-shrink:0}.nav-brand img{height:28px}.nav-brand span{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;letter-spacing:.04em;color:var(--white);white-space:nowrap}.nav-brand span em{font-style:normal;color:var(--gold)}
+    .nav-leagues{display:flex;align-items:center;list-style:none;overflow-x:auto;flex:1;scrollbar-width:none}.nav-leagues::-webkit-scrollbar{display:none}.nav-leagues a{display:flex;align-items:center;height:56px;padding:0 18px;font-size:.82rem;font-weight:600;color:var(--muted);text-decoration:none;border-right:1px solid var(--line);transition:color .2s,background .2s;white-space:nowrap}.nav-leagues a:hover{color:var(--white);background:var(--ink-2)}.nav-leagues a.active{color:var(--gold);background:var(--ink-2);border-bottom:2px solid var(--gold)}
+    .nav-cta{margin-left:auto;padding:0 20px;height:56px;display:flex;align-items:center;flex-shrink:0}.nav-cta a{background:var(--gold);color:var(--ink);font-weight:700;font-size:.8rem;padding:8px 18px;border-radius:5px;text-decoration:none}
+    .page-header{padding:40px 32px 32px;border-bottom:1px solid var(--line);background:var(--ink-2)}
+    .page-header-label{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;letter-spacing:.15em;color:var(--gold);text-transform:uppercase;margin-bottom:10px}
+    .page-header h1{font-family:'Barlow Condensed',sans-serif;font-size:2.4rem;font-weight:900;text-transform:uppercase}
+    .page-header p{color:var(--muted);font-size:.9rem;line-height:1.6;margin-top:8px;max-width:500px}
+    .leagues-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;padding:32px}
+    .league-card{background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:28px 24px;transition:all .2s;cursor:pointer}
+    .league-card:hover{border-color:var(--gold);transform:translateY(-2px)}
+    .lc-icon{font-size:2.4rem;margin-bottom:16px}
+    .lc-title{font-family:'Barlow Condensed',sans-serif;font-size:1.6rem;font-weight:800;text-transform:uppercase;margin-bottom:8px}
+    .lc-title span{color:var(--gold)}
+    .lc-desc{font-size:.85rem;color:var(--muted);line-height:1.6;margin-bottom:16px}
+    .lc-features{display:flex;flex-wrap:wrap;gap:6px}
+    .lc-feat{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:4px;background:var(--ink-3);color:var(--muted);border:1px solid var(--line)}
+    .lc-feat.gold{background:rgba(242,194,48,.1);color:var(--gold);border-color:rgba(242,194,48,.3)}
+    footer{background:var(--ink);border-top:1px solid var(--line);padding:28px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-top:0}.ft-brand{display:flex;align-items:center;gap:8px}.ft-brand img{height:22px}.ft-brand span{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem}.ft-brand span em{font-style:normal;color:var(--gold)}.ft-copy{font-size:.75rem;color:var(--muted)}.ft-links{display:flex;gap:18px}.ft-links a{font-size:.75rem;color:var(--muted);text-decoration:none}.ft-links a:hover{color:var(--white)}
+    @media(max-width:768px){.leagues-grid{padding:20px 16px}.page-header{padding:28px 16px}.nav-brand span{display:none}}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/index.html" class="nav-brand"><img src="/assets/logo.png" alt="SSC" /><span>The Sports <em>Companion</em></span></a>
+  <ul class="nav-leagues">
+    <li><a href="/nfl/index.html">🏈 NFL</a></li><li><a href="/nfl/index.html">🏈 NCAAF</a></li>
+    <li><a href="/nba/index.html">🏀 NBA</a></li><li><a href="/nba/index.html">🏀 NCAAM</a></li>
+    <li><a href="/mlb/index.html">⚾ MLB</a></li>
+    <li><a href="/more/index.html" class="active">🏒 NHL</a></li>
+    <li><a href="/more/index.html" class="active">⚽ MLS</a></li>
+    <li><a href="/more/index.html" class="active">⛳ PGA</a></li>
+  </ul>
+  <div class="nav-cta"><a href="/index.html#cta">Get Early Access</a></div>
+</nav>
+
+<div class="page-header">
+  <div class="page-header-label">// More Sports</div>
+  <h1>All Leagues</h1>
+  <p>NHL, MLS, NCAA Football, NCAA Basketball, and PGA Golf — full stats, scores, and fantasy tools across every league.</p>
+</div>
+
+<div class="leagues-grid">
+  <div class="league-card">
+    <div class="lc-icon">🏒</div>
+    <div class="lc-title">NHL <span>Hockey</span></div>
+    <div class="lc-desc">Full NHL scores, standings, player stats and fantasy hockey tools. Track goals, assists, save percentages, and advanced metrics.</div>
+    <div class="lc-features">
+      <span class="lc-feat">Scores</span><span class="lc-feat">Standings</span><span class="lc-feat">Player Stats</span>
+      <span class="lc-feat gold">Fantasy</span>
+    </div>
+  </div>
+  <div class="league-card">
+    <div class="lc-icon">⚽</div>
+    <div class="lc-title">MLS <span>Soccer</span></div>
+    <div class="lc-desc">MLS scores, standings, player stats and team data across the entire league. Track goals, assists, expected goals, and defensive metrics.</div>
+    <div class="lc-features">
+      <span class="lc-feat">Scores</span><span class="lc-feat">Standings</span><span class="lc-feat">Player Stats</span>
+      <span class="lc-feat">xG Metrics</span>
+    </div>
+  </div>
+  <div class="league-card">
+    <div class="lc-icon">🏈</div>
+    <div class="lc-title">NCAAF <span>Football</span></div>
+    <div class="lc-desc">NCAA Football scores, rankings, and advanced stats. Includes Guess the Play using real college play-by-play data.</div>
+    <div class="lc-features">
+      <span class="lc-feat">Scores</span><span class="lc-feat">Rankings</span><span class="lc-feat">Player Stats</span>
+      <span class="lc-feat gold">Guess the Play</span>
+    </div>
+  </div>
+  <div class="league-card">
+    <div class="lc-icon">🏀</div>
+    <div class="lc-title">NCAAM <span>Basketball</span></div>
+    <div class="lc-desc">NCAA Men's Basketball including comprehensive stats, bracket tools, conference strength analysis, and rankings.</div>
+    <div class="lc-features">
+      <span class="lc-feat">Scores</span><span class="lc-feat">Bracket</span><span class="lc-feat">Conference Strength</span>
+      <span class="lc-feat gold">Rankings</span>
+    </div>
+  </div>
+  <div class="league-card">
+    <div class="lc-icon">🏀</div>
+    <div class="lc-title">NCAAW <span>Basketball</span></div>
+    <div class="lc-desc">NCAA Women's Basketball scores, standings and player stats.</div>
+    <div class="lc-features">
+      <span class="lc-feat">Scores</span><span class="lc-feat">Standings</span><span class="lc-feat">Stats</span>
+    </div>
+  </div>
+  <div class="league-card">
+    <div class="lc-icon">⛳</div>
+    <div class="lc-title">PGA <span>Golf</span></div>
+    <div class="lc-desc">PGA Tour leaderboards, player stats, course data, and tournament schedules. Track strokes gained, driving distance, and putting averages.</div>
+    <div class="lc-features">
+      <span class="lc-feat">Leaderboards</span><span class="lc-feat">Player Stats</span>
+      <span class="lc-feat">Strokes Gained</span>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="ft-brand"><img src="/assets/logo.png" alt="SSC" /><span>The Sports <em>Companion</em></span></div>
+  <div class="ft-links"><a href="/index.html">Home</a><a href="/nfl/index.html">NFL</a><a href="/mlb/index.html">MLB</a><a href="/nba/index.html">NBA</a></div>
+  <div class="ft-copy">© 2026 The Sports Companion</div>
+</footer>
+</body></html>

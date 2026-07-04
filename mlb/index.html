@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MLB — The Sports Companion</title>
+  <link rel="icon" type="image/png" href="/assets/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--ink:#0B0D0F;--ink-2:#181B1F;--ink-3:#262A30;--muted:#8A8F98;--line:#2A2E35;--gold:#F2C230;--white:#FFFFFF}
+    html{scroll-behavior:smooth}body{font-family:'Inter',sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+    nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;background:rgba(11,13,15,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+    .nav-brand{display:flex;align-items:center;gap:8px;padding:0 20px;text-decoration:none;border-right:1px solid var(--line);height:56px;flex-shrink:0}
+    .nav-brand img{height:28px}.nav-brand span{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;letter-spacing:.04em;color:var(--white);white-space:nowrap}
+    .nav-brand span em{font-style:normal;color:var(--gold)}
+    .nav-leagues{display:flex;align-items:center;list-style:none;overflow-x:auto;flex:1;scrollbar-width:none}
+    .nav-leagues::-webkit-scrollbar{display:none}
+    .nav-leagues a{display:flex;align-items:center;height:56px;padding:0 18px;font-size:.82rem;font-weight:600;color:var(--muted);text-decoration:none;border-right:1px solid var(--line);transition:color .2s,background .2s;white-space:nowrap}
+    .nav-leagues a:hover{color:var(--white);background:var(--ink-2)}.nav-leagues a.active{color:var(--gold);background:var(--ink-2);border-bottom:2px solid var(--gold)}
+    .nav-cta{margin-left:auto;padding:0 20px;height:56px;display:flex;align-items:center;flex-shrink:0}
+    .nav-cta a{background:var(--gold);color:var(--ink);font-weight:700;font-size:.8rem;padding:8px 18px;border-radius:5px;text-decoration:none}
+    .league-banner{background:var(--ink-2);border-bottom:1px solid var(--line);padding:24px 32px 0}
+    .league-banner-top{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+    .league-banner-top h1{font-family:'Barlow Condensed',sans-serif;font-size:2.2rem;font-weight:900;text-transform:uppercase;letter-spacing:.04em}
+    .league-badge{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:4px;background:rgba(242,194,48,.12);color:var(--gold);border:1px solid rgba(242,194,48,.3)}
+    .tab-bar{display:flex;gap:0;border-top:1px solid var(--line)}
+    .tab-btn{padding:12px 22px;font-size:.82rem;font-weight:600;color:var(--muted);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;transition:all .2s;white-space:nowrap}
+    .tab-btn:hover{color:var(--white)}.tab-btn.active{color:var(--gold);border-bottom-color:var(--gold)}
+    .tab-panel{display:none;padding:28px 32px}.tab-panel.active{display:block}
+    .sec-label{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;letter-spacing:.15em;color:var(--gold);text-transform:uppercase;margin-bottom:10px}
+    .sec-title{font-family:'Barlow Condensed',sans-serif;font-size:1.6rem;font-weight:800;text-transform:uppercase;margin-bottom:6px}
+    .sec-body{color:var(--muted);font-size:.88rem;line-height:1.6;margin-bottom:20px}
+    .sub-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+    .sub-tab{background:var(--ink-2);border:1px solid var(--line);color:var(--muted);font-size:.78rem;font-weight:500;padding:7px 14px;border-radius:5px;cursor:pointer;transition:all .2s}
+    .sub-tab:hover{border-color:var(--gold);color:var(--white)}.sub-tab.active{background:var(--gold);border-color:var(--gold);color:var(--ink);font-weight:700}
+    .sub-panel{display:none}.sub-panel.active{display:block}
+    .tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+    .tbl{width:100%;border-collapse:collapse;font-size:.83rem}
+    .tbl thead tr{background:var(--ink-3);border-bottom:1px solid var(--line)}
+    .tbl th{font-family:'JetBrains Mono',monospace;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:11px 13px;text-align:left;white-space:nowrap}
+    .tbl tbody tr{border-bottom:1px solid rgba(255,255,255,.04);transition:background .15s}.tbl tbody tr:hover{background:var(--ink-2)}.tbl tbody tr:last-child{border-bottom:none}
+    .tbl td{padding:10px 13px;color:var(--muted);white-space:nowrap}.tbl td.pl{color:var(--white);font-weight:600}.tbl td.hi{color:var(--gold);font-weight:700}.tbl td.ng{color:#FF6B6B}
+    .ovr{display:inline-block;font-family:'Barlow Condensed',sans-serif;font-size:.88rem;font-weight:800;padding:2px 7px;border-radius:4px}
+    .ovr-hi{background:rgba(242,194,48,.2);color:var(--gold)}.ovr-mid{background:rgba(56,189,248,.15);color:#38BDF8}.ovr-lo{background:rgba(255,107,107,.12);color:#FF6B6B}
+    .scores-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+    .score-card{background:var(--ink-2);border:1px solid var(--line);border-radius:10px;padding:16px;transition:border-color .2s}.score-card:hover{border-color:var(--gold)}
+    .score-hdr{font-family:'JetBrains Mono',monospace;font-size:.66rem;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;margin-bottom:12px}
+    .score-row{display:flex;align-items:center;justify-content:space-between;padding:5px 0}
+    .score-team{font-weight:600;font-size:.88rem}.score-val{font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;font-weight:800}.score-val.w{color:var(--gold)}
+    .score-div{height:1px;background:var(--line);margin:4px 0}
+    .score-status{margin-top:10px;font-size:.7rem;font-family:'JetBrains Mono',monospace;letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
+    .live-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#22c55e;margin-right:5px;animation:pulse 1.5s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+    .f-card{background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:28px 24px;text-decoration:none;display:block;transition:all .2s;cursor:pointer}
+    .f-card:hover{border-color:var(--gold);transform:translateY(-2px)}
+    .f-icon{font-size:2rem;margin-bottom:14px}
+    .f-card h3{font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:800;text-transform:uppercase;margin-bottom:8px}
+    .f-card h3 span{color:var(--gold)}.f-card p{font-size:.84rem;color:var(--muted);line-height:1.6}
+    .f-tag{display:inline-block;margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:4px;background:rgba(242,194,48,.12);color:var(--gold)}
+    .fantasy-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+    .guess-wrap{max-width:580px}
+    .guess-game{background:var(--ink-2);border:1px solid var(--line);border-radius:14px;padding:28px}
+    .guess-ctx{font-family:'JetBrains Mono',monospace;font-size:.73rem;color:var(--muted);letter-spacing:.08em;margin-bottom:18px;line-height:1.8}
+    .guess-q{font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;font-weight:800;text-transform:uppercase;margin-bottom:20px}
+    .timer-row{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+    .timer-track{flex:1;height:4px;background:var(--line);border-radius:2px;overflow:hidden}
+    .timer-fill{height:100%;background:var(--gold);border-radius:2px;transition:width 1s linear}
+    .timer-num{font-family:'Barlow Condensed',sans-serif;font-size:1.2rem;font-weight:800;color:var(--gold);min-width:24px;text-align:right}
+    .opts{display:flex;flex-direction:column;gap:9px}
+    .opt{background:var(--ink-3);border:1px solid var(--line);color:var(--white);font-size:.87rem;font-weight:500;padding:12px 15px;border-radius:8px;cursor:pointer;transition:all .2s;text-align:left}
+    .opt:hover:not(:disabled){border-color:var(--gold);background:rgba(242,194,48,.06)}.opt.correct{background:rgba(34,197,94,.12);border-color:#22c55e;color:#22c55e}.opt.wrong{background:rgba(255,107,107,.08);border-color:#FF6B6B;color:#FF6B6B}
+    .score-bar{display:flex;justify-content:space-between;margin-bottom:20px;padding:11px 15px;background:var(--ink-3);border-radius:8px}
+    .score-bar-label{font-size:.76rem;color:var(--muted)}.score-bar-val{font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:800;color:var(--gold)}
+    .next-btn{width:100%;margin-top:14px;padding:12px;background:var(--gold);color:var(--ink);font-weight:700;font-size:.88rem;border:none;border-radius:8px;cursor:pointer;display:none}
+    .next-btn.show{display:block}
+    footer{background:var(--ink);border-top:1px solid var(--line);padding:28px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-top:48px}
+    .ft-brand{display:flex;align-items:center;gap:8px}.ft-brand img{height:22px}
+    .ft-brand span{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem}.ft-brand span em{font-style:normal;color:var(--gold)}
+    .ft-copy{font-size:.75rem;color:var(--muted)}.ft-links{display:flex;gap:18px}.ft-links a{font-size:.75rem;color:var(--muted);text-decoration:none}.ft-links a:hover{color:var(--white)}
+    @media(max-width:768px){.tab-panel{padding:18px 16px}.league-banner{padding:18px 16px 0}.nav-brand span{display:none}}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/index.html" class="nav-brand"><img src="/assets/logo.png" alt="SSC" /><span>The Sports <em>Companion</em></span></a>
+  <ul class="nav-leagues">
+    <li><a href="/nfl/index.html">🏈 NFL</a></li><li><a href="/nfl/index.html">🏈 NCAAF</a></li>
+    <li><a href="/nba/index.html">🏀 NBA</a></li><li><a href="/nba/index.html">🏀 NCAAM</a></li>
+    <li><a href="/mlb/index.html" class="active">⚾ MLB</a></li>
+    <li><a href="/more/index.html">🏒 NHL</a></li><li><a href="/more/index.html">⚽ MLS</a></li><li><a href="/more/index.html">⛳ PGA</a></li>
+  </ul>
+  <div class="nav-cta"><a href="/index.html#cta">Get Early Access</a></div>
+</nav>
+
+<div class="league-banner">
+  <div class="league-banner-top"><h1>⚾ MLB</h1><span class="league-badge">2025 Season</span></div>
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="showTab('scores')">Scores</button>
+    <button class="tab-btn" onclick="showTab('standings')">Standings</button>
+    <button class="tab-btn" onclick="showTab('stats')">Stats</button>
+    <button class="tab-btn" onclick="showTab('fantasy')">Fantasy</button>
+  </div>
+</div>
+
+<!-- SCORES -->
+<div id="tab-scores" class="tab-panel active">
+  <div class="sec-label">// Today's Games</div><div class="sec-title">MLB Scores</div>
+  <div class="scores-grid">
+    <div class="score-card"><div class="score-hdr">Wed · Jul 2 · Final</div>
+      <div class="score-row"><span class="score-team">Los Angeles Dodgers</span><span class="score-val w">6</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">San Francisco Giants</span><span class="score-val">3</span></div>
+      <div class="score-status">Final · F/9</div>
+    </div>
+    <div class="score-card"><div class="score-hdr">Wed · Jul 2</div>
+      <div class="score-row"><span class="score-team">New York Yankees</span><span class="score-val w">5</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">Boston Red Sox</span><span class="score-val">4</span></div>
+      <div class="score-status"><span class="live-dot"></span>Bot 7th</div>
+    </div>
+    <div class="score-card"><div class="score-hdr">Wed · Jul 2 · Final</div>
+      <div class="score-row"><span class="score-team">Houston Astros</span><span class="score-val">2</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">Texas Rangers</span><span class="score-val w">4</span></div>
+      <div class="score-status">Final</div>
+    </div>
+    <div class="score-card"><div class="score-hdr">Wed · Jul 2 · Final</div>
+      <div class="score-row"><span class="score-team">Atlanta Braves</span><span class="score-val w">8</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">New York Mets</span><span class="score-val">3</span></div>
+      <div class="score-status">Final</div>
+    </div>
+    <div class="score-card"><div class="score-hdr">Wed · Jul 2 · Preview</div>
+      <div class="score-row"><span class="score-team">Chicago Cubs</span><span class="score-val">—</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">St. Louis Cardinals</span><span class="score-val">—</span></div>
+      <div class="score-status">7:15 PM ET</div>
+    </div>
+  </div>
+</div>
+
+<!-- STANDINGS -->
+<div id="tab-standings" class="tab-panel">
+  <div class="sec-label">// 2025 Season</div><div class="sec-title">MLB Standings</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px">
+    <div style="background:var(--ink-2);border:1px solid var(--line);border-radius:10px;overflow:hidden">
+      <div style="padding:11px 16px;background:var(--ink-3);border-bottom:1px solid var(--line);font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:800;text-transform:uppercase">AL East</div>
+      <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;padding:9px 16px;border-bottom:1px solid rgba(255,255,255,.04);font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.1em;color:var(--muted);text-transform:uppercase"><span>Team</span><span>W</span><span>L</span><span>GB</span></div>
+      <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;padding:9px 16px;border-bottom:1px solid rgba(255,255,255,.04);font-size:.83rem"><span style="font-weight:600;color:var(--white)">New York Yankees</span><span style="color:var(--gold);font-weight:700">52</span><span style="color:var(--muted)">32</span><span style="color:var(--muted)">—</span></div>
+      <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;padding:9px 16px;border-bottom:1px solid rgba(255,255,255,.04);font-size:.83rem"><span style="font-weight:600;color:var(--white)">Boston Red Sox</span><span style="color:var(--muted)">46</span><span style="color:var(--muted)">38</span><span style="color:var(--muted)">6.0</span></div>
+      <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;padding:9px 16px;border-bottom:1px solid rgba(255,255,255,.04);font-size:.83rem"><span style="font-weight:600;color:var(--white)">Tampa Bay Rays</span><span style="color:var(--muted)">44</span><span style="color:var(--muted)">40</span><span style="color:var(--muted)">8.0</span></div>
+      <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;padding:9px 16px;font-size:.83rem"><span style="font-weight:600;color:var(--white)">Baltimore Orioles</span><span style="color:var(--muted)">40</span><span style="color:var(--muted)">44</span><span style="color:var(--muted)">12.0</span></div>
+    </div>
+    <div style="background:var(--ink-2);border:1px solid var(--line);border-radius:10px;overflow:hidden">
+      <div style="padding:11px 16px;background:var(--ink-3);border-bottom:1px solid var(--line);font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:800;text-transform:uppercase">NL West</div>
+      <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;padding:9px 16px;border-bottom:1px solid rgba(255,255,255,.04);font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.1em;color:var(--muted);text-transform:uppercase"><span>Team</span><span>W</span><span>L</span><span>GB</span></div>
+      <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;padding:9px 16px;border-bottom:1px solid rgba(255,255,255,.04);font-size:.83rem"><span style="font-weight:600;color:var(--white)">LA Dodgers</span><span style="color:var(--gold);font-weight:700">55</span><span style="color:var(--muted)">29</span><span style="color:var(--muted)">—</span></div>
+      <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;padding:9px 16px;border-bottom:1px solid rgba(255,255,255,.04);font-size:.83rem"><span style="font-weight:600;color:var(--white)">San Diego Padres</span><span style="color:var(--muted)">47</span><span style="color:var(--muted)">37</span><span style="color:var(--muted)">8.0</span></div>
+      <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;padding:9px 16px;border-bottom:1px solid rgba(255,255,255,.04);font-size:.83rem"><span style="font-weight:600;color:var(--white)">SF Giants</span><span style="color:var(--muted)">42</span><span style="color:var(--muted)">42</span><span style="color:var(--muted)">13.0</span></div>
+      <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;padding:9px 16px;font-size:.83rem"><span style="font-weight:600;color:var(--white)">Arizona D-backs</span><span style="color:var(--muted)">40</span><span style="color:var(--muted)">44</span><span style="color:var(--muted)">15.0</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div id="tab-stats" class="tab-panel">
+  <div class="sec-label">// 2025 Season</div><div class="sec-title">MLB Stats</div>
+  <div class="sub-tabs">
+    <button class="sub-tab active" onclick="showSub('pitching')">Pitching</button>
+    <button class="sub-tab" onclick="showSub('batting')">Batting</button>
+    <button class="sub-tab" onclick="showSub('fielding')">Fielding</button>
+  </div>
+  <div id="sub-pitching" class="sub-panel active">
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>Player</th><th>Team</th><th>WAR</th><th>W-L</th><th>ERA</th><th>IP</th><th>SO</th><th>WHIP</th><th>FIP</th><th>ERA+</th><th>OVR</th></tr></thead>
+      <tbody>
+        <tr><td class="pl">Paul Skenes</td><td>PIT</td><td class="hi">7.7</td><td>10-10</td><td class="hi">1.97</td><td>187.2</td><td>216</td><td>0.948</td><td>2.36</td><td class="hi">222</td><td><span class="ovr ovr-hi">99</span></td></tr>
+        <tr><td class="pl">Tarik Skubal</td><td>DET</td><td class="hi">6.5</td><td>13-6</td><td class="hi">2.21</td><td>195.1</td><td>241</td><td>0.891</td><td>2.45</td><td class="hi">189</td><td><span class="ovr ovr-hi">99</span></td></tr>
+        <tr><td class="pl">Hunter Brown</td><td>HOU</td><td>6.1</td><td>12-9</td><td>2.43</td><td>185.1</td><td>206</td><td>1.025</td><td>3.14</td><td>172</td><td><span class="ovr ovr-hi">99</span></td></tr>
+        <tr><td class="pl">Garrett Crochet</td><td>BOS</td><td>6.3</td><td>18-5</td><td>2.59</td><td>205.1</td><td>255</td><td>1.028</td><td>2.89</td><td>155</td><td><span class="ovr ovr-mid">66</span></td></tr>
+        <tr><td class="pl">Yoshinobu Yamamoto</td><td>LAD</td><td>4.9</td><td>12-8</td><td>2.49</td><td>173.2</td><td>201</td><td>0.990</td><td>2.94</td><td>165</td><td><span class="ovr ovr-hi">99</span></td></tr>
+        <tr><td class="pl">Max Fried</td><td>NYY</td><td>4.5</td><td>19-5</td><td>2.86</td><td>195.1</td><td>189</td><td>1.101</td><td>3.07</td><td>145</td><td><span class="ovr ovr-mid">66</span></td></tr>
+        <tr><td class="pl">Jake Irvin</td><td>WSN</td><td class="ng">-0.4</td><td>9-13</td><td class="ng">5.70</td><td>180.0</td><td>124</td><td>1.428</td><td>5.64</td><td>73</td><td><span class="ovr ovr-lo">60</span></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+  <div id="sub-batting" class="sub-panel">
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>Player</th><th>Team</th><th>AVG</th><th>HR</th><th>RBI</th><th>OBP</th><th>SLG</th><th>OPS</th><th>WAR</th><th>OVR</th></tr></thead>
+      <tbody>
+        <tr><td class="pl">Shohei Ohtani</td><td>LAD</td><td class="hi">.318</td><td class="hi">44</td><td class="hi">102</td><td>.413</td><td>.654</td><td class="hi">1.067</td><td>8.2</td><td><span class="ovr ovr-hi">99</span></td></tr>
+        <tr><td class="pl">Freddie Freeman</td><td>LAD</td><td>.298</td><td>22</td><td>89</td><td>.378</td><td>.521</td><td>.899</td><td>4.1</td><td><span class="ovr ovr-hi">95</span></td></tr>
+        <tr><td class="pl">Juan Soto</td><td>NYY</td><td>.288</td><td>31</td><td>94</td><td>.419</td><td>.569</td><td>.988</td><td>5.6</td><td><span class="ovr ovr-hi">97</span></td></tr>
+        <tr><td class="pl">Ronald Acuna Jr.</td><td>ATL</td><td>.304</td><td>26</td><td>78</td><td>.388</td><td>.534</td><td>.922</td><td>6.1</td><td><span class="ovr ovr-hi">98</span></td></tr>
+        <tr><td class="pl">Mookie Betts</td><td>LAD</td><td>.281</td><td>28</td><td>86</td><td>.369</td><td>.511</td><td>.880</td><td>4.8</td><td><span class="ovr ovr-hi">96</span></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+  <div id="sub-fielding" class="sub-panel">
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>Player</th><th>Team</th><th>Pos</th><th>G</th><th>TC</th><th>E</th><th>FPCT</th><th>DRS</th><th>OAA</th><th>OVR</th></tr></thead>
+      <tbody>
+        <tr><td class="pl">Nolan Arenado</td><td>STL</td><td>3B</td><td>148</td><td>412</td><td>4</td><td class="hi">.990</td><td class="hi">+18</td><td class="hi">+14</td><td><span class="ovr ovr-hi">99</span></td></tr>
+        <tr><td class="pl">Elly De La Cruz</td><td>CIN</td><td>SS</td><td>142</td><td>598</td><td>12</td><td>.980</td><td>+9</td><td>+7</td><td><span class="ovr ovr-mid">88</span></td></tr>
+        <tr><td class="pl">Trea Turner</td><td>PHI</td><td>SS</td><td>151</td><td>621</td><td>8</td><td>.987</td><td>+12</td><td>+10</td><td><span class="ovr ovr-hi">93</span></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</div>
+
+<!-- FANTASY -->
+<div id="tab-fantasy" class="tab-panel">
+  <div class="sec-label">// MLB Fantasy</div><div class="sec-title">Fantasy & Games</div>
+  <div class="sec-body">Challenge your baseball IQ with Guess the Pitch, or manage your fantasy baseball leagues.</div>
+  <div class="fantasy-grid">
+    <div class="f-card" onclick="showTab('guess')">
+      <div class="f-icon">⚾</div>
+      <h3>Guess the <span>Pitch</span></h3>
+      <p>Every at-bat, predict the pitch type and location before it's thrown. See how your baseball IQ stacks up.</p>
+      <span class="f-tag">New Feature</span>
+    </div>
+    <div class="f-card"><div class="f-icon">👥</div><h3>Fantasy <span>Baseball</span></h3><p>Manage your roster, waiver wire, and weekly lineups.</p><span class="f-tag">Coming Soon</span></div>
+    <div class="f-card"><div class="f-icon">🏆</div><h3>Pitch <span>Leaderboard</span></h3><p>Rank your prediction accuracy against fans globally.</p><span class="f-tag">Coming Soon</span></div>
+  </div>
+</div>
+
+<!-- GUESS THE PITCH -->
+<div id="tab-guess" class="tab-panel">
+  <div class="sec-label">// Interactive</div><div class="sec-title">⚾ Guess the Pitch</div>
+  <div class="sec-body">Real MLB at-bat scenarios. Predict pitch type and location before the delivery.</div>
+  <div class="guess-wrap">
+    <div class="score-bar">
+      <div><div class="score-bar-label">Score</div><div class="score-bar-val" id="score">0.0</div></div>
+      <div><div class="score-bar-label">Correct</div><div class="score-bar-val" id="correct">0 / 0</div></div>
+      <div><div class="score-bar-label">Streak</div><div class="score-bar-val" id="streak">0</div></div>
+    </div>
+    <div class="guess-game">
+      <div class="guess-ctx" id="ctx">Loading scenario...</div>
+      <div class="guess-q">What pitch is thrown?</div>
+      <div class="timer-row"><div class="timer-track"><div class="timer-fill" id="timer-fill" style="width:100%"></div></div><div class="timer-num" id="timer-num">15</div></div>
+      <div class="opts" id="opts"></div>
+      <button class="next-btn" id="next-btn" onclick="nextPlay()">Next Pitch →</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="ft-brand"><img src="/assets/logo.png" alt="SSC" /><span>The Sports <em>Companion</em></span></div>
+  <div class="ft-links"><a href="/index.html">Home</a><a href="/nfl/index.html">NFL</a><a href="/mlb/index.html">MLB</a><a href="/nba/index.html">NBA</a><a href="/more/index.html">More</a></div>
+  <div class="ft-copy">© 2026 The Sports Companion</div>
+</footer>
+
+<script>
+function showTab(id){document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');if(event&&event.target&&event.target.classList)event.target.classList.add('active');if(id==='guess'&&!gameStarted)initGame()}
+function showSub(id){document.querySelectorAll('.sub-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.sub-tab').forEach(b=>b.classList.remove('active'));document.getElementById('sub-'+id).classList.add('active');event.target.classList.add('active')}
+const plays=[
+  {ctx:"0-2 Count · Runner on 1st · RH Batter · 7th Inning · Up by 1",correct:"Slider — Down & Away",opts:["4-Seam Fastball — Up & In","Slider — Down & Away","Changeup — Middle","Curveball — Bounce"]},
+  {ctx:"3-0 Count · Bases Empty · LH Batter · 3rd Inning · Tied",correct:"4-Seam Fastball — Down the Middle",opts:["4-Seam Fastball — Down the Middle","Curveball — Outside","Intentional Ball","Slider — Inside"]},
+  {ctx:"Full Count · Runner on 3rd · 1 Out · 9th Inning · Down by 1",correct:"Changeup — Low & Away",opts:["Fastball — Up & In","Changeup — Low & Away","Slider — Backdoor","Curveball — 12-6"]},
+  {ctx:"1-1 Count · Bases Loaded · RH Batter · 5th Inning · Down by 2",correct:"2-Seam Fastball — Inside",opts:["2-Seam Fastball — Inside","Cutter — Away","Curveball — Outside","Splitter — Down"]},
+  {ctx:"0-0 Count · Runner on 2nd · LH Batter · 6th Inning · Tied",correct:"4-Seam Fastball — Up",opts:["4-Seam Fastball — Up","Slider — Glove Side","Changeup — Arm Side","Curveball — Outside"]},
+];
+let idx=0,score=0,correctCount=0,total=0,streak=0,timer,timeLeft=15,gameStarted=false;
+function initGame(){gameStarted=true;idx=Math.floor(Math.random()*plays.length);renderPlay()}
+function renderPlay(){const p=plays[idx%plays.length];document.getElementById('ctx').textContent=p.ctx;const shuffled=[...p.opts].sort(()=>Math.random()-.5);document.getElementById('opts').innerHTML=shuffled.map(o=>`<button class="opt" onclick="pick(this,'${o.replace(/'/g,"\\'")}','${p.correct.replace(/'/g,"\\'")}')">${o}</button>`).join('');document.getElementById('next-btn').classList.remove('show');startTimer()}
+function startTimer(){clearInterval(timer);timeLeft=15;updateTimer();timer=setInterval(()=>{timeLeft--;updateTimer();if(timeLeft<=0){clearInterval(timer);timeUp()}},1000)}
+function updateTimer(){document.getElementById('timer-num').textContent=timeLeft;document.getElementById('timer-fill').style.width=(timeLeft/15*100)+'%'}
+function timeUp(){total++;streak=0;document.querySelectorAll('.opt').forEach(b=>b.disabled=true);const p=plays[idx%plays.length];document.querySelectorAll('.opt').forEach(b=>{if(b.textContent===p.correct)b.classList.add('correct')});updateScores();document.getElementById('next-btn').classList.add('show')}
+function pick(btn,choice,correct){clearInterval(timer);total++;document.querySelectorAll('.opt').forEach(b=>b.disabled=true);if(choice===correct){btn.classList.add('correct');score+=1+(timeLeft/15);correctCount++;streak++}else{btn.classList.add('wrong');streak=0;document.querySelectorAll('.opt').forEach(b=>{if(b.textContent===correct)b.classList.add('correct')})}updateScores();document.getElementById('next-btn').classList.add('show')}
+function updateScores(){document.getElementById('score').textContent=score.toFixed(1);document.getElementById('correct').textContent=correctCount+' / '+total;document.getElementById('streak').textContent=streak}
+function nextPlay(){idx++;renderPlay()}
+</script>
+</body></html>

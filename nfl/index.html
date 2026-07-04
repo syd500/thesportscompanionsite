@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NFL — The Sports Companion</title>
+  <link rel="icon" type="image/png" href="/assets/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --ink:#0B0D0F; --ink-2:#181B1F; --ink-3:#262A30; --muted:#8A8F98; --line:#2A2E35; --gold:#F2C230; --crimson:#C83A2B; --white:#FFFFFF; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--ink); color: var(--white); overflow-x: hidden; }
+    nav { position: sticky; top: 0; z-index: 100; display: flex; align-items: center; background: rgba(11,13,15,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+    .nav-brand { display: flex; align-items: center; gap: 8px; padding: 0 20px; text-decoration: none; border-right: 1px solid var(--line); height: 56px; flex-shrink: 0; }
+    .nav-brand img { height: 28px; }
+    .nav-brand span { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 1rem; letter-spacing: 0.04em; color: var(--white); white-space: nowrap; }
+    .nav-brand span em { font-style: normal; color: var(--gold); }
+    .nav-leagues { display: flex; align-items: center; list-style: none; overflow-x: auto; flex: 1; scrollbar-width: none; }
+    .nav-leagues::-webkit-scrollbar { display: none; }
+    .nav-leagues a { display: flex; align-items: center; height: 56px; padding: 0 18px; font-size: 0.82rem; font-weight: 600; color: var(--muted); text-decoration: none; border-right: 1px solid var(--line); transition: color 0.2s, background 0.2s; white-space: nowrap; }
+    .nav-leagues a:hover { color: var(--white); background: var(--ink-2); }
+    .nav-leagues a.active { color: var(--gold); background: var(--ink-2); border-bottom: 2px solid var(--gold); }
+    .nav-cta { margin-left: auto; padding: 0 20px; height: 56px; display: flex; align-items: center; flex-shrink: 0; }
+    .nav-cta a { background: var(--gold); color: var(--ink); font-weight: 700; font-size: 0.8rem; padding: 8px 18px; border-radius: 5px; text-decoration: none; }
+    .league-banner { background: var(--ink-2); border-bottom: 1px solid var(--line); padding: 24px 32px 0; }
+    .league-banner-top { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+    .league-banner-top h1 { font-family: 'Barlow Condensed', sans-serif; font-size: 2.2rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.04em; }
+    .league-badge { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 10px; border-radius: 4px; background: rgba(242,194,48,0.12); color: var(--gold); border: 1px solid rgba(242,194,48,0.3); }
+    .tab-bar { display: flex; gap: 0; border-top: 1px solid var(--line); }
+    .tab-btn { padding: 12px 22px; font-size: 0.82rem; font-weight: 600; color: var(--muted); background: none; border: none; border-bottom: 2px solid transparent; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+    .tab-btn:hover { color: var(--white); }
+    .tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+    .tab-panel { display: none; padding: 28px 32px; }
+    .tab-panel.active { display: block; }
+    .sec-label { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.15em; color: var(--gold); text-transform: uppercase; margin-bottom: 10px; }
+    .sec-title { font-family: 'Barlow Condensed', sans-serif; font-size: 1.6rem; font-weight: 800; text-transform: uppercase; margin-bottom: 6px; }
+    .sec-body { color: var(--muted); font-size: 0.88rem; line-height: 1.6; margin-bottom: 20px; }
+    .sub-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+    .sub-tab { background: var(--ink-2); border: 1px solid var(--line); color: var(--muted); font-size: 0.78rem; font-weight: 500; padding: 7px 14px; border-radius: 5px; cursor: pointer; transition: all 0.2s; }
+    .sub-tab:hover { border-color: var(--gold); color: var(--white); }
+    .sub-tab.active { background: var(--gold); border-color: var(--gold); color: var(--ink); font-weight: 700; }
+    .sub-panel { display: none; }
+    .sub-panel.active { display: block; }
+    .tbl-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; }
+    .tbl { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
+    .tbl thead tr { background: var(--ink-3); border-bottom: 1px solid var(--line); }
+    .tbl th { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); padding: 11px 13px; text-align: left; white-space: nowrap; }
+    .tbl tbody tr { border-bottom: 1px solid rgba(255,255,255,0.04); transition: background 0.15s; }
+    .tbl tbody tr:hover { background: var(--ink-2); }
+    .tbl tbody tr:last-child { border-bottom: none; }
+    .tbl td { padding: 10px 13px; color: var(--muted); white-space: nowrap; }
+    .tbl td.pl { color: var(--white); font-weight: 600; }
+    .tbl td.hi { color: var(--gold); font-weight: 700; }
+    .tbl td.ng { color: #FF6B6B; }
+    .ovr { display: inline-block; font-family: 'Barlow Condensed', sans-serif; font-size: 0.88rem; font-weight: 800; padding: 2px 7px; border-radius: 4px; }
+    .ovr-hi { background: rgba(242,194,48,0.2); color: var(--gold); }
+    .ovr-mid { background: rgba(56,189,248,0.15); color: #38BDF8; }
+    .ovr-lo { background: rgba(255,107,107,0.12); color: #FF6B6B; }
+    .scores-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+    .score-card { background: var(--ink-2); border: 1px solid var(--line); border-radius: 10px; padding: 16px; }
+    .score-card:hover { border-color: var(--gold); }
+    .score-hdr { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; margin-bottom: 12px; }
+    .score-row { display: flex; align-items: center; justify-content: space-between; padding: 5px 0; }
+    .score-team { font-weight: 600; font-size: 0.88rem; }
+    .score-val { font-family: 'Barlow Condensed', sans-serif; font-size: 1.5rem; font-weight: 800; }
+    .score-val.w { color: var(--gold); }
+    .score-div { height: 1px; background: var(--line); margin: 4px 0; }
+    .score-status { margin-top: 10px; font-size: 0.7rem; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.08em; color: var(--muted); text-transform: uppercase; }
+    .live-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #22c55e; margin-right: 5px; animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.3} }
+    .fantasy-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; }
+    .f-card { background: var(--ink-2); border: 1px solid var(--line); border-radius: 12px; padding: 28px 24px; text-decoration: none; display: block; transition: all 0.2s; }
+    .f-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+    .f-icon { font-size: 2rem; margin-bottom: 14px; }
+    .f-card h3 { font-family: 'Barlow Condensed', sans-serif; font-size: 1.4rem; font-weight: 800; text-transform: uppercase; margin-bottom: 8px; }
+    .f-card h3 span { color: var(--gold); }
+    .f-card p { font-size: 0.84rem; color: var(--muted); line-height: 1.6; }
+    .f-tag { display: inline-block; margin-top: 14px; font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 9px; border-radius: 4px; background: rgba(242,194,48,0.12); color: var(--gold); }
+    .guess-wrap { max-width: 580px; }
+    .guess-game { background: var(--ink-2); border: 1px solid var(--line); border-radius: 14px; padding: 28px; }
+    .guess-ctx { font-family: 'JetBrains Mono', monospace; font-size: 0.73rem; color: var(--muted); letter-spacing: 0.08em; margin-bottom: 18px; line-height: 1.8; }
+    .guess-q { font-family: 'Barlow Condensed', sans-serif; font-size: 1.5rem; font-weight: 800; text-transform: uppercase; margin-bottom: 20px; }
+    .timer-row { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+    .timer-track { flex: 1; height: 4px; background: var(--line); border-radius: 2px; overflow: hidden; }
+    .timer-fill { height: 100%; background: var(--gold); border-radius: 2px; transition: width 1s linear; }
+    .timer-num { font-family: 'Barlow Condensed', sans-serif; font-size: 1.2rem; font-weight: 800; color: var(--gold); min-width: 24px; text-align: right; }
+    .opts { display: flex; flex-direction: column; gap: 9px; }
+    .opt { background: var(--ink-3); border: 1px solid var(--line); color: var(--white); font-size: 0.87rem; font-weight: 500; padding: 12px 15px; border-radius: 8px; cursor: pointer; transition: all 0.2s; text-align: left; }
+    .opt:hover:not(:disabled) { border-color: var(--gold); background: rgba(242,194,48,0.06); }
+    .opt.correct { background: rgba(34,197,94,0.12); border-color: #22c55e; color: #22c55e; }
+    .opt.wrong { background: rgba(255,107,107,0.08); border-color: #FF6B6B; color: #FF6B6B; }
+    .score-bar { display: flex; justify-content: space-between; margin-bottom: 20px; padding: 11px 15px; background: var(--ink-3); border-radius: 8px; }
+    .score-bar-label { font-size: 0.76rem; color: var(--muted); }
+    .score-bar-val { font-family: 'Barlow Condensed', sans-serif; font-size: 1.3rem; font-weight: 800; color: var(--gold); }
+    .next-btn { width: 100%; margin-top: 14px; padding: 12px; background: var(--gold); color: var(--ink); font-weight: 700; font-size: 0.88rem; border: none; border-radius: 8px; cursor: pointer; display: none; }
+    .next-btn.show { display: block; }
+    .standings-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+    .s-div { background: var(--ink-2); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+    .s-div-hdr { padding: 11px 16px; background: var(--ink-3); border-bottom: 1px solid var(--line); font-family: 'Barlow Condensed', sans-serif; font-size: 0.95rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; }
+    .s-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; padding: 9px 16px; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 0.83rem; align-items: center; }
+    .s-row:last-child { border-bottom: none; }
+    .s-row.hdr { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; }
+    .s-row .team { font-weight: 600; color: var(--white); }
+    .s-row .val { color: var(--muted); }
+    .s-row .hi { color: var(--gold); font-weight: 700; }
+    footer { background: var(--ink); border-top: 1px solid var(--line); padding: 28px 32px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; margin-top: 48px; }
+    .ft-brand { display: flex; align-items: center; gap: 8px; }
+    .ft-brand img { height: 22px; }
+    .ft-brand span { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 1rem; }
+    .ft-brand span em { font-style: normal; color: var(--gold); }
+    .ft-copy { font-size: 0.75rem; color: var(--muted); }
+    .ft-links { display: flex; gap: 18px; }
+    .ft-links a { font-size: 0.75rem; color: var(--muted); text-decoration: none; }
+    .ft-links a:hover { color: var(--white); }
+    @media(max-width:768px){ .tab-panel{padding:18px 16px;} .league-banner{padding:18px 16px 0;} .nav-brand span{display:none;} }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/index.html" class="nav-brand">
+    <img src="/assets/logo.png" alt="SSC" />
+    <span>The Sports <em>Companion</em></span>
+  </a>
+  <ul class="nav-leagues">
+    <li><a href="/nfl/index.html" class="active">🏈 NFL</a></li>
+    <li><a href="/nfl/index.html">🏈 NCAAF</a></li>
+    <li><a href="/nba/index.html">🏀 NBA</a></li>
+    <li><a href="/nba/index.html">🏀 NCAAM</a></li>
+    <li><a href="/mlb/index.html">⚾ MLB</a></li>
+    <li><a href="/more/index.html">🏒 NHL</a></li>
+    <li><a href="/more/index.html">⚽ MLS</a></li>
+    <li><a href="/more/index.html">⛳ PGA</a></li>
+  </ul>
+  <div class="nav-cta"><a href="/index.html#cta">Get Early Access</a></div>
+</nav>
+
+<div class="league-banner">
+  <div class="league-banner-top">
+    <h1>🏈 NFL</h1>
+    <span class="league-badge">2025 Season</span>
+  </div>
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="showTab('scores')">Scores</button>
+    <button class="tab-btn" onclick="showTab('standings')">Standings</button>
+    <button class="tab-btn" onclick="showTab('stats')">Stats</button>
+    <button class="tab-btn" onclick="showTab('fantasy')">Fantasy</button>
+  </div>
+</div>
+
+<!-- SCORES -->
+<div id="tab-scores" class="tab-panel active">
+  <div class="sec-label">// Week 14 Results</div>
+  <div class="sec-title">Scores & Results</div>
+  <div class="scores-grid">
+    <div class="score-card">
+      <div class="score-hdr">Sun · Dec 8 · Final</div>
+      <div class="score-row"><span class="score-team">Kansas City Chiefs</span><span class="score-val w">24</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">Las Vegas Raiders</span><span class="score-val">17</span></div>
+      <div class="score-status">Final</div>
+    </div>
+    <div class="score-card">
+      <div class="score-hdr">Sun · Dec 8 · Final</div>
+      <div class="score-row"><span class="score-team">Detroit Lions</span><span class="score-val w">34</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">Chicago Bears</span><span class="score-val">13</span></div>
+      <div class="score-status">Final</div>
+    </div>
+    <div class="score-card">
+      <div class="score-hdr">Sun · Dec 8 · Final</div>
+      <div class="score-row"><span class="score-team">Buffalo Bills</span><span class="score-val w">30</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">LA Rams</span><span class="score-val">21</span></div>
+      <div class="score-status">Final</div>
+    </div>
+    <div class="score-card">
+      <div class="score-hdr">Mon · Dec 9</div>
+      <div class="score-row"><span class="score-team">Philadelphia Eagles</span><span class="score-val w">28</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">Dallas Cowboys</span><span class="score-val">14</span></div>
+      <div class="score-status"><span class="live-dot"></span>Q3 · 4:22</div>
+    </div>
+    <div class="score-card">
+      <div class="score-hdr">Sun · Dec 8 · Final</div>
+      <div class="score-row"><span class="score-team">Houston Texans</span><span class="score-val w">27</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">NY Jets</span><span class="score-val">10</span></div>
+      <div class="score-status">Final</div>
+    </div>
+    <div class="score-card">
+      <div class="score-hdr">Sun · Dec 8 · Final</div>
+      <div class="score-row"><span class="score-team">San Francisco 49ers</span><span class="score-val w">20</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">Seattle Seahawks</span><span class="score-val">17</span></div>
+      <div class="score-status">Final · OT</div>
+    </div>
+  </div>
+</div>
+
+<!-- STANDINGS -->
+<div id="tab-standings" class="tab-panel">
+  <div class="sec-label">// 2025 Season</div>
+  <div class="sec-title">NFL Standings</div>
+  <div class="standings-grid">
+    <div class="s-div">
+      <div class="s-div-hdr">AFC East</div>
+      <div class="s-row hdr"><span>Team</span><span>W</span><span>L</span><span>PCT</span></div>
+      <div class="s-row"><span class="team">Buffalo Bills</span><span class="val hi">11</span><span class="val">2</span><span class="val">.846</span></div>
+      <div class="s-row"><span class="team">Miami Dolphins</span><span class="val">7</span><span class="val">6</span><span class="val">.538</span></div>
+      <div class="s-row"><span class="team">NY Jets</span><span class="val">4</span><span class="val">9</span><span class="val">.308</span></div>
+      <div class="s-row"><span class="team">New England Patriots</span><span class="val">3</span><span class="val">10</span><span class="val">.231</span></div>
+    </div>
+    <div class="s-div">
+      <div class="s-div-hdr">AFC North</div>
+      <div class="s-row hdr"><span>Team</span><span>W</span><span>L</span><span>PCT</span></div>
+      <div class="s-row"><span class="team">Baltimore Ravens</span><span class="val hi">10</span><span class="val">3</span><span class="val">.769</span></div>
+      <div class="s-row"><span class="team">Pittsburgh Steelers</span><span class="val">9</span><span class="val">4</span><span class="val">.692</span></div>
+      <div class="s-row"><span class="team">Cincinnati Bengals</span><span class="val">5</span><span class="val">8</span><span class="val">.385</span></div>
+      <div class="s-row"><span class="team">Cleveland Browns</span><span class="val">3</span><span class="val">10</span><span class="val">.231</span></div>
+    </div>
+    <div class="s-div">
+      <div class="s-div-hdr">AFC South</div>
+      <div class="s-row hdr"><span>Team</span><span>W</span><span>L</span><span>PCT</span></div>
+      <div class="s-row"><span class="team">Houston Texans</span><span class="val hi">9</span><span class="val">4</span><span class="val">.692</span></div>
+      <div class="s-row"><span class="team">Indianapolis Colts</span><span class="val">6</span><span class="val">7</span><span class="val">.462</span></div>
+      <div class="s-row"><span class="team">Jacksonville Jaguars</span><span class="val">4</span><span class="val">9</span><span class="val">.308</span></div>
+      <div class="s-row"><span class="team">Tennessee Titans</span><span class="val">3</span><span class="val">10</span><span class="val">.231</span></div>
+    </div>
+    <div class="s-div">
+      <div class="s-div-hdr">AFC West</div>
+      <div class="s-row hdr"><span>Team</span><span>W</span><span>L</span><span>PCT</span></div>
+      <div class="s-row"><span class="team">Kansas City Chiefs</span><span class="val hi">11</span><span class="val">2</span><span class="val">.846</span></div>
+      <div class="s-row"><span class="team">Denver Broncos</span><span class="val">8</span><span class="val">5</span><span class="val">.615</span></div>
+      <div class="s-row"><span class="team">Las Vegas Raiders</span><span class="val">3</span><span class="val">10</span><span class="val">.231</span></div>
+      <div class="s-row"><span class="team">LA Chargers</span><span class="val">8</span><span class="val">5</span><span class="val">.615</span></div>
+    </div>
+    <div class="s-div">
+      <div class="s-div-hdr">NFC East</div>
+      <div class="s-row hdr"><span>Team</span><span>W</span><span>L</span><span>PCT</span></div>
+      <div class="s-row"><span class="team">Philadelphia Eagles</span><span class="val hi">11</span><span class="val">2</span><span class="val">.846</span></div>
+      <div class="s-row"><span class="team">Washington Commanders</span><span class="val">7</span><span class="val">6</span><span class="val">.538</span></div>
+      <div class="s-row"><span class="team">NY Giants</span><span class="val">4</span><span class="val">9</span><span class="val">.308</span></div>
+      <div class="s-row"><span class="team">Dallas Cowboys</span><span class="val">5</span><span class="val">8</span><span class="val">.385</span></div>
+    </div>
+    <div class="s-div">
+      <div class="s-div-hdr">NFC North</div>
+      <div class="s-row hdr"><span>Team</span><span>W</span><span>L</span><span>PCT</span></div>
+      <div class="s-row"><span class="team">Detroit Lions</span><span class="val hi">12</span><span class="val">1</span><span class="val">.923</span></div>
+      <div class="s-row"><span class="team">Minnesota Vikings</span><span class="val">10</span><span class="val">3</span><span class="val">.769</span></div>
+      <div class="s-row"><span class="team">Green Bay Packers</span><span class="val">9</span><span class="val">4</span><span class="val">.692</span></div>
+      <div class="s-row"><span class="team">Chicago Bears</span><span class="val">4</span><span class="val">9</span><span class="val">.308</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div id="tab-stats" class="tab-panel">
+  <div class="sec-label">// 2025 Season</div>
+  <div class="sec-title">NFL Stats</div>
+  <div class="sub-tabs">
+    <button class="sub-tab active" onclick="showSub('team-yppg')">Team YPPG</button>
+    <button class="sub-tab" onclick="showSub('kicking')">Kicking</button>
+    <button class="sub-tab" onclick="showSub('punting')">Punting</button>
+  </div>
+
+  <div id="sub-team-yppg" class="sub-panel active">
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>Team</th><th>Pts</th><th>Yds</th><th>Y/P</th><th>TO</th><th>PA</th><th>YdsA</th><th>YPPG</th><th>OVR</th></tr></thead>
+      <tbody>
+        <tr><td class="pl">Los Angeles Rams</td><td>518</td><td>6709</td><td>6.2</td><td>15</td><td>346</td><td>5568</td><td class="hi">7.31</td><td><span class="ovr ovr-hi">99</span></td></tr>
+        <tr><td class="pl">New England Patriots</td><td>490</td><td>6449</td><td>6.2</td><td>16</td><td>320</td><td>5019</td><td class="hi">7.26</td><td><span class="ovr ovr-hi">99</span></td></tr>
+        <tr><td class="pl">Houston Texans</td><td>404</td><td>5559</td><td>5.1</td><td>12</td><td>295</td><td>4713</td><td class="hi">6.98</td><td><span class="ovr ovr-hi">98</span></td></tr>
+        <tr><td class="pl">Buffalo Bills</td><td>481</td><td>6397</td><td>5.9</td><td>19</td><td>365</td><td>4983</td><td class="hi">6.83</td><td><span class="ovr ovr-hi">98</span></td></tr>
+        <tr><td class="pl">Seattle Seahawks</td><td>483</td><td>5973</td><td>5.9</td><td>28</td><td>292</td><td>4860</td><td>4.71</td><td><span class="ovr ovr-mid">92</span></td></tr>
+        <tr><td class="pl">Detroit Lions</td><td>481</td><td>6344</td><td>6.0</td><td>15</td><td>413</td><td>5642</td><td>4.01</td><td><span class="ovr ovr-mid">90</span></td></tr>
+        <tr><td class="pl">Kansas City Chiefs</td><td>362</td><td>5451</td><td>5.1</td><td>15</td><td>328</td><td>5126</td><td>1.35</td><td><span class="ovr ovr-mid">83</span></td></tr>
+        <tr><td class="pl">Las Vegas Raiders</td><td>241</td><td>4168</td><td>4.4</td><td>23</td><td>432</td><td>5403</td><td class="ng">-7.05</td><td><span class="ovr ovr-lo">65</span></td></tr>
+        <tr><td class="pl">Washington Commanders</td><td>356</td><td>5419</td><td>5.5</td><td>23</td><td>451</td><td>6533</td><td class="ng">-7.54</td><td><span class="ovr ovr-lo">64</span></td></tr>
+        <tr><td class="pl">New York Jets</td><td>300</td><td>4481</td><td>4.4</td><td>23</td><td>503</td><td>6045</td><td class="ng">-10.71</td><td><span class="ovr ovr-lo">60</span></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div id="sub-kicking" class="sub-panel">
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>Player</th><th>Team</th><th>G</th><th>20-29</th><th>30-39</th><th>40-49</th><th>50+</th><th>FGM</th><th>Lng</th><th>PPK</th><th>OVR</th></tr></thead>
+      <tbody>
+        <tr><td class="pl">Justin Tucker</td><td>BAL</td><td>16</td><td>4/4</td><td>10/10</td><td>14/14</td><td>10/10</td><td class="hi">38</td><td>57</td><td class="hi">1.97</td><td><span class="ovr ovr-hi">99</span></td></tr>
+        <tr><td class="pl">Matt Prater</td><td>DET</td><td>16</td><td>3/3</td><td>8/9</td><td>6/6</td><td>5/6</td><td>22</td><td>59</td><td>1.52</td><td><span class="ovr ovr-hi">99</span></td></tr>
+        <tr><td class="pl">Adam Vinatieri</td><td>IND</td><td>16</td><td>7/8</td><td>6/6</td><td>8/10</td><td>4/5</td><td>25</td><td>55</td><td>1.44</td><td><span class="ovr ovr-hi">96</span></td></tr>
+        <tr><td class="pl">Stephen Hauschka</td><td>SEA</td><td>16</td><td>9/9</td><td>7/7</td><td>7/9</td><td>6/6</td><td>29</td><td>54</td><td>1.41</td><td><span class="ovr ovr-hi">95</span></td></tr>
+        <tr><td class="pl">Stephen Gostkowski</td><td>NWE</td><td>16</td><td>6/6</td><td>11/11</td><td>12/14</td><td>4/5</td><td>33</td><td>57</td><td>1.38</td><td><span class="ovr ovr-mid">93</span></td></tr>
+        <tr><td class="pl">Dan Bailey</td><td>DAL</td><td>16</td><td>9/9</td><td>10/10</td><td>6/7</td><td>5/6</td><td>30</td><td>54</td><td>1.29</td><td><span class="ovr ovr-mid">90</span></td></tr>
+        <tr><td class="pl">Greg Zuerlein</td><td>STL</td><td>14</td><td>2/2</td><td>9/10</td><td>5/8</td><td>3/9</td><td>20</td><td>61</td><td class="ng">0.23</td><td><span class="ovr ovr-lo">60</span></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div id="sub-punting" class="sub-panel">
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>Player</th><th>Team</th><th>Pnts</th><th>Yds</th><th>Y/P</th><th>Net Yds</th><th>NY/P</th><th>Lng</th><th>In 20</th><th>PPP</th><th>OVR</th></tr></thead>
+      <tbody>
+        <tr><td class="pl">Rigoberto Sanchez</td><td>IND</td><td>44</td><td>2146</td><td>48.8</td><td>1966</td><td class="hi">44.7</td><td>59</td><td>22</td><td class="hi">3.20</td><td><span class="ovr ovr-hi">99</span></td></tr>
+        <tr><td class="pl">Tress Way</td><td>WAS</td><td>56</td><td>2651</td><td>47.3</td><td>2457</td><td class="hi">43.9</td><td>71</td><td>29</td><td class="hi">3.17</td><td><span class="ovr ovr-hi">97</span></td></tr>
+        <tr><td class="pl">Jack Fox</td><td>DET</td><td>56</td><td>2611</td><td>46.6</td><td>2398</td><td>42.8</td><td>70</td><td>28</td><td>3.13</td><td><span class="ovr ovr-mid">93</span></td></tr>
+        <tr><td class="pl">Jordan Stout</td><td>BAL</td><td>53</td><td>2657</td><td>50.1</td><td>2378</td><td>44.9</td><td>74</td><td>24</td><td>3.10</td><td><span class="ovr ovr-mid">91</span></td></tr>
+        <tr><td class="pl">Ryan Wright</td><td>MIN</td><td>65</td><td>3184</td><td>49.0</td><td>2893</td><td>44.5</td><td>77</td><td>25</td><td>3.08</td><td><span class="ovr ovr-mid">89</span></td></tr>
+        <tr><td class="pl">Kai Kroeger</td><td>NOR</td><td>56</td><td>2511</td><td>44.8</td><td>2163</td><td>37.3</td><td>61</td><td>18</td><td class="ng">2.54</td><td><span class="ovr ovr-lo">60</span></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</div>
+
+<!-- FANTASY -->
+<div id="tab-fantasy" class="tab-panel">
+  <div class="sec-label">// NFL Fantasy</div>
+  <div class="sec-title">Fantasy & Games</div>
+  <div class="sec-body">Test your football IQ with our interactive games, or manage your fantasy leagues.</div>
+  <div class="fantasy-grid">
+    <div class="f-card" onclick="showTab('guess')">
+      <div class="f-icon">🔮</div>
+      <h3>Guess the <span>Play</span></h3>
+      <p>Test your play-calling instincts using real NFL play-by-play data from 2013–2024. 15 seconds per play.</p>
+      <span class="f-tag">New Feature</span>
+    </div>
+    <div class="f-card">
+      <div class="f-icon">👥</div>
+      <h3>Fantasy <span>Leagues</span></h3>
+      <p>Manage your teams, waivers, trades, and weekly matchups all in one place.</p>
+      <span class="f-tag">Coming Soon</span>
+    </div>
+    <div class="f-card">
+      <div class="f-icon">🏆</div>
+      <h3>Prediction <span>Leaderboard</span></h3>
+      <p>See how your prediction accuracy stacks up against other fans globally.</p>
+      <span class="f-tag">Coming Soon</span>
+    </div>
+  </div>
+</div>
+
+<!-- GUESS THE PLAY -->
+<div id="tab-guess" class="tab-panel">
+  <div class="sec-label">// Interactive</div>
+  <div class="sec-title">🔮 Guess the Play</div>
+  <div class="sec-body">Real NFL play-by-play scenarios. Predict the call before it happens. You have 15 seconds.</div>
+  <div class="guess-wrap">
+    <div class="score-bar">
+      <div><div class="score-bar-label">Score</div><div class="score-bar-val" id="score">0.0</div></div>
+      <div><div class="score-bar-label">Correct</div><div class="score-bar-val" id="correct">0 / 0</div></div>
+      <div><div class="score-bar-label">Streak</div><div class="score-bar-val" id="streak">0</div></div>
+    </div>
+    <div class="guess-game">
+      <div class="guess-ctx" id="ctx">Loading scenario...</div>
+      <div class="guess-q">What does the offense call?</div>
+      <div class="timer-row">
+        <div class="timer-track"><div class="timer-fill" id="timer-fill" style="width:100%"></div></div>
+        <div class="timer-num" id="timer-num">15</div>
+      </div>
+      <div class="opts" id="opts"></div>
+      <button class="next-btn" id="next-btn" onclick="nextPlay()">Next Play →</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="ft-brand"><img src="/assets/logo.png" alt="SSC" /><span>The Sports <em>Companion</em></span></div>
+  <div class="ft-links">
+    <a href="/index.html">Home</a><a href="/nfl/index.html">NFL</a>
+    <a href="/mlb/index.html">MLB</a><a href="/nba/index.html">NBA</a><a href="/more/index.html">More</a>
+  </div>
+  <div class="ft-copy">© 2026 The Sports Companion</div>
+</footer>
+
+<script>
+// Tab switching
+function showTab(id) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target && event.target.classList.add('active');
+  if (id === 'guess' && !gameStarted) initGame();
+}
+
+// Sub-tab switching
+function showSub(id) {
+  document.querySelectorAll('.sub-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sub-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('sub-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// GUESS THE PLAY GAME
+const plays = [
+  { ctx: "3rd & 7 · Own 35 · Q2 · Tied 7-7 · 2 min warning", correct: "Short Pass — Crossing Route", opts: ["Short Pass — Crossing Route","Outside Zone Run","QB Draw","Deep Shot"] },
+  { ctx: "1st & 10 · Opp 25 · Q4 · Down by 3 · 5:30 left", correct: "Play Action Pass", opts: ["Play Action Pass","Inside Zone Run","Screen Pass","QB Sneak"] },
+  { ctx: "4th & 1 · Opp 2 · Q4 · Up by 4 · 1:10 left", correct: "QB Sneak", opts: ["QB Sneak","Outside Run","Pass — Fade Route","Field Goal"] },
+  { ctx: "2nd & 8 · Own 22 · Q1 · 0-0 · 12:45 left", correct: "Short Pass — Slant", opts: ["Short Pass — Slant","Draw Run","Deep Pass — Post","Screen Pass"] },
+  { ctx: "3rd & 2 · Own 48 · Q3 · Up by 7 · 8:20 left", correct: "Inside Zone Run", opts: ["Inside Zone Run","Play Action Deep","Short Pass — Out","Punt"] },
+  { ctx: "1st & 10 · Opp 40 · Q2 · Down by 10 · 6:00 left", correct: "Deep Pass — Corner Route", opts: ["Deep Pass — Corner Route","Inside Run","Screen Pass","Short Pass — Flat"] },
+  { ctx: "2nd & 4 · Opp 15 · Q4 · Tied · 2:45 left", correct: "Run — Power Right", opts: ["Run — Power Right","Pass — Slant","Pass — Fade","Play Action Boot"] },
+];
+
+let idx = 0, score = 0, correctCount = 0, total = 0, streak = 0, timer, timeLeft = 15, gameStarted = false;
+
+function initGame() {
+  gameStarted = true;
+  idx = Math.floor(Math.random() * plays.length);
+  renderPlay();
+}
+
+function renderPlay() {
+  const p = plays[idx % plays.length];
+  document.getElementById('ctx').textContent = p.ctx;
+  const shuffled = [...p.opts].sort(() => Math.random() - 0.5);
+  const optsEl = document.getElementById('opts');
+  optsEl.innerHTML = shuffled.map(o =>
+    `<button class="opt" onclick="pick(this,'${o.replace(/'/g,"\\'")}','${p.correct.replace(/'/g,"\\'")}')">${o}</button>`
+  ).join('');
+  document.getElementById('next-btn').classList.remove('show');
+  startTimer();
+}
+
+function startTimer() {
+  clearInterval(timer);
+  timeLeft = 15;
+  updateTimer();
+  timer = setInterval(() => {
+    timeLeft--;
+    updateTimer();
+    if (timeLeft <= 0) { clearInterval(timer); timeUp(); }
+  }, 1000);
+}
+
+function updateTimer() {
+  document.getElementById('timer-num').textContent = timeLeft;
+  document.getElementById('timer-fill').style.width = (timeLeft / 15 * 100) + '%';
+}
+
+function timeUp() {
+  total++;
+  streak = 0;
+  document.querySelectorAll('.opt').forEach(b => b.disabled = true);
+  const p = plays[idx % plays.length];
+  document.querySelectorAll('.opt').forEach(b => {
+    if (b.textContent === p.correct) b.classList.add('correct');
+  });
+  updateScores();
+  document.getElementById('next-btn').classList.add('show');
+}
+
+function pick(btn, choice, correct) {
+  clearInterval(timer);
+  total++;
+  document.querySelectorAll('.opt').forEach(b => b.disabled = true);
+  if (choice === correct) {
+    btn.classList.add('correct');
+    score += 1 + (timeLeft / 15);
+    correctCount++;
+    streak++;
+  } else {
+    btn.classList.add('wrong');
+    streak = 0;
+    document.querySelectorAll('.opt').forEach(b => {
+      if (b.textContent === correct) b.classList.add('correct');
+    });
+  }
+  updateScores();
+  document.getElementById('next-btn').classList.add('show');
+}
+
+function updateScores() {
+  document.getElementById('score').textContent = score.toFixed(1);
+  document.getElementById('correct').textContent = correctCount + ' / ' + total;
+  document.getElementById('streak').textContent = streak;
+}
+
+function nextPlay() {
+  idx++;
+  renderPlay();
+}
+</script>
+</body>
+</html>
