@@ -41,13 +41,12 @@
     .sb-possession{font-size:.72rem;color:var(--muted);margin-top:2px}
 
     /* QUARTER SCORES */
-    .quarter-scores{margin-top:20px;overflow-x:auto}
-    .qs-table{width:100%;border-collapse:collapse;font-size:.82rem}
-    .qs-table th{font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;padding:6px 12px;text-align:center;border-bottom:1px solid var(--line)}
-    .qs-table th:first-child{text-align:left}
-    .qs-table td{padding:8px 12px;text-align:center;border-bottom:1px solid rgba(255,255,255,.04)}
-    .qs-table td:first-child{text-align:left;font-weight:600;color:var(--white)}
-    .qs-table td.total{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:800;color:var(--gold)}
+    .quarter-scores{margin-top:16px;display:flex;justify-content:center}
+    .qs-table{border-collapse:collapse;font-size:.72rem;text-align:center}
+    .qs-table th{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;padding:4px 10px;text-align:center;border-bottom:1px solid var(--line)}
+    .qs-table td{padding:5px 10px;text-align:center;border-bottom:1px solid rgba(255,255,255,.04);color:var(--muted)}
+    .qs-table td:first-child{font-weight:600;color:var(--white);text-align:left;padding-right:16px}
+    .qs-table td.total{font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:800;color:var(--gold)}
     .qs-table td.active-q{color:var(--gold);font-weight:700}
 
     /* TABS */
@@ -61,22 +60,13 @@
     .panel{display:none;padding:24px 32px}
     .panel.active{display:block}
 
-    /* FIELD */
-    .field-wrap{background:#2d5a27;border:2px solid #1a3d17;border-radius:10px;overflow:hidden;position:relative;height:160px;margin-bottom:20px}
-    .field-inner{position:relative;width:100%;height:100%}
-    .field-yards{position:absolute;inset:0;display:flex}
-    .field-endzone{width:9%;background:#1a3d17;display:flex;align-items:center;justify-content:center}
-    .field-endzone span{font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:rgba(255,255,255,.5);writing-mode:vertical-rl;transform:rotate(180deg)}
-    .field-play{flex:1;position:relative}
-    .field-lines{position:absolute;inset:0;display:flex;justify-content:space-between;pointer-events:none}
-    .field-line{width:1px;background:rgba(255,255,255,.15);height:100%}
-    .field-yard-labels{position:absolute;bottom:4px;left:0;right:0;display:flex;justify-content:space-around;padding:0 5%}
-    .field-yard-label{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:rgba(255,255,255,.5)}
-    .ball-marker{position:absolute;top:50%;transform:translate(-50%,-50%);z-index:10;transition:left .6s ease}
-    .ball-icon{width:18px;height:18px;background:var(--gold);border-radius:50%;border:2px solid var(--white);box-shadow:0 0 12px rgba(242,194,48,.6)}
-    .ball-line{position:absolute;top:0;bottom:0;width:2px;background:rgba(242,194,48,.5);left:50%;transform:translateX(-50%)}
-    .down-box{position:absolute;top:8px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.75);border:1px solid var(--gold);border-radius:4px;padding:3px 10px;white-space:nowrap;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--gold);font-weight:600}
-    .td-flash{position:absolute;inset:0;background:rgba(34,197,94,.15);display:flex;align-items:center;justify-content:center;border-radius:8px;opacity:0;transition:opacity .3s}
+    /* FIELD - Vertical Madden style */
+    .field-wrap{position:relative;margin-bottom:20px;display:flex;justify-content:center}
+    .field-canvas-wrap{position:relative;width:280px;height:420px;border-radius:10px;overflow:hidden;border:2px solid #1a3d17;flex-shrink:0}
+    .field-svg{width:100%;height:100%;display:block}
+    .field-overlay{position:absolute;inset:0;pointer-events:none}
+    .down-box{position:absolute;top:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.85);border:1px solid var(--gold);border-radius:4px;padding:4px 12px;white-space:nowrap;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--gold);font-weight:600;z-index:10}
+    .td-flash{position:absolute;inset:0;background:rgba(34,197,94,.15);display:flex;align-items:center;justify-content:center;border-radius:8px;opacity:0;transition:opacity .3s;z-index:20}
     .td-flash.show{opacity:1}
     .td-flash span{font-family:'Barlow Condensed',sans-serif;font-size:2rem;font-weight:900;color:var(--green);text-shadow:0 0 20px rgba(34,197,94,.5)}
 
@@ -109,7 +99,7 @@
     .pbp-item.seen{opacity:1}
     .pbp-item.unseen{opacity:.4}
     .pbp-item-meta{font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--gold);margin-bottom:4px;letter-spacing:.06em}
-    .pbp-item-text{font-size:.82rem;color:var(--muted);line-height:1.5}
+    .pbp-item-text{font-size:.92rem;color:var(--muted);line-height:1.6}
     .pbp-item.td .pbp-item-text{color:var(--green)}
     .pbp-item-td-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:2px 6px;border-radius:3px;background:rgba(34,197,94,.15);color:var(--green);margin-left:6px}
 
@@ -210,35 +200,151 @@
 <!-- GAMECAST PANEL -->
 <div id="panel-gamecast" class="panel active">
 
-  <!-- FOOTBALL FIELD -->
+  <!-- FOOTBALL FIELD - Vertical Madden Style -->
   <div class="field-wrap">
-    <div class="field-inner">
-      <div class="field-yards">
-        <div class="field-endzone"><span>PHI</span></div>
-        <div class="field-play">
-          <div class="field-lines">
-            <div class="field-line"></div><div class="field-line"></div>
-            <div class="field-line"></div><div class="field-line"></div>
-            <div class="field-line"></div><div class="field-line"></div>
-            <div class="field-line"></div><div class="field-line"></div>
-            <div class="field-line"></div>
-          </div>
-          <div class="field-yard-labels">
-            <span class="field-yard-label">10</span><span class="field-yard-label">20</span>
-            <span class="field-yard-label">30</span><span class="field-yard-label">40</span>
-            <span class="field-yard-label">50</span><span class="field-yard-label">40</span>
-            <span class="field-yard-label">30</span><span class="field-yard-label">20</span>
-            <span class="field-yard-label">10</span>
-          </div>
-          <div class="ball-line" id="ball-line" style="left:35%"></div>
-          <div class="ball-marker" id="ball-marker" style="left:35%">
-            <div class="ball-icon"></div>
-          </div>
-          <div class="down-box" id="down-box">1st & 10 · PHI 35</div>
-        </div>
-        <div class="field-endzone"><span>DAL</span></div>
+    <div class="field-canvas-wrap">
+      <svg id="field-svg" class="field-svg" viewBox="0 0 280 420" xmlns="http://www.w3.org/2000/svg">
+        <!-- Sky/atmosphere gradient background -->
+        <defs>
+          <linearGradient id="fieldGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#1a4a14"/>
+            <stop offset="100%" stop-color="#2d6b24"/>
+          </linearGradient>
+          <linearGradient id="endzoneGrad1" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#0d2e0a"/>
+            <stop offset="100%" stop-color="#1a4a14"/>
+          </linearGradient>
+          <linearGradient id="endzoneGrad2" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#1a4a14"/>
+            <stop offset="100%" stop-color="#0d2e0a"/>
+          </linearGradient>
+          <!-- Alternating stripe pattern -->
+          <pattern id="stripes" x="0" y="0" width="280" height="28" patternUnits="userSpaceOnUse">
+            <rect width="280" height="14" fill="#2d6b24"/>
+            <rect y="14" width="280" height="14" fill="#256020"/>
+          </pattern>
+        </defs>
+
+        <!-- Field background stripes -->
+        <rect width="280" height="420" fill="url(#stripes)"/>
+
+        <!-- End zones -->
+        <rect x="0" y="0" width="280" height="42" fill="url(#endzoneGrad1)" opacity="0.9"/>
+        <rect x="0" y="378" width="280" height="42" fill="url(#endzoneGrad2)" opacity="0.9"/>
+
+        <!-- End zone text - away (top) -->
+        <text x="140" y="26" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="18" font-weight="900" fill="white" letter-spacing="4" opacity="0.7">PHI</text>
+        <!-- End zone text - home (bottom) -->
+        <text x="140" y="400" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="18" font-weight="900" fill="white" letter-spacing="4" opacity="0.7">DAL</text>
+
+        <!-- Yard lines (10 yard intervals) — inside endzones is 42px each, playing field 336px = 12 yards per 42px... use 33.6px per 10yds -->
+        <!-- Playing field: y=42 to y=378, height=336px, 100 yards = 336px, 10yds = 33.6px -->
+        <line x1="0" y1="42"  x2="280" y2="42"  stroke="white" stroke-width="2" opacity="0.8"/>
+        <line x1="0" y1="75.6"  x2="280" y2="75.6"  stroke="white" stroke-width="1" opacity="0.4"/>
+        <line x1="0" y1="109.2" x2="280" y2="109.2" stroke="white" stroke-width="1" opacity="0.4"/>
+        <line x1="0" y1="142.8" x2="280" y2="142.8" stroke="white" stroke-width="1.5" opacity="0.6"/>
+        <line x1="0" y1="176.4" x2="280" y2="176.4" stroke="white" stroke-width="1" opacity="0.4"/>
+        <line x1="0" y1="210"   x2="280" y2="210"   stroke="white" stroke-width="2" opacity="0.9"/>
+        <line x1="0" y1="243.6" x2="280" y2="243.6" stroke="white" stroke-width="1" opacity="0.4"/>
+        <line x1="0" y1="277.2" x2="280" y2="277.2" stroke="white" stroke-width="1.5" opacity="0.6"/>
+        <line x1="0" y1="310.8" x2="280" y2="310.8" stroke="white" stroke-width="1" opacity="0.4"/>
+        <line x1="0" y1="344.4" x2="280" y2="344.4" stroke="white" stroke-width="1" opacity="0.4"/>
+        <line x1="0" y1="378"   x2="280" y2="378"   stroke="white" stroke-width="2" opacity="0.8"/>
+
+        <!-- Sidelines -->
+        <line x1="8" y1="42" x2="8" y2="378" stroke="white" stroke-width="1.5" opacity="0.7"/>
+        <line x1="272" y1="42" x2="272" y2="378" stroke="white" stroke-width="1.5" opacity="0.7"/>
+
+        <!-- Hash marks left -->
+        <g opacity="0.5" stroke="white" stroke-width="1">
+          <line x1="80" y1="75.6"  x2="100" y2="75.6"/>
+          <line x1="80" y1="109.2" x2="100" y2="109.2"/>
+          <line x1="80" y1="142.8" x2="100" y2="142.8"/>
+          <line x1="80" y1="176.4" x2="100" y2="176.4"/>
+          <line x1="80" y1="243.6" x2="100" y2="243.6"/>
+          <line x1="80" y1="277.2" x2="100" y2="277.2"/>
+          <line x1="80" y1="310.8" x2="100" y2="310.8"/>
+          <line x1="80" y1="344.4" x2="100" y2="344.4"/>
+        </g>
+        <!-- Hash marks right -->
+        <g opacity="0.5" stroke="white" stroke-width="1">
+          <line x1="180" y1="75.6"  x2="200" y2="75.6"/>
+          <line x1="180" y1="109.2" x2="200" y2="109.2"/>
+          <line x1="180" y1="142.8" x2="200" y2="142.8"/>
+          <line x1="180" y1="176.4" x2="200" y2="176.4"/>
+          <line x1="180" y1="243.6" x2="200" y2="243.6"/>
+          <line x1="180" y1="277.2" x2="200" y2="277.2"/>
+          <line x1="180" y1="310.8" x2="200" y2="310.8"/>
+          <line x1="180" y1="344.4" x2="200" y2="344.4"/>
+        </g>
+
+        <!-- Yard numbers -->
+        <g font-family="'Barlow Condensed',sans-serif" font-size="11" font-weight="700" fill="white" opacity="0.55" text-anchor="middle">
+          <text x="30" y="72">10</text><text x="250" y="72">10</text>
+          <text x="30" y="105">20</text><text x="250" y="105">20</text>
+          <text x="30" y="139">30</text><text x="250" y="139">30</text>
+          <text x="30" y="172">40</text><text x="250" y="172">40</text>
+          <text x="30" y="206">50</text><text x="250" y="206">50</text>
+          <text x="30" y="240">40</text><text x="250" y="240">40</text>
+          <text x="30" y="274">30</text><text x="250" y="274">30</text>
+          <text x="30" y="308">20</text><text x="250" y="308">20</text>
+          <text x="30" y="342">10</text><text x="250" y="342">10</text>
+        </g>
+
+        <!-- Line of scrimmage (animated) -->
+        <line id="los-line" x1="0" y1="260" x2="280" y2="260" stroke="#F2C230" stroke-width="2.5" opacity="0.85" stroke-dasharray="8,4"/>
+
+        <!-- First down marker -->
+        <line id="first-down-line" x1="0" y1="235" x2="280" y2="235" stroke="#38BDF8" stroke-width="2" opacity="0.7" stroke-dasharray="8,4"/>
+
+        <!-- Ball -->
+        <ellipse id="ball-el" cx="140" cy="260" rx="9" ry="6" fill="#8B4513" stroke="#F2C230" stroke-width="1.5"/>
+        <line id="ball-lace" x1="135" y1="260" x2="145" y2="260" stroke="white" stroke-width="1" opacity="0.8"/>
+
+        <!-- Offense players — individually IDd for animation -->
+        <g id="offense-group">
+          <!-- OL: use circle for cx/cy animation -->
+          <circle id="ol1-dot" cx="113" cy="271" r="5" fill="#3B82F6" stroke="#60A5FA" stroke-width="1"/>
+          <circle id="ol2-dot" cx="126" cy="271" r="5" fill="#3B82F6" stroke="#60A5FA" stroke-width="1"/>
+          <circle id="ol3-dot" cx="139" cy="271" r="5" fill="#3B82F6" stroke="#60A5FA" stroke-width="1"/>
+          <circle id="ol4-dot" cx="152" cy="271" r="5" fill="#3B82F6" stroke="#60A5FA" stroke-width="1"/>
+          <circle id="ol5-dot" cx="165" cy="271" r="5" fill="#3B82F6" stroke="#60A5FA" stroke-width="1"/>
+          <!-- QB — slightly larger, darker blue -->
+          <circle id="qb1-dot" cx="139" cy="284" r="6" fill="#1D4ED8" stroke="#93C5FD" stroke-width="1.5"/>
+          <!-- WR left -->
+          <circle id="wr1-dot" cx="66"  cy="271" r="5" fill="#3B82F6" stroke="#60A5FA" stroke-width="1"/>
+          <!-- WR right -->
+          <circle id="wr2-dot" cx="212" cy="271" r="5" fill="#3B82F6" stroke="#60A5FA" stroke-width="1"/>
+          <!-- RB -->
+          <circle id="rb1-dot" cx="139" cy="297" r="5" fill="#2563EB" stroke="#93C5FD" stroke-width="1"/>
+        </g>
+
+        <!-- Defense players — individually IDd for animation -->
+        <g id="defense-group">
+          <!-- DL -->
+          <circle id="dl1-dot" cx="117" cy="255" r="5" fill="#DC2626" stroke="#F87171" stroke-width="1"/>
+          <circle id="dl2-dot" cx="130" cy="255" r="5" fill="#DC2626" stroke="#F87171" stroke-width="1"/>
+          <circle id="dl3-dot" cx="144" cy="255" r="5" fill="#DC2626" stroke="#F87171" stroke-width="1"/>
+          <circle id="dl4-dot" cx="157" cy="255" r="5" fill="#DC2626" stroke="#F87171" stroke-width="1"/>
+          <!-- LB -->
+          <circle id="lb1-dot" cx="113" cy="242" r="5" fill="#B91C1C" stroke="#F87171" stroke-width="1"/>
+          <circle id="lb2-dot" cx="139" cy="242" r="5" fill="#B91C1C" stroke="#F87171" stroke-width="1"/>
+          <circle id="lb3-dot" cx="165" cy="242" r="5" fill="#B91C1C" stroke="#F87171" stroke-width="1"/>
+          <!-- DB -->
+          <circle id="db1-dot" cx="79"  cy="228" r="5" fill="#991B1B" stroke="#FCA5A5" stroke-width="1"/>
+          <circle id="db2-dot" cx="139" cy="226" r="5" fill="#991B1B" stroke="#FCA5A5" stroke-width="1"/>
+          <circle id="db3-dot" cx="199" cy="228" r="5" fill="#991B1B" stroke="#FCA5A5" stroke-width="1"/>
+        </g>
+
+        <!-- Crowd/stadium blur effect at top -->
+        <rect x="0" y="0" width="280" height="20" fill="url(#endzoneGrad1)" opacity="0.6"/>
+      </svg>
+
+      <!-- Overlay elements -->
+      <div class="field-overlay">
+        <div class="down-box" id="down-box">1st & 10 · PHI 35</div>
+        <div class="td-flash" id="td-flash"><span style="font-family:'Barlow Condensed',sans-serif;font-size:2rem;font-weight:900;color:#22c55e;text-shadow:0 0 20px rgba(34,197,94,.5)">TOUCHDOWN! 🏈</span></div>
       </div>
-      <div class="td-flash" id="td-flash"><span>TOUCHDOWN! 🏈</span></div>
     </div>
   </div>
 
@@ -406,15 +512,314 @@ const plays = [
 let currentIdx = plays.length - 1;
 let isLive = true;
 let liveTimer = null;
+let animFrames = [];
+
+// ── PLAY CLASSIFIER ────────────────────────────────────────────
+// Reads the play text and returns a play type + direction
+function classifyPlay(text) {
+  const t = text.toLowerCase();
+  if (t.includes('touchdown') || t.includes('td') || t.includes('end zone') && t.includes('score')) return { type:'td' };
+  if (t.includes('spike')) return { type:'spike' };
+  if (t.includes('punt')) return { type:'punt' };
+  if (t.includes('pat') || t.includes('extra point') || t.includes('kick')) return { type:'pat' };
+  if (t.includes('incomplete') || t.includes('off the rim') || t.includes('overthrow')) return { type:'incomplete' };
+  if (t.includes('sack') || t.includes('tackled for loss')) return { type:'sack' };
+  if (t.includes('interception') || t.includes('picks off')) return { type:'int' };
+  if (t.includes('scramble') || t.includes('keeper') || t.includes('qb run') || t.includes('rolls')) return { type:'qb_run', dir: t.includes('right') ? 'right' : t.includes('left') ? 'left' : 'mid' };
+  if (t.includes('sneak')) return { type:'sneak' };
+  if (t.includes('sweep') || t.includes('outside') || t.includes('bounce')) return { type:'run', dir: t.includes('right') ? 'right' : t.includes('left') ? 'left' : 'mid' };
+  if (t.includes('draw') || t.includes('up the middle') || t.includes('counter') || t.includes('off left') || t.includes('off right') || t.includes('hands off') || t.includes('hand off')) return { type:'run', dir: t.includes('right') ? 'right' : t.includes('left') ? 'left' : 'mid' };
+  if (t.includes('slant')) return { type:'pass', route:'slant', dir: t.includes('right') ? 'right' : 'left' };
+  if (t.includes('crossing') || t.includes('cross')) return { type:'pass', route:'cross', dir:'mid' };
+  if (t.includes('fade') || t.includes('back of the end zone') || t.includes('corner')) return { type:'pass', route:'fade', dir: t.includes('right') ? 'right' : 'left' };
+  if (t.includes('deep') || t.includes('deep pass') || t.includes('in stride') || t.includes('long')) return { type:'pass', route:'deep', dir: t.includes('right') ? 'right' : t.includes('left') ? 'left' : 'mid' };
+  if (t.includes('out route') || t.includes('quick out') || t.includes('comeback')) return { type:'pass', route:'out', dir: t.includes('right') ? 'right' : 'left' };
+  if (t.includes('screen')) return { type:'pass', route:'screen', dir: t.includes('right') ? 'right' : 'left' };
+  if (t.includes('play action') || t.includes('pump-fake') || t.includes('pump fake')) return { type:'play_action', dir: t.includes('right') ? 'right' : 'left' };
+  if (t.includes('pass') || t.includes('fires') || t.includes('finds') || t.includes('hits') || t.includes('throws') || t.includes('lofts')) return { type:'pass', route:'short', dir: t.includes('right') ? 'right' : t.includes('left') ? 'left' : 'mid' };
+  if (t.includes('run') || t.includes('rush') || t.includes('carry') || t.includes('gain')) return { type:'run', dir:'mid' };
+  return { type:'run', dir:'mid' };
+}
+
+// ── SVG ANIMATION ENGINE ───────────────────────────────────────
+// Each player has an id. We animate cx/cy via JS tweening.
+// Offense ids: ol1-ol5, qb1, wr1, wr2, rb1
+// Defense ids: dl1-dl4, lb1-lb3, db1-db3
+
+const SNAP_POSITIONS = {
+  // Offense - relative to LOS (y=0 means on the line, positive = behind LOS)
+  ol1: { x:108, dy:3  }, ol2: { x:121, dy:3  }, ol3: { x:134, dy:3  },
+  ol4: { x:147, dy:3  }, ol5: { x:160, dy:3  },
+  qb1: { x:134, dy:16 },
+  wr1: { x:62,  dy:3  }, wr2: { x:207, dy:3  },
+  rb1: { x:134, dy:29 },
+  // Defense - relative to LOS (negative = ahead of LOS toward defense)
+  dl1: { x:112, dy:-9 }, dl2: { x:125, dy:-9 }, dl3: { x:139, dy:-9 }, dl4: { x:152, dy:-9 },
+  lb1: { x:108, dy:-22}, lb2: { x:134, dy:-22}, lb3: { x:160, dy:-22},
+  db1: { x:75,  dy:-35}, db2: { x:134, dy:-37}, db3: { x:195, dy:-35},
+};
+
+function getEl(id) { return document.getElementById(id + '-dot'); }
+
+function tweenAttr(el, attr, from, to, duration, easing) {
+  const start = performance.now();
+  function step(now) {
+    let t = Math.min((now - start) / duration, 1);
+    if (easing === 'ease-out') t = 1 - Math.pow(1 - t, 3);
+    else if (easing === 'ease-in') t = Math.pow(t, 2);
+    else if (easing === 'ease-in-out') t = t < 0.5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2;
+    el.setAttribute(attr, from + (to - from) * t);
+    if (t < 1) animFrames.push(requestAnimationFrame(step));
+  }
+  animFrames.push(requestAnimationFrame(step));
+}
+
+function cancelAnims() {
+  animFrames.forEach(id => cancelAnimationFrame(id));
+  animFrames = [];
+}
+
+function resetToSnap(losY, offenseDown) {
+  // offenseDown: true = offense going DOWN the field (toward DAL endzone)
+  Object.entries(SNAP_POSITIONS).forEach(([id, pos]) => {
+    const el = getEl(id);
+    if (!el) return;
+    const isOffense = ['ol1','ol2','ol3','ol4','ol5','qb1','wr1','wr2','rb1'].includes(id);
+    const dyDir = offenseDown ? 1 : -1;
+    const y = isOffense
+      ? losY + pos.dy * dyDir
+      : losY + pos.dy * dyDir;
+    el.setAttribute('cx', pos.x);
+    el.setAttribute('cy', y);
+  });
+}
+
+function animatePlay(play, losY) {
+  cancelAnims();
+  const cls = classifyPlay(play.text);
+  const offenseDown = play.possession === 'PHI'; // PHI attacks downward
+  const dirMult = offenseDown ? 1 : -1;
+  const dur = 900;
+
+  resetToSnap(losY, offenseDown);
+
+  // Small delay so reset is visible before animation
+  setTimeout(() => {
+    switch(cls.type) {
+
+      case 'run': {
+        const xOff = cls.dir === 'right' ? 30 : cls.dir === 'left' ? -30 : 0;
+        const gain = 12 * dirMult;
+        // OL drives forward
+        ['ol1','ol2','ol3','ol4','ol5'].forEach((id,i) => {
+          const el = getEl(id); if (!el) return;
+          const cx = parseFloat(el.getAttribute('cx'));
+          const cy = parseFloat(el.getAttribute('cy'));
+          tweenAttr(el,'cx', cx, cx + xOff*0.3, dur, 'ease-out');
+          tweenAttr(el,'cy', cy, cy + gain*0.6, dur, 'ease-out');
+        });
+        // RB takes the ball and runs
+        const rb = getEl('rb1'); if (rb) {
+          const cx = parseFloat(rb.getAttribute('cx'));
+          const cy = parseFloat(rb.getAttribute('cy'));
+          tweenAttr(rb,'cx', cx, cx + xOff, dur*1.2, 'ease-in-out');
+          tweenAttr(rb,'cy', cy, cy + gain*1.8, dur*1.2, 'ease-in-out');
+        }
+        // QB hands off (moves slightly)
+        const qb = getEl('qb1'); if (qb) {
+          const cx = parseFloat(qb.getAttribute('cx'));
+          const cy = parseFloat(qb.getAttribute('cy'));
+          tweenAttr(qb,'cx', cx, cx - 5, dur*0.5, 'ease-out');
+        }
+        // Defense converges
+        ['dl1','dl2','dl3','dl4'].forEach(id => {
+          const el = getEl(id); if (!el) return;
+          const cx = parseFloat(el.getAttribute('cx'));
+          const cy = parseFloat(el.getAttribute('cy'));
+          tweenAttr(el,'cx', cx, cx + xOff*0.4, dur*0.8, 'ease-in');
+          tweenAttr(el,'cy', cy, cy + gain*0.4, dur*0.8, 'ease-in');
+        });
+        break;
+      }
+
+      case 'sneak': {
+        const gain = 6 * dirMult;
+        ['ol1','ol2','ol3','ol4','ol5','qb1'].forEach(id => {
+          const el = getEl(id); if (!el) return;
+          const cy = parseFloat(el.getAttribute('cy'));
+          tweenAttr(el,'cy', cy, cy + gain, dur*0.7, 'ease-out');
+        });
+        ['dl1','dl2','dl3','dl4'].forEach(id => {
+          const el = getEl(id); if (!el) return;
+          const cy = parseFloat(el.getAttribute('cy'));
+          tweenAttr(el,'cy', cy, cy + gain*0.5, dur*0.7, 'ease-in');
+        });
+        break;
+      }
+
+      case 'pass':
+      case 'play_action': {
+        const route = cls.route || 'short';
+        const dir = cls.dir || 'mid';
+        // QB drops back
+        const qb = getEl('qb1'); if (qb) {
+          const cy = parseFloat(qb.getAttribute('cy'));
+          tweenAttr(qb,'cy', cy, cy - 12*dirMult, dur*0.4, 'ease-out');
+          // then throws (snaps back slightly)
+          setTimeout(() => tweenAttr(qb,'cy', parseFloat(qb.getAttribute('cy')), parseFloat(qb.getAttribute('cy')) + 6*dirMult, dur*0.3, 'ease-in'), dur*0.5);
+        }
+        // Primary receiver runs their route
+        const primary = dir === 'right' ? getEl('wr2') : dir === 'left' ? getEl('wr1') : getEl('rb1');
+        if (primary) {
+          const cx = parseFloat(primary.getAttribute('cx'));
+          const cy = parseFloat(primary.getAttribute('cy'));
+          let tx = cx, ty = cy;
+          if (route === 'slant')   { tx = cx + (dir==='right'?-35:35); ty = cy + 28*dirMult; }
+          if (route === 'out')     { tx = cx + (dir==='right'?30:-30); ty = cy + 18*dirMult; }
+          if (route === 'cross')   { tx = cx + (dir==='right'?-50:50); ty = cy + 22*dirMult; }
+          if (route === 'deep')    { tx = cx + (dir==='right'?-15:15); ty = cy + 55*dirMult; }
+          if (route === 'fade')    { tx = cx + (dir==='right'?15:-15); ty = cy + 60*dirMult; }
+          if (route === 'screen')  { tx = cx + (dir==='right'?-20:20); ty = cy + 8*dirMult;  }
+          if (route === 'short')   { tx = cx + (dir==='right'?-20:20); ty = cy + 25*dirMult; }
+          tweenAttr(primary,'cx', cx, tx, dur*1.1, 'ease-out');
+          tweenAttr(primary,'cy', cy, ty, dur*1.1, 'ease-out');
+        }
+        // Secondary receiver runs opposite route (spacing)
+        const secondary = dir === 'right' ? getEl('wr1') : getEl('wr2');
+        if (secondary) {
+          const cx = parseFloat(secondary.getAttribute('cx'));
+          const cy = parseFloat(secondary.getAttribute('cy'));
+          tweenAttr(secondary,'cx', cx, cx + (dir==='right'?10:-10), dur*0.9, 'ease-out');
+          tweenAttr(secondary,'cy', cy, cy + 30*dirMult, dur*0.9, 'ease-out');
+        }
+        // OL pass protection - hold position
+        ['ol1','ol2','ol3','ol4','ol5'].forEach(id => {
+          const el = getEl(id); if (!el) return;
+          const cy = parseFloat(el.getAttribute('cy'));
+          tweenAttr(el,'cy', cy, cy + 4*dirMult, dur*0.4, 'ease-out');
+        });
+        // DL rushes the QB
+        ['dl1','dl2','dl3','dl4'].forEach((id,i) => {
+          const el = getEl(id); if (!el) return;
+          const cx = parseFloat(el.getAttribute('cx'));
+          const cy = parseFloat(el.getAttribute('cy'));
+          tweenAttr(el,'cy', cy, cy + 14*dirMult, dur*0.9, 'ease-in');
+          tweenAttr(el,'cx', cx, cx + [-8,-4,4,8][i], dur*0.9, 'ease-in');
+        });
+        // DB drops into coverage
+        ['db1','db2','db3'].forEach(id => {
+          const el = getEl(id); if (!el) return;
+          const cy = parseFloat(el.getAttribute('cy'));
+          tweenAttr(el,'cy', cy, cy - 10*dirMult, dur*0.6, 'ease-out');
+        });
+        break;
+      }
+
+      case 'qb_run': {
+        const xOff = cls.dir === 'right' ? 35 : cls.dir === 'left' ? -35 : 0;
+        const gain = 20 * dirMult;
+        const qb = getEl('qb1'); if (qb) {
+          const cx = parseFloat(qb.getAttribute('cx'));
+          const cy = parseFloat(qb.getAttribute('cy'));
+          // QB fakes drop back then takes off
+          tweenAttr(qb,'cy', cy, cy - 8*dirMult, dur*0.3, 'ease-out');
+          setTimeout(() => {
+            const cy2 = parseFloat(qb.getAttribute('cy'));
+            tweenAttr(qb,'cx', parseFloat(qb.getAttribute('cx')), cx + xOff, dur*0.9, 'ease-in-out');
+            tweenAttr(qb,'cy', cy2, cy2 + gain*1.5, dur*0.9, 'ease-in-out');
+          }, dur*0.35);
+        }
+        // Receivers run downfield as decoys
+        ['wr1','wr2'].forEach((id,i) => {
+          const el = getEl(id); if (!el) return;
+          const cy = parseFloat(el.getAttribute('cy'));
+          tweenAttr(el,'cy', cy, cy + 40*dirMult, dur*1.1, 'ease-out');
+        });
+        // Defense closes on scramble
+        ['lb1','lb2','lb3'].forEach(id => {
+          const el = getEl(id); if (!el) return;
+          const cx = parseFloat(el.getAttribute('cx'));
+          const cy = parseFloat(el.getAttribute('cy'));
+          tweenAttr(el,'cx', cx, cx + xOff*0.5, dur, 'ease-in');
+          tweenAttr(el,'cy', cy, cy + gain*0.8, dur, 'ease-in');
+        });
+        break;
+      }
+
+      case 'td': {
+        // Everyone surges toward end zone
+        const gain = 40 * dirMult;
+        Object.keys(SNAP_POSITIONS).filter(id => ['ol1','ol2','ol3','ol4','ol5','qb1','wr1','wr2','rb1'].includes(id)).forEach(id => {
+          const el = getEl(id); if (!el) return;
+          const cy = parseFloat(el.getAttribute('cy'));
+          tweenAttr(el,'cy', cy, cy + gain, dur*1.3, 'ease-out');
+        });
+        break;
+      }
+
+      case 'sack': {
+        // QB gets driven back
+        const qb = getEl('qb1'); if (qb) {
+          const cy = parseFloat(qb.getAttribute('cy'));
+          tweenAttr(qb,'cy', cy, cy - 20*dirMult, dur*0.8, 'ease-in');
+        }
+        // DL bursts through
+        ['dl1','dl2','dl3','dl4'].forEach((id,i) => {
+          const el = getEl(id); if (!el) return;
+          const cy = parseFloat(el.getAttribute('cy'));
+          tweenAttr(el,'cy', cy, cy + 20*dirMult, dur*0.8, 'ease-in');
+        });
+        break;
+      }
+
+      case 'incomplete': {
+        // QB drops back, receivers run routes, ball doesn't connect
+        const qb = getEl('qb1'); if (qb) {
+          const cy = parseFloat(qb.getAttribute('cy'));
+          tweenAttr(qb,'cy', cy, cy - 10*dirMult, dur*0.4, 'ease-out');
+        }
+        ['wr1','wr2'].forEach(id => {
+          const el = getEl(id); if (!el) return;
+          const cy = parseFloat(el.getAttribute('cy'));
+          tweenAttr(el,'cy', cy, cy + 25*dirMult, dur, 'ease-out');
+        });
+        break;
+      }
+
+      case 'spike': {
+        // Everyone stays in place, small shuffle
+        ['ol1','ol2','ol3','ol4','ol5','qb1'].forEach(id => {
+          const el = getEl(id); if (!el) return;
+          const cy = parseFloat(el.getAttribute('cy'));
+          tweenAttr(el,'cy', cy, cy + 2*dirMult, dur*0.3, 'ease-out');
+          setTimeout(() => tweenAttr(el,'cy', parseFloat(el.getAttribute('cy')), cy, dur*0.3, 'ease-in'), dur*0.4);
+        });
+        break;
+      }
+    }
+  }, 150);
+}
 
 // ── RENDER ─────────────────────────────────────────────────────
 function renderPlay(idx) {
   const p = plays[idx];
-  const ballPct = Math.max(9, Math.min(91, p.yard)) + '%';
 
-  document.getElementById('ball-marker').style.left = ballPct;
-  document.getElementById('ball-line').style.left = ballPct;
+  // Update field position
+  const fieldY = 42 + (p.yard / 100) * 336;
+  const firstDownY = 42 + (Math.min(p.yard + 10, 100) / 100) * 336;
+  const ball = document.getElementById('ball-el');
+  const lace = document.getElementById('ball-lace');
+  const los  = document.getElementById('los-line');
+  const fdn  = document.getElementById('first-down-line');
+  if (ball) { ball.setAttribute('cy', fieldY); lace.setAttribute('y1', fieldY); lace.setAttribute('y2', fieldY); }
+  if (los)  { los.setAttribute('y1', fieldY); los.setAttribute('y2', fieldY); }
+  if (fdn)  { fdn.setAttribute('y1', firstDownY); fdn.setAttribute('y2', firstDownY); }
   document.getElementById('down-box').textContent = `${p.down} · ${p.yardLabel}`;
+
+  // Animate the players
+  animatePlay(p, fieldY);
+
+  // Update scoreboard
   document.getElementById('play-situation').textContent = `Q${p.q} · ${p.possession} · ${p.yardLabel}`;
   document.getElementById('play-down').textContent = p.down;
   document.getElementById('play-text').textContent = p.text;
@@ -434,7 +839,7 @@ function renderPlay(idx) {
   if (p.td) {
     tdFlash.classList.add('show');
     tdLabel.style.display = 'block';
-    setTimeout(() => tdFlash.classList.remove('show'), 2000);
+    setTimeout(() => tdFlash.classList.remove('show'), 2200);
   } else {
     tdFlash.classList.remove('show');
     tdLabel.style.display = 'none';
@@ -454,7 +859,6 @@ function renderMiniFeed(activeIdx) {
       <div class="pbp-item-text">${p.text.substring(0, 90)}...${p.td ? '<span class="pbp-item-td-badge">TD</span>' : ''}</div>
     </div>
   `).join('');
-  // Scroll active into view
   const active = feed.querySelector('.pbp-item.active');
   if (active) active.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
 }
@@ -483,9 +887,7 @@ function nextPlay() { if (currentIdx < plays.length - 1) { currentIdx++; renderP
 function jumpTo(idx) { currentIdx = idx; stopLive(); renderPlay(idx); }
 function jumpToAndShow(idx) { currentIdx = idx; showPanel('gamecast', true); renderPlay(idx); }
 
-function toggleLive() {
-  if (isLive) { stopLive(); } else { startLive(); }
-}
+function toggleLive() { if (isLive) { stopLive(); } else { startLive(); } }
 function startLive() {
   isLive = true;
   document.getElementById('btn-live').textContent = '⏸ Pause';
@@ -493,7 +895,7 @@ function startLive() {
   liveTimer = setInterval(() => {
     if (currentIdx < plays.length - 1) { currentIdx++; renderPlay(currentIdx); }
     else { stopLive(); }
-  }, 2200);
+  }, 2800);
 }
 function stopLive() {
   isLive = false;
@@ -510,7 +912,6 @@ function showPanel(id, skipBtnUpdate) {
   if (!skipBtnUpdate && event && event.target) event.target.classList.add('active');
   if (id === 'pbp') renderFullFeed();
 }
-
 function showBS(team) {
   document.getElementById('bs-phi').style.display = team === 'phi' ? 'block' : 'none';
   document.getElementById('bs-dal').style.display = team === 'dal' ? 'block' : 'none';
