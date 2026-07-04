@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NCAAF Gameday — The Sports Companion</title>
+  <link rel="icon" type="image/png" href="/assets/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--ink:#0B0D0F;--ink-2:#181B1F;--ink-3:#262A30;--muted:#8A8F98;--line:#2A2E35;--gold:#F2C230;--crimson:#C83A2B;--white:#FFFFFF;--green:#22c55e}
+    html{scroll-behavior:smooth}
+    body{font-family:'Inter',sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+
+    /* NAV */
+    nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;background:rgba(11,13,15,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+    .nav-brand{display:flex;align-items:center;gap:8px;padding:0 20px;text-decoration:none;border-right:1px solid var(--line);height:56px;flex-shrink:0}
+    .nav-brand img{height:28px}
+    .nav-brand span{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;letter-spacing:.04em;color:var(--white);white-space:nowrap}
+    .nav-brand span em{font-style:normal;color:var(--gold)}
+    .nav-back{display:flex;align-items:center;height:56px;padding:0 20px;font-size:.82rem;font-weight:600;color:var(--muted);text-decoration:none;border-right:1px solid var(--line);gap:6px;transition:color .2s}
+    .nav-back:hover{color:var(--white)}
+    .nav-live{margin-left:auto;padding:0 20px;height:56px;display:flex;align-items:center;gap:10px}
+    .live-badge{display:flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:5px 10px;border-radius:4px;background:rgba(200,58,43,.15);color:var(--crimson);border:1px solid rgba(200,58,43,.3)}
+    .live-dot{width:6px;height:6px;border-radius:50%;background:var(--crimson);animation:pulse 1.2s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+    /* SCOREBOARD */
+    .scoreboard{background:var(--ink-2);border-bottom:1px solid var(--line);padding:24px 32px}
+    .sb-top{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+    .sb-team{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:120px}
+    .sb-team-name{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;text-align:center}
+    .sb-team-record{font-size:.75rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
+    .sb-score-wrap{display:flex;align-items:center;gap:20px}
+    .sb-score{font-family:'Barlow Condensed',sans-serif;font-size:4.5rem;font-weight:900;line-height:1}
+    .sb-score.leader{color:var(--gold)}
+    .sb-divider{font-family:'Barlow Condensed',sans-serif;font-size:2rem;color:var(--line);font-weight:700}
+    .sb-game-info{display:flex;flex-direction:column;align-items:center;gap:4px}
+    .sb-quarter{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:800;text-transform:uppercase;color:var(--gold)}
+    .sb-clock{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--muted)}
+    .sb-possession{font-size:.72rem;color:var(--muted);margin-top:2px}
+
+    /* QUARTER SCORES */
+    .quarter-scores{margin-top:16px;display:flex;justify-content:center}
+    .qs-table{border-collapse:collapse;font-size:.72rem;text-align:center}
+    .qs-table th{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;padding:4px 10px;text-align:center;border-bottom:1px solid var(--line)}
+    .qs-table td{padding:5px 10px;text-align:center;border-bottom:1px solid rgba(255,255,255,.04);color:var(--muted)}
+    .qs-table td:first-child{font-weight:600;color:var(--white);text-align:left;padding-right:16px}
+    .qs-table td.total{font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:800;color:var(--gold)}
+    .qs-table td.active-q{color:var(--gold);font-weight:700}
+
+    /* TABS */
+    .game-tabs{display:flex;background:var(--ink-2);border-bottom:1px solid var(--line)}
+    .game-tab{padding:13px 24px;font-size:.82rem;font-weight:600;color:var(--muted);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;transition:all .2s;white-space:nowrap}
+    .game-tab:hover{color:var(--white)}
+    .game-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+
+    /* GAMECAST PANEL */
+    #panel-gamecast{display:block}
+    .panel{display:none;padding:24px 32px}
+    .panel.active{display:block}
+
+    /* FIELD - Vertical Madden style */
+    .field-wrap{position:relative;margin-bottom:20px;display:flex;justify-content:center}
+    .field-canvas-wrap{position:relative;width:100%;max-width:680px;height:auto;aspect-ratio:680/340;border-radius:10px;overflow:hidden;border:2px solid #1a3d17;flex-shrink:0}
+    .field-svg{width:100%;height:100%;display:block}
+    .field-overlay{position:absolute;inset:0;pointer-events:none}
+    .down-box{position:absolute;top:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.85);border:1px solid var(--gold);border-radius:4px;padding:4px 12px;white-space:nowrap;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--gold);font-weight:600;z-index:10}
+    .td-flash{position:absolute;inset:0;background:rgba(34,197,94,.15);display:flex;align-items:center;justify-content:center;border-radius:8px;opacity:0;transition:opacity .3s;z-index:20}
+    .td-flash.show{opacity:1}
+    .td-flash span{font-family:'Barlow Condensed',sans-serif;font-size:2rem;font-weight:900;color:var(--green);text-shadow:0 0 20px rgba(34,197,94,.5)}
+
+    /* PLAY DESCRIPTION */
+    .play-desc-card{background:var(--ink-2);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin-bottom:20px}
+    .play-desc-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px}
+    .play-desc-situation{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--white);font-weight:600}
+    .play-desc-down{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--gold);font-weight:600}
+    .play-desc-text{font-size:.88rem;color:var(--muted);line-height:1.6}
+    .play-desc-td{color:var(--green);font-weight:700;font-size:.8rem;margin-top:6px}
+
+    /* PLAY CONTROLS */
+    .play-controls{display:flex;gap:8px;margin-bottom:20px;align-items:center}
+    .ctrl-btn{background:var(--ink-2);border:1px solid var(--line);color:var(--white);font-size:.82rem;font-weight:600;padding:9px 16px;border-radius:6px;cursor:pointer;transition:all .2s}
+    .ctrl-btn:hover{border-color:var(--gold);color:var(--gold)}
+    .ctrl-btn:disabled{opacity:.4;cursor:not-allowed}
+    .ctrl-btn.live{background:var(--crimson);border-color:var(--crimson);color:var(--white)}
+    .ctrl-btn.live.paused{background:var(--green);border-color:var(--green)}
+    .play-counter{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--muted);margin-left:auto}
+
+    /* PLAY BY PLAY FEED */
+    .pbp-feed{border:1px solid var(--line);border-radius:10px;overflow:hidden;max-height:400px;overflow-y:auto}
+    .pbp-feed::-webkit-scrollbar{width:4px}
+    .pbp-feed::-webkit-scrollbar-track{background:var(--ink-2)}
+    .pbp-feed::-webkit-scrollbar-thumb{background:var(--line);border-radius:2px}
+    .pbp-item{padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.04);transition:background .15s;cursor:pointer}
+    .pbp-item:last-child{border-bottom:none}
+    .pbp-item:hover{background:var(--ink-2)}
+    .pbp-item.active{background:rgba(242,194,48,.08);border-left:2px solid var(--gold)}
+    .pbp-item.seen{opacity:1}
+    .pbp-item.unseen{opacity:.4}
+    .pbp-item-meta{font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--gold);margin-bottom:4px;letter-spacing:.06em}
+    .pbp-item-text{font-size:.92rem;color:var(--muted);line-height:1.6}
+    .pbp-item.td .pbp-item-text{color:var(--green)}
+    .pbp-item-td-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:2px 6px;border-radius:3px;background:rgba(34,197,94,.15);color:var(--green);margin-left:6px}
+
+    /* BOX SCORE */
+    .bs-team-toggle{display:flex;gap:8px;margin-bottom:16px}
+    .bs-toggle-btn{background:var(--ink-2);border:1px solid var(--line);color:var(--muted);font-size:.8rem;font-weight:600;padding:8px 16px;border-radius:6px;cursor:pointer;transition:all .2s}
+    .bs-toggle-btn:hover{color:var(--white)}
+    .bs-toggle-btn.active{background:var(--gold);border-color:var(--gold);color:var(--ink)}
+    .bs-section{margin-bottom:24px}
+    .bs-section-title{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;color:var(--white)}
+    .bs-table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+    .bs-tbl{width:100%;border-collapse:collapse;font-size:.82rem}
+    .bs-tbl thead tr{background:var(--ink-3);border-bottom:1px solid var(--line)}
+    .bs-tbl th{font-family:'JetBrains Mono',monospace;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:9px 12px;text-align:left;white-space:nowrap}
+    .bs-tbl tbody tr{border-bottom:1px solid rgba(255,255,255,.04);transition:background .15s}
+    .bs-tbl tbody tr:hover{background:var(--ink-2)}
+    .bs-tbl tbody tr:last-child{border-bottom:none}
+    .bs-tbl td{padding:9px 12px;color:var(--muted);white-space:nowrap}
+    .bs-tbl td.player{color:var(--white);font-weight:600}
+    .bs-tbl td.hi{color:var(--gold);font-weight:700}
+
+    /* FOOTER */
+    footer{background:var(--ink);border-top:1px solid var(--line);padding:28px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-top:48px}
+    .ft-brand{display:flex;align-items:center;gap:8px}.ft-brand img{height:22px}
+    .ft-brand span{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem}
+    .ft-brand span em{font-style:normal;color:var(--gold)}
+    .ft-copy{font-size:.75rem;color:var(--muted)}
+    .ft-links{display:flex;gap:18px}.ft-links a{font-size:.75rem;color:var(--muted);text-decoration:none}.ft-links a:hover{color:var(--white)}
+
+    @media(max-width:768px){
+      .panel{padding:16px}
+      .scoreboard{padding:18px 16px}
+      .sb-score{font-size:3rem}
+      .nav-brand span{display:none}
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/index.html" class="nav-brand"><img src="/assets/logo.png" alt="SSC" /><span>The Sports <em>Companion</em></span></a>
+  <a href="/ncaaf/index.html" class="nav-back">← NCAAF</a>
+  <div class="nav-live">
+    <div class="live-badge"><span class="live-dot"></span>Live</div>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--muted)" id="nav-clock">Q3 · 6:14</span>
+  </div>
+</nav>
+
+<!-- SCOREBOARD -->
+<div class="scoreboard">
+  <div class="sb-top">
+    <div class="sb-team">
+      <div class="sb-team-name"><img src="/assets/ncaa/Ohio_State.png" style="width:28px;height:28px;object-fit:contain" onerror="this.style.display='none'" /> Ohio State Buckeyes</div>
+      <div class="sb-team-record">(8-0)</div>
+    </div>
+    <div class="sb-score-wrap">
+      <div class="sb-score leader" id="away-score">28</div>
+      <div class="sb-divider">—</div>
+      <div class="sb-score" id="home-score">14</div>
+    </div>
+    <div class="sb-team">
+      <div class="sb-team-name"><img src="/assets/ncaa/Michigan.png" style="width:28px;height:28px;object-fit:contain" onerror="this.style.display='none'" /> Michigan Wolverines</div>
+      <div class="sb-team-record">(7-1)</div>
+    </div>
+  </div>
+  <div class="sb-game-info" style="margin-top:14px;display:flex;flex-direction:row;gap:20px;justify-content:center;align-items:center">
+    <div class="sb-quarter" id="sb-quarter">Q3</div>
+    <div class="sb-clock" id="sb-clock">4:22</div>
+    <div class="sb-possession" id="sb-possession">🏈 PHI Ball · Own 35</div>
+  </div>
+  <div class="quarter-scores">
+    <table class="qs-table">
+      <thead>
+        <tr>
+          <th>Team</th><th>Q1</th><th>Q2</th><th>Q3</th><th>Q4</th><th>F</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><img src="/assets/ncaa/Ohio_State.png" style="width:16px;height:16px;object-fit:contain;vertical-align:middle;margin-right:4px" onerror="this.style.display='none'" />OSU</td><td>7</td><td>14</td><td class="active-q" id="osu-q3">7</td><td>—</td><td class="total" id="osu-total">28</td>
+        </tr>
+        <tr>
+          <td><img src="/assets/ncaa/Michigan.png" style="width:16px;height:16px;object-fit:contain;vertical-align:middle;margin-right:4px" onerror="this.style.display='none'" />MICH</td><td>7</td><td>0</td><td class="active-q" id="mich-q3">7</td><td>—</td><td class="total" id="mich-total">14</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="game-tabs">
+  <button class="game-tab active" onclick="showPanel('gamecast')">Gamecast</button>
+  <button class="game-tab" onclick="showPanel('boxscore')">Box Score</button>
+  <button class="game-tab" onclick="showPanel('pbp')">Play-by-Play</button>
+</div>
+
+<!-- GAMECAST PANEL -->
+<div id="panel-gamecast" class="panel active">
+
+  <!-- FOOTBALL FIELD - Vertical Madden Style -->
+  <div class="field-wrap">
+    <div class="field-canvas-wrap">
+            <svg id="field-svg" class="field-svg" viewBox="0 0 680 340" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a1f2e"/>
+      <stop offset="100%" stop-color="#2a3040"/>
+    </linearGradient>
+    <linearGradient id="fieldGrad3d" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1d6617"/>
+      <stop offset="50%" stop-color="#2d8a20"/>
+      <stop offset="100%" stop-color="#1a5c12"/>
+    </linearGradient>
+    <linearGradient id="ezLeft" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0d3a08"/>
+      <stop offset="100%" stop-color="#1a5c12"/>
+    </linearGradient>
+    <linearGradient id="ezRight" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#1a5c12"/>
+      <stop offset="100%" stop-color="#0d3a08"/>
+    </linearGradient>
+    <linearGradient id="sideEdge" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0a2e06"/>
+      <stop offset="100%" stop-color="#061a04"/>
+    </linearGradient>
+    <!-- Alternating stripe pattern horizontal -->
+    <pattern id="stripes" x="0" y="0" width="50" height="340" patternUnits="userSpaceOnUse">
+      <rect width="50" height="340" fill="#2d8a20"/>
+      <rect width="25" height="340" fill="#268018"/>
+    </pattern>
+  </defs>
+
+  <!-- Sky/stadium background -->
+  <rect width="680" height="340" fill="url(#skyGrad)"/>
+
+  <!-- 3D bottom edge (thickness) -->
+  <polygon points="30,310 650,310 660,322 20,322" fill="url(#sideEdge)"/>
+  <!-- Left edge -->
+  <polygon points="20,40 30,30 30,310 20,322" fill="#0a2e06"/>
+  <!-- Right edge -->
+  <polygon points="650,30 660,40 660,322 650,310" fill="#0a2e06"/>
+
+  <!-- MAIN FIELD - horizontal trapezoid (3D angle) -->
+  <polygon points="30,30 650,30 650,310 30,310" fill="url(#stripes)"/>
+
+  <!-- Left end zone -->
+  <polygon points="30,30 110,30 110,310 30,310" fill="url(#ezLeft)" opacity="0.88"/>
+  <!-- Right end zone -->
+  <polygon points="570,30 650,30 650,310 570,310" fill="url(#ezRight)" opacity="0.88"/>
+
+  <!-- Field outline -->
+  <rect x="30" y="30" width="620" height="280" fill="none" stroke="white" stroke-width="2.5" opacity="0.9"/>
+
+  <!-- End zone boundary lines -->
+  <line x1="110" y1="30"  x2="110" y2="310" stroke="white" stroke-width="2.5" opacity="0.9"/>
+  <line x1="570" y1="30"  x2="570" y2="310" stroke="white" stroke-width="2.5" opacity="0.9"/>
+
+  <!-- Yard lines — playing field x=110 to x=570 = 460px, 100 yards, 10yds=46px -->
+  <g stroke="white" opacity="0.7">
+    <line x1="156" y1="30" x2="156" y2="310" stroke-width="1.5"/>
+    <line x1="202" y1="30" x2="202" y2="310" stroke-width="1.5"/>
+    <line x1="248" y1="30" x2="248" y2="310" stroke-width="1.5"/>
+    <line x1="294" y1="30" x2="294" y2="310" stroke-width="1.5"/>
+    <line x1="340" y1="30" x2="340" y2="310" stroke-width="3" opacity="0.95"/>
+    <line x1="386" y1="30" x2="386" y2="310" stroke-width="1.5"/>
+    <line x1="432" y1="30" x2="432" y2="310" stroke-width="1.5"/>
+    <line x1="478" y1="30" x2="478" y2="310" stroke-width="1.5"/>
+    <line x1="524" y1="30" x2="524" y2="310" stroke-width="1.5"/>
+  </g>
+
+  <!-- Top hash marks -->
+  <g stroke="white" stroke-width="1.5" opacity="0.6">
+    <line x1="156" y1="110" x2="156" y2="130"/><line x1="202" y1="110" x2="202" y2="130"/>
+    <line x1="248" y1="110" x2="248" y2="130"/><line x1="294" y1="110" x2="294" y2="130"/>
+    <line x1="386" y1="110" x2="386" y2="130"/><line x1="432" y1="110" x2="432" y2="130"/>
+    <line x1="478" y1="110" x2="478" y2="130"/><line x1="524" y1="110" x2="524" y2="130"/>
+  </g>
+  <!-- Bottom hash marks -->
+  <g stroke="white" stroke-width="1.5" opacity="0.6">
+    <line x1="156" y1="180" x2="156" y2="200"/><line x1="202" y1="180" x2="202" y2="200"/>
+    <line x1="248" y1="180" x2="248" y2="200"/><line x1="294" y1="180" x2="294" y2="200"/>
+    <line x1="386" y1="180" x2="386" y2="200"/><line x1="432" y1="180" x2="432" y2="200"/>
+    <line x1="478" y1="180" x2="478" y2="200"/><line x1="524" y1="180" x2="524" y2="200"/>
+  </g>
+
+  <!-- Sideline inner markers -->
+  <line x1="110" y1="42" x2="570" y2="42"  stroke="white" stroke-width="1" opacity="0.4"/>
+  <line x1="110" y1="298" x2="570" y2="298" stroke="white" stroke-width="1" opacity="0.4"/>
+
+  <!-- Yard numbers top row -->
+  <g font-family="'Barlow Condensed',sans-serif" font-size="13" font-weight="800" fill="white" opacity="0.65" text-anchor="middle">
+    <text x="156" y="72">10</text><text x="202" y="72">20</text>
+    <text x="248" y="72">30</text><text x="294" y="72">40</text>
+    <text x="340" y="72">50</text>
+    <text x="386" y="72">40</text><text x="432" y="72">30</text>
+    <text x="478" y="72">20</text><text x="524" y="72">10</text>
+  </g>
+  <!-- Yard numbers bottom row -->
+  <g font-family="'Barlow Condensed',sans-serif" font-size="13" font-weight="800" fill="white" opacity="0.65" text-anchor="middle">
+    <text x="156" y="295">10</text><text x="202" y="295">20</text>
+    <text x="248" y="295">30</text><text x="294" y="295">40</text>
+    <text x="340" y="295">50</text>
+    <text x="386" y="295">40</text><text x="432" y="295">30</text>
+    <text x="478" y="295">20</text><text x="524" y="295">10</text>
+  </g>
+
+  <!-- End zone text -->
+  <image href="/assets/ncaa/Ohio_State.png" x="15" y="105" width="110" height="110" opacity="0.85" preserveAspectRatio="xMidYMid meet"/>
+  <image href="/assets/ncaa/Michigan.png" x="555" y="105" width="110" height="110" opacity="0.85" preserveAspectRatio="xMidYMid meet"/>
+
+  <!-- Goal posts left -->
+  <line x1="30"  y1="170" x2="18"  y2="170" stroke="#F2C230" stroke-width="2.5" opacity="0.85"/>
+  <line x1="18"  y1="148" x2="18"  y2="192" stroke="#F2C230" stroke-width="2"   opacity="0.85"/>
+  <line x1="12"  y1="148" x2="18"  y2="148" stroke="#F2C230" stroke-width="1.5" opacity="0.75"/>
+  <line x1="12"  y1="192" x2="18"  y2="192" stroke="#F2C230" stroke-width="1.5" opacity="0.75"/>
+
+  <!-- Goal posts right -->
+  <line x1="650" y1="170" x2="662" y2="170" stroke="#F2C230" stroke-width="2.5" opacity="0.85"/>
+  <line x1="662" y1="148" x2="662" y2="192" stroke="#F2C230" stroke-width="2"   opacity="0.85"/>
+  <line x1="662" y1="148" x2="668" y2="148" stroke="#F2C230" stroke-width="1.5" opacity="0.75"/>
+  <line x1="662" y1="192" x2="668" y2="192" stroke="#F2C230" stroke-width="1.5" opacity="0.75"/>
+
+  <!-- Line of scrimmage (vertical line, animated) -->
+  <line id="los-line" x1="340" y1="30" x2="340" y2="310" stroke="#F2C230" stroke-width="3" opacity="0.9" stroke-dasharray="10,5"/>
+  <!-- First down marker -->
+  <line id="first-down-line" x1="386" y1="30" x2="386" y2="310" stroke="#38BDF8" stroke-width="2" opacity="0.75" stroke-dasharray="8,4"/>
+
+  <!-- Ball -->
+  <ellipse id="ball-el" cx="340" cy="170" rx="12" ry="7" fill="#8B4513" stroke="#F2C230" stroke-width="1.5"/>
+  <line id="ball-lace" x1="340" y1="163" x2="340" y2="177" stroke="white" stroke-width="1.2" opacity="0.9"/>
+  <!-- QB behind line -->
+  <!-- Wide receivers split wide -->
+  <!-- RB behind QB -->
+  <!-- LBs behind DL -->
+  <!-- DBs deep -->
+</svg>
+
+      <!-- Overlay elements -->
+      <div class="field-overlay">
+        <div class="down-box" id="down-box">1st & 10 · PHI 35</div>
+        <div class="td-flash" id="td-flash"><span style="font-family:'Barlow Condensed',sans-serif;font-size:2rem;font-weight:900;color:#22c55e;text-shadow:0 0 20px rgba(34,197,94,.5)">TOUCHDOWN! 🏈</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLAY DESCRIPTION -->
+  <div class="play-desc-card">
+    <div class="play-desc-meta">
+      <span class="play-desc-situation" id="play-situation">Q3 · PHI · Own 35</span>
+      <span class="play-desc-down" id="play-down">1st & 10</span>
+    </div>
+    <div class="play-desc-text" id="play-text">Hurts hands off to Saquon Barkley up the middle for 4 yards. Barkley breaks a tackle at the line of scrimmage.</div>
+    <div class="play-desc-td" id="play-td" style="display:none">🟢 TOUCHDOWN</div>
+  </div>
+
+  <!-- CONTROLS -->
+  <div class="play-controls">
+    <button class="ctrl-btn" id="btn-prev" onclick="prevPlay()">← Prev</button>
+    <button class="ctrl-btn live" id="btn-live" onclick="toggleLive()">⏸ Pause</button>
+    <button class="ctrl-btn" id="btn-next" onclick="nextPlay()">Next →</button>
+    <span class="play-counter" id="play-counter">Play 1 of 24</span>
+  </div>
+
+  <!-- MINI FEED -->
+  <div class="pbp-feed" id="mini-feed" style="max-height:240px"></div>
+</div>
+
+<!-- BOX SCORE PANEL -->
+<div id="panel-boxscore" class="panel">
+  <div class="bs-team-toggle">
+    <button class="bs-toggle-btn active" onclick="showBS('osu')">Ohio State Buckeyes</button>
+    <button class="bs-toggle-btn" onclick="showBS('mich')">Michigan Wolverines</button>
+  </div>
+
+  <!-- PHI BOX SCORE -->
+  <div id="bs-osu">
+    <div class="bs-section">
+      <div class="bs-section-title">Passing</div>
+      <div class="bs-table-wrap"><table class="bs-tbl">
+        <thead><tr><th>Player</th><th>CMP</th><th>ATT</th><th>YDS</th><th>TD</th><th>INT</th><th>RTG</th></tr></thead>
+        <tbody>
+          <tr><td class="player">C.J. Stroud</td><td>22</td><td>31</td><td class="hi">312</td><td class="hi">3</td><td>0</td><td class="hi">198.4</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="bs-section">
+      <div class="bs-section-title">Rushing</div>
+      <div class="bs-table-wrap"><table class="bs-tbl">
+        <thead><tr><th>Player</th><th>CAR</th><th>YDS</th><th>AVG</th><th>LNG</th><th>TD</th></tr></thead>
+        <tbody>
+          <tr><td class="player">T. Henderson</td><td>18</td><td class="hi">112</td><td>6.2</td><td>28</td><td class="hi">1</td></tr>
+          <tr><td class="player">C.J. Stroud</td><td>4</td><td>22</td><td>5.5</td><td>14</td><td>0</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="bs-section">
+      <div class="bs-section-title">Receiving</div>
+      <div class="bs-table-wrap"><table class="bs-tbl">
+        <thead><tr><th>Player</th><th>REC</th><th>TGT</th><th>YDS</th><th>AVG</th><th>TD</th><th>LNG</th></tr></thead>
+        <tbody>
+          <tr><td class="player">M. Harrison Jr</td><td>8</td><td>10</td><td class="hi">138</td><td>17.3</td><td class="hi">2</td><td>42</td></tr>
+          <tr><td class="player">E. Egbuka</td><td>6</td><td>8</td><td>74</td><td>12.3</td><td>0</td><td>22</td></tr>
+          <tr><td class="player">J. Smith-Njigba</td><td>4</td><td>6</td><td>58</td><td>14.5</td><td>1</td><td>28</td></tr>
+          <tr><td class="player">C. Stover</td><td>4</td><td>7</td><td>42</td><td>10.5</td><td>0</td><td>18</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="bs-section">
+      <div class="bs-section-title">Defense</div>
+      <div class="bs-table-wrap"><table class="bs-tbl">
+        <thead><tr><th>Player</th><th>TKL</th><th>AST</th><th>SACK</th><th>INT</th><th>PD</th><th>FF</th></tr></thead>
+        <tbody>
+          <tr><td class="player">T. Sanders</td><td class="hi">10</td><td>2</td><td>0</td><td>1</td><td>2</td><td>0</td></tr>
+          <tr><td class="player">J. Simon</td><td>6</td><td>1</td><td class="hi">1.5</td><td>0</td><td>1</td><td>1</td></tr>
+          <tr><td class="player">D. Burke</td><td>4</td><td>0</td><td>0</td><td>0</td><td>3</td><td>0</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <!-- DAL BOX SCORE -->
+  <div id="bs-mich" style="display:none">
+    <div class="bs-section">
+      <div class="bs-section-title">Passing</div>
+      <div class="bs-table-wrap"><table class="bs-tbl">
+        <thead><tr><th>Player</th><th>CMP</th><th>ATT</th><th>YDS</th><th>TD</th><th>INT</th><th>RTG</th></tr></thead>
+        <tbody>
+          <tr><td class="player">J.J. McCarthy</td><td>16</td><td>26</td><td>188</td><td>1</td><td>0</td><td>142.8</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="bs-section">
+      <div class="bs-section-title">Rushing</div>
+      <div class="bs-table-wrap"><table class="bs-tbl">
+        <thead><tr><th>Player</th><th>CAR</th><th>YDS</th><th>AVG</th><th>LNG</th><th>TD</th></tr></thead>
+        <tbody>
+          <tr><td class="player">B. Corum</td><td>21</td><td class="hi">128</td><td>6.1</td><td>20</td><td class="hi">2</td></tr>
+          <tr><td class="player">J.J. McCarthy</td><td>5</td><td>32</td><td>6.4</td><td>14</td><td>0</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="bs-section">
+      <div class="bs-section-title">Receiving</div>
+      <div class="bs-table-wrap"><table class="bs-tbl">
+        <thead><tr><th>Player</th><th>REC</th><th>TGT</th><th>YDS</th><th>AVG</th><th>TD</th><th>LNG</th></tr></thead>
+        <tbody>
+          <tr><td class="player">R. Wilson</td><td>6</td><td>9</td><td class="hi">92</td><td>15.3</td><td>1</td><td>32</td></tr>
+          <tr><td class="player">C. Johnson</td><td>5</td><td>7</td><td>58</td><td>11.6</td><td>0</td><td>22</td></tr>
+          <tr><td class="player">B. Corum</td><td>5</td><td>10</td><td>38</td><td>7.6</td><td>0</td><td>14</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="bs-section">
+      <div class="bs-section-title">Defense</div>
+      <div class="bs-table-wrap"><table class="bs-tbl">
+        <thead><tr><th>Player</th><th>TKL</th><th>AST</th><th>SACK</th><th>INT</th><th>PD</th><th>FF</th></tr></thead>
+        <tbody>
+          <tr><td class="player">M. Barrett</td><td class="hi">11</td><td>3</td><td class="hi">2.0</td><td>0</td><td>1</td><td>0</td></tr>
+          <tr><td class="player">J. Harrell</td><td>7</td><td>2</td><td>1.0</td><td>0</td><td>0</td><td>1</td></tr>
+          <tr><td class="player">D. Turner</td><td>5</td><td>1</td><td>0</td><td class="hi">1</td><td>2</td><td>0</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<!-- PLAY BY PLAY PANEL -->
+<div id="panel-pbp" class="panel">
+  <div style="border:1px solid var(--line);border-radius:10px;overflow:hidden" id="full-pbp-feed"></div>
+</div>
+
+<footer>
+  <div class="ft-brand"><img src="/assets/logo.png" alt="SSC" /><span>The Sports <em>Companion</em></span></div>
+  <div class="ft-links"><a href="/index.html">Home</a><a href="/ncaaf/index.html">NCAAF</a><a href="/mlb/index.html">MLB</a><a href="/nba/index.html">NBA</a></div>
+  <div class="ft-copy">© 2026 The Sports Companion</div>
+</footer>
+
+<script>
+// ── PLAY DATA ──────────────────────────────────────────────────
+const plays = [
+  { q:1, clock:'14:12', possession:'OSU', yard:25, yardLabel:'OSU 25', down:'1st & 10', td:false, awayScore:0,  homeScore:0,  text:'Stroud under center, hands off to Henderson on an inside zone. Henderson gains 7 yards.' },
+  { q:1, clock:'13:28', possession:'OSU', yard:32, yardLabel:'OSU 32', down:'2nd & 3',  td:false, awayScore:0,  homeScore:0,  text:'Stroud drops back, quick slant to Harrison Jr for 11 yards and a first down.' },
+  { q:1, clock:'12:10', possession:'OSU', yard:43, yardLabel:'OSU 43', down:'1st & 10', td:false, awayScore:0,  homeScore:0,  text:'Stroud rolls right on play action, hits Smith-Njigba for 18 yards down the sideline.' },
+  { q:1, clock:'11:02', possession:'OSU', yard:61, yardLabel:'MICH 39', down:'1st & 10', td:false, awayScore:0, homeScore:0, text:'Henderson off left tackle for 8 yards. OSU driving deep into Michigan territory.' },
+  { q:1, clock:'10:18', possession:'OSU', yard:69, yardLabel:'MICH 31', down:'2nd & 2',  td:false, awayScore:0,  homeScore:0,  text:'Stroud QB sneak converts the 2nd and short. Buckeyes at the Michigan 31.' },
+  { q:1, clock:'9:04',  possession:'OSU', yard:83, yardLabel:'MICH 17', down:'1st & 10', td:false, awayScore:0,  homeScore:0,  text:'Stroud fires a deep post to Harrison Jr — caught inside the 10 yard line!' },
+  { q:1, clock:'8:48',  possession:'OSU', yard:100, yardLabel:'MICH End Zone', down:'TD', td:true, awayScore:7, homeScore:0, text:'TOUCHDOWN! TreVeyon Henderson punches it in from the 10. Ohio State leads 7-0.' },
+  { q:1, clock:'6:22',  possession:'MICH', yard:72, yardLabel:'MICH 28', down:'1st & 10', td:false, awayScore:7, homeScore:0, text:'McCarthy drops back, finds Roman Wilson on a crossing route for 12 yards.' },
+  { q:1, clock:'4:44',  possession:'MICH', yard:84, yardLabel:'OSU 16', down:'2nd & 4',  td:false, awayScore:7, homeScore:0, text:'Blake Corum up the middle, breaks a tackle and gains 9 yards. First down Michigan.' },
+  { q:1, clock:'3:11',  possession:'MICH', yard:94, yardLabel:'OSU 6',  down:'1st & 10', td:false, awayScore:7, homeScore:0, text:'Corum scores from 6 yards out! Michigan answers back to tie it!' },
+  { q:1, clock:'3:04',  possession:'MICH', yard:100, yardLabel:'OSU End Zone', down:'PAT', td:true, awayScore:7, homeScore:7, text:'TOUCHDOWN! Blake Corum 6-yard rushing score. Michigan ties it 7-7.' },
+  { q:2, clock:'12:18', possession:'OSU', yard:48, yardLabel:'MICH 52', down:'1st & 10', td:false, awayScore:7, homeScore:7, text:'Henderson on a draw play, breaks into open space for 14 yards.' },
+  { q:2, clock:'10:44', possession:'OSU', yard:64, yardLabel:'MICH 36', down:'1st & 10', td:false, awayScore:7, homeScore:7, text:'Stroud hits Emeka Egbuka on a quick out for 9 yards.' },
+  { q:2, clock:'8:32',  possession:'OSU', yard:78, yardLabel:'MICH 22', down:'2nd & 1',  td:false, awayScore:7, homeScore:7, text:'Stroud finds Cade Stover on a seam route for 14 yards. OSU in the red zone.' },
+  { q:2, clock:'6:14',  possession:'OSU', yard:91, yardLabel:'MICH 9',  down:'1st & 10', td:false, awayScore:7, homeScore:7, text:'Harrison Jr with a spectacular catch in the back of the end zone! Touchdown Buckeyes!' },
+  { q:2, clock:'6:08',  possession:'OSU', yard:100, yardLabel:'MICH End Zone', down:'PAT', td:true, awayScore:14, homeScore:7, text:'TOUCHDOWN! Marvin Harrison Jr 9-yard touchdown. Ohio State leads 14-7.' },
+  { q:2, clock:'2:22',  possession:'MICH', yard:62, yardLabel:'OSU 38', down:'2nd & 8',  td:false, awayScore:14, homeScore:7, text:'McCarthy connects with Johnson on a deep comeback for 22 yards with 2 minutes left.' },
+  { q:2, clock:'0:44',  possession:'MICH', yard:88, yardLabel:'OSU 12', down:'1st & 10', td:false, awayScore:14, homeScore:7, text:'Corum up the gut for 7 yards. Michigan inside the 10 at the half.' },
+  { q:3, clock:'11:38', possession:'MICH', yard:74, yardLabel:'OSU 26', down:'1st & 10', td:false, awayScore:14, homeScore:7,  text:'McCarthy scrambles right for 11 yards to open the second half.' },
+  { q:3, clock:'9:52',  possession:'MICH', yard:86, yardLabel:'OSU 14', down:'1st & 10', td:false, awayScore:14, homeScore:7,  text:'Corum off the right side, scores from 14 yards! Michigan ties it again!' },
+  { q:3, clock:'9:44',  possession:'MICH', yard:100, yardLabel:'OSU End Zone', down:'PAT', td:true, awayScore:14, homeScore:14, text:'TOUCHDOWN! Blake Corum 14-yard score. Michigan ties it 14-14.' },
+  { q:3, clock:'6:14',  possession:'OSU', yard:35, yardLabel:'OSU 35', down:'1st & 10', td:false, awayScore:21, homeScore:14, text:'Stroud drops back, fires to Harrison Jr on a go route. Harrison beats the corner for 40 yards!' },
+];
+
+let currentIdx = plays.length - 1;
+let isLive = true;
+let liveTimer = null;
+let animFrames = [];
+
+// ── RENDER ─────────────────────────────────────────────────────
+function renderPlay(idx) {
+  const p = plays[idx];
+
+  // Update field position
+  const fieldCX = 170; // center x of perspective field
+  const fieldX = 110 + (p.yard / 100) * 460;
+  const firstDownX = 110 + (Math.min(p.yard + 10, 100) / 100) * 460;
+  const ball = document.getElementById('ball-el');
+  const lace = document.getElementById('ball-lace');
+  const los  = document.getElementById('los-line');
+  const fdn  = document.getElementById('first-down-line');
+  if (ball) { ball.setAttribute('cx', fieldX); lace.setAttribute('x1', fieldX); lace.setAttribute('x2', fieldX); }
+  if (los)  { los.setAttribute('x1', fieldX); los.setAttribute('x2', fieldX); }
+  if (fdn)  { fdn.setAttribute('x1', firstDownX); fdn.setAttribute('x2', firstDownX); }
+  document.getElementById('down-box').textContent = `${p.down} · ${p.yardLabel}`;
+
+  // Animate the players
+
+  // Update scoreboard
+  document.getElementById('play-situation').textContent = `Q${p.q} · ${p.possession} · ${p.yardLabel}`;
+  document.getElementById('play-down').textContent = p.down;
+  document.getElementById('play-text').textContent = p.text;
+  document.getElementById('play-counter').textContent = `Play ${idx + 1} of ${plays.length}`;
+  document.getElementById('nav-clock').textContent = `Q${p.q} · ${p.clock}`;
+  document.getElementById('sb-quarter').textContent = `Q${p.q}`;
+  document.getElementById('sb-clock').textContent = p.clock;
+  document.getElementById('sb-possession').textContent = `🏈 ${p.possession} Ball · ${p.yardLabel}`;
+  document.getElementById('away-score').textContent = p.awayScore;
+  document.getElementById('home-score').textContent = p.homeScore;
+  document.getElementById('away-score').className = 'sb-score' + (p.awayScore > p.homeScore ? ' leader' : '');
+  document.getElementById('home-score').className = 'sb-score' + (p.homeScore > p.awayScore ? ' leader' : '');
+
+  // TD flash
+  const tdFlash = document.getElementById('td-flash');
+  const tdLabel = document.getElementById('play-td');
+  if (p.td) {
+    tdFlash.classList.add('show');
+    tdLabel.style.display = 'block';
+    setTimeout(() => tdFlash.classList.remove('show'), 2200);
+  } else {
+    tdFlash.classList.remove('show');
+    tdLabel.style.display = 'none';
+  }
+
+  document.getElementById('btn-prev').disabled = idx === 0;
+  document.getElementById('btn-next').disabled = idx === plays.length - 1;
+
+  renderMiniFeed(idx);
+}
+
+function renderMiniFeed(activeIdx) {
+  const feed = document.getElementById('mini-feed');
+  feed.innerHTML = plays.map((p, i) => `
+    <div class="pbp-item ${i === activeIdx ? 'active' : ''} ${i <= activeIdx ? 'seen' : 'unseen'} ${p.td ? 'td' : ''}" onclick="jumpTo(${i})">
+      <div class="pbp-item-meta">Q${p.q} · ${p.clock} · ${p.possession}</div>
+      <div class="pbp-item-text">${p.text.substring(0, 90)}...${p.td ? '<span class="pbp-item-td-badge">TD</span>' : ''}</div>
+    </div>
+  `).join('');
+  const active = feed.querySelector('.pbp-item.active');
+  if (active) active.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+}
+
+function renderFullFeed() {
+  const feed = document.getElementById('full-pbp-feed');
+  let html = '';
+  let lastQ = 0;
+  plays.forEach((p, i) => {
+    if (p.q !== lastQ) {
+      html += `<div style="padding:10px 16px;background:var(--ink-3);border-bottom:1px solid var(--line);font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--gold)">Quarter ${p.q}</div>`;
+      lastQ = p.q;
+    }
+    html += `
+      <div class="pbp-item ${p.td ? 'td' : ''}" onclick="jumpToAndShow(${i})">
+        <div class="pbp-item-meta">${p.clock} · ${p.possession} · ${p.yardLabel} · ${p.down}</div>
+        <div class="pbp-item-text">${p.text}${p.td ? '<span class="pbp-item-td-badge">TD</span>' : ''}</div>
+      </div>`;
+  });
+  feed.innerHTML = html;
+}
+
+// ── CONTROLS ───────────────────────────────────────────────────
+function prevPlay() { if (currentIdx > 0) { currentIdx--; stopLive(); renderPlay(currentIdx); } }
+function nextPlay() { if (currentIdx < plays.length - 1) { currentIdx++; renderPlay(currentIdx); } }
+function jumpTo(idx) { currentIdx = idx; stopLive(); renderPlay(idx); }
+function jumpToAndShow(idx) { currentIdx = idx; showPanel('gamecast', true); renderPlay(idx); }
+
+function toggleLive() { if (isLive) { stopLive(); } else { startLive(); } }
+function startLive() {
+  isLive = true;
+  document.getElementById('btn-live').textContent = '⏸ Pause';
+  document.getElementById('btn-live').classList.remove('paused');
+  liveTimer = setInterval(() => {
+    if (currentIdx < plays.length - 1) { currentIdx++; renderPlay(currentIdx); }
+    else { stopLive(); }
+  }, 2800);
+}
+function stopLive() {
+  isLive = false;
+  clearInterval(liveTimer);
+  document.getElementById('btn-live').textContent = '▶ Resume';
+  document.getElementById('btn-live').classList.add('paused');
+}
+
+// ── TABS ───────────────────────────────────────────────────────
+function showPanel(id, skipBtnUpdate) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.game-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  if (!skipBtnUpdate && event && event.target) event.target.classList.add('active');
+  if (id === 'pbp') renderFullFeed();
+}
+function showBS(team) {
+  document.getElementById('bs-osu').style.display = team === 'phi' ? 'block' : 'none';
+  document.getElementById('bs-mich').style.display = team === 'dal' ? 'block' : 'none';
+  document.querySelectorAll('.bs-toggle-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+// ── INIT ───────────────────────────────────────────────────────
+renderPlay(currentIdx);
+startLive();
+</script>
+</body>
+</html>

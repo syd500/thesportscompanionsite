@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NCAAF — The Sports Companion</title>
+  <link rel="icon" type="image/png" href="/assets/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--ink:#0B0D0F;--ink-2:#181B1F;--ink-3:#262A30;--muted:#8A8F98;--line:#2A2E35;--gold:#F2C230;--crimson:#C83A2B;--white:#FFFFFF;--accent:#F2C230}
+    html{scroll-behavior:smooth}body{font-family:'Inter',sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+    nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;background:rgba(11,13,15,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+    .nav-brand{display:flex;align-items:center;gap:8px;padding:0 20px;text-decoration:none;border-right:1px solid var(--line);height:56px;flex-shrink:0}
+    .nav-brand img{height:28px}.nav-brand span{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;color:var(--white);white-space:nowrap}
+    .nav-brand span em{font-style:normal;color:var(--gold)}
+    .nav-leagues{display:flex;align-items:center;list-style:none;overflow-x:auto;flex:1;scrollbar-width:none}
+    .nav-leagues::-webkit-scrollbar{display:none}
+    .nav-leagues a{display:flex;align-items:center;height:56px;padding:0 16px;font-size:.78rem;font-weight:600;color:var(--muted);text-decoration:none;border-right:1px solid var(--line);transition:color .2s,background .2s;white-space:nowrap}
+    .nav-leagues a:hover{color:var(--white);background:var(--ink-2)}
+    .nav-leagues a.active{color:var(--gold);background:var(--ink-2);border-bottom:2px solid var(--gold)}
+    .nav-cta{margin-left:auto;padding:0 20px;height:56px;display:flex;align-items:center;flex-shrink:0}
+    .nav-cta a{background:var(--gold);color:var(--ink);font-weight:700;font-size:.8rem;padding:8px 18px;border-radius:5px;text-decoration:none}
+    .league-banner{background:var(--ink-2);border-bottom:1px solid var(--line);padding:24px 32px 0}
+    .league-banner-top{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+    .league-banner-top h1{font-family:'Barlow Condensed',sans-serif;font-size:2.2rem;font-weight:900;text-transform:uppercase;letter-spacing:.04em}
+    .league-badge{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:4px;background:rgba(242,194,48,.12);color:var(--gold);border:1px solid rgba(242,194,48,.3)}
+    .tab-bar{display:flex;gap:0;border-top:1px solid var(--line)}
+    .tab-btn{padding:12px 22px;font-size:.82rem;font-weight:600;color:var(--muted);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;transition:all .2s;white-space:nowrap}
+    .tab-btn:hover{color:var(--white)}.tab-btn.active{color:var(--gold);border-bottom-color:var(--gold)}
+    .tab-panel{display:none;padding:28px 32px}.tab-panel.active{display:block}
+    .sec-label{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;letter-spacing:.15em;color:var(--gold);text-transform:uppercase;margin-bottom:10px}
+    .sec-title{font-family:'Barlow Condensed',sans-serif;font-size:1.6rem;font-weight:800;text-transform:uppercase;margin-bottom:6px}
+    .sec-body{color:var(--muted);font-size:.88rem;line-height:1.6;margin-bottom:20px}
+    .sub-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+    .sub-tab{background:var(--ink-2);border:1px solid var(--line);color:var(--muted);font-size:.78rem;font-weight:500;padding:7px 14px;border-radius:5px;cursor:pointer;transition:all .2s}
+    .sub-tab:hover{border-color:var(--gold);color:var(--white)}.sub-tab.active{background:var(--gold);border-color:var(--gold);color:var(--ink);font-weight:700}
+    .sub-panel{display:none}.sub-panel.active{display:block}
+    .scores-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+    .score-card{background:var(--ink-2);border:1px solid var(--line);border-radius:10px;padding:16px;cursor:pointer;transition:border-color .2s}
+    .score-card:hover{border-color:var(--gold)}
+    .score-hdr{font-family:'JetBrains Mono',monospace;font-size:.66rem;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;margin-bottom:12px}
+    .score-row{display:flex;align-items:center;justify-content:space-between;padding:5px 0}
+    .score-team{font-weight:600;font-size:.88rem;display:flex;align-items:center;gap:6px}
+    .score-team img{width:20px;height:20px;object-fit:contain}
+    .score-val{font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;font-weight:800}
+    .score-val.w{color:var(--gold)}.score-div{height:1px;background:var(--line);margin:4px 0}
+    .score-status{margin-top:10px;font-size:.7rem;font-family:'JetBrains Mono',monospace;letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
+    .live-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#22c55e;margin-right:5px;animation:pulse 1.5s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+    .tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+    .tbl{width:100%;border-collapse:collapse;font-size:.83rem}
+    .tbl thead tr{background:var(--ink-3);border-bottom:1px solid var(--line)}
+    .tbl th{font-family:'JetBrains Mono',monospace;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:11px 13px;text-align:left;white-space:nowrap}
+    .tbl tbody tr{border-bottom:1px solid rgba(255,255,255,.04);transition:background .15s}
+    .tbl tbody tr:hover{background:var(--ink-2)}.tbl tbody tr:last-child{border-bottom:none}
+    .tbl td{padding:10px 13px;color:var(--muted);white-space:nowrap}
+    .tbl td.pl{color:var(--white);font-weight:600}.tbl td.hi{color:var(--gold);font-weight:700}.tbl td.ng{color:#FF6B6B}
+    .tbl td.team-cell{display:flex;align-items:center;gap:8px}
+    .team-logo{width:20px;height:20px;object-fit:contain;flex-shrink:0}
+    .ovr{display:inline-block;font-family:'Barlow Condensed',sans-serif;font-size:.88rem;font-weight:800;padding:2px 7px;border-radius:4px}
+    .ovr-hi{background:rgba(242,194,48,.2);color:var(--gold)}.ovr-mid{background:rgba(56,189,248,.15);color:#38BDF8}.ovr-lo{background:rgba(255,107,107,.12);color:#FF6B6B}
+    .standings-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+    .s-div{background:var(--ink-2);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+    .s-div-hdr{padding:11px 16px;background:var(--ink-3);border-bottom:1px solid var(--line);font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em}
+    .s-row{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;padding:9px 16px;border-bottom:1px solid rgba(255,255,255,.04);font-size:.83rem;align-items:center}
+    .s-row:last-child{border-bottom:none}
+    .s-row.hdr{font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+    .s-row .team{font-weight:600;color:var(--white);display:flex;align-items:center;gap:6px}
+    .s-row .team img{width:18px;height:18px;object-fit:contain}
+    .s-row .val{color:var(--muted)}.s-row .hi{color:var(--gold);font-weight:700}
+    footer{background:var(--ink);border-top:1px solid var(--line);padding:28px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-top:48px}
+    .ft-brand{display:flex;align-items:center;gap:8px}.ft-brand img{height:22px}
+    .ft-brand span{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem}
+    .ft-brand span em{font-style:normal;color:var(--gold)}
+    .ft-copy{font-size:.75rem;color:var(--muted)}.ft-links{display:flex;gap:18px;flex-wrap:wrap}
+    .ft-links a{font-size:.75rem;color:var(--muted);text-decoration:none}.ft-links a:hover{color:var(--white)}
+    @media(max-width:768px){.tab-panel{padding:18px 16px}.league-banner{padding:18px 16px 0}.nav-brand span{display:none}}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/index.html" class="nav-brand"><img src="/assets/logo.png" alt="SSC" /><span>The Sports <em>Companion</em></span></a>
+  <ul class="nav-leagues">
+    <li><a href="/nfl/index.html">🏈 NFL</a></li>
+    <li><a href="/ncaaf/index.html">🏈 NCAAF</a></li>
+    <li><a href="/nba/index.html">🏀 NBA</a></li>
+    <li><a href="/ncaab/mens/index.html">🏀 NCAAM</a></li>
+    <li><a href="/ncaab/womens/index.html">🏀 NCAAW</a></li>
+    <li><a href="/mlb/index.html">⚾ MLB</a></li>
+    <li><a href="/ncaasoftball/index.html">🥎 Softball</a></li>
+    <li><a href="/nhl/index.html">🏒 NHL</a></li>
+    <li><a href="/soccer/mls/index.html">⚽ MLS</a></li>
+    <li><a href="/soccer/epl/index.html">⚽ EPL</a></li>
+    <li><a href="/soccer/laliga/index.html">⚽ La Liga</a></li>
+    <li><a href="/soccer/champions-league/index.html">⚽ UCL</a></li>
+    <li><a href="/soccer/fifa/index.html">⚽ FIFA</a></li>
+    <li><a href="/more/index.html">⛳ PGA</a></li>
+    
+  </ul>
+  <div class="nav-cta"><a href="/index.html#cta">Get the App</a></div>
+</nav>
+
+<div class="league-banner">
+  <div class="league-banner-top">
+    <h1>🏈 NCAA Football</h1>
+    <span class="league-badge">2025 Season</span>
+  </div>
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="showTab('scores')">Scores</button>
+    <button class="tab-btn" onclick="showTab('standings')">Standings</button>
+    <button class="tab-btn" onclick="showTab('stats')">Stats</button>
+    <button class="tab-btn" onclick="showTab('fantasy')">Fantasy</button>
+    
+  </div>
+</div>
+
+<div id="tab-scores" class="tab-panel active">
+  <div class="sec-label">// Latest Results</div>
+  <div class="sec-title">Scores & Results</div>
+  <p style="font-size:.8rem;color:var(--muted);margin-bottom:16px;font-family:'JetBrains Mono',monospace">Tap any game to open Gamecast & Box Score</p>
+  <div class="scores-grid"><div class="score-card"><div class="score-hdr">Sat · Oct 12 · Final</div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Alabama.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> Alabama</span><span class="score-val w">35</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Georgia.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> Georgia</span><span class="score-val">28</span></div>
+      <div class="score-status">Final</div></div><div class="score-card"><div class="score-hdr">Sat · Oct 12 · Final</div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Ohio_State.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> Ohio State</span><span class="score-val w">42</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Michigan.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> Michigan</span><span class="score-val">17</span></div>
+      <div class="score-status">Final</div></div><div class="score-card"><div class="score-hdr">Sat · Oct 12 · Final</div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Texas.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> Texas</span><span class="score-val w">31</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Oklahoma.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> Oklahoma</span><span class="score-val">24</span></div>
+      <div class="score-status">Final</div></div><div class="score-card"><div class="score-hdr">Sat · Oct 12</div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Notre_Dame.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> Notre Dame</span><span class="score-val w">21</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Southern_California.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> USC</span><span class="score-val">17</span></div>
+      <div class="score-status"><span class="live-dot"></span>Q3 8:22</div></div><div class="score-card"><div class="score-hdr">Sat · Oct 12 · Final</div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Penn_State.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> Penn State</span><span class="score-val w">28</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Iowa.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> Iowa</span><span class="score-val">7</span></div>
+      <div class="score-status">Final</div></div><div class="score-card"><div class="score-hdr">Sat · Oct 12 · Final</div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/LSU.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> LSU</span><span class="score-val w">24</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Florida.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> Florida</span><span class="score-val">20</span></div>
+      <div class="score-status">Final</div></div></div>
+</div>
+
+<div id="tab-standings" class="tab-panel">
+  <div class="sec-label">// 2025 Season</div>
+  <div class="sec-title">Standings</div>
+  <div class="standings-grid"><div class="s-div"><div class="s-div-hdr">SEC</div><div class="s-row hdr"><span>Team</span><span>W</span><span>L</span><span>Conf</span><span>PTS/G</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Alabama.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Alabama</span><span class="hi">8</span><span class="val">0</span><span class="val">6-0</span><span class="val">42.1</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Georgia.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Georgia</span><span class="hi">7</span><span class="val">1</span><span class="val">5-1</span><span class="val">38.4</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/LSU.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />LSU</span><span class="hi">6</span><span class="val">2</span><span class="val">4-2</span><span class="val">34.2</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Florida.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Florida</span><span class="hi">5</span><span class="val">3</span><span class="val">3-3</span><span class="val">28.1</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Tennessee.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Tennessee</span><span class="hi">5</span><span class="val">3</span><span class="val">3-3</span><span class="val">31.0</span></div></div><div class="s-div"><div class="s-div-hdr">Big Ten</div><div class="s-row hdr"><span>Team</span><span>W</span><span>L</span><span>Conf</span><span>PTS/G</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Ohio_State.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Ohio State</span><span class="hi">8</span><span class="val">0</span><span class="val">6-0</span><span class="val">44.3</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Michigan.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Michigan</span><span class="hi">7</span><span class="val">1</span><span class="val">5-1</span><span class="val">36.8</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Penn_State.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Penn State</span><span class="hi">6</span><span class="val">2</span><span class="val">4-2</span><span class="val">33.1</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Iowa.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Iowa</span><span class="hi">4</span><span class="val">4</span><span class="val">2-4</span><span class="val">22.4</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Michigan_State.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Michigan State</span><span class="hi">3</span><span class="val">5</span><span class="val">1-5</span><span class="val">19.2</span></div></div><div class="s-div"><div class="s-div-hdr">Big 12</div><div class="s-row hdr"><span>Team</span><span>W</span><span>L</span><span>Conf</span><span>PTS/G</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Texas.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Texas</span><span class="hi">8</span><span class="val">0</span><span class="val">6-0</span><span class="val">38.9</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Oklahoma.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Oklahoma</span><span class="hi">6</span><span class="val">2</span><span class="val">4-2</span><span class="val">34.1</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/TCU.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />TCU</span><span class="hi">5</span><span class="val">3</span><span class="val">3-3</span><span class="val">29.8</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Kansas_State.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Kansas State</span><span class="hi">5</span><span class="val">3</span><span class="val">3-3</span><span class="val">28.4</span></div></div><div class="s-div"><div class="s-div-hdr">ACC</div><div class="s-row hdr"><span>Team</span><span>W</span><span>L</span><span>Conf</span><span>PTS/G</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Florida_State.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Florida State</span><span class="hi">7</span><span class="val">1</span><span class="val">5-1</span><span class="val">37.2</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Notre_Dame.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Notre Dame</span><span class="hi">7</span><span class="val">1</span><span class="val">5-1</span><span class="val">36.8</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Clemson.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Clemson</span><span class="hi">5</span><span class="val">3</span><span class="val">3-3</span><span class="val">28.1</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Miami.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Miami</span><span class="hi">5</span><span class="val">3</span><span class="val">3-3</span><span class="val">27.4</span></div></div></div>
+</div>
+
+<div id="tab-stats" class="tab-panel">
+  <div class="sec-label">// 2025 Season</div>
+  <div class="sec-title">Stats</div>
+  <div class="sub-tabs"><button class="sub-tab active" onclick="showSub('ncaaf-pass')">Passing</button><button class="sub-tab" onclick="showSub('ncaaf-rush')">Rushing</button><button class="sub-tab" onclick="showSub('ncaaf-recv')">Receiving</button></div><div id="sub-ncaaf-pass" class="sub-panel active"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Player</th><th>School</th><th>G</th><th>CMP</th><th>ATT</th><th>YDS</th><th>TD</th><th>RTG</th></tr></thead><tbody><tr><td class="pl">Caleb Williams</td><td><img src="/assets/ncaa/Southern_California.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Southern_California</td><td class="">8</td><td class="">198</td><td class="">281</td><td class="">2641</td><td class="">28</td><td class="">168.4</td></tr><tr><td class="pl">Drake Maye</td><td><img src="/assets/ncaa/North_Carolina.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />North_Carolina</td><td class="">8</td><td class="">188</td><td class="">265</td><td class="">2488</td><td class="">26</td><td class="">161.2</td></tr><tr><td class="pl">Michael Penix Jr</td><td><img src="/assets/ncaa/Washington.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Washington</td><td class="">8</td><td class="">176</td><td class="">248</td><td class="">2312</td><td class="">24</td><td class="">158.8</td></tr><tr><td class="pl">Bo Nix</td><td><img src="/assets/ncaa/Oregon.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Oregon</td><td class="">8</td><td class="">182</td><td class="">261</td><td class="">2298</td><td class="">22</td><td class="">155.1</td></tr><tr><td class="pl">Jayden Daniels</td><td><img src="/assets/ncaa/LSU.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />LSU</td><td class="">8</td><td class="">174</td><td class="">242</td><td class="">2189</td><td class="">21</td><td class="">153.4</td></tr></tbody></table></div></div><div id="sub-ncaaf-rush" class="sub-panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Player</th><th>School</th><th>G</th><th>CAR</th><th>YDS</th><th>AVG</th><th>TD</th></tr></thead><tbody><tr><td class="pl">Jonathon Brooks</td><td><img src="/assets/ncaa/Texas.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Texas</td><td class="">8</td><td class="">148</td><td class="">1121</td><td class="">7.6</td><td class="">14</td></tr><tr><td class="pl">Quinshon Judkins</td><td><img src="/assets/ncaa/Mississippi.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Mississippi</td><td class="">8</td><td class="">141</td><td class="">1088</td><td class="">7.7</td><td class="">13</td></tr><tr><td class="pl">MarShawn Lloyd</td><td><img src="/assets/ncaa/Southern_California.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Southern_California</td><td class="">8</td><td class="">132</td><td class="">998</td><td class="">7.6</td><td class="">12</td></tr><tr><td class="pl">TreVeyon Henderson</td><td><img src="/assets/ncaa/Ohio_State.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Ohio_State</td><td class="">8</td><td class="">128</td><td class="">964</td><td class="">7.5</td><td class="">11</td></tr></tbody></table></div></div><div id="sub-ncaaf-recv" class="sub-panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Player</th><th>School</th><th>G</th><th>REC</th><th>YDS</th><th>AVG</th><th>TD</th></tr></thead><tbody><tr><td class="pl">Rome Odunze</td><td><img src="/assets/ncaa/Washington.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Washington</td><td class="">8</td><td class="">58</td><td class="">924</td><td class="">15.9</td><td class="">10</td></tr><tr><td class="pl">Marvin Harrison Jr</td><td><img src="/assets/ncaa/Ohio_State.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Ohio_State</td><td class="">8</td><td class="">52</td><td class="">888</td><td class="">17.1</td><td class="">12</td></tr><tr><td class="pl">Keon Coleman</td><td><img src="/assets/ncaa/Florida_State.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Florida_State</td><td class="">8</td><td class="">49</td><td class="">812</td><td class="">16.6</td><td class="">9</td></tr><tr><td class="pl">Malik Nabers</td><td><img src="/assets/ncaa/LSU.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />LSU</td><td class="">8</td><td class="">54</td><td class="">841</td><td class="">15.6</td><td class="">8</td></tr></tbody></table></div></div>
+</div>
+
+<div id="tab-fantasy" class="tab-panel">
+  <div class="sec-label">// Fantasy</div>
+  <div class="sec-title">Fantasy & Games</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px"><div style="background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:24px">
+      <div style="font-size:1.8rem;margin-bottom:12px">🏈</div>
+      <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:800;text-transform:uppercase;margin-bottom:6px">NCAAF Fantasy</h3>
+      <p style="font-size:.83rem;color:var(--muted);line-height:1.6">Draft college players and track weekly scores.</p>
+      <span style="display:inline-block;margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:3px;background:rgba(242,194,48,.1);color:var(--gold)">Coming Soon</span>
+    </div><div style="background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:24px">
+      <div style="font-size:1.8rem;margin-bottom:12px">📊</div>
+      <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:800;text-transform:uppercase;margin-bottom:6px">CFP Rankings</h3>
+      <p style="font-size:.83rem;color:var(--muted);line-height:1.6">College Football Playoff rankings and analytics.</p>
+      <span style="display:inline-block;margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:3px;background:rgba(242,194,48,.1);color:var(--gold)">Analytics</span>
+    </div><div style="background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:24px">
+      <div style="font-size:1.8rem;margin-bottom:12px">🔮</div>
+      <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:800;text-transform:uppercase;margin-bottom:6px">Guess the Play</h3>
+      <p style="font-size:.83rem;color:var(--muted);line-height:1.6">Predict college play calls using real play-by-play data.</p>
+      <span style="display:inline-block;margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:3px;background:rgba(242,194,48,.1);color:var(--gold)">New</span>
+    </div></div>
+</div>
+
+
+
+<footer>
+  <div class="ft-brand"><img src="/assets/logo.png" alt="SSC" /><span>The Sports <em>Companion</em></span></div>
+  <div class="ft-links">
+    <a href="/index.html">Home</a><a href="/nfl/index.html">NFL</a><a href="/mlb/index.html">MLB</a>
+    <a href="/nba/index.html">NBA</a><a href="/soccer/mls/index.html">MLS</a>
+    <a href="/soccer/epl/index.html">EPL</a><a href="/ncaaf/index.html">NCAAF</a>
+  </div>
+  <div class="ft-copy">© 2026 The Sports Companion</div>
+</footer>
+
+<script>
+function showTab(id){document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');event.target.classList.add('active')}
+function showSub(id){document.querySelectorAll('.sub-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.sub-tab').forEach(b=>b.classList.remove('active'));document.getElementById('sub-'+id).classList.add('active');event.target.classList.add('active')}
+</script>
+</body></html>

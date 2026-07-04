@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EPL — The Sports Companion</title>
+  <link rel="icon" type="image/png" href="/assets/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--ink:#0B0D0F;--ink-2:#181B1F;--ink-3:#262A30;--muted:#8A8F98;--line:#2A2E35;--gold:#F2C230;--crimson:#C83A2B;--white:#FFFFFF;--accent:#F2C230}
+    html{scroll-behavior:smooth}body{font-family:'Inter',sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+    nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;background:rgba(11,13,15,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+    .nav-brand{display:flex;align-items:center;gap:8px;padding:0 20px;text-decoration:none;border-right:1px solid var(--line);height:56px;flex-shrink:0}
+    .nav-brand img{height:28px}.nav-brand span{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;color:var(--white);white-space:nowrap}
+    .nav-brand span em{font-style:normal;color:var(--gold)}
+    .nav-leagues{display:flex;align-items:center;list-style:none;overflow-x:auto;flex:1;scrollbar-width:none}
+    .nav-leagues::-webkit-scrollbar{display:none}
+    .nav-leagues a{display:flex;align-items:center;height:56px;padding:0 16px;font-size:.78rem;font-weight:600;color:var(--muted);text-decoration:none;border-right:1px solid var(--line);transition:color .2s,background .2s;white-space:nowrap}
+    .nav-leagues a:hover{color:var(--white);background:var(--ink-2)}
+    .nav-leagues a.active{color:var(--gold);background:var(--ink-2);border-bottom:2px solid var(--gold)}
+    .nav-cta{margin-left:auto;padding:0 20px;height:56px;display:flex;align-items:center;flex-shrink:0}
+    .nav-cta a{background:var(--gold);color:var(--ink);font-weight:700;font-size:.8rem;padding:8px 18px;border-radius:5px;text-decoration:none}
+    .league-banner{background:var(--ink-2);border-bottom:1px solid var(--line);padding:24px 32px 0}
+    .league-banner-top{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+    .league-banner-top h1{font-family:'Barlow Condensed',sans-serif;font-size:2.2rem;font-weight:900;text-transform:uppercase;letter-spacing:.04em}
+    .league-badge{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:4px;background:rgba(242,194,48,.12);color:var(--gold);border:1px solid rgba(242,194,48,.3)}
+    .tab-bar{display:flex;gap:0;border-top:1px solid var(--line)}
+    .tab-btn{padding:12px 22px;font-size:.82rem;font-weight:600;color:var(--muted);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;transition:all .2s;white-space:nowrap}
+    .tab-btn:hover{color:var(--white)}.tab-btn.active{color:var(--gold);border-bottom-color:var(--gold)}
+    .tab-panel{display:none;padding:28px 32px}.tab-panel.active{display:block}
+    .sec-label{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;letter-spacing:.15em;color:var(--gold);text-transform:uppercase;margin-bottom:10px}
+    .sec-title{font-family:'Barlow Condensed',sans-serif;font-size:1.6rem;font-weight:800;text-transform:uppercase;margin-bottom:6px}
+    .sec-body{color:var(--muted);font-size:.88rem;line-height:1.6;margin-bottom:20px}
+    .sub-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+    .sub-tab{background:var(--ink-2);border:1px solid var(--line);color:var(--muted);font-size:.78rem;font-weight:500;padding:7px 14px;border-radius:5px;cursor:pointer;transition:all .2s}
+    .sub-tab:hover{border-color:var(--gold);color:var(--white)}.sub-tab.active{background:var(--gold);border-color:var(--gold);color:var(--ink);font-weight:700}
+    .sub-panel{display:none}.sub-panel.active{display:block}
+    .scores-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+    .score-card{background:var(--ink-2);border:1px solid var(--line);border-radius:10px;padding:16px;cursor:pointer;transition:border-color .2s}
+    .score-card:hover{border-color:var(--gold)}
+    .score-hdr{font-family:'JetBrains Mono',monospace;font-size:.66rem;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;margin-bottom:12px}
+    .score-row{display:flex;align-items:center;justify-content:space-between;padding:5px 0}
+    .score-team{font-weight:600;font-size:.88rem;display:flex;align-items:center;gap:6px}
+    .score-team img{width:20px;height:20px;object-fit:contain}
+    .score-val{font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;font-weight:800}
+    .score-val.w{color:var(--gold)}.score-div{height:1px;background:var(--line);margin:4px 0}
+    .score-status{margin-top:10px;font-size:.7rem;font-family:'JetBrains Mono',monospace;letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
+    .live-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#22c55e;margin-right:5px;animation:pulse 1.5s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+    .tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+    .tbl{width:100%;border-collapse:collapse;font-size:.83rem}
+    .tbl thead tr{background:var(--ink-3);border-bottom:1px solid var(--line)}
+    .tbl th{font-family:'JetBrains Mono',monospace;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:11px 13px;text-align:left;white-space:nowrap}
+    .tbl tbody tr{border-bottom:1px solid rgba(255,255,255,.04);transition:background .15s}
+    .tbl tbody tr:hover{background:var(--ink-2)}.tbl tbody tr:last-child{border-bottom:none}
+    .tbl td{padding:10px 13px;color:var(--muted);white-space:nowrap}
+    .tbl td.pl{color:var(--white);font-weight:600}.tbl td.hi{color:var(--gold);font-weight:700}.tbl td.ng{color:#FF6B6B}
+    .tbl td.team-cell{display:flex;align-items:center;gap:8px}
+    .team-logo{width:20px;height:20px;object-fit:contain;flex-shrink:0}
+    .ovr{display:inline-block;font-family:'Barlow Condensed',sans-serif;font-size:.88rem;font-weight:800;padding:2px 7px;border-radius:4px}
+    .ovr-hi{background:rgba(242,194,48,.2);color:var(--gold)}.ovr-mid{background:rgba(56,189,248,.15);color:#38BDF8}.ovr-lo{background:rgba(255,107,107,.12);color:#FF6B6B}
+    .standings-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+    .s-div{background:var(--ink-2);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+    .s-div-hdr{padding:11px 16px;background:var(--ink-3);border-bottom:1px solid var(--line);font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em}
+    .s-row{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;padding:9px 16px;border-bottom:1px solid rgba(255,255,255,.04);font-size:.83rem;align-items:center}
+    .s-row:last-child{border-bottom:none}
+    .s-row.hdr{font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+    .s-row .team{font-weight:600;color:var(--white);display:flex;align-items:center;gap:6px}
+    .s-row .team img{width:18px;height:18px;object-fit:contain}
+    .s-row .val{color:var(--muted)}.s-row .hi{color:var(--gold);font-weight:700}
+    footer{background:var(--ink);border-top:1px solid var(--line);padding:28px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-top:48px}
+    .ft-brand{display:flex;align-items:center;gap:8px}.ft-brand img{height:22px}
+    .ft-brand span{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem}
+    .ft-brand span em{font-style:normal;color:var(--gold)}
+    .ft-copy{font-size:.75rem;color:var(--muted)}.ft-links{display:flex;gap:18px;flex-wrap:wrap}
+    .ft-links a{font-size:.75rem;color:var(--muted);text-decoration:none}.ft-links a:hover{color:var(--white)}
+    @media(max-width:768px){.tab-panel{padding:18px 16px}.league-banner{padding:18px 16px 0}.nav-brand span{display:none}}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/index.html" class="nav-brand"><img src="/assets/logo.png" alt="SSC" /><span>The Sports <em>Companion</em></span></a>
+  <ul class="nav-leagues">
+    <li><a href="/nfl/index.html">🏈 NFL</a></li>
+    <li><a href="/ncaaf/index.html">🏈 NCAAF</a></li>
+    <li><a href="/nba/index.html">🏀 NBA</a></li>
+    <li><a href="/ncaab/mens/index.html">🏀 NCAAM</a></li>
+    <li><a href="/ncaab/womens/index.html">🏀 NCAAW</a></li>
+    <li><a href="/mlb/index.html">⚾ MLB</a></li>
+    <li><a href="/ncaasoftball/index.html">🥎 Softball</a></li>
+    <li><a href="/nhl/index.html">🏒 NHL</a></li>
+    <li><a href="/soccer/mls/index.html">⚽ MLS</a></li>
+    <li><a href="/soccer/epl/index.html">⚽ EPL</a></li>
+    <li><a href="/soccer/laliga/index.html">⚽ La Liga</a></li>
+    <li><a href="/soccer/champions-league/index.html">⚽ UCL</a></li>
+    <li><a href="/soccer/fifa/index.html">⚽ FIFA</a></li>
+    <li><a href="/more/index.html">⛳ PGA</a></li>
+    
+  </ul>
+  <div class="nav-cta"><a href="/index.html#cta">Get the App</a></div>
+</nav>
+
+<div class="league-banner">
+  <div class="league-banner-top">
+    <h1>⚽ Premier League</h1>
+    <span class="league-badge">2024-25 Season</span>
+  </div>
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="showTab('scores')">Scores</button>
+    <button class="tab-btn" onclick="showTab('standings')">Standings</button>
+    <button class="tab-btn" onclick="showTab('stats')">Stats</button>
+    <button class="tab-btn" onclick="showTab('fantasy')">Fantasy</button>
+    
+  </div>
+</div>
+
+<div id="tab-scores" class="tab-panel active">
+  <div class="sec-label">// Latest Results</div>
+  <div class="sec-title">Scores & Results</div>
+  <p style="font-size:.8rem;color:var(--muted);margin-bottom:16px;font-family:'JetBrains Mono',monospace">Tap any game to open Gamecast & Box Score</p>
+  <div class="scores-grid"><div class="score-card">
+      <div class="score-hdr">Sat · Jul 5 · Final</div>
+      <div class="score-row"><span class="score-team">Manchester City</span><span class="score-val w">3</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">Arsenal</span><span class="score-val">1</span></div>
+      <div class="score-status">Final</div>
+    </div><div class="score-card">
+      <div class="score-hdr">Sat · Jul 5 · Final</div>
+      <div class="score-row"><span class="score-team">Liverpool</span><span class="score-val">2</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">Chelsea</span><span class="score-val">2</span></div>
+      <div class="score-status">Final</div>
+    </div><div class="score-card">
+      <div class="score-hdr">Sat · Jul 5</div>
+      <div class="score-row"><span class="score-team">Manchester United</span><span class="score-val">1</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">Tottenham</span><span class="score-val w">2</span></div>
+      <div class="score-status"><span class="live-dot"></span>Live · 67'</div>
+    </div><div class="score-card">
+      <div class="score-hdr">Sat · Jul 5 · Final</div>
+      <div class="score-row"><span class="score-team">Newcastle</span><span class="score-val w">1</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">Aston Villa</span><span class="score-val">0</span></div>
+      <div class="score-status">Final</div>
+    </div><div class="score-card">
+      <div class="score-hdr">Sun · Jul 6</div>
+      <div class="score-row"><span class="score-team">Brighton</span><span class="score-val">—</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">West Ham</span><span class="score-val">—</span></div>
+      <div class="score-status"><span class="live-dot"></span>2:00 PM ET</div>
+    </div><div class="score-card">
+      <div class="score-hdr">Sun · Jul 6</div>
+      <div class="score-row"><span class="score-team">Everton</span><span class="score-val">—</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">Wolves</span><span class="score-val">—</span></div>
+      <div class="score-status"><span class="live-dot"></span>9:00 AM ET</div>
+    </div></div>
+</div>
+
+<div id="tab-standings" class="tab-panel">
+  <div class="sec-label">// 2025 Season</div>
+  <div class="sec-title">Standings</div>
+  <div class="standings-grid"><div class="s-div">
+      <div class="s-div-hdr">Premier League 2024-25</div>
+      <div class="s-row hdr"><span>Team</span><span>W</span><span>D</span><span>L</span><span>GD</span><span>PTS</span></div>
+      <div class="s-row"><span class="team">Manchester City</span><span class="val">26</span><span class="hi">5</span><span class="val">3</span><span class="val">+48</span><span class="val">83</span></div><div class="s-row"><span class="team">Arsenal</span><span class="val">24</span><span class="hi">6</span><span class="val">4</span><span class="val">+41</span><span class="val">78</span></div><div class="s-row"><span class="team">Liverpool</span><span class="val">23</span><span class="hi">7</span><span class="val">4</span><span class="val">+38</span><span class="val">76</span></div><div class="s-row"><span class="team">Aston Villa</span><span class="val">20</span><span class="hi">6</span><span class="val">8</span><span class="val">+22</span><span class="val">66</span></div><div class="s-row"><span class="team">Tottenham</span><span class="val">18</span><span class="hi">5</span><span class="val">11</span><span class="val">+14</span><span class="val">59</span></div><div class="s-row"><span class="team">Chelsea</span><span class="val">17</span><span class="hi">7</span><span class="val">10</span><span class="val">+9</span><span class="val">58</span></div><div class="s-row"><span class="team">Newcastle</span><span class="val">17</span><span class="hi">6</span><span class="val">11</span><span class="val">+11</span><span class="val">57</span></div><div class="s-row"><span class="team">Manchester United</span><span class="val">14</span><span class="hi">4</span><span class="val">16</span><span class="val">-5</span><span class="val">46</span></div><div class="s-row"><span class="team">Brighton</span><span class="val">13</span><span class="hi">8</span><span class="val">13</span><span class="val">+2</span><span class="val">47</span></div><div class="s-row"><span class="team">West Ham</span><span class="val">11</span><span class="hi">6</span><span class="val">17</span><span class="val">-15</span><span class="val">39</span></div>
+    </div></div>
+</div>
+
+<div id="tab-stats" class="tab-panel">
+  <div class="sec-label">// 2025 Season</div>
+  <div class="sec-title">Stats</div>
+  <div class="sub-tabs"><button class="sub-tab active" onclick="showSub('epl-scoring')">Top Scorers</button><button class="sub-tab" onclick="showSub('epl-assists')">Assists</button></div><div id="sub-epl-scoring" class="sub-panel active"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Player</th><th>Club</th><th>GP</th><th>Goals</th><th>xG</th><th>Shots</th><th>OVR</th></tr></thead><tbody><tr><td class="pl">Erling Haaland</td><td class="">Man City</td><td class="">34</td><td class="">28</td><td class="">26.1</td><td class="">142</td><td class="">99</td></tr><tr><td class="pl">Mohamed Salah</td><td class="">Liverpool</td><td class="">34</td><td class="">22</td><td class="">19.8</td><td class="">118</td><td class="">98</td></tr><tr><td class="pl">Bukayo Saka</td><td class="">Arsenal</td><td class="">33</td><td class="">17</td><td class="">15.2</td><td class="">98</td><td class="">96</td></tr><tr><td class="pl">Ollie Watkins</td><td class="">Aston Villa</td><td class="">34</td><td class="">16</td><td class="">14.8</td><td class="">102</td><td class="">94</td></tr><tr><td class="pl">Son Heung-min</td><td class="">Tottenham</td><td class="">32</td><td class="">14</td><td class="">12.9</td><td class="">88</td><td class="">93</td></tr><tr><td class="pl">Cole Palmer</td><td class="">Chelsea</td><td class="">33</td><td class="">18</td><td class="">16.1</td><td class="">109</td><td class="">97</td></tr></tbody></table></div></div><div id="sub-epl-assists" class="sub-panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Player</th><th>Club</th><th>GP</th><th>AST</th><th>Key Passes</th><th>OVR</th></tr></thead><tbody><tr><td class="pl">Kevin De Bruyne</td><td class="">Man City</td><td class="">28</td><td class="">14</td><td class="">98</td><td class="">99</td></tr><tr><td class="pl">Mohamed Salah</td><td class="">Liverpool</td><td class="">34</td><td class="">13</td><td class="">88</td><td class="">98</td></tr><tr><td class="pl">Bukayo Saka</td><td class="">Arsenal</td><td class="">33</td><td class="">12</td><td class="">82</td><td class="">96</td></tr><tr><td class="pl">Cole Palmer</td><td class="">Chelsea</td><td class="">33</td><td class="">11</td><td class="">79</td><td class="">97</td></tr><tr><td class="pl">Trent Alexander-Arnold</td><td class="">Liverpool</td><td class="">34</td><td class="">10</td><td class="">74</td><td class="">95</td></tr></tbody></table></div></div>
+</div>
+
+<div id="tab-fantasy" class="tab-panel">
+  <div class="sec-label">// Fantasy</div>
+  <div class="sec-title">Fantasy & Games</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px"><div style="background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:28px 24px">
+        <div style="font-size:2rem;margin-bottom:14px">⚽</div>
+        <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:800;text-transform:uppercase;margin-bottom:8px">Fantasy Premier League</h3>
+        <p style="font-size:.84rem;color:var(--muted);line-height:1.6">Draft and manage your FPL squad with SSC stat integration.</p>
+        <span style="display:inline-block;margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:4px;background:rgba(242,194,48,.12);color:var(--gold)">Coming Soon</span>
+      </div><div style="background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:28px 24px">
+        <div style="font-size:2rem;margin-bottom:14px">📊</div>
+        <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:800;text-transform:uppercase;margin-bottom:8px">Advanced Metrics</h3>
+        <p style="font-size:.84rem;color:var(--muted);line-height:1.6">xG, progressive passes, pressing stats and more for every EPL team.</p>
+        <span style="display:inline-block;margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:4px;background:rgba(242,194,48,.12);color:var(--gold)">Analytics</span>
+      </div><div style="background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:28px 24px">
+        <div style="font-size:2rem;margin-bottom:14px">🏆</div>
+        <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:800;text-transform:uppercase;margin-bottom:8px">Match Predictions</h3>
+        <p style="font-size:.84rem;color:var(--muted);line-height:1.6">AI-powered match outcome predictions based on form and xG.</p>
+        <span style="display:inline-block;margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:4px;background:rgba(242,194,48,.12);color:var(--gold)">Coming Soon</span>
+      </div></div>
+</div>
+
+
+
+<footer>
+  <div class="ft-brand"><img src="/assets/logo.png" alt="SSC" /><span>The Sports <em>Companion</em></span></div>
+  <div class="ft-links">
+    <a href="/index.html">Home</a><a href="/nfl/index.html">NFL</a><a href="/mlb/index.html">MLB</a>
+    <a href="/nba/index.html">NBA</a><a href="/soccer/mls/index.html">MLS</a>
+    <a href="/soccer/epl/index.html">EPL</a><a href="/ncaaf/index.html">NCAAF</a>
+  </div>
+  <div class="ft-copy">© 2026 The Sports Companion</div>
+</footer>
+
+<script>
+function showTab(id){document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');event.target.classList.add('active')}
+function showSub(id){document.querySelectorAll('.sub-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.sub-tab').forEach(b=>b.classList.remove('active'));document.getElementById('sub-'+id).classList.add('active');event.target.classList.add('active')}
+</script>
+</body></html>
