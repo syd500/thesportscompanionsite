@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MLB Gameday — The Sports Companion</title>
+  <link rel="icon" type="image/png" href="/assets/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--ink:#0B0D0F;--ink-2:#181B1F;--ink-3:#262A30;--muted:#8A8F98;--line:#2A2E35;--gold:#F2C230;--crimson:#C83A2B;--white:#FFFFFF;--green:#22c55e}
+    body{font-family:'Inter',sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+
+    nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;background:rgba(11,13,15,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+    .nav-brand{display:flex;align-items:center;gap:8px;padding:0 20px;text-decoration:none;border-right:1px solid var(--line);height:56px;flex-shrink:0}
+    .nav-brand img{height:28px}
+    .nav-brand span{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;color:var(--white);white-space:nowrap}
+    .nav-brand span em{font-style:normal;color:var(--gold)}
+    .nav-back{display:flex;align-items:center;height:56px;padding:0 20px;font-size:.82rem;font-weight:600;color:var(--muted);text-decoration:none;border-right:1px solid var(--line);transition:color .2s}
+    .nav-back:hover{color:var(--white)}
+    .nav-live{margin-left:auto;padding:0 20px;height:56px;display:flex;align-items:center;gap:10px}
+    .live-badge{display:flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:5px 10px;border-radius:4px;background:rgba(200,58,43,.15);color:var(--crimson);border:1px solid rgba(200,58,43,.3)}
+    .live-dot{width:6px;height:6px;border-radius:50%;background:var(--crimson);animation:pulse 1.2s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+    /* SCOREBOARD */
+    .scoreboard{background:var(--ink-2);border-bottom:1px solid var(--line);padding:20px 32px}
+    .sb-top{display:flex;align-items:center;justify-content:space-between;gap:20px}
+    .sb-team{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:120px}
+    .sb-team-name{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;text-align:center}
+    .sb-team-record{font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
+    .sb-score-wrap{display:flex;align-items:center;gap:16px}
+    .sb-score{font-family:'Barlow Condensed',sans-serif;font-size:4rem;font-weight:900;line-height:1}
+    .sb-score.leader{color:var(--gold)}
+    .sb-divider{font-family:'Barlow Condensed',sans-serif;font-size:2rem;color:var(--line);font-weight:700}
+    .sb-inning-info{display:flex;flex-direction:column;align-items:center;gap:3px;margin-top:12px}
+    .sb-inning{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;color:var(--gold)}
+    .sb-half{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--muted)}
+
+    /* COUNT & OUTS */
+    .count-bar{display:flex;align-items:center;justify-content:center;gap:24px;margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+    .count-group{display:flex;flex-direction:column;align-items:center;gap:6px}
+    .count-label{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+    .count-dots{display:flex;gap:5px}
+    .count-dot{width:10px;height:10px;border-radius:50%;background:var(--line);border:1px solid var(--muted)}
+    .count-dot.on.ball{background:#22c55e;border-color:#22c55e}
+    .count-dot.on.strike{background:var(--crimson);border-color:var(--crimson)}
+    .count-dot.on.out{background:var(--gold);border-color:var(--gold)}
+    .count-val{font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:800}
+
+    /* LINE SCORE */
+    .line-score-wrap{margin-top:14px;overflow-x:auto;display:flex;justify-content:center}
+    .line-score{border-collapse:collapse;font-size:.72rem;text-align:center}
+    .line-score th{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;padding:4px 8px;border-bottom:1px solid var(--line)}
+    .line-score td{padding:4px 8px;text-align:center;color:var(--muted)}
+    .line-score td:first-child{font-weight:600;color:var(--white);text-align:left;padding-right:12px}
+    .line-score td.active{color:var(--gold);font-weight:700}
+    .line-score td.total{font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:800;color:var(--gold)}
+
+    /* TABS */
+    .game-tabs{display:flex;background:var(--ink-2);border-bottom:1px solid var(--line)}
+    .game-tab{padding:13px 24px;font-size:.82rem;font-weight:600;color:var(--muted);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;transition:all .2s;white-space:nowrap}
+    .game-tab:hover{color:var(--white)}.game-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+    .panel{display:none;padding:24px 32px}.panel.active{display:block}
+
+    /* GAMECAST LAYOUT */
+    .gamecast-layout{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+    @media(max-width:700px){.gamecast-layout{grid-template-columns:1fr}}
+
+    /* BASEBALL DIAMOND */
+    .diamond-wrap{background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:20px;display:flex;flex-direction:column;align-items:center;gap:12px}
+    .diamond-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+    .diamond-svg{width:200px;height:200px}
+
+    /* BATTER/PITCHER INFO */
+    .matchup-card{background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:18px}
+    .matchup-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+    .matchup-row:last-child{border-bottom:none}
+    .matchup-label{font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
+    .matchup-val{font-size:.88rem;font-weight:600;color:var(--white)}
+    .matchup-val.gold{color:var(--gold)}
+    .matchup-val.green{color:var(--green)}
+
+    /* PLAY DESC */
+    .play-desc-card{background:var(--ink-2);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-top:16px}
+    .play-desc-event{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:800;text-transform:uppercase;margin-bottom:6px}
+    .play-desc-event.hit{color:var(--gold)}
+    .play-desc-event.hr{color:var(--crimson)}
+    .play-desc-event.out{color:var(--muted)}
+    .play-desc-event.walk{color:var(--green)}
+    .play-desc-text{font-size:.92rem;color:var(--muted);line-height:1.6}
+
+    /* CONTROLS */
+    .play-controls{display:flex;gap:8px;margin-top:16px;align-items:center}
+    .ctrl-btn{background:var(--ink-2);border:1px solid var(--line);color:var(--white);font-size:.82rem;font-weight:600;padding:9px 16px;border-radius:6px;cursor:pointer;transition:all .2s}
+    .ctrl-btn:hover{border-color:var(--gold);color:var(--gold)}
+    .ctrl-btn:disabled{opacity:.4;cursor:not-allowed}
+    .ctrl-btn.live{background:var(--crimson);border-color:var(--crimson);color:var(--white)}
+    .ctrl-btn.live.paused{background:var(--green);border-color:var(--green)}
+    .play-counter{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--muted);margin-left:auto}
+
+    /* PBP FEED */
+    .pbp-feed{border:1px solid var(--line);border-radius:10px;overflow:hidden;max-height:320px;overflow-y:auto;margin-top:16px}
+    .pbp-feed::-webkit-scrollbar{width:4px}
+    .pbp-feed::-webkit-scrollbar-thumb{background:var(--line);border-radius:2px}
+    .pbp-item{padding:11px 15px;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;transition:background .15s}
+    .pbp-item:hover{background:var(--ink-2)}.pbp-item:last-child{border-bottom:none}
+    .pbp-item.active{background:rgba(242,194,48,.07);border-left:2px solid var(--gold)}
+    .pbp-item.unseen{opacity:.4}
+    .pbp-item-meta{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--gold);margin-bottom:4px;letter-spacing:.05em}
+    .pbp-item-text{font-size:.92rem;color:var(--muted);line-height:1.5}
+    .pbp-item.hr .pbp-item-text{color:#FF6B6B}
+    .pbp-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.58rem;font-weight:600;text-transform:uppercase;padding:2px 6px;border-radius:3px;margin-left:6px}
+    .badge-hr{background:rgba(255,107,107,.15);color:#FF6B6B}
+    .badge-hit{background:rgba(242,194,48,.12);color:var(--gold)}
+
+    /* BOX SCORE */
+    .bs-team-toggle{display:flex;gap:8px;margin-bottom:16px}
+    .bs-toggle-btn{background:var(--ink-2);border:1px solid var(--line);color:var(--muted);font-size:.8rem;font-weight:600;padding:8px 16px;border-radius:6px;cursor:pointer;transition:all .2s}
+    .bs-toggle-btn:hover{color:var(--white)}.bs-toggle-btn.active{background:var(--gold);border-color:var(--gold);color:var(--ink)}
+    .bs-section{margin-bottom:22px}
+    .bs-section-title{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
+    .bs-tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+    .bs-tbl{width:100%;border-collapse:collapse;font-size:.82rem}
+    .bs-tbl thead tr{background:var(--ink-3);border-bottom:1px solid var(--line)}
+    .bs-tbl th{font-family:'JetBrains Mono',monospace;font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:9px 12px;text-align:left;white-space:nowrap}
+    .bs-tbl tbody tr{border-bottom:1px solid rgba(255,255,255,.04);transition:background .15s}
+    .bs-tbl tbody tr:hover{background:var(--ink-2)}.bs-tbl tbody tr:last-child{border-bottom:none}
+    .bs-tbl td{padding:9px 12px;color:var(--muted);white-space:nowrap}
+    .bs-tbl td.player{color:var(--white);font-weight:600}.bs-tbl td.hi{color:var(--gold);font-weight:700}
+
+    footer{background:var(--ink);border-top:1px solid var(--line);padding:28px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-top:48px}
+    .ft-brand{display:flex;align-items:center;gap:8px}.ft-brand img{height:22px}
+    .ft-brand span{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem}
+    .ft-brand span em{font-style:normal;color:var(--gold)}
+    .ft-copy{font-size:.75rem;color:var(--muted)}.ft-links{display:flex;gap:18px}
+    .ft-links a{font-size:.75rem;color:var(--muted);text-decoration:none}.ft-links a:hover{color:var(--white)}
+    @media(max-width:768px){.panel{padding:16px}.scoreboard{padding:16px}.nav-brand span{display:none}}
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/index.html" class="nav-brand"><img src="/assets/logo.png" alt="SSC" /><span>The Sports <em>Companion</em></span></a>
+  <a href="/mlb/index.html" class="nav-back">← MLB</a>
+  <div class="nav-live">
+    <div class="live-badge"><span class="live-dot"></span>Live</div>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--muted)" id="nav-inning">Top 3rd</span>
+  </div>
+</nav>
+
+<!-- SCOREBOARD -->
+<div class="scoreboard">
+  <div class="sb-top">
+    <div class="sb-team">
+      <div class="sb-team-name">New York Yankees</div>
+      <div class="sb-team-record">(52-32)</div>
+    </div>
+    <div class="sb-score-wrap">
+      <div class="sb-score leader" id="away-score">2</div>
+      <div class="sb-divider">—</div>
+      <div class="sb-score" id="home-score">0</div>
+    </div>
+    <div class="sb-team">
+      <div class="sb-team-name">Boston Red Sox</div>
+      <div class="sb-team-record">(46-38)</div>
+    </div>
+  </div>
+
+  <div class="sb-inning-info" style="flex-direction:row;gap:16px;margin-top:12px">
+    <span class="sb-inning" id="sb-inning">Top 1st</span>
+    <span class="sb-half" id="sb-pitcher">P: C. Sale</span>
+    <span class="sb-half" id="sb-batter">AB: D. Jeter</span>
+  </div>
+
+  <!-- COUNT & OUTS -->
+  <div class="count-bar">
+    <div class="count-group">
+      <div class="count-label">Balls</div>
+      <div class="count-dots" id="balls-dots">
+        <div class="count-dot ball"></div><div class="count-dot ball"></div>
+        <div class="count-dot ball"></div><div class="count-dot ball"></div>
+      </div>
+    </div>
+    <div class="count-group">
+      <div class="count-label">Strikes</div>
+      <div class="count-dots" id="strikes-dots">
+        <div class="count-dot strike"></div><div class="count-dot strike"></div>
+        <div class="count-dot strike"></div>
+      </div>
+    </div>
+    <div class="count-group">
+      <div class="count-label">Outs</div>
+      <div class="count-dots" id="outs-dots">
+        <div class="count-dot out"></div><div class="count-dot out"></div>
+        <div class="count-dot out"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LINE SCORE -->
+  <div class="line-score-wrap">
+    <table class="line-score" id="line-score-table">
+      <thead><tr>
+        <th>Team</th>
+        <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th>
+        <th>R</th><th>H</th><th>E</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td>NYY</td>
+          <td class="active" id="nyy-1">2</td><td id="nyy-2">—</td><td id="nyy-3">—</td>
+          <td id="nyy-4">—</td><td id="nyy-5">—</td><td id="nyy-6">—</td>
+          <td id="nyy-7">—</td><td id="nyy-8">—</td><td id="nyy-9">—</td>
+          <td class="total" id="nyy-r">2</td><td id="nyy-h">3</td><td>0</td>
+        </tr>
+        <tr>
+          <td>BOS</td>
+          <td class="active" id="bos-1">0</td><td id="bos-2">—</td><td id="bos-3">—</td>
+          <td id="bos-4">—</td><td id="bos-5">—</td><td id="bos-6">—</td>
+          <td id="bos-7">—</td><td id="bos-8">—</td><td id="bos-9">—</td>
+          <td class="total" id="bos-r">0</td><td id="bos-h">1</td><td>0</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="game-tabs">
+  <button class="game-tab active" onclick="showPanel('gamecast')">Gamecast</button>
+  <button class="game-tab" onclick="showPanel('boxscore')">Box Score</button>
+  <button class="game-tab" onclick="showPanel('pbp')">Play-by-Play</button>
+</div>
+
+<!-- GAMECAST -->
+<div id="panel-gamecast" class="panel active">
+  <div class="gamecast-layout">
+
+    <!-- LEFT: DIAMOND + MATCHUP -->
+    <div>
+      <div class="diamond-wrap">
+        <div class="diamond-title">Base Runners</div>
+        <svg class="diamond-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <!-- Outfield grass -->
+          <ellipse cx="100" cy="90" rx="95" ry="85" fill="#2d6b24" opacity="0.4"/>
+          <!-- Infield dirt -->
+          <polygon points="100,30 170,100 100,170 30,100" fill="#8B6914" opacity="0.35"/>
+          <!-- Grass overlay on infield -->
+          <polygon points="100,55 148,103 100,151 52,103" fill="#2d6b24" opacity="0.3"/>
+
+          <!-- Foul lines -->
+          <line x1="100" y1="170" x2="20" y2="20" stroke="white" stroke-width="1" opacity="0.3"/>
+          <line x1="100" y1="170" x2="180" y2="20" stroke="white" stroke-width="1" opacity="0.3"/>
+
+          <!-- Base paths -->
+          <line x1="100" y1="170" x2="170" y2="100" stroke="white" stroke-width="1.5" opacity="0.4"/>
+          <line x1="170" y1="100" x2="100" y2="30"  stroke="white" stroke-width="1.5" opacity="0.4"/>
+          <line x1="100" y1="30"  x2="30"  y2="100" stroke="white" stroke-width="1.5" opacity="0.4"/>
+          <line x1="30"  y1="100" x2="100" y2="170" stroke="white" stroke-width="1.5" opacity="0.4"/>
+
+          <!-- Bases (diamonds) -->
+          <!-- 1B (right) -->
+          <rect id="base-1b" x="162" y="93" width="14" height="14" rx="2" transform="rotate(45 169 100)" fill="#2A2E35" stroke="white" stroke-width="1.5"/>
+          <!-- 2B (top) -->
+          <rect id="base-2b" x="93" y="23" width="14" height="14" rx="2" transform="rotate(45 100 30)" fill="#2A2E35" stroke="white" stroke-width="1.5"/>
+          <!-- 3B (left) -->
+          <rect id="base-3b" x="23" y="93" width="14" height="14" rx="2" transform="rotate(45 30 100)" fill="#2A2E35" stroke="white" stroke-width="1.5"/>
+          <!-- Home plate -->
+          <polygon points="100,178 108,170 108,162 92,162 92,170" fill="white" opacity="0.9"/>
+
+          <!-- Pitcher's mound -->
+          <circle cx="100" cy="100" r="5" fill="#8B6914" stroke="white" stroke-width="1" opacity="0.7"/>
+
+          <!-- Runner indicators (shown/hidden by JS) -->
+          <circle id="runner-1b" cx="169" cy="100" r="7" fill="#F2C230" stroke="white" stroke-width="1.5" opacity="0" style="transition:opacity .4s"/>
+          <circle id="runner-2b" cx="100" cy="30"  r="7" fill="#F2C230" stroke="white" stroke-width="1.5" opacity="0" style="transition:opacity .4s"/>
+          <circle id="runner-3b" cx="30"  cy="100" r="7" fill="#F2C230" stroke="white" stroke-width="1.5" opacity="0" style="transition:opacity .4s"/>
+
+          <!-- HR flash ring -->
+          <circle id="hr-ring" cx="100" cy="100" r="80" fill="none" stroke="#FF6B6B" stroke-width="3" opacity="0" style="transition:opacity .3s"/>
+        </svg>
+      </div>
+
+      <!-- MATCHUP INFO -->
+      <div class="matchup-card" style="margin-top:14px">
+        <div class="matchup-row">
+          <span class="matchup-label">Batter</span>
+          <span class="matchup-val gold" id="mc-batter">D. Jeter</span>
+        </div>
+        <div class="matchup-row">
+          <span class="matchup-label">Pitcher</span>
+          <span class="matchup-val" id="mc-pitcher">C. Sale</span>
+        </div>
+        <div class="matchup-row">
+          <span class="matchup-label">Inning</span>
+          <span class="matchup-val" id="mc-inning">Top 1st</span>
+        </div>
+        <div class="matchup-row">
+          <span class="matchup-label">Count</span>
+          <span class="matchup-val" id="mc-count">1-2</span>
+        </div>
+        <div class="matchup-row">
+          <span class="matchup-label">Outs</span>
+          <span class="matchup-val" id="mc-outs">0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: PLAY DESCRIPTION + FEED -->
+    <div>
+      <div class="play-desc-card">
+        <div class="play-desc-event" id="play-event">Single</div>
+        <div class="play-desc-text" id="play-text">D. Jeter hits a sharp single to left field. Runners at 1B.</div>
+      </div>
+
+      <div class="play-controls">
+        <button class="ctrl-btn" id="btn-prev" onclick="prevPlay()">← Prev</button>
+        <button class="ctrl-btn live" id="btn-live" onclick="toggleLive()">⏸ Pause</button>
+        <button class="ctrl-btn" id="btn-next" onclick="nextPlay()">Next →</button>
+        <span class="play-counter" id="play-counter">Play 1 of 20</span>
+      </div>
+
+      <div class="pbp-feed" id="mini-feed"></div>
+    </div>
+  </div>
+</div>
+
+<!-- BOX SCORE -->
+<div id="panel-boxscore" class="panel">
+  <div class="bs-team-toggle">
+    <button class="bs-toggle-btn active" onclick="showBS('nyy')">New York Yankees</button>
+    <button class="bs-toggle-btn" onclick="showBS('bos')">Boston Red Sox</button>
+  </div>
+  <div id="bs-nyy">
+    <div class="bs-section">
+      <div class="bs-section-title">Batting</div>
+      <div class="bs-tbl-wrap"><table class="bs-tbl">
+        <thead><tr><th>Player</th><th>Pos</th><th>AB</th><th>R</th><th>H</th><th>RBI</th><th>HR</th><th>BB</th><th>AVG</th></tr></thead>
+        <tbody>
+          <tr><td class="player">D. Jeter</td><td>SS</td><td>4</td><td>1</td><td class="hi">2</td><td>0</td><td>0</td><td>0</td><td>.328</td></tr>
+          <tr><td class="player">A. Judge</td><td>RF</td><td>3</td><td class="hi">2</td><td class="hi">1</td><td class="hi">2</td><td class="hi">1</td><td>1</td><td>.312</td></tr>
+          <tr><td class="player">G. Stanton</td><td>DH</td><td>4</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>.241</td></tr>
+          <tr><td class="player">A. Rizzo</td><td>1B</td><td>2</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>.265</td></tr>
+          <tr><td class="player">J. Soto</td><td>LF</td><td>4</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>.295</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="bs-section">
+      <div class="bs-section-title">Pitching</div>
+      <div class="bs-tbl-wrap"><table class="bs-tbl">
+        <thead><tr><th>Player</th><th>IP</th><th>H</th><th>R</th><th>ER</th><th>BB</th><th>SO</th><th>ERA</th></tr></thead>
+        <tbody>
+          <tr><td class="player">G. Cole</td><td class="hi">6.0</td><td>1</td><td>0</td><td>0</td><td>1</td><td class="hi">7</td><td class="hi">2.21</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+  <div id="bs-bos" style="display:none">
+    <div class="bs-section">
+      <div class="bs-section-title">Batting</div>
+      <div class="bs-tbl-wrap"><table class="bs-tbl">
+        <thead><tr><th>Player</th><th>Pos</th><th>AB</th><th>R</th><th>H</th><th>RBI</th><th>HR</th><th>BB</th><th>AVG</th></tr></thead>
+        <tbody>
+          <tr><td class="player">X. Bogaerts</td><td>SS</td><td>3</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>.282</td></tr>
+          <tr><td class="player">R. Devers</td><td>3B</td><td>3</td><td>0</td><td class="hi">1</td><td>0</td><td>0</td><td>0</td><td>.271</td></tr>
+          <tr><td class="player">J. Martinez</td><td>DH</td><td>3</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>.255</td></tr>
+          <tr><td class="player">T. Turner</td><td>1B</td><td>3</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>.261</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="bs-section">
+      <div class="bs-section-title">Pitching</div>
+      <div class="bs-tbl-wrap"><table class="bs-tbl">
+        <thead><tr><th>Player</th><th>IP</th><th>H</th><th>R</th><th>ER</th><th>BB</th><th>SO</th><th>ERA</th></tr></thead>
+        <tbody>
+          <tr><td class="player">C. Sale</td><td>2.0</td><td>3</td><td class="hi" style="color:#FF6B6B">2</td><td>2</td><td>1</td><td>4</td><td>3.84</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<!-- PLAY BY PLAY -->
+<div id="panel-pbp" class="panel">
+  <div style="border:1px solid var(--line);border-radius:10px;overflow:hidden" id="full-pbp-feed"></div>
+</div>
+
+<footer>
+  <div class="ft-brand"><img src="/assets/logo.png" alt="SSC" /><span>The Sports <em>Companion</em></span></div>
+  <div class="ft-links"><a href="/index.html">Home</a><a href="/nfl/index.html">NFL</a><a href="/mlb/index.html">MLB</a><a href="/nba/index.html">NBA</a></div>
+  <div class="ft-copy">© 2026 The Sports Companion</div>
+</footer>
+
+<script>
+const plays = [
+  { inning:1, half:'Top', batter:'D. Jeter',    pitcher:'C. Sale', balls:1, strikes:2, outs:0, first:false, second:false, third:false, event:'Single',      away:0,  home:0,  hr:false, text:'D. Jeter hits a sharp single to left field. Runners at 1B.' },
+  { inning:1, half:'Top', batter:'A. Judge',     pitcher:'C. Sale', balls:0, strikes:2, outs:0, first:true,  second:false, third:false, event:'Home Run',    away:2,  home:0,  hr:true,  text:'A. Judge crushes a 2-run home run to deep center field! Yankees lead 2-0!' },
+  { inning:1, half:'Top', batter:'G. Stanton',   pitcher:'C. Sale', balls:2, strikes:1, outs:0, first:false, second:false, third:false, event:'Strikeout',   away:2,  home:0,  hr:false, text:'G. Stanton called out on strikes. 1 out.' },
+  { inning:1, half:'Top', batter:'A. Rizzo',     pitcher:'C. Sale', balls:3, strikes:2, outs:1, first:false, second:false, third:false, event:'Walk',        away:2,  home:0,  hr:false, text:'A. Rizzo draws a full-count walk. Runner at 1B.' },
+  { inning:1, half:'Top', batter:'D. LeMahieu',  pitcher:'C. Sale', balls:0, strikes:1, outs:1, first:true,  second:false, third:false, event:'Double Play', away:2,  home:0,  hr:false, text:'D. LeMahieu grounds into a 4-6-3 double play. Inning over.' },
+  { inning:1, half:'Bot', batter:'X. Bogaerts',  pitcher:'G. Cole', balls:2, strikes:2, outs:0, first:false, second:false, third:false, event:'Strikeout',   away:2,  home:0,  hr:false, text:'X. Bogaerts swings and misses. 1 out.' },
+  { inning:1, half:'Bot', batter:'R. Devers',    pitcher:'G. Cole', balls:1, strikes:0, outs:1, first:false, second:false, third:false, event:'Single',      away:2,  home:0,  hr:false, text:'R. Devers hits a liner to right. Runner at 1B.' },
+  { inning:1, half:'Bot', batter:'J. Martinez',  pitcher:'G. Cole', balls:0, strikes:2, outs:1, first:true,  second:false, third:false, event:'Fly Out',     away:2,  home:0,  hr:false, text:'J. Martinez pops out to shallow center. 2 outs.' },
+  { inning:1, half:'Bot', batter:'T. Turner',    pitcher:'G. Cole', balls:1, strikes:1, outs:2, first:true,  second:false, third:false, event:'Ground Out',  away:2,  home:0,  hr:false, text:'T. Turner grounds out to third. Inning over.' },
+  { inning:2, half:'Top', batter:'J. Soto',      pitcher:'C. Sale', balls:2, strikes:1, outs:0, first:false, second:false, third:false, event:'Double',      away:2,  home:0,  hr:false, text:'J. Soto rips a double down the left-field line!' },
+  { inning:2, half:'Top', batter:'A. Judge',     pitcher:'C. Sale', balls:3, strikes:2, outs:0, first:false, second:true,  third:false, event:'Walk',        away:2,  home:0,  hr:false, text:'A. Judge works a walk. Runners on 1B and 2B.' },
+  { inning:2, half:'Top', batter:'G. Stanton',   pitcher:'C. Sale', balls:1, strikes:1, outs:0, first:true,  second:true,  third:false, event:'Strikeout',   away:2,  home:0,  hr:false, text:'G. Stanton fans on a nasty slider. 1 out.' },
+  { inning:2, half:'Bot', batter:'X. Bogaerts',  pitcher:'G. Cole', balls:1, strikes:2, outs:0, first:false, second:false, third:false, event:'Ground Out',  away:2,  home:0,  hr:false, text:'Bogaerts bounces weakly to second. 1 out.' },
+  { inning:2, half:'Bot', batter:'R. Devers',    pitcher:'G. Cole', balls:0, strikes:2, outs:1, first:false, second:false, third:false, event:'Strikeout',   away:2,  home:0,  hr:false, text:'Cole blows a 97mph fastball past Devers. 2 outs.' },
+  { inning:2, half:'Bot', batter:'J. Martinez',  pitcher:'G. Cole', balls:2, strikes:2, outs:2, first:false, second:false, third:false, event:'Fly Out',     away:2,  home:0,  hr:false, text:'Martinez lifts a deep fly that Judge catches at the warning track. Inning over.' },
+];
+
+let currentIdx = 0;
+let isLive = true;
+let liveTimer = null;
+
+function eventClass(ev) {
+  const e = ev.toLowerCase();
+  if (e.includes('home run') || e.includes('hr')) return 'hr';
+  if (e.includes('single') || e.includes('double') || e.includes('triple')) return 'hit';
+  if (e.includes('walk') || e.includes('hbp')) return 'walk';
+  return 'out';
+}
+
+function renderDots(container, count, max, cls) {
+  container.innerHTML = '';
+  for (let i = 0; i < max; i++) {
+    const d = document.createElement('div');
+    d.className = 'count-dot ' + cls + (i < count ? ' on' : '');
+    container.appendChild(d);
+  }
+}
+
+function renderPlay(idx) {
+  const p = plays[idx];
+
+  // Scoreboard
+  document.getElementById('away-score').textContent = p.away;
+  document.getElementById('home-score').textContent = p.home;
+  document.getElementById('away-score').className = 'sb-score' + (p.away > p.home ? ' leader' : '');
+  document.getElementById('home-score').className = 'sb-score' + (p.home > p.away ? ' leader' : '');
+  const inningLabel = `${p.half === 'Top' ? '▲' : '▼'} ${p.inning}${['st','nd','rd'][p.inning-1]||'th'}`;
+  document.getElementById('sb-inning').textContent = inningLabel;
+  document.getElementById('sb-pitcher').textContent = 'P: ' + p.pitcher;
+  document.getElementById('sb-batter').textContent = 'AB: ' + p.batter;
+  document.getElementById('nav-inning').textContent = `${p.half} ${p.inning}${['st','nd','rd'][p.inning-1]||'th'}`;
+
+  // Count dots
+  renderDots(document.getElementById('balls-dots'),   p.balls,   4, 'ball');
+  renderDots(document.getElementById('strikes-dots'), p.strikes, 3, 'strike');
+  renderDots(document.getElementById('outs-dots'),    p.outs,    3, 'out');
+
+  // Matchup card
+  document.getElementById('mc-batter').textContent  = p.batter;
+  document.getElementById('mc-pitcher').textContent = p.pitcher;
+  document.getElementById('mc-inning').textContent  = inningLabel;
+  document.getElementById('mc-count').textContent   = `${p.balls}-${p.strikes}`;
+  document.getElementById('mc-outs').textContent    = p.outs;
+
+  // Play description
+  const ec = eventClass(p.event);
+  document.getElementById('play-event').textContent = p.event;
+  document.getElementById('play-event').className = 'play-desc-event ' + ec;
+  document.getElementById('play-text').textContent = p.text;
+
+  // Base runners
+  document.getElementById('runner-1b').style.opacity = p.first  ? '1' : '0';
+  document.getElementById('runner-2b').style.opacity = p.second ? '1' : '0';
+  document.getElementById('runner-3b').style.opacity = p.third  ? '1' : '0';
+
+  // HR flash
+  const hrRing = document.getElementById('hr-ring');
+  if (p.hr) {
+    hrRing.style.opacity = '0.8';
+    setTimeout(() => hrRing.style.opacity = '0', 1800);
+  } else {
+    hrRing.style.opacity = '0';
+  }
+
+  document.getElementById('play-counter').textContent = `Play ${idx + 1} of ${plays.length}`;
+  document.getElementById('btn-prev').disabled = idx === 0;
+  document.getElementById('btn-next').disabled = idx === plays.length - 1;
+
+  renderMiniFeed(idx);
+}
+
+function renderMiniFeed(activeIdx) {
+  const feed = document.getElementById('mini-feed');
+  feed.innerHTML = plays.map((p, i) => {
+    const ec = eventClass(p.event);
+    const badge = p.hr ? '<span class="pbp-badge badge-hr">HR</span>' : p.event.toLowerCase().includes('single')||p.event.toLowerCase().includes('double') ? '<span class="pbp-badge badge-hit">HIT</span>' : '';
+    return `<div class="pbp-item ${i===activeIdx?'active':''} ${i<=activeIdx?'seen':'unseen'} ${p.hr?'hr':''}" onclick="jumpTo(${i})">
+      <div class="pbp-item-meta">${p.half} ${p.inning} · ${p.batter} vs ${p.pitcher} · ${p.balls}-${p.strikes} · ${p.outs} out</div>
+      <div class="pbp-item-text">${p.text}${badge}</div>
+    </div>`;
+  }).join('');
+  const active = feed.querySelector('.pbp-item.active');
+  if (active) active.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+}
+
+function renderFullFeed() {
+  const feed = document.getElementById('full-pbp-feed');
+  let html = ''; let lastInning = '';
+  plays.forEach((p, i) => {
+    const label = `${p.half} ${p.inning}${['st','nd','rd'][p.inning-1]||'th'}`;
+    if (label !== lastInning) {
+      html += `<div style="padding:10px 16px;background:var(--ink-3);border-bottom:1px solid var(--line);font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--gold)">${label} Inning</div>`;
+      lastInning = label;
+    }
+    const ec = eventClass(p.event);
+    const badge = p.hr ? '<span class="pbp-badge badge-hr">HR</span>' : p.event.toLowerCase().includes('single')||p.event.toLowerCase().includes('double')?'<span class="pbp-badge badge-hit">HIT</span>':'';
+    html += `<div class="pbp-item ${p.hr?'hr':''}" onclick="jumpToAndShow(${i})">
+      <div class="pbp-item-meta">${p.batter} vs ${p.pitcher} · ${p.balls}-${p.strikes} · ${p.outs} out</div>
+      <div class="pbp-item-text">${p.text}${badge}</div>
+    </div>`;
+  });
+  feed.innerHTML = html;
+}
+
+function prevPlay() { if (currentIdx > 0) { currentIdx--; stopLive(); renderPlay(currentIdx); } }
+function nextPlay() { if (currentIdx < plays.length - 1) { currentIdx++; renderPlay(currentIdx); } }
+function jumpTo(idx) { currentIdx = idx; stopLive(); renderPlay(idx); }
+function jumpToAndShow(idx) { currentIdx = idx; showPanel('gamecast', true); renderPlay(idx); }
+
+function toggleLive() { if (isLive) stopLive(); else startLive(); }
+function startLive() {
+  isLive = true;
+  document.getElementById('btn-live').textContent = '⏸ Pause';
+  document.getElementById('btn-live').classList.remove('paused');
+  liveTimer = setInterval(() => {
+    if (currentIdx < plays.length - 1) { currentIdx++; renderPlay(currentIdx); }
+    else stopLive();
+  }, 2600);
+}
+function stopLive() {
+  isLive = false; clearInterval(liveTimer);
+  document.getElementById('btn-live').textContent = '▶ Resume';
+  document.getElementById('btn-live').classList.add('paused');
+}
+
+function showPanel(id, skipBtn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.game-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  if (!skipBtn && event && event.target) event.target.classList.add('active');
+  if (id === 'pbp') renderFullFeed();
+}
+function showBS(team) {
+  document.getElementById('bs-nyy').style.display = team === 'nyy' ? 'block' : 'none';
+  document.getElementById('bs-bos').style.display = team === 'bos' ? 'block' : 'none';
+  document.querySelectorAll('.bs-toggle-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+renderPlay(currentIdx);
+startLive();
+</script>
+</body>
+</html>

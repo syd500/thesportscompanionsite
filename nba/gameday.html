@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NBA Gameday — The Sports Companion</title>
+  <link rel="icon" type="image/png" href="/assets/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--ink:#0B0D0F;--ink-2:#181B1F;--ink-3:#262A30;--muted:#8A8F98;--line:#2A2E35;--gold:#F2C230;--crimson:#C83A2B;--white:#FFFFFF;--green:#22c55e;--sky:#38BDF8}
+    body{font-family:'Inter',sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+
+    nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;background:rgba(11,13,15,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+    .nav-brand{display:flex;align-items:center;gap:8px;padding:0 20px;text-decoration:none;border-right:1px solid var(--line);height:56px;flex-shrink:0}
+    .nav-brand img{height:28px}
+    .nav-brand span{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;color:var(--white);white-space:nowrap}
+    .nav-brand span em{font-style:normal;color:var(--gold)}
+    .nav-back{display:flex;align-items:center;height:56px;padding:0 20px;font-size:.82rem;font-weight:600;color:var(--muted);text-decoration:none;border-right:1px solid var(--line);transition:color .2s}
+    .nav-back:hover{color:var(--white)}
+    .nav-live{margin-left:auto;padding:0 20px;height:56px;display:flex;align-items:center;gap:10px}
+    .live-badge{display:flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:5px 10px;border-radius:4px;background:rgba(200,58,43,.15);color:var(--crimson);border:1px solid rgba(200,58,43,.3)}
+    .live-dot{width:6px;height:6px;border-radius:50%;background:var(--crimson);animation:pulse 1.2s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+    /* SCOREBOARD */
+    .scoreboard{background:var(--ink-2);border-bottom:1px solid var(--line);padding:20px 32px}
+    .sb-top{display:flex;align-items:center;justify-content:space-between;gap:20px}
+    .sb-team{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:120px}
+    .sb-team-name{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;text-align:center}
+    .sb-team-record{font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
+    .sb-score-wrap{display:flex;align-items:center;gap:16px}
+    .sb-score{font-family:'Barlow Condensed',sans-serif;font-size:4rem;font-weight:900;line-height:1}
+    .sb-score.leader{color:var(--gold)}
+    .sb-divider{font-family:'Barlow Condensed',sans-serif;font-size:2rem;color:var(--line);font-weight:700}
+    .sb-game-status{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:12px}
+    .sb-quarter{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;color:var(--gold)}
+    .sb-clock{font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--muted)}
+
+    /* QUARTER SCORES */
+    .quarter-scores{margin-top:14px;display:flex;justify-content:center}
+    .qs-table{border-collapse:collapse;font-size:.72rem;text-align:center}
+    .qs-table th{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;padding:4px 10px;border-bottom:1px solid var(--line);text-align:center}
+    .qs-table td{padding:5px 10px;text-align:center;color:var(--muted)}
+    .qs-table td:first-child{font-weight:600;color:var(--white);text-align:left;padding-right:16px}
+    .qs-table td.total{font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:800;color:var(--gold)}
+    .qs-table td.active-q{color:var(--gold);font-weight:700}
+
+    /* TABS */
+    .game-tabs{display:flex;background:var(--ink-2);border-bottom:1px solid var(--line)}
+    .game-tab{padding:13px 24px;font-size:.82rem;font-weight:600;color:var(--muted);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;transition:all .2s;white-space:nowrap}
+    .game-tab:hover{color:var(--white)}.game-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+    .panel{display:none;padding:24px 32px}.panel.active{display:block}
+
+    /* GAMECAST LAYOUT */
+    .gamecast-layout{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+    @media(max-width:720px){.gamecast-layout{grid-template-columns:1fr}}
+
+    /* SHOT CHART */
+    .court-wrap{background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;align-items:center;gap:10px}
+    .court-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+    .court-legend{display:flex;gap:16px;font-size:.72rem;color:var(--muted)}
+    .legend-item{display:flex;align-items:center;gap:5px}
+    .legend-dot{width:8px;height:8px;border-radius:50%}
+
+    /* PLAY DESC */
+    .play-desc-card{background:var(--ink-2);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-bottom:14px}
+    .play-desc-player{font-family:'Barlow Condensed',sans-serif;font-size:1.2rem;font-weight:800;text-transform:uppercase;margin-bottom:4px}
+    .play-desc-event{font-size:.82rem;font-weight:600;margin-bottom:6px}
+    .play-desc-event.made{color:var(--green)}
+    .play-desc-event.miss{color:var(--crimson)}
+    .play-desc-event.other{color:var(--gold)}
+    .play-desc-text{font-size:.92rem;color:var(--muted);line-height:1.6}
+
+    /* CONTROLS */
+    .play-controls{display:flex;gap:8px;margin-bottom:14px;align-items:center}
+    .ctrl-btn{background:var(--ink-2);border:1px solid var(--line);color:var(--white);font-size:.82rem;font-weight:600;padding:9px 16px;border-radius:6px;cursor:pointer;transition:all .2s}
+    .ctrl-btn:hover{border-color:var(--gold);color:var(--gold)}
+    .ctrl-btn:disabled{opacity:.4;cursor:not-allowed}
+    .ctrl-btn.live{background:var(--crimson);border-color:var(--crimson);color:var(--white)}
+    .ctrl-btn.live.paused{background:var(--green);border-color:var(--green)}
+    .play-counter{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--muted);margin-left:auto}
+
+    /* PBP FEED */
+    .pbp-feed{border:1px solid var(--line);border-radius:10px;overflow:hidden;max-height:320px;overflow-y:auto}
+    .pbp-feed::-webkit-scrollbar{width:4px}
+    .pbp-feed::-webkit-scrollbar-thumb{background:var(--line);border-radius:2px}
+    .pbp-item{padding:11px 15px;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;transition:background .15s}
+    .pbp-item:hover{background:var(--ink-2)}.pbp-item:last-child{border-bottom:none}
+    .pbp-item.active{background:rgba(242,194,48,.07);border-left:2px solid var(--gold)}
+    .pbp-item.unseen{opacity:.4}
+    .pbp-item-meta{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--gold);margin-bottom:4px}
+    .pbp-item-text{font-size:.92rem;color:var(--muted);line-height:1.5}
+    .pbp-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.58rem;font-weight:600;text-transform:uppercase;padding:2px 6px;border-radius:3px;margin-left:6px}
+    .badge-made{background:rgba(34,197,94,.15);color:var(--green)}
+    .badge-3pt{background:rgba(56,189,248,.15);color:var(--sky)}
+
+    /* BOX SCORE */
+    .bs-team-toggle{display:flex;gap:8px;margin-bottom:16px}
+    .bs-toggle-btn{background:var(--ink-2);border:1px solid var(--line);color:var(--muted);font-size:.8rem;font-weight:600;padding:8px 16px;border-radius:6px;cursor:pointer;transition:all .2s}
+    .bs-toggle-btn:hover{color:var(--white)}.bs-toggle-btn.active{background:var(--gold);border-color:var(--gold);color:var(--ink)}
+    .bs-section{margin-bottom:22px}
+    .bs-section-title{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
+    .bs-tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+    .bs-tbl{width:100%;border-collapse:collapse;font-size:.82rem}
+    .bs-tbl thead tr{background:var(--ink-3);border-bottom:1px solid var(--line)}
+    .bs-tbl th{font-family:'JetBrains Mono',monospace;font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:9px 12px;text-align:left;white-space:nowrap}
+    .bs-tbl tbody tr{border-bottom:1px solid rgba(255,255,255,.04);transition:background .15s}
+    .bs-tbl tbody tr:hover{background:var(--ink-2)}.bs-tbl tbody tr:last-child{border-bottom:none}
+    .bs-tbl td{padding:9px 12px;color:var(--muted);white-space:nowrap}
+    .bs-tbl td.player{color:var(--white);font-weight:600}.bs-tbl td.hi{color:var(--gold);font-weight:700}
+
+    footer{background:var(--ink);border-top:1px solid var(--line);padding:28px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-top:48px}
+    .ft-brand{display:flex;align-items:center;gap:8px}.ft-brand img{height:22px}
+    .ft-brand span{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem}
+    .ft-brand span em{font-style:normal;color:var(--gold)}
+    .ft-copy{font-size:.75rem;color:var(--muted)}.ft-links{display:flex;gap:18px}
+    .ft-links a{font-size:.75rem;color:var(--muted);text-decoration:none}.ft-links a:hover{color:var(--white)}
+    @media(max-width:768px){.panel{padding:16px}.scoreboard{padding:16px}.nav-brand span{display:none}}
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/index.html" class="nav-brand"><img src="/assets/logo.png" alt="SSC" /><span>The Sports <em>Companion</em></span></a>
+  <a href="/nba/index.html" class="nav-back">← NBA</a>
+  <div class="nav-live">
+    <div class="live-badge"><span class="live-dot"></span>Live</div>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--muted)" id="nav-clock">Q1 · 11:45</span>
+  </div>
+</nav>
+
+<!-- SCOREBOARD -->
+<div class="scoreboard">
+  <div class="sb-top">
+    <div class="sb-team">
+      <div class="sb-team-name">Golden State Warriors</div>
+      <div class="sb-team-record">(46-36) Away</div>
+    </div>
+    <div class="sb-score-wrap">
+      <div class="sb-score" id="away-score">3</div>
+      <div class="sb-divider">—</div>
+      <div class="sb-score leader" id="home-score">0</div>
+    </div>
+    <div class="sb-team">
+      <div class="sb-team-name">Los Angeles Lakers</div>
+      <div class="sb-team-record">(47-35) Home</div>
+    </div>
+  </div>
+
+  <div class="sb-game-status">
+    <span class="sb-quarter" id="sb-quarter">Q1</span>
+    <span class="sb-clock" id="sb-clock">11:45</span>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--muted)" id="sb-possession">🏀 GSW Possession</span>
+  </div>
+
+  <div class="quarter-scores">
+    <table class="qs-table">
+      <thead><tr><th>Team</th><th>Q1</th><th>Q2</th><th>Q3</th><th>Q4</th><th>T</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>GSW</td>
+          <td class="active-q" id="gsw-q1">3</td><td id="gsw-q2">—</td><td id="gsw-q3">—</td><td id="gsw-q4">—</td>
+          <td class="total" id="gsw-total">3</td>
+        </tr>
+        <tr>
+          <td>LAL</td>
+          <td class="active-q" id="lal-q1">0</td><td id="lal-q2">—</td><td id="lal-q3">—</td><td id="lal-q4">—</td>
+          <td class="total" id="lal-total">0</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="game-tabs">
+  <button class="game-tab active" onclick="showPanel('gamecast')">Gamecast</button>
+  <button class="game-tab" onclick="showPanel('boxscore')">Box Score</button>
+  <button class="game-tab" onclick="showPanel('pbp')">Play-by-Play</button>
+</div>
+
+<!-- GAMECAST -->
+<div id="panel-gamecast" class="panel active">
+  <div class="gamecast-layout">
+
+    <!-- LEFT: SHOT CHART -->
+    <div>
+      <div class="court-wrap">
+        <div class="court-title">Shot Chart</div>
+        <svg id="court-svg" viewBox="0 0 500 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:520px">
+          <defs>
+            <!-- Hardwood floor gradient -->
+            <linearGradient id="woodGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#D4956A"/>
+              <stop offset="30%" stop-color="#C4813A"/>
+              <stop offset="60%" stop-color="#D4956A"/>
+              <stop offset="100%" stop-color="#BA7030"/>
+            </linearGradient>
+            <!-- Wood plank pattern -->
+            <pattern id="woodPlanks" x="0" y="0" width="500" height="18" patternUnits="userSpaceOnUse">
+              <rect width="500" height="18" fill="#C8854A"/>
+              <rect y="0"  width="80"  height="17" fill="#D4956A" opacity="0.6"/>
+              <rect x="85" y="0"  width="110" height="17" fill="#BA7030" opacity="0.4"/>
+              <rect x="200" y="0" width="90"  height="17" fill="#D4A060" opacity="0.5"/>
+              <rect x="295" y="0" width="120" height="17" fill="#C07838" opacity="0.45"/>
+              <rect x="420" y="0" width="80"  height="17" fill="#D4956A" opacity="0.55"/>
+              <line x1="0" y1="17" x2="500" y2="17" stroke="#A06020" stroke-width="0.5" opacity="0.4"/>
+            </pattern>
+            <!-- Second row offset -->
+            <pattern id="woodPlanks2" x="0" y="18" width="500" height="18" patternUnits="userSpaceOnUse">
+              <rect y="18" width="500" height="18" fill="#C07838"/>
+              <rect x="40"  y="18" width="100" height="17" fill="#D4956A" opacity="0.5"/>
+              <rect x="145" y="18" width="85"  height="17" fill="#BA7030" opacity="0.35"/>
+              <rect x="235" y="18" width="115" height="17" fill="#D4A060" opacity="0.45"/>
+              <rect x="355" y="18" width="90"  height="17" fill="#C07838" opacity="0.4"/>
+            </pattern>
+          </defs>
+
+          <!-- Court surface -->
+          <rect width="500" height="280" fill="url(#woodPlanks)" rx="3"/>
+          <!-- Second plank layer offset for realism -->
+          <rect width="500" height="280" fill="url(#woodPlanks2)" opacity="0.5" rx="3"/>
+          <!-- Outer border/sideline area -->
+          <rect width="500" height="280" fill="#B8702E" opacity="0.15" rx="3"/>
+
+          <!-- Court outline -->
+          <rect x="10" y="10" width="480" height="260" fill="none" stroke="white" stroke-width="2.5" opacity="0.85"/>
+
+          <!-- Half court line -->
+          <line x1="250" y1="10" x2="250" y2="270" stroke="white" stroke-width="2" opacity="0.8"/>
+
+          <!-- Center circle -->
+          <circle cx="250" cy="140" r="36" fill="none" stroke="white" stroke-width="2" opacity="0.75"/>
+          <!-- Jump ball inner circle -->
+          <circle cx="250" cy="140" r="8" fill="none" stroke="white" stroke-width="1.5" opacity="0.6"/>
+
+          <!-- LEFT KEY / PAINT -->
+          <rect x="10" y="95" width="95" height="90" fill="none" stroke="white" stroke-width="2" opacity="0.75"/>
+          <!-- Left free throw circle -->
+          <circle cx="105" cy="140" r="35" fill="none" stroke="white" stroke-width="1.5" opacity="0.65"/>
+          <!-- Left restricted area arc -->
+          <path d="M 40 155 A 20 20 0 0 1 40 125" fill="none" stroke="white" stroke-width="1.5" opacity="0.7"/>
+          <!-- Left backboard -->
+          <line x1="12" y1="128" x2="12" y2="152" stroke="white" stroke-width="3" opacity="0.9"/>
+          <!-- Left rim -->
+          <circle cx="26" cy="140" r="9" fill="none" stroke="#FF6B6B" stroke-width="2" opacity="0.85"/>
+          <!-- Left 3PT arc -->
+          <path d="M 10 60 L 52 60 A 105 105 0 0 1 52 220 L 10 220" fill="none" stroke="white" stroke-width="2" opacity="0.7"/>
+
+          <!-- RIGHT KEY / PAINT -->
+          <rect x="395" y="95" width="95" height="90" fill="none" stroke="white" stroke-width="2" opacity="0.75"/>
+          <!-- Right free throw circle -->
+          <circle cx="395" cy="140" r="35" fill="none" stroke="white" stroke-width="1.5" opacity="0.65"/>
+          <!-- Right restricted area arc -->
+          <path d="M 460 155 A 20 20 0 0 0 460 125" fill="none" stroke="white" stroke-width="1.5" opacity="0.7"/>
+          <!-- Right backboard -->
+          <line x1="488" y1="128" x2="488" y2="152" stroke="white" stroke-width="3" opacity="0.9"/>
+          <!-- Right rim -->
+          <circle cx="474" cy="140" r="9" fill="none" stroke="#FF6B6B" stroke-width="2" opacity="0.85"/>
+          <!-- Right 3PT arc -->
+          <path d="M 490 60 L 448 60 A 105 105 0 0 0 448 220 L 490 220" fill="none" stroke="white" stroke-width="2" opacity="0.7"/>
+
+          <!-- Free throw lane dashed arcs (inside key) -->
+          <circle cx="105" cy="140" r="35" fill="none" stroke="white" stroke-width="1.5" stroke-dasharray="5,5" opacity="0.4" clip-path="inset(0 0 0 70px)"/>
+          <circle cx="395" cy="140" r="35" fill="none" stroke="white" stroke-width="1.5" stroke-dasharray="5,5" opacity="0.4"/>
+
+          <!-- Shot markers added by JS -->
+          <g id="shot-markers"></g>
+
+          <!-- Ball position indicator -->
+          <circle id="ball-pos" cx="370" cy="140" r="7" fill="var(--gold)" stroke="white" stroke-width="1.5" opacity="0.95" style="transition:cx .5s ease,cy .5s ease"/>
+
+          <!-- Team labels -->
+          <text x="65"  y="280" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="9" fill="white" opacity="0.5" font-weight="700">LAL</text>
+          <text x="435" y="280" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="9" fill="white" opacity="0.5" font-weight="700">GSW</text>
+        </svg>
+        <div class="court-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#22c55e"></div>Made</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#FF6B6B"></div>Miss</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--gold)"></div>Ball</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: PLAY + FEED -->
+    <div>
+      <div class="play-desc-card">
+        <div class="play-desc-player" id="play-player">Stephen Curry</div>
+        <div class="play-desc-event made" id="play-event">3PT Made</div>
+        <div class="play-desc-text" id="play-text">Curry hits opening three from right wing.</div>
+      </div>
+
+      <div class="play-controls">
+        <button class="ctrl-btn" id="btn-prev" onclick="prevPlay()">← Prev</button>
+        <button class="ctrl-btn live" id="btn-live" onclick="toggleLive()">⏸ Pause</button>
+        <button class="ctrl-btn" id="btn-next" onclick="nextPlay()">Next →</button>
+        <span class="play-counter" id="play-counter">Play 1 of 15</span>
+      </div>
+
+      <div class="pbp-feed" id="mini-feed"></div>
+    </div>
+  </div>
+</div>
+
+<!-- BOX SCORE -->
+<div id="panel-boxscore" class="panel">
+  <div class="bs-team-toggle">
+    <button class="bs-toggle-btn active" onclick="showBS('gsw')">Golden State Warriors</button>
+    <button class="bs-toggle-btn" onclick="showBS('lal')">Los Angeles Lakers</button>
+  </div>
+  <div id="bs-gsw">
+    <div class="bs-section">
+      <div class="bs-section-title">Player Stats</div>
+      <div class="bs-tbl-wrap"><table class="bs-tbl">
+        <thead><tr><th>Player</th><th>POS</th><th>PTS</th><th>REB</th><th>AST</th><th>STL</th><th>BLK</th><th>FG</th><th>3PT</th><th>+/-</th></tr></thead>
+        <tbody>
+          <tr><td class="player">S. Curry</td><td>PG</td><td class="hi">34</td><td>5</td><td>7</td><td>2</td><td>0</td><td>11/22</td><td class="hi">6/12</td><td class="hi">+14</td></tr>
+          <tr><td class="player">K. Thompson</td><td>SG</td><td>18</td><td>3</td><td>2</td><td>1</td><td>0</td><td>6/14</td><td>4/9</td><td>+8</td></tr>
+          <tr><td class="player">A. Wiggins</td><td>SF</td><td>12</td><td>6</td><td>1</td><td>2</td><td>1</td><td>5/10</td><td>2/4</td><td>+6</td></tr>
+          <tr><td class="player">D. Green</td><td>PF</td><td>4</td><td>8</td><td class="hi">9</td><td>3</td><td>2</td><td>2/5</td><td>0/1</td><td>+10</td></tr>
+          <tr><td class="player">K. Looney</td><td>C</td><td>6</td><td class="hi">12</td><td>2</td><td>0</td><td>2</td><td>3/5</td><td>0/0</td><td>+4</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+  <div id="bs-lal" style="display:none">
+    <div class="bs-section">
+      <div class="bs-section-title">Player Stats</div>
+      <div class="bs-tbl-wrap"><table class="bs-tbl">
+        <thead><tr><th>Player</th><th>POS</th><th>PTS</th><th>REB</th><th>AST</th><th>STL</th><th>BLK</th><th>FG</th><th>3PT</th><th>+/-</th></tr></thead>
+        <tbody>
+          <tr><td class="player">LeBron James</td><td>SF</td><td class="hi">29</td><td>8</td><td class="hi">10</td><td>2</td><td>1</td><td>11/19</td><td>2/5</td><td>-8</td></tr>
+          <tr><td class="player">A. Davis</td><td>C</td><td>22</td><td class="hi">14</td><td>3</td><td>1</td><td class="hi">4</td><td>9/16</td><td>0/1</td><td>-6</td></tr>
+          <tr><td class="player">A. Reaves</td><td>SG</td><td>16</td><td>4</td><td>5</td><td>2</td><td>0</td><td>6/11</td><td>3/6</td><td>-4</td></tr>
+          <tr><td class="player">D. Russell</td><td>PG</td><td>12</td><td>2</td><td>6</td><td>1</td><td>0</td><td>4/10</td><td>2/5</td><td>-10</td></tr>
+          <tr><td class="player">J. Vanderbilt</td><td>PF</td><td>8</td><td>9</td><td>2</td><td>3</td><td>2</td><td>3/7</td><td>1/3</td><td>-5</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<!-- PLAY BY PLAY -->
+<div id="panel-pbp" class="panel">
+  <div style="border:1px solid var(--line);border-radius:10px;overflow:hidden" id="full-pbp-feed"></div>
+</div>
+
+<footer>
+  <div class="ft-brand"><img src="/assets/logo.png" alt="SSC" /><span>The Sports <em>Companion</em></span></div>
+  <div class="ft-links"><a href="/index.html">Home</a><a href="/nfl/index.html">NFL</a><a href="/mlb/index.html">MLB</a><a href="/nba/index.html">NBA</a></div>
+  <div class="ft-copy">© 2026 The Sports Companion</div>
+</footer>
+
+<script>
+// Shot positions [x, y] on the 300x280 court SVG
+// Bottom half = LAL (home) attacking up, Top half = GSW (away) attacking down
+// Shot positions remapped to 500x280 full court
+// LAL attacks LEFT (x~10-250), GSW attacks RIGHT (x~250-490)
+const plays = [
+  // GSW attacks left side (x: 20-195), LAL attacks right side (x: 205-380)
+  { q:1, clock:'11:45', team:'GSW', player:'Stephen Curry',   event:'3PT Made',      home:false, made:true,  is3:true,  awayScore:3,  homeScore:0,  shot:[130, 44],  detail:'Curry hits opening three from right wing.' },
+  { q:1, clock:'10:22', team:'LAL', player:'LeBron James',    event:'2PT Made',      home:true,  made:true,  is3:false, awayScore:3,  homeScore:2,  shot:[365, 115], detail:'LeBron fast-break layup.' },
+  { q:1, clock:'09:15', team:'GSW', player:'Klay Thompson',   event:'Missed 3PT',    home:false, made:false, is3:true,  awayScore:3,  homeScore:2,  shot:[120, 186], detail:'Thompson three off the rim.' },
+  { q:1, clock:'08:30', team:'LAL', player:'Anthony Davis',   event:'Rebound',       home:true,  made:null,  is3:false, awayScore:3,  homeScore:2,  shot:[350, 130], detail:'Davis grabs offensive rebound off the miss.' },
+  { q:1, clock:'08:22', team:'LAL', player:'Anthony Davis',   event:'2PT Made',      home:true,  made:true,  is3:false, awayScore:3,  homeScore:4,  shot:[345, 115], detail:'Davis strong move in the paint for the putback.' },
+  { q:1, clock:'07:05', team:'GSW', player:'Stephen Curry',   event:'2PT Made',      home:false, made:true,  is3:false, awayScore:5,  homeScore:4,  shot:[80,  115], detail:'Curry floater off the glass.' },
+  { q:2, clock:'06:00', team:'GSW', player:'Stephen Curry',   event:'Turnover',      home:false, made:null,  is3:false, awayScore:18, homeScore:24, shot:[200, 115], detail:'Curry bad pass stolen by LeBron at half court.' },
+  { q:2, clock:'04:30', team:'LAL', player:'Austin Reaves',   event:'2PT Made',      home:true,  made:true,  is3:false, awayScore:20, homeScore:26, shot:[370, 100], detail:'Reaves driving layup through contact.' },
+  { q:2, clock:'03:15', team:'GSW', player:'Klay Thompson',   event:'3PT Made',      home:false, made:true,  is3:true,  awayScore:23, homeScore:26, shot:[150, 44],  detail:'Thompson splash three from the corner.' },
+  { q:3, clock:'08:45', team:'LAL', player:'LeBron James',    event:'Assist',        home:true,  made:null,  is3:false, awayScore:48, homeScore:54, shot:[310, 115], detail:'LeBron finds Davis cutting for the alley-oop dunk.' },
+  { q:3, clock:'07:20', team:'GSW', player:'Andrew Wiggins',  event:'Foul',          home:false, made:null,  is3:false, awayScore:51, homeScore:56, shot:[160, 90],  detail:'Wiggins personal foul driving into the paint.' },
+  { q:3, clock:'06:00', team:'LAL', player:'Anthony Davis',   event:'Dunk',          home:true,  made:true,  is3:false, awayScore:51, homeScore:58, shot:[375, 115], detail:'Davis thunderous dunk off the lob from LeBron.' },
+  { q:4, clock:'10:00', team:'GSW', player:'Stephen Curry',   event:'3PT Made',      home:false, made:true,  is3:true,  awayScore:80, homeScore:82, shot:[110, 186], detail:'Curry pulls up from deep on the left wing. Good.' },
+  { q:4, clock:'07:48', team:'GSW', player:'Stephen Curry',   event:'4PT Play',      home:false, made:true,  is3:true,  awayScore:94, homeScore:90, shot:[42,  186], detail:'Curry buries a corner three and draws the foul. 4-point play.' },
+  { q:4, clock:'05:22', team:'LAL', player:'LeBron James',    event:'2PT Made',      home:true,  made:true,  is3:false, awayScore:98, homeScore:93, shot:[320, 145], detail:'LeBron post-up fadeaway over Wiggins. Good.' },
+];
+
+let currentIdx = 0;
+let isLive = true;
+let liveTimer = null;
+const shotMarkers = []; // track all markers added so far
+
+function eventClass(ev) {
+  const e = ev.toLowerCase();
+  if (e.includes('made') || e.includes('dunk') || e.includes('layup') || e.includes('assist')) return 'made';
+  if (e.includes('miss') || e.includes('block') || e.includes('foul')) return 'miss';
+  return 'other';
+}
+
+function addShotMarker(p) {
+  if (p.made === null) return; // no shot on turnovers/fouls/rebounds
+  const g = document.getElementById('shot-markers');
+  const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  circle.setAttribute('cx', p.shot[0]);
+  circle.setAttribute('cy', p.shot[1]);
+  circle.setAttribute('r', p.is3 ? '5' : '4');
+  circle.setAttribute('fill', p.made ? '#22c55e' : '#FF6B6B');
+  circle.setAttribute('stroke', 'white');
+  circle.setAttribute('stroke-width', '1');
+  circle.setAttribute('opacity', '0.85');
+  g.appendChild(circle);
+  shotMarkers.push(circle);
+}
+
+function renderPlay(idx) {
+  const p = plays[idx];
+
+  // Scoreboard
+  document.getElementById('away-score').textContent = p.awayScore;
+  document.getElementById('home-score').textContent = p.homeScore;
+  document.getElementById('away-score').className = 'sb-score' + (p.awayScore > p.homeScore ? ' leader' : '');
+  document.getElementById('home-score').className = 'sb-score' + (p.homeScore >= p.awayScore ? ' leader' : '');
+  document.getElementById('sb-quarter').textContent = `Q${p.q}`;
+  document.getElementById('sb-clock').textContent = p.clock;
+  document.getElementById('sb-possession').textContent = `🏀 ${p.team} Possession`;
+  document.getElementById('nav-clock').textContent = `Q${p.q} · ${p.clock}`;
+
+  // Quarter scores (simplified — fill from play data)
+  const awayQ = `gsw-q${p.q}`, homeQ = `lal-q${p.q}`;
+  ['q1','q2','q3','q4'].forEach(q => {
+    const gEl = document.getElementById('gsw-' + q);
+    const lEl = document.getElementById('lal-' + q);
+    if (gEl) gEl.className = q === `q${p.q}` ? 'active-q' : '';
+    if (lEl) lEl.className = q === `q${p.q}` ? 'active-q' : '';
+  });
+  document.getElementById('gsw-total').textContent = p.awayScore;
+  document.getElementById('lal-total').textContent = p.homeScore;
+
+  // Play description
+  document.getElementById('play-player').textContent = p.player;
+  const ec = eventClass(p.event);
+  document.getElementById('play-event').textContent = p.event;
+  document.getElementById('play-event').className = 'play-desc-event ' + ec;
+  document.getElementById('play-text').textContent = p.detail;
+
+  // Move ball on court
+  const ball = document.getElementById('ball-pos');
+  ball.setAttribute('cx', p.shot[0]);
+  ball.setAttribute('cy', p.shot[1]);
+
+  // Add shot markers for all plays up to current
+  const g = document.getElementById('shot-markers');
+  g.innerHTML = '';
+  for (let i = 0; i <= idx; i++) addShotMarker(plays[i]);
+
+  document.getElementById('play-counter').textContent = `Play ${idx + 1} of ${plays.length}`;
+  document.getElementById('btn-prev').disabled = idx === 0;
+  document.getElementById('btn-next').disabled = idx === plays.length - 1;
+
+  renderMiniFeed(idx);
+}
+
+function renderMiniFeed(activeIdx) {
+  const feed = document.getElementById('mini-feed');
+  feed.innerHTML = plays.map((p, i) => {
+    const ec = eventClass(p.event);
+    const badge = p.made === true ? `<span class="pbp-badge ${p.is3 ? 'badge-3pt' : 'badge-made'}">${p.is3 ? '3PT' : 'MADE'}</span>` : '';
+    return `<div class="pbp-item ${i===activeIdx?'active':''} ${i<=activeIdx?'seen':'unseen'}" onclick="jumpTo(${i})">
+      <div class="pbp-item-meta">Q${p.q} · ${p.clock} · ${p.team}</div>
+      <div class="pbp-item-text">${p.player} — ${p.detail}${badge}</div>
+    </div>`;
+  }).join('');
+  const active = feed.querySelector('.pbp-item.active');
+  if (active) active.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+}
+
+function renderFullFeed() {
+  const feed = document.getElementById('full-pbp-feed');
+  let html = ''; let lastQ = 0;
+  plays.forEach((p, i) => {
+    if (p.q !== lastQ) {
+      html += `<div style="padding:10px 16px;background:var(--ink-3);border-bottom:1px solid var(--line);font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--gold)">Quarter ${p.q}</div>`;
+      lastQ = p.q;
+    }
+    const ec = eventClass(p.event);
+    const badge = p.made === true ? `<span class="pbp-badge ${p.is3 ? 'badge-3pt' : 'badge-made'}">${p.is3 ? '3PT' : 'MADE'}</span>` : '';
+    html += `<div class="pbp-item" onclick="jumpToAndShow(${i})">
+      <div class="pbp-item-meta">${p.clock} · ${p.team} · ${p.event}</div>
+      <div class="pbp-item-text">${p.player} — ${p.detail}${badge}</div>
+    </div>`;
+  });
+  feed.innerHTML = html;
+}
+
+function prevPlay() { if (currentIdx > 0) { currentIdx--; stopLive(); renderPlay(currentIdx); } }
+function nextPlay() { if (currentIdx < plays.length - 1) { currentIdx++; renderPlay(currentIdx); } }
+function jumpTo(idx) { currentIdx = idx; stopLive(); renderPlay(idx); }
+function jumpToAndShow(idx) { currentIdx = idx; showPanel('gamecast', true); renderPlay(idx); }
+
+function toggleLive() { if (isLive) stopLive(); else startLive(); }
+function startLive() {
+  isLive = true;
+  document.getElementById('btn-live').textContent = '⏸ Pause';
+  document.getElementById('btn-live').classList.remove('paused');
+  liveTimer = setInterval(() => {
+    if (currentIdx < plays.length - 1) { currentIdx++; renderPlay(currentIdx); }
+    else stopLive();
+  }, 2600);
+}
+function stopLive() {
+  isLive = false; clearInterval(liveTimer);
+  document.getElementById('btn-live').textContent = '▶ Resume';
+  document.getElementById('btn-live').classList.add('paused');
+}
+
+function showPanel(id, skipBtn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.game-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  if (!skipBtn && event && event.target) event.target.classList.add('active');
+  if (id === 'pbp') renderFullFeed();
+}
+function showBS(team) {
+  document.getElementById('bs-gsw').style.display = team === 'gsw' ? 'block' : 'none';
+  document.getElementById('bs-lal').style.display = team === 'lal' ? 'block' : 'none';
+  document.querySelectorAll('.bs-toggle-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+renderPlay(currentIdx);
+startLive();
+</script>
+</body>
+</html>
