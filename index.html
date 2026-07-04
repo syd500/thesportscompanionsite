@@ -3,717 +3,510 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Sports Companion App</title>
+  <title>The Sports Companion — Scores, Stats & Analytics</title>
   <link rel="icon" type="image/png" href="assets/logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --ink:       #0B0D0F;
-      --ink-2:     #181B1F;
-      --ink-3:     #262A30;
-      --muted:     #8A8F98;
-      --line:      #2A2E35;
-      --signal:    #F2C230;  /* shield gold */
-      --signal-dim:#C99E1E;
-      --crimson:   #C83A2B;  /* shield red */
-      --navy:      #1B2A4A;  /* shield navy */
-      --amber:     #F2C230;
-      --sky:       #38BDF8;
-      --paper:     #F5F7FA;
-      --white:     #FFFFFF;
+      --ink:#0B0D0F; --ink-2:#181B1F; --ink-3:#262A30;
+      --muted:#8A8F98; --line:#2A2E35;
+      --gold:#F2C230; --crimson:#C83A2B; --white:#FFFFFF;
+      --green:#22c55e; --sky:#38BDF8;
     }
-
     html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--ink);
-      color: var(--white);
-      overflow-x: hidden;
-    }
+    body { font-family: 'Inter', sans-serif; background: var(--ink); color: var(--white); overflow-x: hidden; }
 
     /* ── NAV ── */
     nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 18px 40px;
-      background: rgba(11,13,15,0.85);
-      backdrop-filter: blur(12px);
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center;
+      background: rgba(11,13,15,0.96); backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--line);
     }
-    .nav-logo {
-      display: flex; align-items: center; gap: 10px;
-      font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 800; font-size: 1.25rem; letter-spacing: 0.04em;
-      color: var(--white);
-      text-decoration: none;
-    }
-    .nav-logo img { height: 34px; width: auto; }
-    .nav-logo span { color: var(--signal); }
-    .nav-links { display: flex; gap: 32px; list-style: none; }
-    .nav-links a {
-      font-size: 0.85rem; font-weight: 500; color: var(--muted);
-      text-decoration: none; transition: color 0.2s;
-    }
-    .nav-links a:hover { color: var(--white); }
-    .nav-cta {
-      background: var(--signal); color: var(--ink);
-      font-weight: 600; font-size: 0.85rem;
-      padding: 10px 22px; border-radius: 6px;
-      text-decoration: none; transition: opacity 0.2s;
-    }
-    .nav-cta:hover { opacity: 0.85; }
+    .nav-brand { display: flex; align-items: center; gap: 8px; padding: 0 20px; text-decoration: none; border-right: 1px solid var(--line); height: 56px; flex-shrink: 0; }
+    .nav-brand img { height: 30px; }
+    .nav-brand span { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 1.05rem; letter-spacing: .04em; color: var(--white); white-space: nowrap; }
+    .nav-brand span em { font-style: normal; color: var(--gold); }
+    .nav-leagues { display: flex; align-items: center; list-style: none; overflow-x: auto; flex: 1; scrollbar-width: none; }
+    .nav-leagues::-webkit-scrollbar { display: none; }
+    .nav-leagues a { display: flex; align-items: center; height: 56px; padding: 0 18px; font-size: .82rem; font-weight: 600; color: var(--muted); text-decoration: none; border-right: 1px solid var(--line); transition: color .2s, background .2s; white-space: nowrap; }
+    .nav-leagues a:hover { color: var(--white); background: var(--ink-2); }
+    .nav-cta { margin-left: auto; padding: 0 20px; height: 56px; display: flex; align-items: center; flex-shrink: 0; }
+    .nav-cta a { background: var(--gold); color: var(--ink); font-weight: 700; font-size: .8rem; padding: 8px 18px; border-radius: 5px; text-decoration: none; }
 
-    /* ── HERO ── */
-    .hero {
-      min-height: 100vh;
-      display: flex; flex-direction: column; justify-content: center;
-      padding: 120px 40px 80px;
-      position: relative; overflow: hidden;
-    }
-    .hero-grid {
-      position: absolute; inset: 0; opacity: 0.06;
-      background-image:
-        linear-gradient(var(--signal) 1px, transparent 1px),
-        linear-gradient(90deg, var(--signal) 1px, transparent 1px);
-      background-size: 60px 60px;
-      pointer-events: none;
-    }
-    .hero-glow {
-      position: absolute; top: -200px; right: -200px;
-      width: 700px; height: 700px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(242,194,48,0.10) 0%, transparent 70%);
-      pointer-events: none;
-    }
+    /* ── BREAKING TICKER ── */
+    .ticker { background: var(--crimson); padding: 9px 0; overflow: hidden; }
+    .ticker-track { display: flex; gap: 48px; animation: ticker 30s linear infinite; white-space: nowrap; }
+    .ticker-item { font-family: 'JetBrains Mono', monospace; font-size: .75rem; color: var(--white); display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+    .ticker-item strong { font-weight: 700; }
+    .ticker-sep { opacity: .5; }
+    @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-    .hero-eyebrow {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.15em;
-      color: var(--signal); text-transform: uppercase;
-      margin-bottom: 20px;
-    }
-    .hero h1 {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 900; font-size: clamp(3.5rem, 9vw, 7.5rem);
-      line-height: 0.92; letter-spacing: -0.01em;
-      text-transform: uppercase; max-width: 900px;
-    }
-    .hero h1 em {
-      font-style: normal; color: var(--signal);
-      -webkit-text-stroke: 0px;
-    }
-    .hero h1 .outline {
-      -webkit-text-stroke: 2px var(--white);
-      color: transparent;
-    }
-    .hero-sub {
-      margin-top: 28px;
-      font-size: 1.1rem; color: var(--muted);
-      max-width: 520px; line-height: 1.65;
-    }
-    .hero-actions {
-      margin-top: 40px; display: flex; gap: 16px; flex-wrap: wrap;
-    }
-    .btn-primary {
-      background: var(--signal); color: var(--ink);
-      font-weight: 700; font-size: 0.95rem;
-      padding: 14px 32px; border-radius: 6px;
-      text-decoration: none; transition: opacity 0.2s;
-      display: inline-block;
-    }
-    .btn-primary:hover { opacity: 0.85; }
-    .btn-ghost {
-      border: 1px solid var(--line); color: var(--white);
-      font-weight: 500; font-size: 0.95rem;
-      padding: 14px 32px; border-radius: 6px;
-      text-decoration: none; transition: border-color 0.2s;
-      display: inline-block;
-    }
-    .btn-ghost:hover { border-color: var(--muted); }
+    /* ── SCORES STRIP ── */
+    .scores-strip { background: var(--ink-2); border-bottom: 1px solid var(--line); padding: 14px 20px; overflow-x: auto; }
+    .scores-strip-inner { display: flex; gap: 12px; min-width: max-content; }
+    .score-pill { background: var(--ink-3); border: 1px solid var(--line); border-radius: 8px; padding: 10px 16px; min-width: 160px; cursor: pointer; transition: border-color .2s; text-decoration: none; display: block; }
+    .score-pill:hover { border-color: var(--gold); }
+    .score-pill-league { font-family: 'JetBrains Mono', monospace; font-size: .6rem; letter-spacing: .1em; color: var(--muted); text-transform: uppercase; margin-bottom: 6px; }
+    .score-pill-row { display: flex; justify-content: space-between; align-items: center; padding: 2px 0; }
+    .score-pill-team { font-size: .82rem; font-weight: 600; color: var(--white); }
+    .score-pill-score { font-family: 'Barlow Condensed', sans-serif; font-size: 1.2rem; font-weight: 800; }
+    .score-pill-score.leader { color: var(--gold); }
+    .score-pill-status { font-family: 'JetBrains Mono', monospace; font-size: .6rem; color: var(--muted); margin-top: 5px; text-transform: uppercase; }
+    .live-dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--green); margin-right: 4px; animation: pulse 1.4s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
 
-    .hero-stats {
-      margin-top: 72px;
-      display: flex; gap: 48px; flex-wrap: wrap;
-      border-top: 1px solid var(--line); padding-top: 36px;
-    }
-    .hero-stat-val {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 2.4rem; font-weight: 800; color: var(--white);
-    }
-    .hero-stat-val span { color: var(--signal); }
-    .hero-stat-label {
-      font-size: 0.78rem; color: var(--muted); letter-spacing: 0.06em;
-      text-transform: uppercase; margin-top: 4px;
-    }
+    /* ── MAIN GRID ── */
+    .main-grid { display: grid; grid-template-columns: 1fr 340px; gap: 0; max-width: 1200px; margin: 0 auto; padding: 24px 20px; }
+    @media(max-width:900px) { .main-grid { grid-template-columns: 1fr; } }
 
-    /* ── TICKER ── */
-    .ticker {
-      background: var(--ink-2);
-      border-top: 1px solid var(--line);
-      border-bottom: 1px solid var(--line);
-      padding: 14px 0; overflow: hidden;
-    }
-    .ticker-track {
-      display: flex; gap: 64px;
-      animation: ticker 28s linear infinite;
-      white-space: nowrap;
-    }
-    .ticker-item {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.78rem; color: var(--muted);
-      display: flex; align-items: center; gap: 10px; flex-shrink: 0;
-    }
-    .ticker-item .dot {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: var(--signal); display: inline-block;
-    }
-    .ticker-item strong { color: var(--white); }
-    @keyframes ticker {
-      from { transform: translateX(0); }
-      to   { transform: translateX(-50%); }
-    }
+    /* ── FEATURED STORY ── */
+    .featured { margin-bottom: 24px; }
+    .featured-label { font-family: 'JetBrains Mono', monospace; font-size: .68rem; font-weight: 600; letter-spacing: .12em; color: var(--gold); text-transform: uppercase; margin-bottom: 10px; }
+    .featured-card { background: var(--ink-2); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; cursor: pointer; transition: border-color .2s; }
+    .featured-card:hover { border-color: var(--gold); }
+    .featured-img { width: 100%; height: 200px; background: linear-gradient(135deg, #1a2a4a 0%, #2d5a27 100%); display: flex; align-items: center; justify-content: center; font-size: 4rem; position: relative; }
+    .featured-img-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(11,13,15,.9) 0%, transparent 60%); }
+    .featured-img-badge { position: absolute; top: 12px; left: 12px; font-family: 'JetBrains Mono', monospace; font-size: .65rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; background: var(--crimson); color: var(--white); padding: 3px 8px; border-radius: 3px; }
+    .featured-body { padding: 18px; }
+    .featured-title { font-family: 'Barlow Condensed', sans-serif; font-size: 1.5rem; font-weight: 800; text-transform: uppercase; line-height: 1.1; margin-bottom: 8px; }
+    .featured-desc { font-size: .85rem; color: var(--muted); line-height: 1.6; }
+    .featured-meta { font-family: 'JetBrains Mono', monospace; font-size: .65rem; color: var(--muted); margin-top: 10px; }
 
-    /* ── SECTION SHARED ── */
-    section { padding: 100px 40px; }
-    .section-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.15em;
-      color: var(--signal); text-transform: uppercase;
-      margin-bottom: 14px;
-    }
-    .section-title {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: clamp(2rem, 5vw, 3.5rem);
-      font-weight: 800; text-transform: uppercase; line-height: 1;
-      max-width: 700px; margin-bottom: 16px;
-    }
-    .section-body {
-      color: var(--muted); font-size: 1rem; line-height: 1.7;
-      max-width: 540px;
-    }
+    /* ── STORY GRID ── */
+    .story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+    @media(max-width:600px) { .story-grid { grid-template-columns: 1fr; } }
+    .story-card { background: var(--ink-2); border: 1px solid var(--line); border-radius: 8px; padding: 16px; cursor: pointer; transition: border-color .2s; }
+    .story-card:hover { border-color: var(--gold); }
+    .story-league { font-family: 'JetBrains Mono', monospace; font-size: .62rem; letter-spacing: .1em; color: var(--gold); text-transform: uppercase; margin-bottom: 6px; }
+    .story-title { font-family: 'Barlow Condensed', sans-serif; font-size: 1.1rem; font-weight: 800; text-transform: uppercase; line-height: 1.1; margin-bottom: 6px; }
+    .story-desc { font-size: .8rem; color: var(--muted); line-height: 1.5; }
+    .story-meta { font-family: 'JetBrains Mono', monospace; font-size: .6rem; color: var(--muted); margin-top: 8px; }
 
-    /* ── FEATURES ── */
-    #features { background: var(--ink); }
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2px; margin-top: 64px;
-      border: 2px solid var(--line); border-radius: 12px; overflow: hidden;
-    }
-    .feature-card {
-      background: var(--ink-2);
-      padding: 36px 32px;
-      transition: background 0.2s;
-    }
-    .feature-card:hover { background: var(--ink-3); }
-    .feature-icon {
-      font-size: 1.8rem; margin-bottom: 18px;
-    }
-    .feature-card h3 {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 1.4rem; font-weight: 700; text-transform: uppercase;
-      margin-bottom: 10px; letter-spacing: 0.02em;
-    }
-    .feature-card p {
-      font-size: 0.88rem; color: var(--muted); line-height: 1.65;
-    }
-    .feature-tag {
-      display: inline-block; margin-top: 16px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em;
-      text-transform: uppercase; padding: 4px 10px; border-radius: 4px;
-    }
-    .tag-new { background: rgba(0,229,160,0.12); color: var(--signal); }
-    .tag-live { background: rgba(245,158,11,0.12); color: var(--amber); }
-    .tag-pro  { background: rgba(56,189,248,0.12); color: var(--sky); }
+    /* ── STAT OF THE DAY ── */
+    .stat-spotlight { background: var(--ink-2); border: 1px solid var(--line); border-radius: 10px; padding: 20px; margin-bottom: 24px; }
+    .stat-spotlight-label { font-family: 'JetBrains Mono', monospace; font-size: .65rem; letter-spacing: .12em; color: var(--gold); text-transform: uppercase; margin-bottom: 14px; }
+    .stat-spotlight-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .stat-spot-item { text-align: center; padding: 12px; background: var(--ink-3); border-radius: 6px; }
+    .stat-spot-val { font-family: 'Barlow Condensed', sans-serif; font-size: 1.8rem; font-weight: 900; color: var(--gold); line-height: 1; }
+    .stat-spot-name { font-size: .78rem; font-weight: 600; margin: 4px 0 2px; }
+    .stat-spot-cat { font-family: 'JetBrains Mono', monospace; font-size: .6rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
 
-    /* ── INTERACTIVE FEATURES (Guess the Play / Pitch) ── */
-    #interactive { background: var(--ink-2); }
-    .interactive-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 2px;
-      margin-top: 64px; border-radius: 12px; overflow: hidden;
-      border: 2px solid var(--line);
-    }
-    .int-card {
-      padding: 52px 44px; position: relative; overflow: hidden;
-    }
-    .int-card.football { background: linear-gradient(135deg, #2A1410 0%, var(--ink-2) 100%); }
-    .int-card.baseball { background: linear-gradient(135deg, #1A1F2E 0%, var(--ink-2) 100%); }
-    .int-card-sport {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 7rem; font-weight: 900; text-transform: uppercase;
-      letter-spacing: -0.03em; line-height: 1;
-      opacity: 0.06; position: absolute; bottom: -10px; right: -10px;
-      pointer-events: none;
-    }
-    .int-card-emoji { font-size: 2.5rem; margin-bottom: 20px; }
-    .int-card h3 {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 2rem; font-weight: 800; text-transform: uppercase;
-      margin-bottom: 12px; letter-spacing: 0.02em;
-    }
-    .int-card h3 span { color: var(--signal); }
-    .int-card p {
-      font-size: 0.9rem; color: var(--muted); line-height: 1.65;
-      max-width: 320px; position: relative;
-    }
-    .int-sample {
-      margin-top: 28px; position: relative;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid var(--line); border-radius: 8px;
-      padding: 18px 20px;
-    }
-    .int-sample-q {
-      font-size: 0.8rem; color: var(--muted); margin-bottom: 10px;
-    }
-    .int-sample-options { display: flex; flex-direction: column; gap: 8px; }
-    .int-opt {
-      font-size: 0.82rem; padding: 8px 12px; border-radius: 5px;
-      border: 1px solid var(--line); color: var(--white);
-      cursor: default; transition: background 0.2s, border-color 0.2s;
-    }
-    .int-opt.correct { background: rgba(0,229,160,0.15); border-color: var(--signal); color: var(--signal); }
-    .int-opt.wrong   { background: rgba(255,60,60,0.08); border-color: #ff3c3c44; color: #ff8080; }
+    /* ── SIDEBAR ── */
+    .sidebar { padding-left: 20px; border-left: 1px solid var(--line); }
+    @media(max-width:900px) { .sidebar { padding-left: 0; border-left: none; border-top: 1px solid var(--line); padding-top: 24px; } }
 
-    /* ── STATS SHOWCASE ── */
-    #stats { background: var(--ink); }
-    .stats-showcase {
-      margin-top: 64px;
-      display: grid; grid-template-columns: 1fr 1.6fr; gap: 2px;
-      border-radius: 12px; overflow: hidden; border: 2px solid var(--line);
-    }
-    .stats-left {
-      background: var(--ink-2); padding: 40px 36px;
-      display: flex; flex-direction: column; gap: 24px;
-    }
-    .stat-row {
-      display: flex; flex-direction: column; gap: 6px;
-      padding-bottom: 24px; border-bottom: 1px solid var(--line);
-    }
-    .stat-row:last-child { border-bottom: none; padding-bottom: 0; }
-    .stat-row-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem; letter-spacing: 0.1em; color: var(--muted);
-      text-transform: uppercase;
-    }
-    .stat-row-val {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 2rem; font-weight: 800;
-    }
-    .stat-bar-track {
-      height: 4px; background: var(--line); border-radius: 2px; overflow: hidden;
-    }
-    .stat-bar-fill { height: 100%; background: var(--signal); border-radius: 2px; }
-    .stats-right { background: var(--ink-2); padding: 40px 36px; }
-    .stats-right h4 {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 1.1rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.05em; color: var(--muted); margin-bottom: 20px;
-    }
-    .table-head, .table-row {
-      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
-      gap: 8px; align-items: center;
-    }
-    .table-head {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.68rem; letter-spacing: 0.1em; color: var(--muted);
-      text-transform: uppercase; padding-bottom: 12px;
-      border-bottom: 1px solid var(--line); margin-bottom: 12px;
-    }
-    .table-row {
-      padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
-      font-size: 0.88rem;
-    }
-    .table-row .player { font-weight: 600; }
-    .table-row .val {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.82rem; color: var(--muted);
-    }
-    .table-row .highlight { color: var(--signal); font-weight: 600; }
+    .sidebar-section { margin-bottom: 28px; }
+    .sidebar-label { font-family: 'JetBrains Mono', monospace; font-size: .65rem; font-weight: 600; letter-spacing: .12em; color: var(--gold); text-transform: uppercase; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
 
-    /* ── CTA ── */
-    #cta {
-      background: var(--ink-2);
-      border-top: 1px solid var(--line);
-      text-align: center;
-    }
-    #cta .section-title { margin: 0 auto 16px; }
-    #cta .section-body  { margin: 0 auto 40px; }
-    .cta-form {
-      display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
-    }
-    .cta-input {
-      background: var(--ink); border: 1px solid var(--line);
-      color: var(--white); font-size: 0.95rem;
-      padding: 14px 20px; border-radius: 6px; width: 280px;
-      outline: none; font-family: 'Inter', sans-serif;
-      transition: border-color 0.2s;
-    }
+    /* Standings widget */
+    .standings-widget { }
+    .sw-row { display: grid; grid-template-columns: 20px 1fr 28px 28px 40px; gap: 6px; align-items: center; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,.05); font-size: .8rem; }
+    .sw-row:last-child { border-bottom: none; }
+    .sw-row.header { font-family: 'JetBrains Mono', monospace; font-size: .6rem; letter-spacing: .08em; color: var(--muted); text-transform: uppercase; }
+    .sw-rank { font-family: 'JetBrains Mono', monospace; font-size: .7rem; color: var(--muted); }
+    .sw-team { font-weight: 600; }
+    .sw-val { text-align: center; color: var(--muted); font-family: 'JetBrains Mono', monospace; font-size: .72rem; }
+    .sw-val.hi { color: var(--gold); font-weight: 700; }
+    .sw-pct { text-align: right; color: var(--muted); font-family: 'JetBrains Mono', monospace; font-size: .72rem; }
+
+    /* League tabs in sidebar */
+    .sw-tabs { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+    .sw-tab { background: var(--ink-3); border: 1px solid var(--line); color: var(--muted); font-size: .72rem; font-weight: 600; padding: 5px 10px; border-radius: 4px; cursor: pointer; transition: all .2s; }
+    .sw-tab:hover { color: var(--white); }
+    .sw-tab.active { background: var(--gold); border-color: var(--gold); color: var(--ink); }
+    .sw-panel { display: none; }
+    .sw-panel.active { display: block; }
+
+    /* Top performers */
+    .performer-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,.05); }
+    .performer-row:last-child { border-bottom: none; }
+    .performer-name { font-weight: 600; font-size: .83rem; }
+    .performer-team { font-family: 'JetBrains Mono', monospace; font-size: .65rem; color: var(--muted); }
+    .performer-stat { font-family: 'Barlow Condensed', sans-serif; font-size: 1.1rem; font-weight: 800; color: var(--gold); }
+    .performer-cat { font-family: 'JetBrains Mono', monospace; font-size: .6rem; color: var(--muted); text-align: right; }
+
+    /* ── DIVIDER ── */
+    .section-divider { border: none; border-top: 1px solid var(--line); margin: 32px 20px; }
+    .section-header { font-family: 'Barlow Condensed', sans-serif; font-size: 1.4rem; font-weight: 900; text-transform: uppercase; letter-spacing: .04em; padding: 0 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+    .section-header::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+
+    /* ── FEATURES (bottom) ── */
+    .features-section { padding: 60px 20px; background: var(--ink-2); border-top: 1px solid var(--line); }
+    .features-intro { max-width: 600px; margin: 0 auto 40px; text-align: center; }
+    .features-intro-label { font-family: 'JetBrains Mono', monospace; font-size: .7rem; font-weight: 600; letter-spacing: .15em; color: var(--gold); text-transform: uppercase; margin-bottom: 10px; }
+    .features-intro-title { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 900; text-transform: uppercase; margin-bottom: 12px; }
+    .features-intro-body { color: var(--muted); font-size: .9rem; line-height: 1.7; }
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; max-width: 1000px; margin: 0 auto; }
+    .feat-card { background: var(--ink-3); border: 1px solid var(--line); border-radius: 8px; padding: 22px 20px; }
+    .feat-icon { font-size: 1.6rem; margin-bottom: 12px; }
+    .feat-title { font-family: 'Barlow Condensed', sans-serif; font-size: 1.1rem; font-weight: 800; text-transform: uppercase; margin-bottom: 6px; }
+    .feat-title span { color: var(--gold); }
+    .feat-desc { font-size: .82rem; color: var(--muted); line-height: 1.6; }
+    .feat-tag { display: inline-block; margin-top: 10px; font-family: 'JetBrains Mono', monospace; font-size: .62rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; padding: 3px 8px; border-radius: 3px; background: rgba(242,194,48,.1); color: var(--gold); }
+
+    /* ── BOOK SECTION ── */
+    .book-section { padding: 60px 20px; border-top: 1px solid var(--line); }
+    .book-inner { max-width: 860px; margin: 0 auto; display: grid; grid-template-columns: auto 1fr; gap: 48px; align-items: center; }
+    @media(max-width:600px) { .book-inner { grid-template-columns: 1fr; text-align: center; } }
+    .book-cover { width: 160px; background: var(--white); border-radius: 8px; padding: 14px; box-shadow: 0 20px 50px rgba(0,0,0,.5); transform: rotate(-2deg); flex-shrink: 0; }
+    .book-cover-inner { background: #f5f5f5; border-radius: 4px; padding: 12px; text-align: center; }
+    .book-label { font-family: 'JetBrains Mono', monospace; font-size: .68rem; font-weight: 600; letter-spacing: .12em; color: var(--gold); text-transform: uppercase; margin-bottom: 10px; }
+    .book-title { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 900; text-transform: uppercase; line-height: 1; margin-bottom: 14px; }
+    .book-desc { color: var(--muted); font-size: .9rem; line-height: 1.7; margin-bottom: 22px; }
+    .btn-amazon { display: inline-flex; align-items: center; gap: 8px; background: var(--gold); color: var(--ink); font-weight: 700; font-size: .9rem; padding: 12px 24px; border-radius: 6px; text-decoration: none; transition: opacity .2s; }
+    .btn-amazon:hover { opacity: .85; }
+
+    /* ── APP CTA ── */
+    .app-cta { padding: 60px 20px; background: var(--ink-2); border-top: 1px solid var(--line); text-align: center; }
+    .app-cta-label { font-family: 'JetBrains Mono', monospace; font-size: .7rem; font-weight: 600; letter-spacing: .15em; color: var(--gold); text-transform: uppercase; margin-bottom: 12px; }
+    .app-cta-title { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 900; text-transform: uppercase; margin-bottom: 12px; }
+    .app-cta-body { color: var(--muted); font-size: .9rem; max-width: 460px; margin: 0 auto 32px; line-height: 1.7; }
+    .cta-form { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    .cta-input { background: var(--ink); border: 1px solid var(--line); color: var(--white); font-size: .9rem; padding: 12px 18px; border-radius: 6px; width: 260px; outline: none; font-family: 'Inter', sans-serif; transition: border-color .2s; }
     .cta-input::placeholder { color: var(--muted); }
-    .cta-input:focus { border-color: var(--signal); }
-    .cta-note {
-      margin-top: 16px; font-size: 0.78rem; color: var(--muted);
-    }
+    .cta-input:focus { border-color: var(--gold); }
+    .btn-primary { background: var(--gold); color: var(--ink); font-weight: 700; font-size: .9rem; padding: 12px 26px; border-radius: 6px; border: none; cursor: pointer; font-family: 'Inter', sans-serif; }
+    .cta-note { font-size: .75rem; color: var(--muted); margin-top: 12px; }
 
     /* ── FOOTER ── */
-    footer {
-      background: var(--ink); border-top: 1px solid var(--line);
-      padding: 40px 40px;
-      display: flex; align-items: center; justify-content: space-between;
-      flex-wrap: wrap; gap: 16px;
-    }
-    .footer-logo {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 800; font-size: 1.1rem; letter-spacing: 0.04em;
-      color: var(--white);
-    }
-    .footer-logo span { color: var(--signal); }
-    .footer-copy { font-size: 0.78rem; color: var(--muted); }
-    .footer-links { display: flex; gap: 24px; }
-    .footer-links a {
-      font-size: 0.78rem; color: var(--muted);
-      text-decoration: none; transition: color 0.2s;
-    }
-    .footer-links a:hover { color: var(--white); }
+    footer { background: var(--ink); border-top: 1px solid var(--line); padding: 28px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; }
+    .ft-brand { display: flex; align-items: center; gap: 8px; }
+    .ft-brand img { height: 22px; }
+    .ft-brand span { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 1rem; }
+    .ft-brand span em { font-style: normal; color: var(--gold); }
+    .ft-links { display: flex; gap: 20px; }
+    .ft-links a { font-size: .76rem; color: var(--muted); text-decoration: none; }
+    .ft-links a:hover { color: var(--white); }
+    .ft-copy { font-size: .75rem; color: var(--muted); }
 
-    /* ── RESPONSIVE ── */
-    @media (max-width: 768px) {
-      nav { padding: 16px 20px; }
-      .nav-links { display: none; }
-      .hero { padding: 100px 20px 60px; }
-      section { padding: 72px 20px; }
-      .interactive-grid { grid-template-columns: 1fr; }
-      .stats-showcase { grid-template-columns: 1fr; }
-      footer { flex-direction: column; align-items: flex-start; padding: 32px 20px; }
-      .features-grid { grid-template-columns: 1fr; }
-      .int-card { padding: 36px 28px; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .ticker-track { animation: none; }
-    }
+    @media(max-width:768px) { nav { padding: 0; } .nav-brand span { display: none; } }
   </style>
 </head>
 <body>
 
 <!-- NAV -->
 <nav>
-  <a href="/index.html" class="nav-logo"><img src="assets/logo.png" alt="SSC Shield" />The Sports <span>Companion</span></a>
-  <ul class="nav-links">
+  <a href="/index.html" class="nav-brand">
+    <img src="assets/logo.png" alt="SSC" />
+    <span>The Sports <em>Companion</em></span>
+  </a>
+  <ul class="nav-leagues">
     <li><a href="/nfl/index.html">🏈 NFL</a></li>
+    <li><a href="/nfl/index.html">🏈 NCAAF</a></li>
     <li><a href="/nba/index.html">🏀 NBA</a></li>
+    <li><a href="/nba/index.html">🏀 NCAAM</a></li>
     <li><a href="/mlb/index.html">⚾ MLB</a></li>
-    <li><a href="/more/index.html">More</a></li>
-    <li><a href="#features">Features</a></li>
+    <li><a href="/more/index.html">🏒 NHL</a></li>
+    <li><a href="/more/index.html">⚽ MLS</a></li>
+    <li><a href="/more/index.html">⛳ PGA</a></li>
   </ul>
-  <a href="#cta" class="nav-cta">Get Early Access</a>
+  <div class="nav-cta"><a href="#cta">Get the App</a></div>
 </nav>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-grid"></div>
-  <div class="hero-glow"></div>
-  <div class="hero-eyebrow">// The analytics platform built for real fans</div>
-  <h1>Sports<br /><em>Deeper</em><br /><span class="outline">Than Ever</span></h1>
-  <p class="hero-sub">
-    Stats that go beyond the box score. Predict plays before they happen. 
-    SportsCompanion gives you the data layer the broadcast never shows you.
-  </p>
-  <div class="hero-actions">
-    <a href="#cta" class="btn-primary">Get Early Access</a>
-    <a href="#features" class="btn-ghost">See Features</a>
-  </div>
-  <div class="hero-stats">
-    <div>
-      <div class="hero-stat-val">40<span>+</span></div>
-      <div class="hero-stat-label">Advanced Stat Categories</div>
-    </div>
-    <div>
-      <div class="hero-stat-val">NFL <span>&</span> MLB</div>
-      <div class="hero-stat-label">Launch Sports</div>
-    </div>
-    <div>
-      <div class="hero-stat-val">Live<span>.</span></div>
-      <div class="hero-stat-label">Real-Time Data</div>
-    </div>
-  </div>
-</section>
-
-<!-- TICKER -->
+<!-- BREAKING TICKER -->
 <div class="ticker" aria-hidden="true">
   <div class="ticker-track">
-    <span class="ticker-item"><span class="dot"></span> <strong>Mahomes</strong> — Pass Pressure Rate: 31.2%</span>
-    <span class="ticker-item"><span class="dot"></span> <strong>Ohtani</strong> — Spin Rate (Fastball): 2,312 RPM</span>
-    <span class="ticker-item"><span class="dot"></span> <strong>McCaffrey</strong> — Route Win Rate: 78.4%</span>
-    <span class="ticker-item"><span class="dot"></span> <strong>Cole</strong> — xFIP: 2.91 · K/9: 11.8</span>
-    <span class="ticker-item"><span class="dot"></span> <strong>Jefferson</strong> — Separation at Snap: 2.4 yds</span>
-    <span class="ticker-item"><span class="dot"></span> <strong>Acuña</strong> — Sprint Speed: 30.1 ft/s</span>
-    <!-- Duplicate for seamless loop -->
-    <span class="ticker-item"><span class="dot"></span> <strong>Mahomes</strong> — Pass Pressure Rate: 31.2%</span>
-    <span class="ticker-item"><span class="dot"></span> <strong>Ohtani</strong> — Spin Rate (Fastball): 2,312 RPM</span>
-    <span class="ticker-item"><span class="dot"></span> <strong>McCaffrey</strong> — Route Win Rate: 78.4%</span>
-    <span class="ticker-item"><span class="dot"></span> <strong>Cole</strong> — xFIP: 2.91 · K/9: 11.8</span>
-    <span class="ticker-item"><span class="dot"></span> <strong>Jefferson</strong> — Separation at Snap: 2.4 yds</span>
-    <span class="ticker-item"><span class="dot"></span> <strong>Acuña</strong> — Sprint Speed: 30.1 ft/s</span>
+    <span class="ticker-item">🏈 <strong>PHI 28</strong> DAL 14 <span class="ticker-sep">·</span> Q3 4:22</span>
+    <span class="ticker-item">⚾ <strong>NYY 2</strong> BOS 0 <span class="ticker-sep">·</span> Top 3rd</span>
+    <span class="ticker-item">🏀 <strong>GSW 98</strong> LAL 93 <span class="ticker-sep">·</span> Q4 5:22</span>
+    <span class="ticker-item">🏒 <strong>TOR 3</strong> BOS 1 <span class="ticker-sep">·</span> 3rd Period</span>
+    <span class="ticker-item">⚽ <strong>LAFC 2</strong> LAG 0 <span class="ticker-sep">·</span> 74'</span>
+    <span class="ticker-item">⛳ <strong>Scottie Scheffler</strong> leads at -14 <span class="ticker-sep">·</span> R3</span>
+    <span class="ticker-item">🏈 <strong>PHI 28</strong> DAL 14 <span class="ticker-sep">·</span> Q3 4:22</span>
+    <span class="ticker-item">⚾ <strong>NYY 2</strong> BOS 0 <span class="ticker-sep">·</span> Top 3rd</span>
+    <span class="ticker-item">🏀 <strong>GSW 98</strong> LAL 93 <span class="ticker-sep">·</span> Q4 5:22</span>
+    <span class="ticker-item">🏒 <strong>TOR 3</strong> BOS 1 <span class="ticker-sep">·</span> 3rd Period</span>
+    <span class="ticker-item">⚽ <strong>LAFC 2</strong> LAG 0 <span class="ticker-sep">·</span> 74'</span>
+    <span class="ticker-item">⛳ <strong>Scottie Scheffler</strong> leads at -14 <span class="ticker-sep">·</span> R3</span>
   </div>
 </div>
 
-<!-- FEATURES -->
-<section id="features">
-  <div class="section-label">// What's inside</div>
-  <h2 class="section-title">Everything the broadcast skips</h2>
-  <p class="section-body">We surface the numbers that actually explain what's happening on the field — not just what already happened.</p>
+<!-- LIVE SCORES STRIP -->
+<div class="scores-strip">
+  <div class="scores-strip-inner">
+    <a href="/nfl/gameday.html" class="score-pill">
+      <div class="score-pill-league">NFL · Week 14</div>
+      <div class="score-pill-row"><span class="score-pill-team">Philadelphia Eagles</span><span class="score-pill-score leader">28</span></div>
+      <div class="score-pill-row"><span class="score-pill-team">Dallas Cowboys</span><span class="score-pill-score">14</span></div>
+      <div class="score-pill-status"><span class="live-dot"></span>Q3 · 4:22</div>
+    </a>
+    <a href="/nba/gameday.html" class="score-pill">
+      <div class="score-pill-league">NBA · Regular Season</div>
+      <div class="score-pill-row"><span class="score-pill-team">Golden State Warriors</span><span class="score-pill-score">98</span></div>
+      <div class="score-pill-row"><span class="score-pill-team">Los Angeles Lakers</span><span class="score-pill-score leader">93</span></div>
+      <div class="score-pill-status"><span class="live-dot"></span>Q4 · 5:22</div>
+    </a>
+    <a href="/mlb/gameday.html" class="score-pill">
+      <div class="score-pill-league">MLB · Regular Season</div>
+      <div class="score-pill-row"><span class="score-pill-team">New York Yankees</span><span class="score-pill-score leader">2</span></div>
+      <div class="score-pill-row"><span class="score-pill-team">Boston Red Sox</span><span class="score-pill-score">0</span></div>
+      <div class="score-pill-status"><span class="live-dot"></span>Top 3rd</div>
+    </a>
+    <a href="/more/index.html" class="score-pill">
+      <div class="score-pill-league">NHL · Regular Season</div>
+      <div class="score-pill-row"><span class="score-pill-team">Toronto Maple Leafs</span><span class="score-pill-score leader">3</span></div>
+      <div class="score-pill-row"><span class="score-pill-team">Boston Bruins</span><span class="score-pill-score">1</span></div>
+      <div class="score-pill-status"><span class="live-dot"></span>3rd · 8:14</div>
+    </a>
+    <a href="/more/index.html" class="score-pill">
+      <div class="score-pill-league">MLS · Regular Season</div>
+      <div class="score-pill-row"><span class="score-pill-team">LAFC</span><span class="score-pill-score leader">2</span></div>
+      <div class="score-pill-row"><span class="score-pill-team">LA Galaxy</span><span class="score-pill-score">0</span></div>
+      <div class="score-pill-status"><span class="live-dot"></span>74'</div>
+    </a>
+    <a href="/nfl/index.html" class="score-pill">
+      <div class="score-pill-league">NFL · Week 14</div>
+      <div class="score-pill-row"><span class="score-pill-team">Detroit Lions</span><span class="score-pill-score leader">34</span></div>
+      <div class="score-pill-row"><span class="score-pill-team">Chicago Bears</span><span class="score-pill-score">13</span></div>
+      <div class="score-pill-status">Final</div>
+    </a>
+  </div>
+</div>
 
+<!-- MAIN CONTENT -->
+<div class="main-grid">
+
+  <!-- LEFT: STORIES + STATS -->
+  <div>
+
+    <!-- FEATURED STORY -->
+    <div class="featured">
+      <div class="featured-label">// Top Story</div>
+      <a href="/nfl/gameday.html" class="featured-card" style="text-decoration:none;color:inherit">
+        <div class="featured-img">
+          🏈
+          <div class="featured-img-overlay"></div>
+          <div class="featured-img-badge">🔴 Live</div>
+        </div>
+        <div class="featured-body">
+          <div class="featured-title">Eagles dominate Cowboys in prime time showdown — Hurts throws 2 TDs</div>
+          <div class="featured-desc">Jalen Hurts is 18/26 for 247 yards with two touchdowns as Philadelphia pulls away in Q3. Saquon Barkley adds 88 rushing yards and a score on the ground.</div>
+          <div class="featured-meta">NFL · PHI 28 — DAL 14 · Q3 4:22 · Tap for Gamecast & Box Score</div>
+        </div>
+      </a>
+    </div>
+
+    <!-- STORY GRID -->
+    <div class="story-grid">
+      <a href="/nba/gameday.html" class="story-card" style="text-decoration:none;color:inherit">
+        <div class="story-league">🏀 NBA</div>
+        <div class="story-title">Curry drops 34 as Warriors edge Lakers in Q4 thriller</div>
+        <div class="story-desc">Stephen Curry hits 6 threes and scores 34 points but the Lakers stay within 5 heading into the final minutes.</div>
+        <div class="story-meta">GSW 98 · LAL 93 · Q4 5:22</div>
+      </a>
+      <a href="/mlb/gameday.html" class="story-card" style="text-decoration:none;color:inherit">
+        <div class="story-league">⚾ MLB</div>
+        <div class="story-title">Judge crushes 2-run homer as Yankees blank Red Sox through 2</div>
+        <div class="story-desc">Aaron Judge hit his team-leading home run off Chris Sale in the 1st inning. Gerrit Cole has been lights out, punching out 7 through 6 innings.</div>
+        <div class="story-meta">NYY 2 · BOS 0 · Top 3rd</div>
+      </a>
+      <a href="/nfl/index.html" class="story-card" style="text-decoration:none;color:inherit">
+        <div class="story-league">🏈 NFL</div>
+        <div class="story-title">Lions extend lead atop NFC North with win over Bears</div>
+        <div class="story-desc">Detroit remains the hottest team in the NFC, improving to 12-1 with a dominant 34-13 victory. Jared Goff efficient with 3 TDs and no turnovers.</div>
+        <div class="story-meta">DET 34 · CHI 13 · Final</div>
+      </a>
+      <a href="/more/index.html" class="story-card" style="text-decoration:none;color:inherit">
+        <div class="story-league">⛳ PGA</div>
+        <div class="story-title">Scheffler continues world-class form, leads by 3 heading into Sunday</div>
+        <div class="story-desc">Scottie Scheffler fired a 65 in Round 3 to take a commanding lead. His strokes gained numbers this season are historically elite.</div>
+        <div class="story-meta">-14 · Round 3 Complete</div>
+      </a>
+    </div>
+
+    <!-- STAT SPOTLIGHT -->
+    <div class="stat-spotlight">
+      <div class="stat-spotlight-label">// Stat of the Day — Top Performers</div>
+      <div class="stat-spotlight-grid">
+        <div class="stat-spot-item">
+          <div class="stat-spot-val">1.97</div>
+          <div class="stat-spot-name">Paul Skenes</div>
+          <div class="stat-spot-cat">ERA · MLB Pitcher</div>
+        </div>
+        <div class="stat-spot-item">
+          <div class="stat-spot-val">29.6</div>
+          <div class="stat-spot-name">Nikola Jokic</div>
+          <div class="stat-spot-cat">PPG · NBA Center</div>
+        </div>
+        <div class="stat-spot-item">
+          <div class="stat-spot-val">7.31</div>
+          <div class="stat-spot-name">LA Rams</div>
+          <div class="stat-spot-cat">YPPG · NFL Offense</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT: SIDEBAR -->
+  <div class="sidebar">
+
+    <!-- STANDINGS -->
+    <div class="sidebar-section">
+      <div class="sidebar-label">Standings</div>
+      <div class="sw-tabs">
+        <button class="sw-tab active" onclick="showStandings('nfl')">NFL</button>
+        <button class="sw-tab" onclick="showStandings('nba')">NBA</button>
+        <button class="sw-tab" onclick="showStandings('mlb')">MLB</button>
+      </div>
+
+      <div id="sw-nfl" class="sw-panel active">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em">NFC North</div>
+        <div class="sw-row header"><span>#</span><span>Team</span><span>W</span><span>L</span><span>PCT</span></div>
+        <div class="sw-row"><span class="sw-rank">1</span><span class="sw-team">Detroit Lions</span><span class="sw-val hi">12</span><span class="sw-val">1</span><span class="sw-pct">.923</span></div>
+        <div class="sw-row"><span class="sw-rank">2</span><span class="sw-team">Minnesota Vikings</span><span class="sw-val">10</span><span class="sw-val">3</span><span class="sw-pct">.769</span></div>
+        <div class="sw-row"><span class="sw-rank">3</span><span class="sw-team">Green Bay Packers</span><span class="sw-val">9</span><span class="sw-val">4</span><span class="sw-pct">.692</span></div>
+        <div class="sw-row"><span class="sw-rank">4</span><span class="sw-team">Chicago Bears</span><span class="sw-val">4</span><span class="sw-val">9</span><span class="sw-pct">.308</span></div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--muted);margin:10px 0 6px;text-transform:uppercase;letter-spacing:.06em">AFC West</div>
+        <div class="sw-row"><span class="sw-rank">1</span><span class="sw-team">Kansas City Chiefs</span><span class="sw-val hi">11</span><span class="sw-val">2</span><span class="sw-pct">.846</span></div>
+        <div class="sw-row"><span class="sw-rank">2</span><span class="sw-team">LA Chargers</span><span class="sw-val">8</span><span class="sw-val">5</span><span class="sw-pct">.615</span></div>
+        <div class="sw-row"><span class="sw-rank">3</span><span class="sw-team">Denver Broncos</span><span class="sw-val">8</span><span class="sw-val">5</span><span class="sw-pct">.615</span></div>
+        <div class="sw-row"><span class="sw-rank">4</span><span class="sw-team">Las Vegas Raiders</span><span class="sw-val">3</span><span class="sw-val">10</span><span class="sw-pct">.231</span></div>
+        <a href="/nfl/index.html" style="display:block;margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--gold);text-decoration:none">Full NFL Standings →</a>
+      </div>
+
+      <div id="sw-nba" class="sw-panel">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em">Western Conference</div>
+        <div class="sw-row header"><span>#</span><span>Team</span><span>W</span><span>L</span><span>PCT</span></div>
+        <div class="sw-row"><span class="sw-rank">1</span><span class="sw-team">OKC Thunder</span><span class="sw-val hi">68</span><span class="sw-val">14</span><span class="sw-pct">.829</span></div>
+        <div class="sw-row"><span class="sw-rank">2</span><span class="sw-team">Denver Nuggets</span><span class="sw-val">50</span><span class="sw-val">32</span><span class="sw-pct">.610</span></div>
+        <div class="sw-row"><span class="sw-rank">3</span><span class="sw-team">LA Lakers</span><span class="sw-val">47</span><span class="sw-val">35</span><span class="sw-pct">.573</span></div>
+        <div class="sw-row"><span class="sw-rank">4</span><span class="sw-team">Golden State</span><span class="sw-val">46</span><span class="sw-val">36</span><span class="sw-pct">.561</span></div>
+        <a href="/nba/index.html" style="display:block;margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--gold);text-decoration:none">Full NBA Standings →</a>
+      </div>
+
+      <div id="sw-mlb" class="sw-panel">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em">AL East</div>
+        <div class="sw-row header"><span>#</span><span>Team</span><span>W</span><span>L</span><span>GB</span></div>
+        <div class="sw-row"><span class="sw-rank">1</span><span class="sw-team">New York Yankees</span><span class="sw-val hi">52</span><span class="sw-val">32</span><span class="sw-pct">—</span></div>
+        <div class="sw-row"><span class="sw-rank">2</span><span class="sw-team">Boston Red Sox</span><span class="sw-val">46</span><span class="sw-val">38</span><span class="sw-pct">6.0</span></div>
+        <div class="sw-row"><span class="sw-rank">3</span><span class="sw-team">Tampa Bay Rays</span><span class="sw-val">44</span><span class="sw-val">40</span><span class="sw-pct">8.0</span></div>
+        <div class="sw-row"><span class="sw-rank">4</span><span class="sw-team">Baltimore Orioles</span><span class="sw-val">40</span><span class="sw-val">44</span><span class="sw-pct">12.0</span></div>
+        <a href="/mlb/index.html" style="display:block;margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--gold);text-decoration:none">Full MLB Standings →</a>
+      </div>
+    </div>
+
+    <!-- TOP PERFORMERS -->
+    <div class="sidebar-section">
+      <div class="sidebar-label">Top Performers Today</div>
+      <div class="performer-row">
+        <div><div class="performer-name">Jalen Hurts</div><div class="performer-team">PHI · QB</div></div>
+        <div style="text-align:right"><div class="performer-stat">247</div><div class="performer-cat">Pass YDS</div></div>
+      </div>
+      <div class="performer-row">
+        <div><div class="performer-name">Stephen Curry</div><div class="performer-team">GSW · PG</div></div>
+        <div style="text-align:right"><div class="performer-stat">34</div><div class="performer-cat">Points</div></div>
+      </div>
+      <div class="performer-row">
+        <div><div class="performer-name">Aaron Judge</div><div class="performer-team">NYY · RF</div></div>
+        <div style="text-align:right"><div class="performer-stat">2-run HR</div><div class="performer-cat">1st Inning</div></div>
+      </div>
+      <div class="performer-row">
+        <div><div class="performer-name">Saquon Barkley</div><div class="performer-team">PHI · RB</div></div>
+        <div style="text-align:right"><div class="performer-stat">88</div><div class="performer-cat">Rush YDS</div></div>
+      </div>
+      <div class="performer-row">
+        <div><div class="performer-name">Scottie Scheffler</div><div class="performer-team">PGA · R3</div></div>
+        <div style="text-align:right"><div class="performer-stat">-14</div><div class="performer-cat">Overall</div></div>
+      </div>
+    </div>
+
+    <!-- QUICK LINKS -->
+    <div class="sidebar-section">
+      <div class="sidebar-label">Play Now</div>
+      <a href="/nfl/index.html" onclick="setTimeout(()=>{document.querySelectorAll('.tab-btn')[3]&&document.querySelectorAll('.tab-btn')[3].click()},300)" style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--ink-3);border:1px solid var(--line);border-radius:7px;text-decoration:none;color:var(--white);margin-bottom:8px;transition:border-color .2s" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--line)'">
+        <div style="display:flex;align-items:center;gap:10px"><span style="font-size:1.2rem">🔮</span><div><div style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase">Guess the Play</div><div style="font-size:.72rem;color:var(--muted)">NFL · 15 sec per play</div></div></div>
+        <span style="color:var(--gold);font-size:.8rem">→</span>
+      </a>
+      <a href="/mlb/index.html" style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--ink-3);border:1px solid var(--line);border-radius:7px;text-decoration:none;color:var(--white);transition:border-color .2s" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--line)'">
+        <div style="display:flex;align-items:center;gap:10px"><span style="font-size:1.2rem">⚾</span><div><div style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase">Guess the Pitch</div><div style="font-size:.72rem;color:var(--muted)">MLB · Predict pitch type</div></div></div>
+        <span style="color:var(--gold);font-size:.8rem">→</span>
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<!-- FEATURES SECTION -->
+<div class="features-section" id="features">
+  <div class="features-intro">
+    <div class="features-intro-label">// The Sports Companion App</div>
+    <div class="features-intro-title">Stats That Go Deeper</div>
+    <div class="features-intro-body">Beyond the box score — advanced analytics, interactive games, and real-time data across every major sport. Available on iOS and Android.</div>
+  </div>
   <div class="features-grid">
-    <div class="feature-card">
-      <div class="feature-icon">📊</div>
-      <h3>Next-Gen Stats</h3>
-      <p>Tracking data, expected values, pressure rates, route grades, spin metrics — the numbers coaches actually use.</p>
-      <span class="feature-tag tag-pro">Deep Analytics</span>
+    <div class="feat-card">
+      <div class="feat-icon">📊</div>
+      <div class="feat-title">Advanced <span>Stats</span></div>
+      <div class="feat-desc">YPPG, WAR, xFIP, per-minute ratings and more. Metrics that actually explain what's happening on the field.</div>
+      <span class="feat-tag">NFL · MLB · NBA</span>
     </div>
-    <div class="feature-card">
-      <div class="feature-icon">⚡</div>
-      <h3>Live Data Feed</h3>
-      <p>Real-time updates as plays happen. Stats refresh mid-drive, mid-inning — not just at the final whistle.</p>
-      <span class="feature-tag tag-live">Live</span>
+    <div class="feat-card">
+      <div class="feat-icon">🔮</div>
+      <div class="feat-title">Guess the <span>Play</span></div>
+      <div class="feat-desc">Real NFL play-by-play data. Predict the call before the snap and earn points based on speed and accuracy.</div>
+      <span class="feat-tag">New · NFL</span>
     </div>
-    <div class="feature-card">
-      <div class="feature-icon">🔮</div>
-      <h3>Guess the Play</h3>
-      <p>Before the snap, predict the call: run, pass, blitz, screen. Earn points, track your prediction accuracy over time.</p>
-      <span class="feature-tag tag-new">New · NFL</span>
+    <div class="feat-card">
+      <div class="feat-icon">⚾</div>
+      <div class="feat-title">Guess the <span>Pitch</span></div>
+      <div class="feat-desc">Every at-bat, predict the pitch type and location before it's thrown. Test your baseball IQ against real data.</div>
+      <span class="feat-tag">New · MLB</span>
     </div>
-    <div class="feature-card">
-      <div class="feature-icon">⚾</div>
-      <h3>Guess the Pitch</h3>
-      <p>Every at-bat, guess the pitch type and location before it's thrown. See how your baseball IQ stacks up.</p>
-      <span class="feature-tag tag-new">New · MLB</span>
+    <div class="feat-card">
+      <div class="feat-icon">⚡</div>
+      <div class="feat-title">Live <span>Gamecast</span></div>
+      <div class="feat-desc">Animated play-by-play with field visualization, box scores, and possession tracking updated in real time.</div>
+      <span class="feat-tag">Live</span>
     </div>
-    <div class="feature-card">
-      <div class="feature-icon">📈</div>
-      <h3>Player Trends</h3>
-      <p>Visualize rolling averages, hot/cold streaks, and situational splits across any date range you choose.</p>
-      <span class="feature-tag tag-pro">Analytics</span>
+    <div class="feat-card">
+      <div class="feat-icon">🏆</div>
+      <div class="feat-title">Prediction <span>Leaderboard</span></div>
+      <div class="feat-desc">See how your sports IQ ranks globally. Compete on weekly prediction accuracy across all supported sports.</div>
+      <span class="feat-tag">Coming Soon</span>
     </div>
-    <div class="feature-card">
-      <div class="feature-icon">🏆</div>
-      <h3>Prediction Leaderboards</h3>
-      <p>Compete against other fans on weekly prediction accuracy. See where your sports knowledge ranks globally.</p>
-      <span class="feature-tag tag-new">New</span>
+    <div class="feat-card">
+      <div class="feat-icon">👥</div>
+      <div class="feat-title">Fantasy <span>Tools</span></div>
+      <div class="feat-desc">Manage your leagues, check waiver trends, and get stat-backed lineup recommendations.</div>
+      <span class="feat-tag">Coming Soon</span>
     </div>
   </div>
-</section>
+</div>
 
-<!-- INTERACTIVE -->
-<section id="interactive">
-  <div class="section-label">// Signature features</div>
-  <h2 class="section-title">Play along in real time</h2>
-  <p class="section-body">These aren't fantasy tools or betting aids — they're pure sports IQ challenges built for the obsessive fan.</p>
-
-  <div class="interactive-grid">
-    <div class="int-card football">
-      <div class="int-card-sport">NFL</div>
-      <div class="int-card-emoji">🏈</div>
-      <h3>Guess the <span>Play</span></h3>
-      <p>3rd & 6 from the opponent's 22. The defense is showing two-high. What does the offense call? Lock in your prediction before the snap.</p>
-      <div class="int-sample">
-        <div class="int-sample-q">2nd & 8 · Own 35 · Q3 · Down by 4</div>
-        <div class="int-sample-options">
-          <div class="int-opt correct">✓ Short Pass — Crossing Route</div>
-          <div class="int-opt">Outside Zone Run</div>
-          <div class="int-opt wrong">✗ Deep Shot</div>
-          <div class="int-opt">QB Draw</div>
+<!-- BOOK SECTION -->
+<div class="book-section" id="book">
+  <div class="book-inner">
+    <div>
+      <div class="book-cover">
+        <div class="book-cover-inner">
+          <div style="font-family:'Inter',sans-serif;font-size:.5rem;font-weight:700;letter-spacing:.06em;color:#444;margin-bottom:6px">CHRIS CAIN</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:900;color:#111;line-height:1.1">THE <span style="color:var(--crimson);font-size:1.3rem">SPORTS</span></div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:.85rem;font-weight:800;color:#111;letter-spacing:.03em">STATISTICS MANUAL</div>
+          <div style="font-family:'Inter',sans-serif;font-size:.48rem;color:#666;margin-top:3px;line-height:1.4">BASEBALL, FOOTBALL<br/>AND BASKETBALL</div>
+          <div style="margin:10px 0;font-size:1.6rem">🏈⚾🏀</div>
+          <div style="background:#222;height:1.5px;margin:6px 0;border-radius:1px"></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.4rem;color:#888">ISBN 9798333428103</div>
         </div>
       </div>
     </div>
-    <div class="int-card baseball">
-      <div class="int-card-sport">MLB</div>
-      <div class="int-card-emoji">⚾</div>
-      <h3>Guess the <span>Pitch</span></h3>
-      <p>Full count, runner on second, left-hand batter. The pitcher loves his slider in this spot. Do you trust the data or your gut?</p>
-      <div class="int-sample">
-        <div class="int-sample-q">0-2 Count · Runner on 1st · 7th Inning</div>
-        <div class="int-sample-options">
-          <div class="int-opt">4-Seam Fastball — Up &amp; In</div>
-          <div class="int-opt correct">✓ Slider — Down &amp; Away</div>
-          <div class="int-opt wrong">✗ Changeup — Middle</div>
-          <div class="int-opt">Curveball — Bounce</div>
-        </div>
-      </div>
+    <div>
+      <div class="book-label">// The stats behind the app</div>
+      <div class="book-title">The Sports Statistics Manual</div>
+      <div class="book-desc">The advanced metrics powering The Sports Companion are based on the methodology developed in <em style="color:var(--white)">The Sports Statistics Manual</em> by Chris Cain — covering Baseball, Football, and Basketball. From yards per play to per-minute production ratings, the book breaks down exactly how each stat is calculated and what it actually tells you about performance.</div>
+      <a href="https://www.amazon.com/Sports-Statistics-Manual-Baseball-Basketball/dp/B0DDHVR5MK/" target="_blank" rel="noopener" class="btn-amazon">📖 Buy on Amazon</a>
     </div>
   </div>
-</section>
+</div>
 
-<!-- STATS SHOWCASE -->
-<section id="stats">
-  <div class="section-label">// Advanced analytics</div>
-  <h2 class="section-title">Stats that actually mean something</h2>
-  <p class="section-body">Real data from your app — deep analytics across NFL, MLB, and NBA going far beyond the box score.</p>
-
-  <div class="stat-tabs">
-    <button class="stat-tab active" onclick="showTab(event,'nfl-team')">🏈 NFL Teams</button>
-    <button class="stat-tab" onclick="showTab(event,'nfl-kick')">🦵 NFL Kicking</button>
-    <button class="stat-tab" onclick="showTab(event,'nfl-punt')">📍 NFL Punting</button>
-    <button class="stat-tab" onclick="showTab(event,'mlb')">⚾ MLB Pitching</button>
-    <button class="stat-tab" onclick="showTab(event,'nba')">🏀 NBA Players</button>
-  </div>
-
-  <div id="tab-nfl-team" class="stat-panel active">
-    <div class="stat-panel-label">NFL Team Yards Per Play (2025) — Offensive vs Defensive</div>
-    <div class="stat-table-wrap"><table class="stat-table">
-      <thead><tr><th>Team</th><th>Pts</th><th>Yds</th><th>Y/P</th><th>TO</th><th>PA</th><th>YdsA</th><th>YPPG</th><th>OVR</th></tr></thead>
-      <tbody>
-        <tr><td class="pl">Los Angeles Rams</td><td>518</td><td>6709</td><td>6.2</td><td>15</td><td>346</td><td>5568</td><td class="hi">7.31</td><td><span class="ob" style="--p:99">99</span></td></tr>
-        <tr><td class="pl">New England Patriots</td><td>490</td><td>6449</td><td>6.2</td><td>16</td><td>320</td><td>5019</td><td class="hi">7.26</td><td><span class="ob" style="--p:99">99</span></td></tr>
-        <tr><td class="pl">Houston Texans</td><td>404</td><td>5559</td><td>5.1</td><td>12</td><td>295</td><td>4713</td><td class="hi">6.98</td><td><span class="ob" style="--p:98">98</span></td></tr>
-        <tr><td class="pl">Buffalo Bills</td><td>481</td><td>6397</td><td>5.9</td><td>19</td><td>365</td><td>4983</td><td class="hi">6.83</td><td><span class="ob" style="--p:98">98</span></td></tr>
-        <tr><td class="pl">Jacksonville Jaguars</td><td>474</td><td>5735</td><td>5.2</td><td>18</td><td>336</td><td>5162</td><td>4.99</td><td><span class="ob" style="--p:92">92</span></td></tr>
-        <tr><td class="pl">Seattle Seahawks</td><td>483</td><td>5973</td><td>5.9</td><td>28</td><td>292</td><td>4860</td><td>4.71</td><td><span class="ob" style="--p:92">92</span></td></tr>
-        <tr><td class="pl">Detroit Lions</td><td>481</td><td>6344</td><td>6.0</td><td>15</td><td>413</td><td>5642</td><td>4.01</td><td><span class="ob" style="--p:90">90</span></td></tr>
-        <tr><td class="pl">Kansas City Chiefs</td><td>362</td><td>5451</td><td>5.1</td><td>15</td><td>328</td><td>5126</td><td>1.35</td><td><span class="ob" style="--p:83">83</span></td></tr>
-        <tr><td class="pl">Philadelphia Eagles</td><td>379</td><td>5291</td><td>5.2</td><td>15</td><td>325</td><td>5341</td><td>0.82</td><td><span class="ob" style="--p:81">81</span></td></tr>
-        <tr><td class="pl">Las Vegas Raiders</td><td>241</td><td>4168</td><td>4.4</td><td>23</td><td>432</td><td>5403</td><td class="ng">-7.05</td><td><span class="ob" style="--p:65">65</span></td></tr>
-        <tr><td class="pl">Washington Commanders</td><td>356</td><td>5419</td><td>5.5</td><td>23</td><td>451</td><td>6533</td><td class="ng">-7.54</td><td><span class="ob" style="--p:64">64</span></td></tr>
-        <tr><td class="pl">New York Jets</td><td>300</td><td>4481</td><td>4.4</td><td>23</td><td>503</td><td>6045</td><td class="ng">-10.71</td><td><span class="ob" style="--p:60">60</span></td></tr>
-      </tbody>
-    </table></div>
-  </div>
-
-  <div id="tab-nfl-kick" class="stat-panel">
-    <div class="stat-panel-label">NFL Kicking Stats — Field Goal Performance by Range</div>
-    <div class="stat-table-wrap"><table class="stat-table">
-      <thead><tr><th>Player</th><th>Team</th><th>G</th><th>20-29</th><th>30-39</th><th>40-49</th><th>50+</th><th>FGM</th><th>Lng</th><th>PPK</th><th>OVR</th></tr></thead>
-      <tbody>
-        <tr><td class="pl">Justin Tucker</td><td>BAL</td><td>16</td><td>4/4</td><td>10/10</td><td>14/14</td><td>10/10</td><td class="hi">38</td><td>57</td><td class="hi">1.97</td><td><span class="ob" style="--p:99">99</span></td></tr>
-        <tr><td class="pl">Matt Prater</td><td>DET</td><td>16</td><td>3/3</td><td>8/9</td><td>6/6</td><td>5/6</td><td>22</td><td>59</td><td>1.52</td><td><span class="ob" style="--p:99">99</span></td></tr>
-        <tr><td class="pl">Adam Vinatieri</td><td>IND</td><td>16</td><td>7/8</td><td>6/6</td><td>8/10</td><td>4/5</td><td>25</td><td>55</td><td>1.44</td><td><span class="ob" style="--p:96">96</span></td></tr>
-        <tr><td class="pl">Stephen Hauschka</td><td>SEA</td><td>16</td><td>9/9</td><td>7/7</td><td>7/9</td><td>6/6</td><td>29</td><td>54</td><td>1.41</td><td><span class="ob" style="--p:95">95</span></td></tr>
-        <tr><td class="pl">Stephen Gostkowski</td><td>NWE</td><td>16</td><td>6/6</td><td>11/11</td><td>12/14</td><td>4/5</td><td>33</td><td>57</td><td>1.38</td><td><span class="ob" style="--p:93">93</span></td></tr>
-        <tr><td class="pl">Dan Bailey</td><td>DAL</td><td>16</td><td>9/9</td><td>10/10</td><td>6/7</td><td>5/6</td><td>30</td><td>54</td><td>1.29</td><td><span class="ob" style="--p:90">90</span></td></tr>
-        <tr><td class="pl">Chris Boswell</td><td>PIT</td><td>12</td><td>9/9</td><td>8/8</td><td>9/12</td><td>2/2</td><td>29</td><td>51</td><td>1.12</td><td><span class="ob" style="--p:83">83</span></td></tr>
-        <tr><td class="pl">Mason Crosby</td><td>GNB</td><td>16</td><td>7/7</td><td>4/4</td><td>8/11</td><td>4/5</td><td>24</td><td>56</td><td>1.08</td><td><span class="ob" style="--p:82">82</span></td></tr>
-        <tr><td class="pl">Greg Zuerlein</td><td>STL</td><td>14</td><td>2/2</td><td>9/10</td><td>5/8</td><td>3/9</td><td>20</td><td>61</td><td class="ng">0.23</td><td><span class="ob" style="--p:60">60</span></td></tr>
-      </tbody>
-    </table></div>
-  </div>
-
-  <div id="tab-nfl-punt" class="stat-panel">
-    <div class="stat-panel-label">NFL Punting Stats (2025) — Net Yards &amp; Placement</div>
-    <div class="stat-table-wrap"><table class="stat-table">
-      <thead><tr><th>Player</th><th>Team</th><th>Pnts</th><th>Yds</th><th>Y/P</th><th>Net Yds</th><th>NY/P</th><th>Lng</th><th>In 20</th><th>PPP</th><th>OVR</th></tr></thead>
-      <tbody>
-        <tr><td class="pl">Rigoberto Sanchez</td><td>IND</td><td>44</td><td>2146</td><td>48.8</td><td>1966</td><td class="hi">44.7</td><td>59</td><td>22</td><td class="hi">3.20</td><td><span class="ob" style="--p:99">99</span></td></tr>
-        <tr><td class="pl">Tress Way</td><td>WAS</td><td>56</td><td>2651</td><td>47.3</td><td>2457</td><td class="hi">43.9</td><td>71</td><td>29</td><td class="hi">3.17</td><td><span class="ob" style="--p:97">97</span></td></tr>
-        <tr><td class="pl">Jack Fox</td><td>DET</td><td>56</td><td>2611</td><td>46.6</td><td>2398</td><td>42.8</td><td>70</td><td>28</td><td>3.13</td><td><span class="ob" style="--p:93">93</span></td></tr>
-        <tr><td class="pl">Jordan Stout</td><td>BAL</td><td>53</td><td>2657</td><td>50.1</td><td>2378</td><td>44.9</td><td>74</td><td>24</td><td>3.10</td><td><span class="ob" style="--p:91">91</span></td></tr>
-        <tr><td class="pl">Ryan Wright</td><td>MIN</td><td>65</td><td>3184</td><td>49.0</td><td>2893</td><td>44.5</td><td>77</td><td>25</td><td>3.08</td><td><span class="ob" style="--p:89">89</span></td></tr>
-        <tr><td class="pl">Austin McNamara</td><td>NYJ</td><td>71</td><td>3317</td><td>46.7</td><td>3064</td><td>43.2</td><td>72</td><td>32</td><td>3.03</td><td><span class="ob" style="--p:86">86</span></td></tr>
-        <tr><td class="pl">Daniel Whelan</td><td>GNB</td><td>49</td><td>2533</td><td>51.7</td><td>2171</td><td>44.3</td><td>72</td><td>18</td><td>2.90</td><td><span class="ob" style="--p:77">77</span></td></tr>
-        <tr><td class="pl">Ryan Rehkow</td><td>CIN</td><td>65</td><td>3285</td><td>50.5</td><td>2788</td><td>42.9</td><td>70</td><td>28</td><td>2.89</td><td><span class="ob" style="--p:76">76</span></td></tr>
-        <tr><td class="pl">Kai Kroeger</td><td>NOR</td><td>56</td><td>2511</td><td>44.8</td><td>2163</td><td>37.3</td><td>61</td><td>18</td><td class="ng">2.54</td><td><span class="ob" style="--p:60">60</span></td></tr>
-      </tbody>
-    </table></div>
-  </div>
-
-  <div id="tab-mlb" class="stat-panel">
-    <div class="stat-panel-label">MLB Pitching Stats (2025) — Advanced Metrics</div>
-    <div class="stat-table-wrap"><table class="stat-table">
-      <thead><tr><th>Player</th><th>Team</th><th>WAR</th><th>W-L</th><th>ERA</th><th>IP</th><th>SO</th><th>WHIP</th><th>FIP</th><th>ERA+</th><th>OVR</th></tr></thead>
-      <tbody>
-        <tr><td class="pl">Paul Skenes</td><td>PIT</td><td class="hi">7.7</td><td>10-10</td><td class="hi">1.97</td><td>187.2</td><td>216</td><td>0.948</td><td>2.36</td><td class="hi">222</td><td><span class="ob" style="--p:99">99</span></td></tr>
-        <tr><td class="pl">Tarik Skubal</td><td>DET</td><td class="hi">6.5</td><td>13-6</td><td class="hi">2.21</td><td>195.1</td><td>241</td><td>0.891</td><td>2.45</td><td class="hi">189</td><td><span class="ob" style="--p:99">99</span></td></tr>
-        <tr><td class="pl">Hunter Brown</td><td>HOU</td><td>6.1</td><td>12-9</td><td>2.43</td><td>185.1</td><td>206</td><td>1.025</td><td>3.14</td><td>172</td><td><span class="ob" style="--p:99">99</span></td></tr>
-        <tr><td class="pl">Garrett Crochet</td><td>BOS</td><td>6.3</td><td>18-5</td><td>2.59</td><td>205.1</td><td>255</td><td>1.028</td><td>2.89</td><td>155</td><td><span class="ob" style="--p:66">66</span></td></tr>
-        <tr><td class="pl">Cristopher Sanchez</td><td>PHI</td><td>8.0</td><td>13-5</td><td>2.50</td><td>202.0</td><td>212</td><td>1.064</td><td>2.55</td><td>176</td><td><span class="ob" style="--p:65">65</span></td></tr>
-        <tr><td class="pl">Yoshinobu Yamamoto</td><td>LAD</td><td>4.9</td><td>12-8</td><td>2.49</td><td>173.2</td><td>201</td><td>0.990</td><td>2.94</td><td>165</td><td><span class="ob" style="--p:99">99</span></td></tr>
-        <tr><td class="pl">Jacob deGrom</td><td>TEX</td><td>3.0</td><td>12-8</td><td>2.97</td><td>172.2</td><td>185</td><td>0.921</td><td>3.64</td><td>122</td><td><span class="ob" style="--p:99">99</span></td></tr>
-        <tr><td class="pl">Max Fried</td><td>NYY</td><td>4.5</td><td>19-5</td><td>2.86</td><td>195.1</td><td>189</td><td>1.101</td><td>3.07</td><td>145</td><td><span class="ob" style="--p:66">66</span></td></tr>
-        <tr><td class="pl">Freddy Peralta</td><td>MIL</td><td>5.4</td><td>17-6</td><td>2.70</td><td>176.2</td><td>204</td><td>1.075</td><td>3.64</td><td>157</td><td><span class="ob" style="--p:99">99</span></td></tr>
-        <tr><td class="pl">Logan Webb</td><td>SFG</td><td>4.0</td><td>15-11</td><td>3.22</td><td>207.0</td><td>224</td><td>1.237</td><td>2.60</td><td>125</td><td><span class="ob" style="--p:66">66</span></td></tr>
-        <tr><td class="pl">Jake Irvin</td><td>WSN</td><td class="ng">-0.4</td><td>9-13</td><td class="ng">5.70</td><td>180.0</td><td>124</td><td>1.428</td><td>5.64</td><td>73</td><td><span class="ob" style="--p:60">60</span></td></tr>
-      </tbody>
-    </table></div>
-  </div>
-
-  <div id="tab-nba" class="stat-panel">
-    <div class="stat-panel-label">NBA Player Stats (2025) — Per-Minute Production &amp; Overall Rating</div>
-    <div class="stat-table-wrap"><table class="stat-table">
-      <thead><tr><th>Player</th><th>Team</th><th>Pos</th><th>G</th><th>PPG</th><th>REB</th><th>AST</th><th>STL</th><th>BLK</th><th>PPM</th><th>OVR</th></tr></thead>
-      <tbody>
-        <tr><td class="pl">Nikola Jokic</td><td>DEN</td><td>C</td><td>70</td><td class="hi">29.6</td><td class="hi">12.7</td><td class="hi">10.2</td><td>1.8</td><td>0.6</td><td class="hi">0.827</td><td><span class="ob" style="--p:99">99</span></td></tr>
-        <tr><td class="pl">Giannis Antetokounmpo</td><td>MIL</td><td>PF</td><td>67</td><td class="hi">30.4</td><td>11.9</td><td>6.5</td><td>0.9</td><td>1.2</td><td>0.763</td><td><span class="ob" style="--p:99">99</span></td></tr>
-        <tr><td class="pl">Anthony Davis</td><td>LAL</td><td>C</td><td>51</td><td>24.7</td><td>11.6</td><td>3.5</td><td>1.2</td><td>2.2</td><td>0.659</td><td><span class="ob" style="--p:83">83</span></td></tr>
-        <tr><td class="pl">Victor Wembanyama</td><td>SAS</td><td>C</td><td>46</td><td>24.3</td><td>11.0</td><td>3.7</td><td>1.1</td><td>3.8</td><td>0.631</td><td><span class="ob" style="--p:80">80</span></td></tr>
-        <tr><td class="pl">Karl-Anthony Towns</td><td>NYK</td><td>C</td><td>72</td><td>24.4</td><td>12.8</td><td>3.1</td><td>1.0</td><td>0.7</td><td>0.631</td><td><span class="ob" style="--p:80">80</span></td></tr>
-        <tr><td class="pl">Kevin Durant</td><td>PHO</td><td>PF</td><td>62</td><td>26.6</td><td>6.0</td><td>4.2</td><td>0.8</td><td>1.2</td><td>0.562</td><td><span class="ob" style="--p:82">82</span></td></tr>
-        <tr><td class="pl">Jayson Tatum</td><td>BOS</td><td>PF</td><td>72</td><td>26.8</td><td>8.7</td><td>6.0</td><td>1.1</td><td>0.5</td><td>0.556</td><td><span class="ob" style="--p:81">81</span></td></tr>
-        <tr><td class="pl">Evan Mobley</td><td>CLE</td><td>PF</td><td>71</td><td>18.5</td><td>9.3</td><td>3.2</td><td>0.9</td><td>1.6</td><td>0.575</td><td><span class="ob" style="--p:83">83</span></td></tr>
-        <tr><td class="pl">Domantas Sabonis</td><td>SAC</td><td>C</td><td>70</td><td>19.1</td><td>13.9</td><td>6.0</td><td>0.7</td><td>0.4</td><td>0.600</td><td><span class="ob" style="--p:77">77</span></td></tr>
-        <tr><td class="pl">Rudy Gobert</td><td>MIN</td><td>C</td><td>72</td><td>12.0</td><td>10.9</td><td>1.8</td><td>0.8</td><td>1.4</td><td>0.453</td><td><span class="ob" style="--p:66">66</span></td></tr>
-      </tbody>
-    </table></div>
-  </div>
-</section>
-
-<style>
-.stat-tabs { display:flex; gap:8px; flex-wrap:wrap; margin-top:48px; }
-.stat-tab {
-  background:var(--ink-2); border:1px solid var(--line);
-  color:var(--muted); font-family:'Inter',sans-serif;
-  font-size:0.82rem; font-weight:500;
-  padding:10px 18px; border-radius:6px; cursor:pointer; transition:all 0.2s;
-}
-.stat-tab:hover { border-color:var(--signal); color:var(--white); }
-.stat-tab.active { background:var(--signal); border-color:var(--signal); color:var(--ink); font-weight:700; }
-.stat-panel { display:none; margin-top:24px; }
-.stat-panel.active { display:block; }
-.stat-panel-label {
-  font-family:'JetBrains Mono',monospace;
-  font-size:0.72rem; color:var(--muted); letter-spacing:0.08em;
-  text-transform:uppercase; margin-bottom:16px;
-}
-.stat-table-wrap { overflow-x:auto; border:1px solid var(--line); border-radius:10px; }
-.stat-table { width:100%; border-collapse:collapse; font-size:0.84rem; }
-.stat-table thead tr { background:var(--ink-3); border-bottom:1px solid var(--line); }
-.stat-table th {
-  font-family:'JetBrains Mono',monospace;
-  font-size:0.68rem; letter-spacing:0.1em; text-transform:uppercase;
-  color:var(--muted); padding:12px 14px; text-align:left; white-space:nowrap;
-}
-.stat-table tbody tr { border-bottom:1px solid rgba(255,255,255,0.04); transition:background 0.15s; }
-.stat-table tbody tr:hover { background:var(--ink-2); }
-.stat-table tbody tr:last-child { border-bottom:none; }
-.stat-table td { padding:11px 14px; color:var(--muted); white-space:nowrap; }
-.stat-table td.pl { color:var(--white); font-weight:600; }
-.stat-table td.hi { color:var(--signal); font-weight:700; }
-.stat-table td.ng { color:#FF6B6B; }
-.ob {
-  display:inline-block;
-  font-family:'Barlow Condensed',sans-serif;
-  font-size:0.9rem; font-weight:800;
-  padding:2px 8px; border-radius:4px;
-  background:color-mix(in srgb, var(--signal) calc(var(--p) * 1%), #2a2e35 0%);
-  color:var(--ink);
-}
-</style>
-<script>
-function showTab(e, id) {
-  document.querySelectorAll('.stat-panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.stat-tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById('tab-'+id).classList.add('active');
-  e.target.classList.add('active');
-}
-</script>
-
-<!-- CTA -->
-<section id="cta">
-  <div class="section-label">// Early access</div>
-  <h2 class="section-title">Be first in the game</h2>
-  <p class="section-body">Join the waitlist and get priority access when we launch — plus a free month of premium analytics.</p>
+<!-- APP CTA -->
+<div class="app-cta" id="cta">
+  <div class="app-cta-label">// Early access</div>
+  <div class="app-cta-title">Be first in the game</div>
+  <div class="app-cta-body">Join the waitlist and get priority access when we launch — plus a free month of premium analytics.</div>
   <form class="cta-form" name="waitlist" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/thankyou.html">
     <input type="hidden" name="form-name" value="waitlist" />
     <p hidden><input name="bot-field" /></p>
@@ -721,21 +514,28 @@ function showTab(e, id) {
     <button type="submit" class="btn-primary">Join Waitlist</button>
   </form>
   <p class="cta-note">No spam. No credit card. Just early access.</p>
-</section>
+</div>
 
-<!-- FOOTER -->
 <footer>
-  <div class="footer-logo" style="display:flex;align-items:center;gap:8px;">
-    <img src="assets/logo.png" alt="" style="height:24px;" />
-    Sports<span>Companion</span>
+  <div class="ft-brand"><img src="assets/logo.png" alt="SSC" /><span>The Sports <em>Companion</em></span></div>
+  <div class="ft-links">
+    <a href="/nfl/index.html">NFL</a>
+    <a href="/mlb/index.html">MLB</a>
+    <a href="/nba/index.html">NBA</a>
+    <a href="/more/index.html">More</a>
+    <a href="#features">Features</a>
+    <a href="#book">Book</a>
   </div>
-  <div class="footer-links">
-    <a href="#">Privacy</a>
-    <a href="#">Terms</a>
-    <a href="#">Contact</a>
-  </div>
-  <div class="footer-copy">© 2026 SportsCompanion. All rights reserved.</div>
+  <div class="ft-copy">© 2026 The Sports Companion. All rights reserved.</div>
 </footer>
 
+<script>
+function showStandings(id) {
+  document.querySelectorAll('.sw-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sw-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('sw-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
 </body>
 </html>
