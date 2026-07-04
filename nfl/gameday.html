@@ -57,7 +57,7 @@
 
     /* GAMECAST PANEL */
     #panel-gamecast{display:block}
-    .panel{display:none;padding:24px 32px}
+    .panel{display:none;padding:24px 20px}.panel-inner{max-width:860px;margin:0 auto}
     .panel.active{display:block}
 
     /* FIELD - Vertical Madden style */
@@ -130,7 +130,7 @@
     .ft-links{display:flex;gap:18px}.ft-links a{font-size:.75rem;color:var(--muted);text-decoration:none}.ft-links a:hover{color:var(--white)}
 
     @media(max-width:768px){
-      .panel{padding:16px}
+      .panel{padding:16px}.panel-inner{max-width:860px;margin:0 auto}
       .scoreboard{padding:18px 16px}
       .sb-score{font-size:3rem}
       .nav-brand span{display:none}
@@ -199,6 +199,7 @@
 
 <!-- GAMECAST PANEL -->
 <div id="panel-gamecast" class="panel active">
+  <div class="panel-inner">
 
   <!-- FOOTBALL FIELD - Vertical Madden Style -->
   <div class="field-wrap">
@@ -308,8 +309,8 @@
   </g>
 
   <!-- End zone text -->
-  <image href="/assets/nfl/eagles.png" x="20" y="110" width="100" height="100" opacity="0.85" preserveAspectRatio="xMidYMid meet"/>
-  <image href="/assets/nfl/cowboys.png" x="560" y="110" width="100" height="100" opacity="0.85" preserveAspectRatio="xMidYMid meet"/>
+  <image href="/assets/nfl/eagles.png" x="40" y="140" width="60" height="60" opacity="0.85" preserveAspectRatio="xMidYMid meet"/>
+  <image href="/assets/nfl/cowboys.png" x="580" y="140" width="60" height="60" opacity="0.85" preserveAspectRatio="xMidYMid meet"/>
 
   <!-- Goal posts left -->
   <line x1="30"  y1="170" x2="18"  y2="170" stroke="#F2C230" stroke-width="2.5" opacity="0.85"/>
@@ -369,7 +370,9 @@
 </div>
 
 <!-- BOX SCORE PANEL -->
+  </div><!-- /panel-inner -->
 <div id="panel-boxscore" class="panel">
+  <div class="panel-inner">
   <div class="bs-team-toggle">
     <button class="bs-toggle-btn active" onclick="showBS('phi')">Philadelphia Eagles</button>
     <button class="bs-toggle-btn" onclick="showBS('dal')">Dallas Cowboys</button>
@@ -468,10 +471,13 @@
 </div>
 
 <!-- PLAY BY PLAY PANEL -->
+  </div><!-- /panel-inner -->
 <div id="panel-pbp" class="panel">
+  <div class="panel-inner">
   <div style="border:1px solid var(--line);border-radius:10px;overflow:hidden" id="full-pbp-feed"></div>
 </div>
 
+  </div><!-- /panel-inner -->
 <footer>
   <div class="ft-brand"><img src="/assets/logo.png" alt="SSC" /><span>The Sports <em>Companion</em></span></div>
   <div class="ft-links"><a href="/index.html">Home</a><a href="/nfl/index.html">NFL</a><a href="/mlb/index.html">MLB</a><a href="/nba/index.html">NBA</a></div>

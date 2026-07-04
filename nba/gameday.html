@@ -50,7 +50,7 @@
     .game-tabs{display:flex;background:var(--ink-2);border-bottom:1px solid var(--line)}
     .game-tab{padding:13px 24px;font-size:.82rem;font-weight:600;color:var(--muted);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;transition:all .2s;white-space:nowrap}
     .game-tab:hover{color:var(--white)}.game-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
-    .panel{display:none;padding:24px 32px}.panel.active{display:block}
+    .panel{display:none;padding:24px 20px}.panel-inner{max-width:860px;margin:0 auto}.panel.active{display:block}
 
     /* GAMECAST LAYOUT */
     .gamecast-layout{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
@@ -116,7 +116,7 @@
     .ft-brand span em{font-style:normal;color:var(--gold)}
     .ft-copy{font-size:.75rem;color:var(--muted)}.ft-links{display:flex;gap:18px}
     .ft-links a{font-size:.75rem;color:var(--muted);text-decoration:none}.ft-links a:hover{color:var(--white)}
-    @media(max-width:768px){.panel{padding:16px}.scoreboard{padding:16px}.nav-brand span{display:none}}
+    @media(max-width:768px){.panel{padding:16px}.panel-inner{max-width:860px;margin:0 auto}.scoreboard{padding:16px}.nav-brand span{display:none}}
   </style>
 </head>
 <body>
@@ -182,6 +182,7 @@
 
 <!-- GAMECAST -->
 <div id="panel-gamecast" class="panel active">
+  <div class="panel-inner">
   <div class="gamecast-layout">
 
     <!-- LEFT: SHOT CHART -->
@@ -304,7 +305,9 @@
 </div>
 
 <!-- BOX SCORE -->
+  </div><!-- /panel-inner -->
 <div id="panel-boxscore" class="panel">
+  <div class="panel-inner">
   <div class="bs-team-toggle">
     <button class="bs-toggle-btn active" onclick="showBS('gsw')">Golden State Warriors</button>
     <button class="bs-toggle-btn" onclick="showBS('lal')">Los Angeles Lakers</button>
@@ -342,10 +345,13 @@
 </div>
 
 <!-- PLAY BY PLAY -->
+  </div><!-- /panel-inner -->
 <div id="panel-pbp" class="panel">
+  <div class="panel-inner">
   <div style="border:1px solid var(--line);border-radius:10px;overflow:hidden" id="full-pbp-feed"></div>
 </div>
 
+  </div><!-- /panel-inner -->
 <footer>
   <div class="ft-brand"><img src="/assets/logo.png" alt="SSC" /><span>The Sports <em>Companion</em></span></div>
   <div class="ft-links"><a href="/index.html">Home</a><a href="/nfl/index.html">NFL</a><a href="/mlb/index.html">MLB</a><a href="/nba/index.html">NBA</a></div>

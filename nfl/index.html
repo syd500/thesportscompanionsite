@@ -347,165 +347,143 @@
   <div class="sec-label">// Interactive</div>
   <div class="sec-title">🔮 Guess the Play</div>
   <div class="sec-body">Real NFL play-by-play scenarios. Predict the call before the snap. You have 15 seconds.</div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start;max-width:920px">
+  <div style="display:flex;flex-direction:column;gap:20px;max-width:720px">
     <div style="display:flex;flex-direction:column;align-items:center">
-      <div style="position:relative;width:100%;max-width:320px;aspect-ratio:320/460;border-radius:10px;overflow:hidden;border:2px solid #1a3d17">
-        <svg id="guess-field-svg" class="field-svg" viewBox="0 0 320 460" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <!-- 3D perspective field gradients -->
-          <linearGradient id="fieldGrad3d" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#1a5c12"/>
-            <stop offset="40%" stop-color="#2d8a20"/>
-            <stop offset="100%" stop-color="#1a5c12"/>
-          </linearGradient>
-          <linearGradient id="endzoneTop" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#0d3a08"/>
-            <stop offset="100%" stop-color="#1a5c12"/>
-          </linearGradient>
-          <linearGradient id="endzoneBot" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#1a5c12"/>
-            <stop offset="100%" stop-color="#0d3a08"/>
-          </linearGradient>
-          <!-- Stripe pattern for alternating dark/light bands -->
-          <pattern id="fieldStripes3d" x="0" y="0" width="320" height="30" patternUnits="userSpaceOnUse">
-            <rect width="320" height="15" fill="#2d8a20"/>
-            <rect y="15" width="320" height="15" fill="#268018"/>
-          </pattern>
-          <!-- Side edge gradient for 3D effect -->
-          <linearGradient id="sideEdge" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stop-color="#0a2e06"/>
-            <stop offset="100%" stop-color="#1a5c12"/>
-          </linearGradient>
-          <!-- Perspective transform: field is a trapezoid wider at bottom, narrower at top -->
-        </defs>
+      <div style="position:relative;width:100%;max-width:680px;aspect-ratio:680/340;border-radius:10px;overflow:hidden;border:2px solid #1a3d17">
+        <svg id="guess-field-svg" class="field-svg" viewBox="0 0 680 340" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a1f2e"/>
+      <stop offset="100%" stop-color="#2a3040"/>
+    </linearGradient>
+    <linearGradient id="fieldGrad3d" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1d6617"/>
+      <stop offset="50%" stop-color="#2d8a20"/>
+      <stop offset="100%" stop-color="#1a5c12"/>
+    </linearGradient>
+    <linearGradient id="ezLeft" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0d3a08"/>
+      <stop offset="100%" stop-color="#1a5c12"/>
+    </linearGradient>
+    <linearGradient id="ezRight" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#1a5c12"/>
+      <stop offset="100%" stop-color="#0d3a08"/>
+    </linearGradient>
+    <linearGradient id="sideEdge" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0a2e06"/>
+      <stop offset="100%" stop-color="#061a04"/>
+    </linearGradient>
+    <!-- Alternating stripe pattern horizontal -->
+    <pattern id="stripes" x="0" y="0" width="50" height="340" patternUnits="userSpaceOnUse">
+      <rect width="50" height="340" fill="#2d8a20"/>
+      <rect width="25" height="340" fill="#268018"/>
+    </pattern>
+  </defs>
 
-        <!-- 3D side edge (bottom thickness illusion) -->
-        <polygon points="20,418 300,418 310,410 10,410" fill="#0a2e06"/>
-        <polygon points="10,410 10,50 20,42 20,418" fill="#0d3a08"/>
-        <polygon points="300,418 310,410 310,50 300,42" fill="#0d3a08"/>
+  <!-- Sky/stadium background -->
+  <rect width="680" height="340" fill="url(#skyGrad)"/>
 
-        <!-- MAIN FIELD SURFACE - trapezoid perspective (wider bottom, narrower top) -->
-        <polygon points="20,42 300,42 300,418 20,418" fill="url(#fieldStripes3d)"/>
+  <!-- 3D bottom edge (thickness) -->
+  <polygon points="30,310 650,310 660,322 20,322" fill="url(#sideEdge)"/>
+  <!-- Left edge -->
+  <polygon points="20,40 30,30 30,310 20,322" fill="#0a2e06"/>
+  <!-- Right edge -->
+  <polygon points="650,30 660,40 660,322 650,310" fill="#0a2e06"/>
 
-        <!-- End zones -->
-        <polygon points="20,42 300,42 300,78 20,78" fill="url(#endzoneTop)" opacity="0.92"/>
-        <polygon points="20,382 300,382 300,418 20,418" fill="url(#endzoneBot)" opacity="0.92"/>
+  <!-- MAIN FIELD - horizontal trapezoid (3D angle) -->
+  <polygon points="30,30 650,30 650,310 30,310" fill="url(#stripes)"/>
 
-        <!-- Field outline -->
-        <polygon points="20,42 300,42 300,418 20,418" fill="none" stroke="white" stroke-width="2.5" opacity="0.9"/>
+  <!-- Left end zone -->
+  <polygon points="30,30 110,30 110,310 30,310" fill="url(#ezLeft)" opacity="0.88"/>
+  <!-- Right end zone -->
+  <polygon points="570,30 650,30 650,310 570,310" fill="url(#ezRight)" opacity="0.88"/>
 
-        <!-- End zone lines -->
-        <line x1="20" y1="78"  x2="300" y2="78"  stroke="white" stroke-width="2" opacity="0.85"/>
-        <line x1="20" y1="382" x2="300" y2="382" stroke="white" stroke-width="2" opacity="0.85"/>
+  <!-- Field outline -->
+  <rect x="30" y="30" width="620" height="280" fill="none" stroke="white" stroke-width="2.5" opacity="0.9"/>
 
-        <!-- Yard lines — 10yd intervals, playing field y=78 to y=382 = 304px, 100yds -->
-        <!-- Each 10yds = 30.4px -->
-        <g stroke="white" opacity="0.7">
-          <line x1="20" y1="108.4" x2="300" y2="108.4" stroke-width="1.5"/>
-          <line x1="20" y1="138.8" x2="300" y2="138.8" stroke-width="1.5"/>
-          <line x1="20" y1="169.2" x2="300" y2="169.2" stroke-width="1.5"/>
-          <line x1="20" y1="199.6" x2="300" y2="199.6" stroke-width="2"/>
-          <line x1="20" y1="230"   x2="300" y2="230"   stroke-width="1.5"/>
-          <line x1="20" y1="260.4" x2="300" y2="260.4" stroke-width="1.5"/>
-          <line x1="20" y1="290.8" x2="300" y2="290.8" stroke-width="1.5"/>
-          <line x1="20" y1="321.2" x2="300" y2="321.2" stroke-width="1.5"/>
-          <line x1="20" y1="351.6" x2="300" y2="351.6" stroke-width="1.5"/>
-        </g>
+  <!-- End zone boundary lines -->
+  <line x1="110" y1="30"  x2="110" y2="310" stroke="white" stroke-width="2.5" opacity="0.9"/>
+  <line x1="570" y1="30"  x2="570" y2="310" stroke="white" stroke-width="2.5" opacity="0.9"/>
 
-        <!-- Hash marks left side -->
-        <g stroke="white" stroke-width="1" opacity="0.6">
-          <line x1="95" y1="108.4" x2="115" y2="108.4"/>
-          <line x1="95" y1="138.8" x2="115" y2="138.8"/>
-          <line x1="95" y1="169.2" x2="115" y2="169.2"/>
-          <line x1="95" y1="199.6" x2="115" y2="199.6"/>
-          <line x1="95" y1="230"   x2="115" y2="230"/>
-          <line x1="95" y1="260.4" x2="115" y2="260.4"/>
-          <line x1="95" y1="290.8" x2="115" y2="290.8"/>
-          <line x1="95" y1="321.2" x2="115" y2="321.2"/>
-          <line x1="95" y1="351.6" x2="115" y2="351.6"/>
-        </g>
-        <!-- Hash marks right side -->
-        <g stroke="white" stroke-width="1" opacity="0.6">
-          <line x1="205" y1="108.4" x2="225" y2="108.4"/>
-          <line x1="205" y1="138.8" x2="225" y2="138.8"/>
-          <line x1="205" y1="169.2" x2="225" y2="169.2"/>
-          <line x1="205" y1="199.6" x2="225" y2="199.6"/>
-          <line x1="205" y1="230"   x2="225" y2="230"/>
-          <line x1="205" y1="260.4" x2="225" y2="260.4"/>
-          <line x1="205" y1="290.8" x2="225" y2="290.8"/>
-          <line x1="205" y1="321.2" x2="225" y2="321.2"/>
-          <line x1="205" y1="351.6" x2="225" y2="351.6"/>
-        </g>
+  <!-- Yard lines — playing field x=110 to x=570 = 460px, 100 yards, 10yds=46px -->
+  <g stroke="white" opacity="0.7">
+    <line x1="156" y1="30" x2="156" y2="310" stroke-width="1.5"/>
+    <line x1="202" y1="30" x2="202" y2="310" stroke-width="1.5"/>
+    <line x1="248" y1="30" x2="248" y2="310" stroke-width="1.5"/>
+    <line x1="294" y1="30" x2="294" y2="310" stroke-width="1.5"/>
+    <line x1="340" y1="30" x2="340" y2="310" stroke-width="3" opacity="0.95"/>
+    <line x1="386" y1="30" x2="386" y2="310" stroke-width="1.5"/>
+    <line x1="432" y1="30" x2="432" y2="310" stroke-width="1.5"/>
+    <line x1="478" y1="30" x2="478" y2="310" stroke-width="1.5"/>
+    <line x1="524" y1="30" x2="524" y2="310" stroke-width="1.5"/>
+  </g>
 
-        <!-- Sidelines inner -->
-        <line x1="30" y1="78" x2="30" y2="382" stroke="white" stroke-width="1" opacity="0.5"/>
-        <line x1="290" y1="78" x2="290" y2="382" stroke="white" stroke-width="1" opacity="0.5"/>
+  <!-- Top hash marks -->
+  <g stroke="white" stroke-width="1.5" opacity="0.6">
+    <line x1="156" y1="110" x2="156" y2="130"/><line x1="202" y1="110" x2="202" y2="130"/>
+    <line x1="248" y1="110" x2="248" y2="130"/><line x1="294" y1="110" x2="294" y2="130"/>
+    <line x1="386" y1="110" x2="386" y2="130"/><line x1="432" y1="110" x2="432" y2="130"/>
+    <line x1="478" y1="110" x2="478" y2="130"/><line x1="524" y1="110" x2="524" y2="130"/>
+  </g>
+  <!-- Bottom hash marks -->
+  <g stroke="white" stroke-width="1.5" opacity="0.6">
+    <line x1="156" y1="180" x2="156" y2="200"/><line x1="202" y1="180" x2="202" y2="200"/>
+    <line x1="248" y1="180" x2="248" y2="200"/><line x1="294" y1="180" x2="294" y2="200"/>
+    <line x1="386" y1="180" x2="386" y2="200"/><line x1="432" y1="180" x2="432" y2="200"/>
+    <line x1="478" y1="180" x2="478" y2="200"/><line x1="524" y1="180" x2="524" y2="200"/>
+  </g>
 
-        <!-- Yard numbers -->
-        <g font-family="'Barlow Condensed',sans-serif" font-size="11" font-weight="700" fill="white" opacity="0.65" text-anchor="middle">
-          <text x="55" y="105">10</text><text x="265" y="105">10</text>
-          <text x="55" y="136">20</text><text x="265" y="136">20</text>
-          <text x="55" y="166">30</text><text x="265" y="166">30</text>
-          <text x="55" y="196">40</text><text x="265" y="196">40</text>
-          <text x="55" y="226">50</text><text x="265" y="226">50</text>
-          <text x="55" y="257">40</text><text x="265" y="257">40</text>
-          <text x="55" y="287">30</text><text x="265" y="287">30</text>
-          <text x="55" y="318">20</text><text x="265" y="318">20</text>
-          <text x="55" y="348">10</text><text x="265" y="348">10</text>
-        </g>
+  <!-- Sideline inner markers -->
+  <line x1="110" y1="42" x2="570" y2="42"  stroke="white" stroke-width="1" opacity="0.4"/>
+  <line x1="110" y1="298" x2="570" y2="298" stroke="white" stroke-width="1" opacity="0.4"/>
 
-        <!-- End zone team labels -->
-        <text x="160" y="65" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="16" font-weight="900" fill="white" letter-spacing="5" opacity="0.75">PHI</text>
-        <text x="160" y="406" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="16" font-weight="900" fill="white" letter-spacing="5" opacity="0.75">DAL</text>
+  <!-- Yard numbers top row -->
+  <g font-family="'Barlow Condensed',sans-serif" font-size="13" font-weight="800" fill="white" opacity="0.65" text-anchor="middle">
+    <text x="156" y="72">10</text><text x="202" y="72">20</text>
+    <text x="248" y="72">30</text><text x="294" y="72">40</text>
+    <text x="340" y="72">50</text>
+    <text x="386" y="72">40</text><text x="432" y="72">30</text>
+    <text x="478" y="72">20</text><text x="524" y="72">10</text>
+  </g>
+  <!-- Yard numbers bottom row -->
+  <g font-family="'Barlow Condensed',sans-serif" font-size="13" font-weight="800" fill="white" opacity="0.65" text-anchor="middle">
+    <text x="156" y="295">10</text><text x="202" y="295">20</text>
+    <text x="248" y="295">30</text><text x="294" y="295">40</text>
+    <text x="340" y="295">50</text>
+    <text x="386" y="295">40</text><text x="432" y="295">30</text>
+    <text x="478" y="295">20</text><text x="524" y="295">10</text>
+  </g>
 
-        <!-- Goal posts (top) -->
-        <line x1="160" y1="42" x2="160" y2="30" stroke="#F2C230" stroke-width="2.5" opacity="0.8"/>
-        <line x1="145" y1="30" x2="175" y2="30" stroke="#F2C230" stroke-width="2" opacity="0.8"/>
-        <line x1="145" y1="24" x2="145" y2="30" stroke="#F2C230" stroke-width="1.5" opacity="0.7"/>
-        <line x1="175" y1="24" x2="175" y2="30" stroke="#F2C230" stroke-width="1.5" opacity="0.7"/>
+  <!-- End zone text -->
+  
+  
 
-        <!-- Goal posts (bottom) -->
-        <line x1="160" y1="418" x2="160" y2="430" stroke="#F2C230" stroke-width="2.5" opacity="0.8"/>
-        <line x1="145" y1="430" x2="175" y2="430" stroke="#F2C230" stroke-width="2" opacity="0.8"/>
-        <line x1="145" y1="430" x2="145" y2="436" stroke="#F2C230" stroke-width="1.5" opacity="0.7"/>
-        <line x1="175" y1="430" x2="175" y2="436" stroke="#F2C230" stroke-width="1.5" opacity="0.7"/>
+  <!-- Goal posts left -->
+  <line x1="30"  y1="170" x2="18"  y2="170" stroke="#F2C230" stroke-width="2.5" opacity="0.85"/>
+  <line x1="18"  y1="148" x2="18"  y2="192" stroke="#F2C230" stroke-width="2"   opacity="0.85"/>
+  <line x1="12"  y1="148" x2="18"  y2="148" stroke="#F2C230" stroke-width="1.5" opacity="0.75"/>
+  <line x1="12"  y1="192" x2="18"  y2="192" stroke="#F2C230" stroke-width="1.5" opacity="0.75"/>
 
-        <!-- Line of scrimmage -->
-        <line id="guess-los-line" x1="20" y1="230" x2="300" y2="230" stroke="#F2C230" stroke-width="2.5" opacity="0.9" stroke-dasharray="8,4"/>
-        <!-- First down marker -->
-        <line id="guess-first-down-line" x1="20" y1="200" x2="300" y2="200" stroke="#38BDF8" stroke-width="2" opacity="0.75" stroke-dasharray="8,4"/>
+  <!-- Goal posts right -->
+  <line x1="650" y1="170" x2="662" y2="170" stroke="#F2C230" stroke-width="2.5" opacity="0.85"/>
+  <line x1="662" y1="148" x2="662" y2="192" stroke="#F2C230" stroke-width="2"   opacity="0.85"/>
+  <line x1="662" y1="148" x2="668" y2="148" stroke="#F2C230" stroke-width="1.5" opacity="0.75"/>
+  <line x1="662" y1="192" x2="668" y2="192" stroke="#F2C230" stroke-width="1.5" opacity="0.75"/>
 
-        <!-- Ball -->
-        <ellipse id="guess-ball-el" cx="160" cy="230" rx="10" ry="7" fill="#8B4513" stroke="#F2C230" stroke-width="1.5"/>
-        <line id="guess-ball-lace" x1="154" y1="230" x2="166" y2="230" stroke="white" stroke-width="1.2" opacity="0.9"/>
+  <!-- Line of scrimmage (vertical line, animated) -->
+  <line id="guess-los-line" x1="340" y1="30" x2="340" y2="310" stroke="#F2C230" stroke-width="3" opacity="0.9" stroke-dasharray="10,5"/>
+  <!-- First down marker -->
+  <line id="guess-first-down-line" x1="386" y1="30" x2="386" y2="310" stroke="#38BDF8" stroke-width="2" opacity="0.75" stroke-dasharray="8,4"/>
 
-        <!-- Offense players -->
-        <g id="offense-group">
-          <circle id="g-ol1-dot" cx="113" cy="238" r="5.5" fill="#3B82F6" stroke="#93C5FD" stroke-width="1.2"/>
-          <circle id="g-ol2-dot" cx="130" cy="238" r="5.5" fill="#3B82F6" stroke="#93C5FD" stroke-width="1.2"/>
-          <circle id="g-ol3-dot" cx="160" cy="238" r="5.5" fill="#3B82F6" stroke="#93C5FD" stroke-width="1.2"/>
-          <circle id="g-ol4-dot" cx="190" cy="238" r="5.5" fill="#3B82F6" stroke="#93C5FD" stroke-width="1.2"/>
-          <circle id="g-ol5-dot" cx="207" cy="238" r="5.5" fill="#3B82F6" stroke="#93C5FD" stroke-width="1.2"/>
-          <circle id="g-qb1-dot" cx="160" cy="252" r="6.5" fill="#1D4ED8" stroke="#93C5FD" stroke-width="1.5"/>
-          <circle id="g-wr1-dot" cx="60"  cy="238" r="5.5" fill="#3B82F6" stroke="#93C5FD" stroke-width="1.2"/>
-          <circle id="g-wr2-dot" cx="258" cy="238" r="5.5" fill="#3B82F6" stroke="#93C5FD" stroke-width="1.2"/>
-          <circle id="g-rb1-dot" cx="160" cy="268" r="5.5" fill="#2563EB" stroke="#93C5FD" stroke-width="1.2"/>
-        </g>
-
-        <!-- Defense players -->
-        <g id="defense-group">
-          <circle id="g-dl1-dot" cx="117" cy="220" r="5.5" fill="#DC2626" stroke="#FCA5A5" stroke-width="1.2"/>
-          <circle id="g-dl2-dot" cx="135" cy="220" r="5.5" fill="#DC2626" stroke="#FCA5A5" stroke-width="1.2"/>
-          <circle id="g-dl3-dot" cx="160" cy="220" r="5.5" fill="#DC2626" stroke="#FCA5A5" stroke-width="1.2"/>
-          <circle id="g-dl4-dot" cx="185" cy="220" r="5.5" fill="#DC2626" stroke="#FCA5A5" stroke-width="1.2"/>
-          <circle id="g-lb1-dot" cx="113" cy="207" r="5.5" fill="#B91C1C" stroke="#FCA5A5" stroke-width="1.2"/>
-          <circle id="g-lb2-dot" cx="160" cy="207" r="5.5" fill="#B91C1C" stroke="#FCA5A5" stroke-width="1.2"/>
-          <circle id="g-lb3-dot" cx="207" cy="207" r="5.5" fill="#B91C1C" stroke="#FCA5A5" stroke-width="1.2"/>
-          <circle id="g-db1-dot" cx="75"  cy="193" r="5.5" fill="#991B1B" stroke="#FCA5A5" stroke-width="1.2"/>
-          <circle id="g-db2-dot" cx="160" cy="190" r="5.5" fill="#991B1B" stroke="#FCA5A5" stroke-width="1.2"/>
-          <circle id="g-db3-dot" cx="245" cy="193" r="5.5" fill="#991B1B" stroke="#FCA5A5" stroke-width="1.2"/>
-        </g>
-      </svg>
+  <!-- Ball -->
+  <ellipse id="guess-ball-el" cx="340" cy="170" rx="12" ry="7" fill="#8B4513" stroke="#F2C230" stroke-width="1.5"/>
+  <line id="guess-ball-lace" x1="340" y1="163" x2="340" y2="177" stroke="white" stroke-width="1.2" opacity="0.9"/>
+  <!-- QB behind line -->
+  <!-- Wide receivers split wide -->
+  <!-- RB behind QB -->
+  <!-- LBs behind DL -->
+  <!-- DBs deep -->
+</svg>
         <div style="position:absolute;top:10px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.85);border:1px solid var(--gold);border-radius:4px;padding:4px 12px;white-space:nowrap;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--gold);font-weight:600;z-index:10" id="guess-down-box">1st & 10</div>
       </div>
       <div style="margin-top:10px;display:flex;gap:16px;font-size:.72rem;font-family:'JetBrains Mono',monospace;color:var(--muted)">
