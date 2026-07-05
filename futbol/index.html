@@ -150,6 +150,48 @@
     .lang-btn{background:none;border:1px solid transparent;border-radius:5px;padding:5px 9px;font-size:.75rem;font-weight:700;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;font-family:'Barlow Condensed',sans-serif;letter-spacing:.03em}
     .lang-btn:hover{color:var(--white);border-color:var(--line)}
     .lang-btn.active{color:var(--gold);border-color:rgba(242,194,48,.4);background:rgba(242,194,48,.08)}
+  
+    /* ──────────────── BRACKET STYLES ──────────────── */
+    .bracket-wrap{overflow-x:auto;padding:20px 0}
+    .bracket{display:flex;gap:0;align-items:flex-start;min-width:900px}
+    .bracket-col{display:flex;flex-direction:column;min-width:160px}
+    .bracket-col-title{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);text-align:center;padding:0 8px 12px;white-space:nowrap}
+    .bracket-matches{display:flex;flex-direction:column;height:100%}
+    .match-wrap{display:flex;align-items:center;flex:1;position:relative;padding:0 4px}
+    .match{background:var(--ink-2);border:1px solid var(--line);border-radius:8px;overflow:hidden;width:148px;cursor:pointer;transition:border-color .2s;flex-shrink:0}
+    .match:hover{border-color:var(--gold)}
+    .match.decided .team.winner{background:rgba(242,194,48,.08);color:var(--gold)}
+    .match.decided .team.winner .seed{color:var(--gold)}
+    .match.decided .team.loser{opacity:.45}
+    .team{display:flex;align-items:center;gap:6px;padding:7px 9px;border-bottom:1px solid rgba(255,255,255,.06);font-size:.78rem;font-weight:600;color:var(--white);transition:all .2s;position:relative}
+    .team:last-child{border-bottom:none}
+    .team:hover{background:rgba(242,194,48,.06)}
+    .team img{width:18px;height:18px;object-fit:contain;flex-shrink:0}
+    .team-name{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:.77rem}
+    .seed{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--muted);width:14px;text-align:center;flex-shrink:0}
+    .score{font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:800;color:var(--muted);margin-left:auto;min-width:20px;text-align:right}
+    .score.w{color:var(--gold)}
+    /* Connector lines */
+    .conn{position:absolute;right:-4px;top:50%;width:4px;height:1px;background:var(--line)}
+    .conn-v{position:absolute;right:-4px;width:1px;background:var(--line)}
+    /* Champion */
+    .champion-col{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:180px;padding:0 16px}
+    .champion-title{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px}
+    .champion-card{background:linear-gradient(135deg,rgba(242,194,48,.12),rgba(27,42,74,.6));border:2px solid var(--gold);border-radius:12px;padding:20px 16px;text-align:center;width:156px}
+    .champion-card .trophy{font-size:2rem;margin-bottom:8px}
+    .champion-card .champ-name{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:900;text-transform:uppercase;color:var(--gold)}
+    .champion-card .champ-sub{font-size:.72rem;color:var(--muted);margin-top:3px;font-family:'JetBrains Mono',monospace}
+    /* Region label */
+    .region-label{font-family:'Barlow Condensed',sans-serif;font-size:.85rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);text-align:center;padding:8px 0 4px;border-bottom:1px solid var(--line);margin-bottom:8px}
+    /* Bracket legend */
+    .bracket-legend{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:16px;padding:10px 14px;background:var(--ink-2);border:1px solid var(--line);border-radius:8px}
+    .legend-item{display:flex;align-items:center;gap:6px;font-size:.74rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
+    .legend-dot{width:8px;height:8px;border-radius:50%}
+    /* Bracket tabs (Men/Women toggle for NCAA BB) */
+    .bracket-toggle{display:flex;gap:8px;margin-bottom:18px}
+    .bracket-toggle-btn{padding:8px 18px;font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:800;text-transform:uppercase;border:1px solid var(--line);background:var(--ink-3);color:var(--muted);border-radius:6px;cursor:pointer;transition:all .2s}
+    .bracket-toggle-btn.active{background:rgba(242,194,48,.1);border-color:var(--gold);color:var(--gold)}
+
   </style>
 </head>
 <body>
@@ -225,6 +267,7 @@
     <button class="tab-btn"        id="inner-btn-standings" onclick="showInner('standings',this)">Standings</button>
     <button class="tab-btn"        id="inner-btn-stats"     onclick="showInner('stats',this)">Stats</button>
     <button class="tab-btn"        id="inner-btn-fantasy"   onclick="showInner('fantasy',this)">Fantasy &amp; Games</button>
+    <button class="tab-btn" id="inner-btn-bracket" onclick="showInner('bracket',this)">Bracket</button>
   </div>
 </div>
 
@@ -372,6 +415,7 @@
   <div class="sec-title">Fantasy & Games</div>
   <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px"><div style="background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:28px 24px">
         <div style="font-size:2rem;margin-bottom:14px">⚽</div>
+  <div id="mls-bracket" class="inner-panel" style="padding:28px 32px"><div class="sec-label">// Coming Soon</div><div class="sec-title">Bracket</div><p style="color:var(--muted);font-size:.88rem;margin-top:8px">Bracket view coming for this competition.</p></div>
         <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:800;text-transform:uppercase;margin-bottom:8px">Fantasy MLS</h3>
         <p style="font-size:.84rem;color:var(--muted);line-height:1.6">Build your squad, track points, manage waivers across the whole season.</p>
         <span style="display:inline-block;margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:4px;background:rgba(242,194,48,.12);color:var(--gold)">Coming Soon</span>
@@ -526,6 +570,7 @@
   <div class="sec-title">Fantasy & Games</div>
   <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px"><div style="background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:28px 24px">
         <div style="font-size:2rem;margin-bottom:14px">⚽</div>
+  <div id="epl-bracket" class="inner-panel" style="padding:28px 32px"><div class="sec-label">// Coming Soon</div><div class="sec-title">Bracket</div><p style="color:var(--muted);font-size:.88rem;margin-top:8px">Bracket view coming for this competition.</p></div>
         <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:800;text-transform:uppercase;margin-bottom:8px">Fantasy Premier League</h3>
         <p style="font-size:.84rem;color:var(--muted);line-height:1.6">Draft and manage your FPL squad with SSC stat integration.</p>
         <span style="display:inline-block;margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:4px;background:rgba(242,194,48,.12);color:var(--gold)">Coming Soon</span>
@@ -645,6 +690,7 @@
   <div class="sec-title">Fantasy & Games</div>
   <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px"><div style="background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:28px 24px">
         <div style="font-size:2rem;margin-bottom:14px">⚽</div>
+  <div id="laliga-bracket" class="inner-panel" style="padding:28px 32px"><div class="sec-label">// Coming Soon</div><div class="sec-title">Bracket</div><p style="color:var(--muted);font-size:.88rem;margin-top:8px">Bracket view coming for this competition.</p></div>
         <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:800;text-transform:uppercase;margin-bottom:8px">Fantasy La Liga</h3>
         <p style="font-size:.84rem;color:var(--muted);line-height:1.6">Build your squad from Spain's top division.</p>
         <span style="display:inline-block;margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:4px;background:rgba(242,194,48,.12);color:var(--gold)">Coming Soon</span>
@@ -771,6 +817,7 @@
   <div class="sec-title">Fantasy & Games</div>
   <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px"><div style="background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:28px 24px">
         <div style="font-size:2rem;margin-bottom:14px">⚽</div>
+  <div id="ucl-bracket" class="inner-panel" style="padding:28px 32px"><div class="sec-label">// Coming Soon</div><div class="sec-title">Bracket</div><p style="color:var(--muted);font-size:.88rem;margin-top:8px">Bracket view coming for this competition.</p></div>
         <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:800;text-transform:uppercase;margin-bottom:8px">Fantasy UCL</h3>
         <p style="font-size:.84rem;color:var(--muted);line-height:1.6">Pick your Champions League squad each round.</p>
         <span style="display:inline-block;margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:4px;background:rgba(242,194,48,.12);color:var(--gold)">Coming Soon</span>
@@ -830,7 +877,109 @@
       <div class="score-row"><span class="score-team">Spain</span><span class="score-val">2</span></div>
       <div class="score-status">Final</div>
     </div></div>
-</div></div>
+</div>
+  <div id="fifa-bracket" class="inner-panel" style="padding:28px 32px">
+    <div class="sec-label">// 2026 FIFA World Cup · USA · Canada · Mexico</div>
+<div class="sec-title" style="margin-bottom:16px">World Cup Bracket</div>
+<div class="bracket-legend">
+  <div class="legend-item"><div class="legend-dot" style="background:var(--gold)"></div>Winner</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#8A8F98"></div>Eliminated</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--line)"></div>TBD</div>
+</div>
+<div class="bracket-wrap">
+  <div class="bracket">
+    <div class="bracket-col"><div class="bracket-col-title">Round of 32</div><div class="bracket-matches" style="gap:8px"><div class="match-wrap" style="padding:0px 4px 0"><div class="match decided">
+  <div class="team winner"><span class="seed">A1</span><span class="team-name">France</span><span class="score w">2</span></div>
+  <div class="team loser"><span class="seed">B2</span><span class="team-name">Poland</span><span class="score">0</span></div>
+</div><div class="conn"></div></div><div class="match-wrap" style="padding:0px 4px 0"><div class="match decided">
+  <div class="team winner"><span class="seed">C1</span><span class="team-name">Argentina</span><span class="score w">1</span></div>
+  <div class="team loser"><span class="seed">D2</span><span class="team-name">Australia</span><span class="score">0</span></div>
+</div><div class="conn"></div></div><div class="match-wrap" style="padding:0px 4px 0"><div class="match decided">
+  <div class="team winner"><span class="seed">E1</span><span class="team-name">England</span><span class="score w">2</span></div>
+  <div class="team loser"><span class="seed">F2</span><span class="team-name">Senegal</span><span class="score">0</span></div>
+</div><div class="conn"></div></div><div class="match-wrap" style="padding:0px 4px 0"><div class="match decided">
+  <div class="team winner"><span class="seed">G1</span><span class="team-name">Spain</span><span class="score w">3</span></div>
+  <div class="team loser"><span class="seed">H2</span><span class="team-name">Morocco</span><span class="score">1</span></div>
+</div><div class="conn"></div></div><div class="match-wrap" style="padding:0px 4px 0"><div class="match decided">
+  <div class="team winner"><span class="seed">B1</span><span class="team-name">Brazil</span><span class="score w">2</span></div>
+  <div class="team loser"><span class="seed">A2</span><span class="team-name">South Korea</span><span class="score">1</span></div>
+</div><div class="conn"></div></div><div class="match-wrap" style="padding:0px 4px 0"><div class="match decided">
+  <div class="team winner"><span class="seed">D1</span><span class="team-name">Portugal</span><span class="score w">4</span></div>
+  <div class="team loser"><span class="seed">C2</span><span class="team-name">Switzerland</span><span class="score">0</span></div>
+</div><div class="conn"></div></div><div class="match-wrap" style="padding:0px 4px 0"><div class="match decided">
+  <div class="team winner"><span class="seed">F1</span><span class="team-name">Germany</span><span class="score w">2</span></div>
+  <div class="team loser"><span class="seed">E2</span><span class="team-name">Japan</span><span class="score">1</span></div>
+</div><div class="conn"></div></div><div class="match-wrap" style="padding:0px 4px 0"><div class="match decided">
+  <div class="team winner"><span class="seed">H1</span><span class="team-name">Netherlands</span><span class="score w">3</span></div>
+  <div class="team loser"><span class="seed">G2</span><span class="team-name">USA</span><span class="score">1</span></div>
+</div><div class="conn"></div></div></div></div>
+    <div class="bracket-col"><div class="bracket-col-title">Round of 16</div><div class="bracket-matches" style="gap:8px"><div class="match-wrap" style="padding:0px 4px 0"><div class="match decided">
+  <div class="team winner"><span class="seed"></span><span class="team-name">France</span><span class="score w">2</span></div>
+  <div class="team loser"><span class="seed"></span><span class="team-name">Argentina</span><span class="score">1</span></div>
+</div><div class="conn"></div></div><div class="match-wrap" style="padding:0px 4px 0"><div class="match decided">
+  <div class="team loser"><span class="seed"></span><span class="team-name">England</span><span class="score">1</span></div>
+  <div class="team winner"><span class="seed"></span><span class="team-name">Spain</span><span class="score w">2</span></div>
+</div><div class="conn"></div></div><div class="match-wrap" style="padding:0px 4px 0"><div class="match decided">
+  <div class="team winner"><span class="seed"></span><span class="team-name">Brazil</span><span class="score w">3</span></div>
+  <div class="team loser"><span class="seed"></span><span class="team-name">Portugal</span><span class="score">2</span></div>
+</div><div class="conn"></div></div><div class="match-wrap" style="padding:0px 4px 0"><div class="match decided">
+  <div class="team loser"><span class="seed"></span><span class="team-name">Germany</span><span class="score">1</span></div>
+  <div class="team winner"><span class="seed"></span><span class="team-name">Netherlands</span><span class="score w">2</span></div>
+</div><div class="conn"></div></div></div></div>
+    <div class="bracket-col"><div class="bracket-col-title">Quarterfinals</div><div class="bracket-matches" style="gap:8px"><div class="match-wrap" style="padding:0px 4px 0"><div class="match decided">
+  <div class="team winner"><span class="seed"></span><span class="team-name">France</span><span class="score w">2</span></div>
+  <div class="team loser"><span class="seed"></span><span class="team-name">Spain</span><span class="score">1</span></div>
+</div><div class="conn"></div></div><div class="match-wrap" style="padding:0px 4px 0"><div class="match decided">
+  <div class="team winner"><span class="seed"></span><span class="team-name">Portugal</span><span class="score w">2</span></div>
+  <div class="team loser"><span class="seed"></span><span class="team-name">Netherlands</span><span class="score">1</span></div>
+</div><div class="conn"></div></div></div></div>
+    <div class="bracket-col"><div class="bracket-col-title">Semifinals</div><div class="bracket-matches" style="gap:8px"><div class="match-wrap" style="padding:0px 4px 0"><div class="match decided">
+  <div class="team winner"><span class="seed"></span><span class="team-name">France</span><span class="score w">1</span></div>
+  <div class="team loser"><span class="seed"></span><span class="team-name">Portugal</span><span class="score">0</span></div>
+</div><div class="conn"></div></div></div></div>
+    <div class="champion-col">
+  <div class="champion-title">🏆 Champion</div>
+  <div class="champion-card">
+    <div class="trophy">🌍</div>
+    <div class="champ-name">France</div>
+    <div class="champ-sub">2026 FIFA World Cup Champions</div>
+  </div>
+</div>
+    <div class="bracket-col"><div class="bracket-col-title">Semifinals</div><div class="bracket-matches" style="gap:8px"><div class="match-wrap" style="padding:0px 4px 0"><div class="match decided">
+  <div class="team loser"><span class="seed"></span><span class="team-name">Brazil</span><span class="score">2</span></div>
+  <div class="team winner"><span class="seed"></span><span class="team-name">Germany</span><span class="score w">3</span></div>
+</div><div class="conn"></div></div></div></div>
+    <div class="bracket-col"><div class="bracket-col-title">Quarterfinals</div><div class="bracket-matches" style="gap:8px"><div class="match-wrap" style="padding:0px 4px 0"><div class="match decided">
+  <div class="team winner"><span class="seed"></span><span class="team-name">Brazil</span><span class="score w">1</span></div>
+  <div class="team loser"><span class="seed"></span><span class="team-name">England</span><span class="score">0</span></div>
+</div><div class="conn"></div></div><div class="match-wrap" style="padding:0px 4px 0"><div class="match decided">
+  <div class="team winner"><span class="seed"></span><span class="team-name">Germany</span><span class="score w">2</span></div>
+  <div class="team loser"><span class="seed"></span><span class="team-name">Spain</span><span class="score">1</span></div>
+</div><div class="conn"></div></div></div></div>
+    <div class="bracket-col"><div class="bracket-col-title">Round of 16</div><div class="bracket-matches" style="gap:8px"><div class="match-wrap" style="padding:0px 4px 0"><div class="match decided">
+  <div class="team winner"><span class="seed"></span><span class="team-name">Brazil</span><span class="score w">2</span></div>
+  <div class="team loser"><span class="seed"></span><span class="team-name">Germany</span><span class="score">0</span></div>
+</div><div class="conn"></div></div><div class="match-wrap" style="padding:0px 4px 0"><div class="match decided">
+  <div class="team winner"><span class="seed"></span><span class="team-name">England</span><span class="score w">2</span></div>
+  <div class="team loser"><span class="seed"></span><span class="team-name">Germany</span><span class="score">1</span></div>
+</div><div class="conn"></div></div></div></div>
+    <div class="bracket-col"><div class="bracket-col-title">Round of 32</div><div class="bracket-matches" style="gap:8px"><div class="match-wrap" style="padding:0px 4px 0"><div class="match decided">
+  <div class="team winner"><span class="seed">B1</span><span class="team-name">Brazil</span><span class="score w">2</span></div>
+  <div class="team loser"><span class="seed">A2</span><span class="team-name">South Korea</span><span class="score">1</span></div>
+</div><div class="conn"></div></div><div class="match-wrap" style="padding:0px 4px 0"><div class="match decided">
+  <div class="team winner"><span class="seed">D1</span><span class="team-name">Portugal</span><span class="score w">4</span></div>
+  <div class="team loser"><span class="seed">C2</span><span class="team-name">Switzerland</span><span class="score">0</span></div>
+</div><div class="conn"></div></div><div class="match-wrap" style="padding:0px 4px 0"><div class="match decided">
+  <div class="team winner"><span class="seed">F1</span><span class="team-name">Germany</span><span class="score w">2</span></div>
+  <div class="team loser"><span class="seed">E2</span><span class="team-name">Japan</span><span class="score">1</span></div>
+</div><div class="conn"></div></div><div class="match-wrap" style="padding:0px 4px 0"><div class="match decided">
+  <div class="team winner"><span class="seed">H1</span><span class="team-name">Netherlands</span><span class="score w">3</span></div>
+  <div class="team loser"><span class="seed">G2</span><span class="team-name">USA</span><span class="score">1</span></div>
+</div><div class="conn"></div></div></div></div>
+  </div>
+</div>
+  </div>
+</div>
   <div id="fifa-standings" class="inner-panel"        style="padding:28px 32px"><div class="sec-label">// 2025 Season</div>
   <div class="sec-title">Standings</div>
   <div class="standings-grid"><div class="s-div">
@@ -961,6 +1110,19 @@ function changeLeague(id) {
 }
 
 function showInner(panel, btn) {
+  // Map bracket to correct league-specific panel
+  if (panel === 'bracket') {
+    const leagueEl = document.getElementById('league-' + currentLeague);
+    if (leagueEl) {
+      leagueEl.querySelectorAll('.inner-panel').forEach(p => p.classList.remove('active'));
+      const bk = document.getElementById(currentLeague + '-bracket');
+      if (bk) bk.classList.add('active');
+    }
+    document.querySelectorAll('.tab-bar .tab-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    currentPanel = 'bracket';
+    return;
+  }
   // Hide all inner panels in current league block
   const leagueEl = document.getElementById('league-' + currentLeague);
   if (leagueEl) {

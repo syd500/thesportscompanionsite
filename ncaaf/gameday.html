@@ -106,22 +106,22 @@
     .pbp-item-td-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:2px 6px;border-radius:3px;background:rgba(34,197,94,.15);color:var(--green);margin-left:6px}
 
     /* BOX SCORE */
-    .bs-team-toggle{display:flex;gap:8px;margin-bottom:16px}
-    .bs-toggle-btn{background:var(--ink-2);border:1px solid var(--line);color:var(--muted);font-size:.8rem;font-weight:600;padding:8px 16px;border-radius:6px;cursor:pointer;transition:all .2s}
-    .bs-toggle-btn:hover{color:var(--white)}
-    .bs-toggle-btn.active{background:var(--gold);border-color:var(--gold);color:var(--ink)}
-    .bs-section{margin-bottom:24px}
-    .bs-section-title{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;color:var(--white)}
-    .bs-table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
-    .bs-tbl{width:100%;border-collapse:collapse;font-size:.82rem}
-    .bs-tbl thead tr{background:var(--ink-3);border-bottom:1px solid var(--line)}
-    .bs-tbl th{font-family:'JetBrains Mono',monospace;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:9px 12px;text-align:center;white-space:nowrap;}
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     .bs-tbl tbody tr{border-bottom:1px solid rgba(255,255,255,.04);transition:background .15s}
     .bs-tbl tbody tr:hover{background:var(--ink-2)}
     .bs-tbl tbody tr:last-child{border-bottom:none}
-    .bs-tbl td{padding:9px 12px;color:var(--muted);white-space:nowrap;text-align:center;}
-    .bs-tbl td.player{color:var(--white);font-weight:600;text-align:left}
-    .bs-tbl td.hi{color:var(--gold);font-weight:700}
+    
+    
+    
 
     /* FOOTER */
     footer{background:var(--ink);border-top:1px solid var(--line);padding:28px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-top:48px}
@@ -147,6 +147,54 @@
     .lang-btn{background:none;border:1px solid transparent;border-radius:5px;padding:5px 9px;font-size:.75rem;font-weight:700;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;font-family:'Barlow Condensed',sans-serif;letter-spacing:.03em}
     .lang-btn:hover{color:var(--white);border-color:var(--line)}
     .lang-btn.active{color:var(--gold);border-color:rgba(242,194,48,.4);background:rgba(242,194,48,.08)}
+  
+    /* ── BOX SCORE IMPROVEMENTS ───────────────────────────── */
+    .bs-score-header{display:flex;align-items:center;justify-content:center;background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:20px 16px;margin-bottom:12px;gap:8px}
+    .bs-team-side{display:flex;flex-direction:column;align-items:center;gap:5px;flex:1;max-width:180px}
+    .bs-team-logo{width:42px;height:42px;object-fit:contain}
+    .bs-team-name-blue{font-family:'Barlow Condensed',sans-serif;font-size:.82rem;font-weight:800;text-transform:uppercase;color:#5b9bd5;text-align:center;line-height:1.2}
+    .bs-final-score{font-family:'Barlow Condensed',sans-serif;font-size:2.8rem;font-weight:900;line-height:1;color:var(--white)}
+    .bs-center-info{display:flex;flex-direction:column;align-items:center;gap:3px;flex-shrink:0;padding:0 12px}
+    .bs-final-label{font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:700;color:var(--muted);text-transform:uppercase}
+    .bs-game-date{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--muted);text-align:center;line-height:1.4}
+    /* Stat tables - redesigned */
+    .bs-section{margin-bottom:18px}
+    .bs-section-title{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--gold);margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid var(--line)}
+    .bs-table-wrap{overflow-x:auto;border-radius:8px;border:1px solid var(--line)}
+    .bs-tbl{width:100%;border-collapse:collapse;font-size:.8rem}
+    .bs-tbl thead tr{background:#1B2A4A}
+    .bs-tbl th{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:#8ab4d8;padding:8px 10px;text-align:center;white-space:nowrap;font-weight:600}
+    .bs-tbl th:first-child{text-align:left;padding-left:12px}
+    .bs-tbl tbody tr:nth-child(even){background:rgba(255,255,255,0.025)}
+    .bs-tbl tbody tr:hover{background:rgba(242,194,48,0.05)}
+    .bs-tbl tbody tr:last-child td{border-bottom:none}
+    .bs-tbl td{padding:8px 10px;color:var(--muted);text-align:center;white-space:nowrap;border-bottom:1px solid rgba(255,255,255,0.04);font-size:.8rem}
+    .bs-tbl td.player{color:var(--white);font-weight:600;text-align:left;padding-left:12px}
+    .bs-tbl td.hi{color:var(--gold);font-weight:700}
+    /* Team stat rows */
+    .bs-stat-row{display:grid;grid-template-columns:1fr 1.6fr 1fr;padding:8px 4px;border-bottom:1px solid rgba(255,255,255,0.04);align-items:center}
+    .bs-stat-row:last-child{border-bottom:none}
+    .bs-stat-row:nth-child(even){background:rgba(255,255,255,0.02)}
+    .bs-stat-val{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:800;color:var(--white);text-align:center}
+    .bs-stat-val.hi{color:var(--gold)}
+    .bs-stat-label{color:var(--muted);font-size:.76rem;text-align:center;font-family:'JetBrains Mono',monospace;letter-spacing:.04em}
+    .bs-teamstats-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+    .bs-team-toggle{display:flex;gap:8px;margin-top:12px;margin-bottom:12px}
+    .bs-toggle-btn{flex:1;padding:8px 0;font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;border:1px solid var(--line);background:var(--ink-3);color:var(--muted);border-radius:6px;cursor:pointer;transition:all .2s}
+    .bs-toggle-btn:hover{border-color:var(--gold);color:var(--white)}
+    .bs-toggle-btn.active{background:rgba(27,42,74,.8);border-color:#5b9bd5;color:#5b9bd5}
+    /* Line score */
+    .bs-linescore{width:100%;border-collapse:collapse;font-size:.78rem}
+    .bs-linescore th{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.08em;color:#8ab4d8;padding:7px 8px;text-align:center;background:#1B2A4A;border-bottom:1px solid var(--line)}
+    .bs-linescore th:first-child{text-align:left;padding-left:12px}
+    .bs-linescore td{padding:8px;color:var(--muted);text-align:center;border-bottom:1px solid rgba(255,255,255,0.04);font-size:.8rem}
+    .bs-linescore td:first-child{text-align:left;color:var(--white);font-weight:600;font-size:.75rem;padding-left:12px;max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .bs-linescore td.total{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:900;color:var(--gold);border-left:1px solid var(--line)}
+    .bs-card-title{font-family:'Barlow Condensed',sans-serif;font-size:1.05rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px;color:var(--white);display:flex;align-items:center;gap:8px}
+    .bs-sample-tag{font-family:'JetBrains Mono',monospace;font-size:.58rem;padding:2px 6px;border-radius:3px;background:rgba(138,143,152,.1);color:var(--muted);text-transform:lowercase}
+    .bs-card-body{font-size:.84rem;color:var(--muted);line-height:1.8}
+    .bs-card{background:var(--ink-2);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:10px}
+    .bs-linescore-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
   </style>
 </head>
 <body>

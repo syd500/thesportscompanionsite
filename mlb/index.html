@@ -104,22 +104,57 @@
     }
     .season-notice.show { display: block; }
   
-    /* PITCH ZONE */
-    
-    
-    
-    
-    
-    
-    .pitch-result-badge.show-hit{opacity:1;background:rgba(242,194,48,.15);border-color:var(--gold);color:var(--gold)}
-    .pitch-result-badge.show-miss{opacity:1;background:rgba(200,58,43,.12);border-color:var(--crimson);color:#FF6B6B}
-    .pitch-result-badge.show-ball{opacity:1;background:rgba(56,189,248,.12);border-color:#38BDF8;color:#38BDF8}
-  
     /* LANGUAGE SWITCHER */
     .lang-switch{display:flex;align-items:center;gap:2px;padding:0 12px;border-right:1px solid var(--line);height:56px;flex-shrink:0}
     .lang-btn{background:none;border:1px solid transparent;border-radius:5px;padding:5px 9px;font-size:.75rem;font-weight:700;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;font-family:'Barlow Condensed',sans-serif;letter-spacing:.03em}
     .lang-btn:hover{color:var(--white);border-color:var(--line)}
     .lang-btn.active{color:var(--gold);border-color:rgba(242,194,48,.4);background:rgba(242,194,48,.08)}
+  
+    /* ── PITCH ZONE (Guess the Pitch + Gameday) ────────────── */
+    .pitch-zone-wrap{background:#0a0c0e;border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:14px}
+    .pitch-zone-header{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--ink-2);border-bottom:1px solid var(--line)}
+    .pitch-zone-label{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--white)}
+    .pitch-zone-status{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--gold)}
+    .pitch-zone-canvas{position:relative}
+    .pz-stadium{position:relative;width:100%;padding-bottom:56%;overflow:hidden;background:#0a1628}
+    .pz-sky{position:absolute;inset:0;background:linear-gradient(180deg,#081220 0%,#0f2244 25%,#1a4060 50%,#1e5a2a 68%,#163d1a 85%,#0f2a12 100%)}
+    .pz-sky::before{content:'';position:absolute;top:0;left:5%;width:22%;height:38%;background:radial-gradient(ellipse,rgba(255,240,160,.4) 0%,transparent 65%)}
+    .pz-sky::after{content:'';position:absolute;top:0;right:5%;width:22%;height:38%;background:radial-gradient(ellipse,rgba(255,240,160,.4) 0%,transparent 65%)}
+    .pz-stands{position:absolute;top:15%;left:0;right:0;height:28%;background:rgba(20,35,65,.85)}
+    .pz-stands::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent,transparent 4px,rgba(255,255,255,.025) 4px,rgba(255,255,255,.025) 8px)}
+    .pz-outfield{position:absolute;top:40%;left:0;right:0;height:24%;background:linear-gradient(180deg,#1e6012 0%,#164a0e 60%,#1e6a14 100%)}
+    .pz-outfield::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(0,0,0,.1) 0,rgba(0,0,0,.1) 28px,transparent 28px,transparent 56px)}
+    .pz-infield{position:absolute;top:60%;left:12%;right:12%;bottom:0;background:radial-gradient(ellipse 75% 65% at 50% 25%,#9a6432 0%,#7a4e22 55%,#5a3a14 100%)}
+    .pz-plate-area{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:42%;height:44%}
+    .pz-batter{position:absolute;bottom:6%;left:4%;width:21%;height:90%}
+    .pz-batter-helmet{position:absolute;top:0;left:26%;width:46%;height:20%;background:#111;border-radius:50% 50% 28% 28%}
+    .pz-batter-helmet::after{content:'';position:absolute;left:-28%;bottom:-10%;width:58%;height:42%;background:#0a0a0a;border-radius:0 0 50% 50%}
+    .pz-batter-head{position:absolute;top:13%;left:30%;width:38%;height:17%;background:#c8845a;border-radius:50%}
+    .pz-batter-torso{position:absolute;top:28%;left:18%;width:62%;height:34%;background:#ddd;border-radius:6px 6px 3px 3px}
+    .pz-batter-torso::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.2) 0%,transparent 45%);border-radius:inherit}
+    .pz-batter-arm-back{position:absolute;top:30%;left:48%;width:52%;height:13%;background:#c8845a;border-radius:4px;transform:rotate(-18deg);transform-origin:left center}
+    .pz-batter-arm-front{position:absolute;top:34%;left:20%;width:46%;height:11%;background:#c8845a;border-radius:4px;transform:rotate(18deg);transform-origin:right center}
+    .pz-batter-bat{position:absolute;top:18%;left:62%;width:7%;height:58%;background:linear-gradient(180deg,#8B4513,#A0522D 55%,#5C3317);border-radius:3px 3px 6px 6px;transform:rotate(-6deg);transform-origin:bottom center}
+    .pz-batter-leg-front{position:absolute;top:60%;left:26%;width:22%;height:40%;background:#1e1e3a;border-radius:3px 3px 0 0}
+    .pz-batter-leg-front::after{content:'';position:absolute;bottom:0;left:0;right:0;height:16%;background:#111;border-radius:0 0 2px 2px}
+    .pz-batter-leg-back{position:absolute;top:58%;left:50%;width:22%;height:42%;background:#181830;border-radius:3px 3px 0 0}
+    .pz-batter-leg-back::after{content:'';position:absolute;bottom:0;left:0;right:0;height:16%;background:#0a0a0a;border-radius:0 0 2px 2px}
+    .pz-home-plate{position:absolute;bottom:2%;left:50%;transform:translateX(-50%);width:30%;height:9%;background:white;clip-path:polygon(10% 0%,90% 0%,100% 50%,50% 100%,0% 50%);opacity:.92}
+    .pz-zone{position:absolute;top:10%;right:22%;width:28%;height:62%;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);border:2.5px solid rgba(255,255,255,.95);border-radius:2px;box-shadow:0 0 24px rgba(255,255,255,.18),0 0 60px rgba(255,255,255,.06),inset 0 0 24px rgba(255,255,255,.04)}
+    .pz-zone-glow{position:absolute;inset:-6px;background:rgba(255,255,255,.03);border-radius:5px;pointer-events:none}
+    .pz-cell{border:1px solid rgba(255,255,255,.4);transition:background .15s}
+    .pz-ball{position:absolute;width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 32% 30%,#fff8d0,#F2C230 42%,#b8900a);border:2px solid rgba(255,255,255,.9);box-shadow:0 0 0 3px rgba(242,194,48,.3),0 0 18px rgba(242,194,48,.9);opacity:0;transform:translate(-50%,-50%);pointer-events:none;z-index:10;transition:left .0s,top .0s}
+    .pz-ball::before{content:'';position:absolute;top:20%;left:15%;width:25%;height:40%;border:1.5px solid rgba(180,60,60,.6);border-radius:50%;transform:rotate(20deg)}
+    .pz-ball::after{content:'';position:absolute;top:15%;right:12%;width:25%;height:45%;border:1.5px solid rgba(180,60,60,.6);border-radius:50%;transform:rotate(-20deg)}
+    .pz-ball.wrong{background:radial-gradient(circle at 32% 30%,#ffcccc,#FF4444 42%,#cc1111);box-shadow:0 0 0 3px rgba(255,68,68,.3),0 0 18px rgba(255,68,68,.9)}
+    .pz-ball.wrong::before,.pz-ball.wrong::after{border-color:rgba(255,255,255,.4)}
+    .pz-pitch-label{position:absolute;bottom:4%;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.7);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:4px 14px;font-family:'Barlow Condensed',sans-serif;font-size:.85rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:white;opacity:0;transition:opacity .3s;white-space:nowrap;pointer-events:none}
+    .pz-pitch-label.show{opacity:1}
+    .pitch-result-badge{position:absolute;bottom:4%;left:50%;transform:translateX(-50%);font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;padding:5px 16px;border-radius:20px;border:2px solid transparent;opacity:0;transition:opacity .3s;white-space:nowrap;pointer-events:none;z-index:10}
+    .pitch-result-badge.show-hit{opacity:1;background:rgba(242,194,48,.18);border-color:var(--gold);color:var(--gold)}
+    .pitch-result-badge.show-miss{opacity:1;background:rgba(200,58,43,.14);border-color:#FF6B6B;color:#FF6B6B}
+    @keyframes pitchFly{0%{opacity:0;transform:translate(-50%,-50%) scale(.4) translateY(-30px)}60%{opacity:1}100%{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+    .pz-ball.fly{animation:pitchFly .4s cubic-bezier(.22,.68,0,1.15) forwards}
   </style>
 </head>
 <body>
@@ -365,58 +400,40 @@
     <div class="guess-game">
       <div class="guess-ctx" id="ctx">Loading scenario...</div>
       <div class="pitch-zone-wrap">
-  <div class="pitch-zone-header">
-    <span class="pitch-zone-label" data-i18n="pitch_zone">Pitch Zone</span>
-    <span class="pitch-zone-status" id="zone-status"></span>
-  </div>
-  <div class="pitch-zone-canvas" id="pitch-canvas">
-    <!-- Stadium photo background via CSS, batter overlay, strike zone grid -->
-    <div class="pz-stadium">
-      <!-- Sky gradient + stadium lights -->
-      <div class="pz-sky"></div>
-      <!-- Stadium crowd/stands -->
-      <div class="pz-stands"></div>
-      <!-- Outfield grass -->
-      <div class="pz-outfield"></div>
-      <!-- Infield dirt -->
-      <div class="pz-infield"></div>
-      <!-- Home plate area -->
-      <div class="pz-plate-area">
-        <!-- Batter silhouette (detailed CSS art) -->
-        <div class="pz-batter">
-          <div class="pz-batter-helmet"></div>
-          <div class="pz-batter-head"></div>
-          <div class="pz-batter-torso"></div>
-          <div class="pz-batter-arm-back"></div>
-          <div class="pz-batter-arm-front"></div>
-          <div class="pz-batter-bat"></div>
-          <div class="pz-batter-leg-front"></div>
-          <div class="pz-batter-leg-back"></div>
+      <div class="pitch-zone-header">
+        <span class="pitch-zone-label">Pitch Zone</span>
+        <span class="pitch-zone-status" id="zone-status"></span>
+      </div>
+      <div class="pitch-zone-canvas">
+        <div class="pz-stadium">
+          <div class="pz-sky"></div>
+          <div class="pz-stands"></div>
+          <div class="pz-outfield"></div>
+          <div class="pz-infield"></div>
+          <div class="pz-plate-area">
+            <div class="pz-batter">
+              <div class="pz-batter-helmet"></div>
+              <div class="pz-batter-head"></div>
+              <div class="pz-batter-torso"></div>
+              <div class="pz-batter-arm-back"></div>
+              <div class="pz-batter-arm-front"></div>
+              <div class="pz-batter-bat"></div>
+              <div class="pz-batter-leg-front"></div>
+              <div class="pz-batter-leg-back"></div>
+            </div>
+            <div class="pz-home-plate"></div>
+          </div>
+          <div class="pz-zone">
+            <div class="pz-zone-glow"></div>
+            <div class="pz-cell"></div><div class="pz-cell"></div><div class="pz-cell"></div>
+            <div class="pz-cell"></div><div class="pz-cell"></div><div class="pz-cell"></div>
+            <div class="pz-cell"></div><div class="pz-cell"></div><div class="pz-cell"></div>
+          </div>
+          <div class="pz-ball" id="pz-ball"></div>
+          <div class="pitch-result-badge" id="pitch-result"></div>
         </div>
-        <!-- Home plate -->
-        <div class="pz-home-plate"></div>
       </div>
-      <!-- Strike zone overlay (3x3 grid) -->
-      <div class="pz-zone" id="pz-zone">
-        <div class="pz-zone-glow"></div>
-        <!-- 9 clickable cells -->
-        <div class="pz-cell" data-zone="hi-in"></div>
-        <div class="pz-cell" data-zone="hi-mid"></div>
-        <div class="pz-cell" data-zone="hi-out"></div>
-        <div class="pz-cell" data-zone="mid-in"></div>
-        <div class="pz-cell" data-zone="middle"></div>
-        <div class="pz-cell" data-zone="mid-out"></div>
-        <div class="pz-cell" data-zone="lo-in"></div>
-        <div class="pz-cell" data-zone="lo-mid"></div>
-        <div class="pz-cell" data-zone="lo-out"></div>
-      </div>
-      <!-- Ball dot (JS-positioned) -->
-      <div class="pz-ball" id="pz-ball"></div>
-      <!-- Result badge -->
-      <div class="pitch-result-badge" id="pitch-result"></div>
     </div>
-  </div>
-</div>
       
       <div class="guess-q">Where will the pitch land?</div>
       <div class="timer-row"><div class="timer-track"><div class="timer-fill" id="timer-fill" style="width:100%"></div></div><div class="timer-num" id="timer-num">15</div></div>
@@ -477,57 +494,50 @@ function updateTimer(){document.getElementById('timer-num').textContent=timeLeft
 function timeUp(){total++;streak=0;document.querySelectorAll('.opt').forEach(b=>b.disabled=true);const p=plays[idx%plays.length];document.querySelectorAll('.opt').forEach(b=>{if(b.textContent===p.correct)b.classList.add('correct')});updateScores();document.getElementById('next-btn').classList.add('show')}
 
 // Zone cell positions (cx, cy) for each of 9 pitch locations
-const PZ_ZONE_POS = {
-  "Up & In":       {l:31, t:13, inZone:true},
-  "Up & Middle":   {l:38, t:13, inZone:true},
-  "Up & Away":     {l:45, t:13, inZone:true},
-  "Middle-In":     {l:31, t:28, inZone:true},
-  "Middle":        {l:38, t:28, inZone:true},
-  "Middle-Away":   {l:45, t:28, inZone:true},
-  "Down & In":     {l:31, t:44, inZone:true},
-  "Down & Middle": {l:38, t:44, inZone:true},
-  "Down & Away":   {l:45, t:44, inZone:true},
-  "Low & Away":    {l:52, t:62, inZone:false},
-  "Bounce":        {l:38, t:72, inZone:false},
-  "Way Outside":   {l:56, t:30, inZone:false},
-  "High":          {l:38, t:6,  inZone:false},
-  "Inside":        {l:24, t:28, inZone:false},
-  "Backdoor":      {l:49, t:40, inZone:true},
-  "12-6":          {l:38, t:44, inZone:true},
-  "Down the Middle":{l:38, t:28, inZone:true},
-  "Arm Side":      {l:31, t:28, inZone:true},
-  "Glove Side":    {l:45, t:28, inZone:true},
+const PZ_POS = {
+  "Up & In":       {l:29,t:11},"Up & Middle":   {l:37,t:11},"Up & Away":     {l:45,t:11},
+  "Middle-In":     {l:29,t:27},"Middle":         {l:37,t:27},"Middle-Away":   {l:45,t:27},
+  "Down & In":     {l:29,t:43},"Down & Middle":  {l:37,t:43},"Down & Away":   {l:45,t:43},
+  "Low & Away":    {l:52,t:60,out:true},"Bounce":{l:37,t:70,out:true},
+  "Way Outside":   {l:56,t:27,out:true},"High":  {l:37,t:5, out:true},
+  "Inside":        {l:22,t:27,out:true},"Down the Middle":{l:37,t:27},
+  "Backdoor":      {l:47,t:38},"12-6":           {l:37,t:43},
+  "Arm Side":      {l:29,t:27},"Glove Side":     {l:45,t:27},
 };
-function getPitchPos(label) {
-  const loc = label.includes("—") ? label.split("—")[1].trim() : label.trim();
-  for (const [key, val] of Object.entries(PZ_ZONE_POS)) {
-    if (loc.toLowerCase().includes(key.toLowerCase()) || key.toLowerCase().includes(loc.toLowerCase())) return val;
+function getPitchPos(label){
+  const loc=label.includes("—")?label.split("—")[1].trim():label.trim();
+  for(const[k,v]of Object.entries(PZ_POS)){
+    if(loc.toLowerCase().includes(k.toLowerCase())||k.toLowerCase().includes(loc.toLowerCase()))return v;
   }
-  return {l:38, t:28, inZone:true};
+  return{l:37,t:27};
 }
-function showPitchZone(pitchLabel, isCorrect) {
-  const ball = document.getElementById("pz-ball");
-  const status = document.getElementById("zone-status");
-  const badge = document.getElementById("pitch-result");
-  if (!ball) return;
-  const pos = getPitchPos(pitchLabel);
-  ball.style.left = pos.l + "%";
-  ball.style.top  = pos.t + "%";
-  ball.style.opacity = "1";
-  ball.className = "pz-ball" + (isCorrect ? "" : " wrong");
-  status.textContent = pos.inZone ? "In Zone" : "Out of Zone";
-  status.style.color  = pos.inZone ? "var(--gold)" : "var(--muted)";
-  badge.className = "pitch-result-badge";
-  badge.textContent = isCorrect ? "Correct Spot" : (pos.inZone ? "Missed Spot" : "Out of Zone");
-  badge.classList.add(isCorrect ? "show-hit" : "show-miss");
+function showPitchZone(pitchLabel,isCorrect){
+  const ball=document.getElementById("pz-ball");
+  const status=document.getElementById("zone-status");
+  const badge=document.getElementById("pitch-result");
+  if(!ball)return;
+  const pos=getPitchPos(pitchLabel);
+  // Reset animation
+  ball.style.opacity="0";
+  ball.classList.remove("fly","wrong");
+  void ball.offsetWidth;
+  ball.style.left=pos.l+"%";
+  ball.style.top=pos.t+"%";
+  if(!isCorrect||pos.out)ball.classList.add("wrong");
+  ball.classList.add("fly");
+  status.textContent=pos.out?"Out of Zone":"In Zone";
+  status.style.color=pos.out?"#8A8F98":"var(--gold)";
+  badge.className="pitch-result-badge";
+  badge.textContent=isCorrect?"Correct Spot":(pos.out?"Out of Zone":"Missed Spot");
+  badge.classList.add(isCorrect?"show-hit":"show-miss");
 }
-function resetPitchZone() {
-  const ball = document.getElementById("pz-ball");
-  const status = document.getElementById("zone-status");
-  const badge = document.getElementById("pitch-result");
-  if (ball) { ball.style.opacity = "0"; ball.className = "pz-ball"; }
-  if (status) status.textContent = "";
-  if (badge) { badge.className = "pitch-result-badge"; badge.textContent = ""; }
+function resetPitchZone(){
+  const ball=document.getElementById("pz-ball");
+  const status=document.getElementById("zone-status");
+  const badge=document.getElementById("pitch-result");
+  if(ball){ball.style.opacity="0";ball.classList.remove("fly","wrong");}
+  if(status)status.textContent="";
+  if(badge){badge.className="pitch-result-badge";badge.textContent="";}
 }
 function pick(btn,choice,correct){clearInterval(timer);total++;document.querySelectorAll('.opt').forEach(b=>b.disabled=true);if(choice===correct){btn.classList.add('correct');score+=1+(timeLeft/15);correctCount++;streak++;showPitchZone(correct,true)}else{btn.classList.add('wrong');streak=0;document.querySelectorAll('.opt').forEach(b=>{if(b.textContent===correct)b.classList.add('correct')});showPitchZone(correct,false)}updateScores();document.getElementById('next-btn').classList.add('show')}
 function updateScores(){document.getElementById('score').textContent=score.toFixed(1);document.getElementById('correct').textContent=correctCount+' / '+total;document.getElementById('streak').textContent=streak}

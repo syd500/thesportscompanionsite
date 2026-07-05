@@ -147,6 +147,48 @@
     .lang-btn{background:none;border:1px solid transparent;border-radius:5px;padding:5px 9px;font-size:.75rem;font-weight:700;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;font-family:'Barlow Condensed',sans-serif;letter-spacing:.03em}
     .lang-btn:hover{color:var(--white);border-color:var(--line)}
     .lang-btn.active{color:var(--gold);border-color:rgba(242,194,48,.4);background:rgba(242,194,48,.08)}
+  
+    /* ──────────────── BRACKET STYLES ──────────────── */
+    .bracket-wrap{overflow-x:auto;padding:20px 0}
+    .bracket{display:flex;gap:0;align-items:flex-start;min-width:900px}
+    .bracket-col{display:flex;flex-direction:column;min-width:160px}
+    .bracket-col-title{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);text-align:center;padding:0 8px 12px;white-space:nowrap}
+    .bracket-matches{display:flex;flex-direction:column;height:100%}
+    .match-wrap{display:flex;align-items:center;flex:1;position:relative;padding:0 4px}
+    .match{background:var(--ink-2);border:1px solid var(--line);border-radius:8px;overflow:hidden;width:148px;cursor:pointer;transition:border-color .2s;flex-shrink:0}
+    .match:hover{border-color:var(--gold)}
+    .match.decided .team.winner{background:rgba(242,194,48,.08);color:var(--gold)}
+    .match.decided .team.winner .seed{color:var(--gold)}
+    .match.decided .team.loser{opacity:.45}
+    .team{display:flex;align-items:center;gap:6px;padding:7px 9px;border-bottom:1px solid rgba(255,255,255,.06);font-size:.78rem;font-weight:600;color:var(--white);transition:all .2s;position:relative}
+    .team:last-child{border-bottom:none}
+    .team:hover{background:rgba(242,194,48,.06)}
+    .team img{width:18px;height:18px;object-fit:contain;flex-shrink:0}
+    .team-name{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:.77rem}
+    .seed{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--muted);width:14px;text-align:center;flex-shrink:0}
+    .score{font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:800;color:var(--muted);margin-left:auto;min-width:20px;text-align:right}
+    .score.w{color:var(--gold)}
+    /* Connector lines */
+    .conn{position:absolute;right:-4px;top:50%;width:4px;height:1px;background:var(--line)}
+    .conn-v{position:absolute;right:-4px;width:1px;background:var(--line)}
+    /* Champion */
+    .champion-col{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:180px;padding:0 16px}
+    .champion-title{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px}
+    .champion-card{background:linear-gradient(135deg,rgba(242,194,48,.12),rgba(27,42,74,.6));border:2px solid var(--gold);border-radius:12px;padding:20px 16px;text-align:center;width:156px}
+    .champion-card .trophy{font-size:2rem;margin-bottom:8px}
+    .champion-card .champ-name{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:900;text-transform:uppercase;color:var(--gold)}
+    .champion-card .champ-sub{font-size:.72rem;color:var(--muted);margin-top:3px;font-family:'JetBrains Mono',monospace}
+    /* Region label */
+    .region-label{font-family:'Barlow Condensed',sans-serif;font-size:.85rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);text-align:center;padding:8px 0 4px;border-bottom:1px solid var(--line);margin-bottom:8px}
+    /* Bracket legend */
+    .bracket-legend{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:16px;padding:10px 14px;background:var(--ink-2);border:1px solid var(--line);border-radius:8px}
+    .legend-item{display:flex;align-items:center;gap:6px;font-size:.74rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
+    .legend-dot{width:8px;height:8px;border-radius:50%}
+    /* Bracket tabs (Men/Women toggle for NCAA BB) */
+    .bracket-toggle{display:flex;gap:8px;margin-bottom:18px}
+    .bracket-toggle-btn{padding:8px 18px;font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:800;text-transform:uppercase;border:1px solid var(--line);background:var(--ink-3);color:var(--muted);border-radius:6px;cursor:pointer;transition:all .2s}
+    .bracket-toggle-btn.active{background:rgba(242,194,48,.1);border-color:var(--gold);color:var(--gold)}
+
   </style>
 </head>
 <body>
@@ -220,6 +262,7 @@
     <button class="tab-btn active" onclick="showInner('football','scores',this)">Scores</button>
     <button class="tab-btn" onclick="showInner('football','standings',this)">Standings</button>
     <button class="tab-btn" onclick="showInner('football','stats',this)">Stats</button>
+    <button class="tab-btn" onclick="showInner('football','bracket',this)">Bracket</button>
   </div>
   <div id="football-scores" class="inner-panel active" style="padding:28px 32px"><div class="sec-label">// Latest Results</div>
   <div class="sec-title">Scores & Results</div>
@@ -250,7 +293,102 @@
       <div class="score-div"></div>
       <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Florida.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Florida</span><span class="score-val">20</span></div>
       <div class="score-status">Final</div></div></div>
+</div>
+<div id="football-bracket" class="inner-panel" style="padding:28px 32px"><div class="sec-label">// 2024–25 College Football Playoff · 12-Team Format</div>
+<div class="sec-title" style="margin-bottom:16px">CFP Bracket</div>
+<div class="bracket-legend">
+  <div class="legend-item"><div class="legend-dot" style="background:var(--gold)"></div>Advancing / Champion</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#8A8F98"></div>Eliminated</div>
+  <div class="legend-item"><span style="font-size:.7rem;color:var(--muted)">Seeds 1–4 receive First Round byes</span></div>
+</div>
+<div style="overflow-x:auto;padding-bottom:12px">
+<div style="display:flex;gap:0;align-items:flex-start;min-width:940px">
+
+  <!-- FIRST ROUND (5v12, 6v11, 7v10, 8v9) -->
+  <div class="bracket-col" style="min-width:155px">
+    <div class="bracket-col-title">First Round</div>
+    <div class="bracket-matches" style="gap:6px;padding-top:4px">
+      <div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">5</span><span class="team-name">Boise St</span><span class="score w">34</span></div>
+  <div class="team loser"><span class="seed">12</span><span class="team-name">Clemson</span><span class="score">13</span></div>
+</div><div class="conn"></div></div>
+      <div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">6</span><span class="team-name">Arizona St</span><span class="score w">28</span></div>
+  <div class="team loser"><span class="seed">11</span><span class="team-name">Baylor</span><span class="score">14</span></div>
+</div><div class="conn"></div></div>
+      <div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">7</span><span class="team-name">Ohio St</span><span class="score w">42</span></div>
+  <div class="team loser"><span class="seed">10</span><span class="team-name">Tennessee</span><span class="score">17</span></div>
+</div><div class="conn"></div></div>
+      <div class="match-wrap"><div class="match decided">
+  <div class="team loser"><span class="seed">8</span><span class="team-name">Indiana</span><span class="score">20</span></div>
+  <div class="team winner"><span class="seed">9</span><span class="team-name">Notre Dame</span><span class="score w">27</span></div>
+</div><div class="conn"></div></div>
+    </div>
+  </div>
+
+  <!-- QUARTERFINALS -->
+  <div class="bracket-col" style="min-width:155px">
+    <div class="bracket-col-title">Quarterfinals</div>
+    <div class="bracket-matches" style="gap:40px;padding-top:26px">
+      <div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">1</span><span class="team-name">Oregon</span><span class="score w">27</span></div>
+  <div class="team loser"><span class="seed">5</span><span class="team-name">Boise St</span><span class="score">20</span></div>
+</div><div class="conn"></div></div>
+      <div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">2</span><span class="team-name">Georgia</span><span class="score w">34</span></div>
+  <div class="team loser"><span class="seed">6</span><span class="team-name">Arizona St</span><span class="score">31</span></div>
+</div><div class="conn"></div></div>
+      <div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">3</span><span class="team-name">Texas</span><span class="score w">38</span></div>
+  <div class="team loser"><span class="seed">7</span><span class="team-name">Ohio St</span><span class="score">24</span></div>
+</div><div class="conn"></div></div>
+      <div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">4</span><span class="team-name">Penn St</span><span class="score w">31</span></div>
+  <div class="team loser"><span class="seed">9</span><span class="team-name">Notre Dame</span><span class="score">24</span></div>
+</div><div class="conn"></div></div>
+    </div>
+  </div>
+
+  <!-- SEMIFINALS (Rose + Sugar Bowls) -->
+  <div class="bracket-col" style="min-width:155px">
+    <div class="bracket-col-title">Rose Bowl · Sugar Bowl</div>
+    <div class="bracket-matches" style="gap:80px;padding-top:70px">
+      <div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">1</span><span class="team-name">Oregon</span><span class="score w">31</span></div>
+  <div class="team loser"><span class="seed">2</span><span class="team-name">Georgia</span><span class="score">28</span></div>
+</div><div class="conn"></div></div>
+      <div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">3</span><span class="team-name">Texas</span><span class="score w">28</span></div>
+  <div class="team loser"><span class="seed">4</span><span class="team-name">Penn St</span><span class="score">14</span></div>
+</div><div class="conn"></div></div>
+    </div>
+  </div>
+
+  <!-- NATIONAL CHAMPIONSHIP -->
+  <div class="bracket-col" style="min-width:155px">
+    <div class="bracket-col-title">National Championship</div>
+    <div class="bracket-matches" style="padding-top:150px">
+      <div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">3</span><span class="team-name">Texas</span><span class="score w">30</span></div>
+  <div class="team loser"><span class="seed">1</span><span class="team-name">Oregon</span><span class="score">25</span></div>
+</div><div class="conn"></div></div>
+    </div>
+  </div>
+
+  <!-- CHAMPION -->
+  <div class="champion-col">
+    <div class="champion-title">🏈 National Champions</div>
+    <div class="champion-card">
+      <div class="trophy">🏆</div>
+      <div class="champ-name">Texas Longhorns</div>
+      <div class="champ-sub">2025 CFP National Champions</div>
+    </div>
+  </div>
+
+</div>
 </div></div>
+</div>
   <div id="football-standings" class="inner-panel" style="padding:28px 32px"><div class="sec-label">// 2025 Season</div>
   <div class="sec-title">Standings</div>
   <div class="standings-grid"><div class="s-div"><div class="s-div-hdr">SEC</div><div class="s-row hdr"><span>Team</span><span>W</span><span>L</span><span>Conf</span><span>PTS/G</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Alabama.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Alabama</span><span class="hi">8</span><span class="val">0</span><span class="val">6-0</span><span class="val">42.1</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Georgia.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Georgia</span><span class="hi">7</span><span class="val">1</span><span class="val">5-1</span><span class="val">38.4</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/LSU.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />LSU</span><span class="hi">6</span><span class="val">2</span><span class="val">4-2</span><span class="val">34.2</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Florida.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Florida</span><span class="hi">5</span><span class="val">3</span><span class="val">3-3</span><span class="val">28.1</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Tennessee.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Tennessee</span><span class="hi">5</span><span class="val">3</span><span class="val">3-3</span><span class="val">31.0</span></div></div><div class="s-div"><div class="s-div-hdr">Big Ten</div><div class="s-row hdr"><span>Team</span><span>W</span><span>L</span><span>Conf</span><span>PTS/G</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Ohio_State.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Ohio State</span><span class="hi">8</span><span class="val">0</span><span class="val">6-0</span><span class="val">44.3</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Michigan.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Michigan</span><span class="hi">7</span><span class="val">1</span><span class="val">5-1</span><span class="val">36.8</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Penn_State.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Penn State</span><span class="hi">6</span><span class="val">2</span><span class="val">4-2</span><span class="val">33.1</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Iowa.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Iowa</span><span class="hi">4</span><span class="val">4</span><span class="val">2-4</span><span class="val">22.4</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Michigan_State.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Michigan State</span><span class="hi">3</span><span class="val">5</span><span class="val">1-5</span><span class="val">19.2</span></div></div><div class="s-div"><div class="s-div-hdr">Big 12</div><div class="s-row hdr"><span>Team</span><span>W</span><span>L</span><span>Conf</span><span>PTS/G</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Texas.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Texas</span><span class="hi">8</span><span class="val">0</span><span class="val">6-0</span><span class="val">38.9</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Oklahoma.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Oklahoma</span><span class="hi">6</span><span class="val">2</span><span class="val">4-2</span><span class="val">34.1</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/TCU.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />TCU</span><span class="hi">5</span><span class="val">3</span><span class="val">3-3</span><span class="val">29.8</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Kansas_State.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Kansas State</span><span class="hi">5</span><span class="val">3</span><span class="val">3-3</span><span class="val">28.4</span></div></div><div class="s-div"><div class="s-div-hdr">ACC</div><div class="s-row hdr"><span>Team</span><span>W</span><span>L</span><span>Conf</span><span>PTS/G</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Florida_State.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Florida State</span><span class="hi">7</span><span class="val">1</span><span class="val">5-1</span><span class="val">37.2</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Notre_Dame.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Notre Dame</span><span class="hi">7</span><span class="val">1</span><span class="val">5-1</span><span class="val">36.8</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Clemson.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Clemson</span><span class="hi">5</span><span class="val">3</span><span class="val">3-3</span><span class="val">28.1</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Miami.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Miami</span><span class="hi">5</span><span class="val">3</span><span class="val">3-3</span><span class="val">27.4</span></div></div></div>
@@ -375,6 +513,7 @@
     <button class="tab-btn active" onclick="showInner('mens-bball','scores',this)">Scores</button>
     <button class="tab-btn" onclick="showInner('mens-bball','standings',this)">Standings</button>
     <button class="tab-btn" onclick="showInner('mens-bball','stats',this)">Stats</button>
+    <button class="tab-btn" onclick="showInner('mens-bball','bracket',this)">Bracket</button>
   </div>
   <div id="mens-bball-scores" class="inner-panel active" style="padding:28px 32px"><div class="sec-label">// Latest Results</div>
   <div class="sec-title">Scores & Results</div>
@@ -405,7 +544,235 @@
       <div class="score-div"></div>
       <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Indiana.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Indiana</span><span class="score-val">—</span></div>
       <div class="score-status"><span class="live-dot"></span>2:00 PM ET</div></div></div>
+</div>
+<div id="mens-bball-bracket" class="inner-panel" style="padding:28px 32px"><div class="sec-label">// 2025 NCAA Tournament · Men's Basketball</div>
+<div class="sec-title" style="margin-bottom:16px">March Madness — Men's Bracket</div>
+<div class="bracket-legend">
+  <div class="legend-item"><div class="legend-dot" style="background:var(--gold)"></div>Advancing / Winner</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#8A8F98"></div>Eliminated</div>
+</div>
+<div style="overflow-x:auto;padding-bottom:12px">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;min-width:960px">
+  <div style="margin-bottom:4px">
+<div class="region-label">East Region</div>
+<div style="display:flex;gap:0">
+  <div class="bracket-col" style="min-width:152px">
+    <div class="bracket-col-title">First Round</div>
+    <div class="bracket-matches" style="gap:6px">
+      <div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">1</span><span class="team-name">UConn</span><span class="score w">88</span></div>
+  <div class="team loser"><span class="seed">16</span><span class="team-name">Stetson</span><span class="score">56</span></div>
+</div><div class="conn"></div></div><div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">5</span><span class="team-name">San Diego St</span><span class="score w">71</span></div>
+  <div class="team loser"><span class="seed">12</span><span class="team-name">UAB</span><span class="score">64</span></div>
+</div><div class="conn"></div></div><div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">3</span><span class="team-name">Illinois</span><span class="score w">69</span></div>
+  <div class="team loser"><span class="seed">14</span><span class="team-name">Morehead St</span><span class="score">41</span></div>
+</div><div class="conn"></div></div><div class="match-wrap"><div class="match decided">
+  <div class="team loser"><span class="seed">11</span><span class="team-name">Duquesne</span><span class="score">55</span></div>
+  <div class="team winner"><span class="seed">6</span><span class="team-name">BYU</span><span class="score w">59</span></div>
+</div><div class="conn"></div></div>
+    </div>
+  </div>
+  <div class="bracket-col" style="min-width:152px">
+    <div class="bracket-col-title">Sweet 16</div>
+    <div class="bracket-matches" style="gap:38px;padding-top:30px">
+      <div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">1</span><span class="team-name">UConn</span><span class="score w">82</span></div>
+  <div class="team loser"><span class="seed">5</span><span class="team-name">San Diego St</span><span class="score">52</span></div>
+</div><div class="conn"></div></div><div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">3</span><span class="team-name">Illinois</span><span class="score w">72</span></div>
+  <div class="team loser"><span class="seed">6</span><span class="team-name">BYU</span><span class="score">65</span></div>
+</div><div class="conn"></div></div>
+    </div>
+  </div>
+  <div class="bracket-col" style="min-width:152px">
+    <div class="bracket-col-title">Elite 8</div>
+    <div class="bracket-matches" style="padding-top:72px">
+      <div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">1</span><span class="team-name">UConn</span><span class="score w">77</span></div>
+  <div class="team loser"><span class="seed">3</span><span class="team-name">Illinois</span><span class="score">52</span></div>
+</div><div class="conn"></div></div>
+    </div>
+  </div>
+</div>
+</div>
+  <div style="margin-bottom:4px">
+<div class="region-label">West Region</div>
+<div style="display:flex;gap:0">
+  <div class="bracket-col" style="min-width:152px">
+    <div class="bracket-col-title">First Round</div>
+    <div class="bracket-matches" style="gap:6px">
+      <div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">1</span><span class="team-name">North Carolina</span><span class="score w">90</span></div>
+  <div class="team loser"><span class="seed">16</span><span class="team-name">Wagner</span><span class="score">62</span></div>
+</div><div class="conn"></div></div><div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">4</span><span class="team-name">Alabama</span><span class="score w">109</span></div>
+  <div class="team loser"><span class="seed">13</span><span class="team-name">Charleston</span><span class="score">92</span></div>
+</div><div class="conn"></div></div><div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">3</span><span class="team-name">Baylor</span><span class="score w">72</span></div>
+  <div class="team loser"><span class="seed">14</span><span class="team-name">Colgate</span><span class="score">67</span></div>
+</div><div class="conn"></div></div><div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">6</span><span class="team-name">Clemson</span><span class="score w">77</span></div>
+  <div class="team loser"><span class="seed">11</span><span class="team-name">New Mexico</span><span class="score">56</span></div>
+</div><div class="conn"></div></div>
+    </div>
+  </div>
+  <div class="bracket-col" style="min-width:152px">
+    <div class="bracket-col-title">Sweet 16</div>
+    <div class="bracket-matches" style="gap:38px;padding-top:30px">
+      <div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">1</span><span class="team-name">North Carolina</span><span class="score w">84</span></div>
+  <div class="team loser"><span class="seed">4</span><span class="team-name">Alabama</span><span class="score">78</span></div>
+</div><div class="conn"></div></div><div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">3</span><span class="team-name">Baylor</span><span class="score w">76</span></div>
+  <div class="team loser"><span class="seed">6</span><span class="team-name">Clemson</span><span class="score">64</span></div>
+</div><div class="conn"></div></div>
+    </div>
+  </div>
+  <div class="bracket-col" style="min-width:152px">
+    <div class="bracket-col-title">Elite 8</div>
+    <div class="bracket-matches" style="padding-top:72px">
+      <div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">1</span><span class="team-name">North Carolina</span><span class="score w">90</span></div>
+  <div class="team loser"><span class="seed">3</span><span class="team-name">Baylor</span><span class="score">76</span></div>
+</div><div class="conn"></div></div>
+    </div>
+  </div>
+</div>
+</div>
+  <div style="margin-bottom:4px">
+<div class="region-label">South Region</div>
+<div style="display:flex;gap:0">
+  <div class="bracket-col" style="min-width:152px">
+    <div class="bracket-col-title">First Round</div>
+    <div class="bracket-matches" style="gap:6px">
+      <div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">1</span><span class="team-name">Houston</span><span class="score w">86</span></div>
+  <div class="team loser"><span class="seed">16</span><span class="team-name">Longwood</span><span class="score">46</span></div>
+</div><div class="conn"></div></div><div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">4</span><span class="team-name">Duke</span><span class="score w">93</span></div>
+  <div class="team loser"><span class="seed">13</span><span class="team-name">Vermont</span><span class="score">65</span></div>
+</div><div class="conn"></div></div><div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">2</span><span class="team-name">Marquette</span><span class="score w">87</span></div>
+  <div class="team loser"><span class="seed">15</span><span class="team-name">Western Kentucky</span><span class="score">69</span></div>
+</div><div class="conn"></div></div><div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">5</span><span class="team-name">Colorado</span><span class="score w">96</span></div>
+  <div class="team loser"><span class="seed">4</span><span class="team-name">Florida</span><span class="score">65</span></div>
+</div><div class="conn"></div></div>
+    </div>
+  </div>
+  <div class="bracket-col" style="min-width:152px">
+    <div class="bracket-col-title">Sweet 16</div>
+    <div class="bracket-matches" style="gap:38px;padding-top:30px">
+      <div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">1</span><span class="team-name">Houston</span><span class="score w">76</span></div>
+  <div class="team loser"><span class="seed">4</span><span class="team-name">Duke</span><span class="score">65</span></div>
+</div><div class="conn"></div></div><div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">2</span><span class="team-name">Marquette</span><span class="score w">74</span></div>
+  <div class="team loser"><span class="seed">5</span><span class="team-name">Colorado</span><span class="score">61</span></div>
+</div><div class="conn"></div></div>
+    </div>
+  </div>
+  <div class="bracket-col" style="min-width:152px">
+    <div class="bracket-col-title">Elite 8</div>
+    <div class="bracket-matches" style="padding-top:72px">
+      <div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">1</span><span class="team-name">Houston</span><span class="score w">62</span></div>
+  <div class="team loser"><span class="seed">2</span><span class="team-name">Marquette</span><span class="score">50</span></div>
+</div><div class="conn"></div></div>
+    </div>
+  </div>
+</div>
+</div>
+  <div style="margin-bottom:4px">
+<div class="region-label">Midwest Region</div>
+<div style="display:flex;gap:0">
+  <div class="bracket-col" style="min-width:152px">
+    <div class="bracket-col-title">First Round</div>
+    <div class="bracket-matches" style="gap:6px">
+      <div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">1</span><span class="team-name">Purdue</span><span class="score w">78</span></div>
+  <div class="team loser"><span class="seed">16</span><span class="team-name">Montana St</span><span class="score">43</span></div>
+</div><div class="conn"></div></div><div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">4</span><span class="team-name">Kansas</span><span class="score w">93</span></div>
+  <div class="team loser"><span class="seed">13</span><span class="team-name">Samford</span><span class="score">89</span></div>
+</div><div class="conn"></div></div><div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">2</span><span class="team-name">Gonzaga</span><span class="score w">86</span></div>
+  <div class="team loser"><span class="seed">15</span><span class="team-name">McNeese</span><span class="score">65</span></div>
+</div><div class="conn"></div></div><div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">3</span><span class="team-name">Iowa St</span><span class="score w">93</span></div>
+  <div class="team loser"><span class="seed">14</span><span class="team-name">South Dakota St</span><span class="score">75</span></div>
+</div><div class="conn"></div></div>
+    </div>
+  </div>
+  <div class="bracket-col" style="min-width:152px">
+    <div class="bracket-col-title">Sweet 16</div>
+    <div class="bracket-matches" style="gap:38px;padding-top:30px">
+      <div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">1</span><span class="team-name">Purdue</span><span class="score w">89</span></div>
+  <div class="team loser"><span class="seed">4</span><span class="team-name">Kansas</span><span class="score">72</span></div>
+</div><div class="conn"></div></div><div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">2</span><span class="team-name">Gonzaga</span><span class="score w">80</span></div>
+  <div class="team loser"><span class="seed">3</span><span class="team-name">Iowa St</span><span class="score">65</span></div>
+</div><div class="conn"></div></div>
+    </div>
+  </div>
+  <div class="bracket-col" style="min-width:152px">
+    <div class="bracket-col-title">Elite 8</div>
+    <div class="bracket-matches" style="padding-top:72px">
+      <div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">1</span><span class="team-name">Purdue</span><span class="score w">80</span></div>
+  <div class="team loser"><span class="seed">2</span><span class="team-name">Gonzaga</span><span class="score">68</span></div>
+</div><div class="conn"></div></div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+<!-- Final Four -->
+<div style="margin-top:20px">
+<div class="region-label">Final Four · Championship</div>
+<div style="display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:wrap">
+  <div class="bracket-col" style="min-width:152px">
+    <div class="bracket-col-title">Final Four</div>
+    <div class="bracket-matches" style="gap:16px">
+      <div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">E1</span><span class="team-name">UConn</span><span class="score w">72</span></div>
+  <div class="team loser"><span class="seed">W1</span><span class="team-name">North Carolina</span><span class="score">61</span></div>
+</div><div class="conn"></div></div>
+    </div>
+  </div>
+  <div class="bracket-col" style="min-width:152px">
+    <div class="bracket-col-title">Championship</div>
+    <div class="bracket-matches">
+      <div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed"></span><span class="team-name">UConn</span><span class="score w">75</span></div>
+  <div class="team loser"><span class="seed"></span><span class="team-name">Purdue</span><span class="score">60</span></div>
+</div><div class="conn"></div></div>
+    </div>
+  </div>
+  <div class="champion-col">
+  <div class="champion-title">🏆 Champion</div>
+  <div class="champion-card">
+    <div class="trophy">🌍</div>
+    <div class="champ-name">UConn Huskies</div>
+    <div class="champ-sub">2025 NCAA Men's Champions</div>
+  </div>
+</div>
+  <div class="bracket-col" style="min-width:152px">
+    <div class="bracket-col-title">Final Four</div>
+    <div class="bracket-matches" style="gap:16px">
+      <div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">MW1</span><span class="team-name">Purdue</span><span class="score w">63</span></div>
+  <div class="team loser"><span class="seed">S1</span><span class="team-name">Houston</span><span class="score">50</span></div>
+</div><div class="conn"></div></div>
+    </div>
+  </div>
+</div>
+</div>
 </div></div>
+</div>
   <div id="mens-bball-standings" class="inner-panel" style="padding:28px 32px"><div class="sec-label">// 2025 Season</div>
   <div class="sec-title">Standings</div>
   <div class="standings-grid"><div class="s-div"><div class="s-div-hdr">AP Top 10</div><div class="s-row hdr"><span>Team</span><span>W</span><span>L</span><span>Conf</span><span>PPG</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Kansas.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Kansas</span><span class="hi">18</span><span class="val">2</span><span class="val">9-1</span><span class="val">84.2</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Duke.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Duke</span><span class="hi">17</span><span class="val">3</span><span class="val">8-2</span><span class="val">81.4</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Gonzaga.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Gonzaga</span><span class="hi">20</span><span class="val">1</span><span class="val">10-0</span><span class="val">88.1</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Kentucky.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Kentucky</span><span class="hi">16</span><span class="val">4</span><span class="val">7-3</span><span class="val">78.8</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/UConn.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />UConn</span><span class="hi">19</span><span class="val">2</span><span class="val">9-1</span><span class="val">82.4</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Purdue.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Purdue</span><span class="hi">17</span><span class="val">3</span><span class="val">8-2</span><span class="val">79.1</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Tennessee.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Tennessee</span><span class="hi">16</span><span class="val">4</span><span class="val">7-3</span><span class="val">77.2</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Alabama.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Alabama</span><span class="hi">15</span><span class="val">5</span><span class="val">6-4</span><span class="val">80.1</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Arizona.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Arizona</span><span class="hi">16</span><span class="val">4</span><span class="val">8-2</span><span class="val">81.8</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Houston.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Houston</span><span class="hi">17</span><span class="val">3</span><span class="val">8-2</span><span class="val">76.4</span></div></div><div class="s-div"><div class="s-div-hdr">Big East</div><div class="s-row hdr"><span>Team</span><span>W</span><span>L</span><span>Conf</span><span>PPG</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/UConn.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />UConn</span><span class="hi">19</span><span class="val">2</span><span class="val">9-1</span><span class="val">82.4</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Marquette.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Marquette</span><span class="hi">16</span><span class="val">4</span><span class="val">8-2</span><span class="val">78.1</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Creighton.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Creighton</span><span class="hi">14</span><span class="val">6</span><span class="val">6-4</span><span class="val">74.8</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Villanova.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Villanova</span><span class="hi">12</span><span class="val">8</span><span class="val">5-5</span><span class="val">71.2</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Seton_Hall.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Seton Hall</span><span class="hi">10</span><span class="val">10</span><span class="val">4-6</span><span class="val">68.4</span></div></div></div>
@@ -500,6 +867,7 @@
     <button class="tab-btn active" onclick="showInner('womens-bball','scores',this)">Scores</button>
     <button class="tab-btn" onclick="showInner('womens-bball','standings',this)">Standings</button>
     <button class="tab-btn" onclick="showInner('womens-bball','stats',this)">Stats</button>
+    <button class="tab-btn" onclick="showInner('womens-bball','bracket',this)">Bracket</button>
   </div>
   <div id="womens-bball-scores" class="inner-panel active" style="padding:28px 32px"><div class="sec-label">// Latest Results</div>
   <div class="sec-title">Scores & Results</div>
@@ -526,7 +894,234 @@
       <div class="score-div"></div>
       <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Baylor.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Baylor</span><span class="score-val">—</span></div>
       <div class="score-status"><span class="live-dot"></span>2:00 PM ET</div></div></div>
+</div>
+<div id="womens-bball-bracket" class="inner-panel" style="padding:28px 32px"><div class="sec-label">// 2025 NCAA Tournament · Women's Basketball</div>
+<div class="sec-title" style="margin-bottom:16px">March Madness — Women's Bracket</div>
+<div class="bracket-legend">
+  <div class="legend-item"><div class="legend-dot" style="background:var(--gold)"></div>Advancing / Winner</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#8A8F98"></div>Eliminated</div>
+</div>
+<div style="overflow-x:auto;padding-bottom:12px">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;min-width:960px">
+  <div style="margin-bottom:4px">
+<div class="region-label">South Region</div>
+<div style="display:flex;gap:0">
+  <div class="bracket-col" style="min-width:152px">
+    <div class="bracket-col-title">First Round</div>
+    <div class="bracket-matches" style="gap:6px">
+      <div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">1</span><span class="team-name">South Carolina</span><span class="score w">79</span></div>
+  <div class="team loser"><span class="seed">16</span><span class="team-name">Presbyterian</span><span class="score">21</span></div>
+</div><div class="conn"></div></div><div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">4</span><span class="team-name">Maryland</span><span class="score w">74</span></div>
+  <div class="team loser"><span class="seed">13</span><span class="team-name">Holy Cross</span><span class="score">50</span></div>
+</div><div class="conn"></div></div><div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">3</span><span class="team-name">Notre Dame</span><span class="score w">87</span></div>
+  <div class="team loser"><span class="seed">14</span><span class="team-name">Norfolk St</span><span class="score">55</span></div>
+</div><div class="conn"></div></div><div class="match-wrap"><div class="match decided">
+  <div class="team loser"><span class="seed">6</span><span class="team-name">Mississippi St</span><span class="score">50</span></div>
+  <div class="team winner"><span class="seed">11</span><span class="team-name">Oregon</span><span class="score w">67</span></div>
+</div><div class="conn"></div></div>
+    </div>
+  </div>
+  <div class="bracket-col" style="min-width:152px">
+    <div class="bracket-col-title">Sweet 16</div>
+    <div class="bracket-matches" style="gap:38px;padding-top:30px">
+      <div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">1</span><span class="team-name">South Carolina</span><span class="score w">75</span></div>
+  <div class="team loser"><span class="seed">4</span><span class="team-name">Maryland</span><span class="score">51</span></div>
+</div><div class="conn"></div></div><div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">3</span><span class="team-name">Notre Dame</span><span class="score w">75</span></div>
+  <div class="team loser"><span class="seed">11</span><span class="team-name">Oregon</span><span class="score">62</span></div>
+</div><div class="conn"></div></div>
+    </div>
+  </div>
+  <div class="bracket-col" style="min-width:152px">
+    <div class="bracket-col-title">Elite 8</div>
+    <div class="bracket-matches" style="padding-top:72px">
+      <div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">1</span><span class="team-name">South Carolina</span><span class="score w">80</span></div>
+  <div class="team loser"><span class="seed">3</span><span class="team-name">Notre Dame</span><span class="score">61</span></div>
+</div><div class="conn"></div></div>
+    </div>
+  </div>
+</div>
+</div>
+  <div style="margin-bottom:4px">
+<div class="region-label">Albany Region</div>
+<div style="display:flex;gap:0">
+  <div class="bracket-col" style="min-width:152px">
+    <div class="bracket-col-title">First Round</div>
+    <div class="bracket-matches" style="gap:6px">
+      <div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">1</span><span class="team-name">Iowa</span><span class="score w">95</span></div>
+  <div class="team loser"><span class="seed">16</span><span class="team-name">Holy Family</span><span class="score">43</span></div>
+</div><div class="conn"></div></div><div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">4</span><span class="team-name">Colorado</span><span class="score w">72</span></div>
+  <div class="team loser"><span class="seed">13</span><span class="team-name">Drake</span><span class="score">59</span></div>
+</div><div class="conn"></div></div><div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">3</span><span class="team-name">LSU</span><span class="score w">70</span></div>
+  <div class="team loser"><span class="seed">14</span><span class="team-name">Rice</span><span class="score">60</span></div>
+</div><div class="conn"></div></div><div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">6</span><span class="team-name">Creighton</span><span class="score w">81</span></div>
+  <div class="team loser"><span class="seed">11</span><span class="team-name">FGCU</span><span class="score">45</span></div>
+</div><div class="conn"></div></div>
+    </div>
+  </div>
+  <div class="bracket-col" style="min-width:152px">
+    <div class="bracket-col-title">Sweet 16</div>
+    <div class="bracket-matches" style="gap:38px;padding-top:30px">
+      <div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">1</span><span class="team-name">Iowa</span><span class="score w">89</span></div>
+  <div class="team loser"><span class="seed">4</span><span class="team-name">Colorado</span><span class="score">68</span></div>
+</div><div class="conn"></div></div><div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">3</span><span class="team-name">LSU</span><span class="score w">73</span></div>
+  <div class="team loser"><span class="seed">6</span><span class="team-name">Creighton</span><span class="score">63</span></div>
+</div><div class="conn"></div></div>
+    </div>
+  </div>
+  <div class="bracket-col" style="min-width:152px">
+    <div class="bracket-col-title">Elite 8</div>
+    <div class="bracket-matches" style="padding-top:72px">
+      <div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">1</span><span class="team-name">Iowa</span><span class="score w">94</span></div>
+  <div class="team loser"><span class="seed">3</span><span class="team-name">LSU</span><span class="score">83</span></div>
+</div><div class="conn"></div></div>
+    </div>
+  </div>
+</div>
+</div>
+  <div style="margin-bottom:4px">
+<div class="region-label">Portland Region</div>
+<div style="display:flex;gap:0">
+  <div class="bracket-col" style="min-width:152px">
+    <div class="bracket-col-title">First Round</div>
+    <div class="bracket-matches" style="gap:6px">
+      <div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">1</span><span class="team-name">Texas</span><span class="score w">79</span></div>
+  <div class="team loser"><span class="seed">16</span><span class="team-name">Drexel</span><span class="score">36</span></div>
+</div><div class="conn"></div></div><div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">4</span><span class="team-name">Gonzaga</span><span class="score w">66</span></div>
+  <div class="team loser"><span class="seed">13</span><span class="team-name">Colorado St</span><span class="score">64</span></div>
+</div><div class="conn"></div></div><div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">2</span><span class="team-name">Connecticut</span><span class="score w">101</span></div>
+  <div class="team loser"><span class="seed">15</span><span class="team-name">Winthrop</span><span class="score">45</span></div>
+</div><div class="conn"></div></div><div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">5</span><span class="team-name">Ole Miss</span><span class="score w">78</span></div>
+  <div class="team loser"><span class="seed">12</span><span class="team-name">Marquette</span><span class="score">56</span></div>
+</div><div class="conn"></div></div>
+    </div>
+  </div>
+  <div class="bracket-col" style="min-width:152px">
+    <div class="bracket-col-title">Sweet 16</div>
+    <div class="bracket-matches" style="gap:38px;padding-top:30px">
+      <div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">1</span><span class="team-name">Texas</span><span class="score w">70</span></div>
+  <div class="team loser"><span class="seed">4</span><span class="team-name">Gonzaga</span><span class="score">56</span></div>
+</div><div class="conn"></div></div><div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">2</span><span class="team-name">Connecticut</span><span class="score w">83</span></div>
+  <div class="team loser"><span class="seed">5</span><span class="team-name">Ole Miss</span><span class="score">46</span></div>
+</div><div class="conn"></div></div>
+    </div>
+  </div>
+  <div class="bracket-col" style="min-width:152px">
+    <div class="bracket-col-title">Elite 8</div>
+    <div class="bracket-matches" style="padding-top:72px">
+      <div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">2</span><span class="team-name">Connecticut</span><span class="score w">77</span></div>
+  <div class="team loser"><span class="seed">1</span><span class="team-name">Texas</span><span class="score">66</span></div>
+</div><div class="conn"></div></div>
+    </div>
+  </div>
+</div>
+</div>
+  <div style="margin-bottom:4px">
+<div class="region-label">Spokane Region</div>
+<div style="display:flex;gap:0">
+  <div class="bracket-col" style="min-width:152px">
+    <div class="bracket-col-title">First Round</div>
+    <div class="bracket-matches" style="gap:6px">
+      <div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">1</span><span class="team-name">Stanford</span><span class="score w">92</span></div>
+  <div class="team loser"><span class="seed">16</span><span class="team-name">Sacred Heart</span><span class="score">49</span></div>
+</div><div class="conn"></div></div><div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">4</span><span class="team-name">Oklahoma</span><span class="score w">75</span></div>
+  <div class="team loser"><span class="seed">13</span><span class="team-name">Portland</span><span class="score">64</span></div>
+</div><div class="conn"></div></div><div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">2</span><span class="team-name">Ohio St</span><span class="score w">71</span></div>
+  <div class="team loser"><span class="seed">15</span><span class="team-name">James Madison</span><span class="score">46</span></div>
+</div><div class="conn"></div></div><div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">5</span><span class="team-name">NC State</span><span class="score w">78</span></div>
+  <div class="team loser"><span class="seed">12</span><span class="team-name">Presbyterian</span><span class="score">42</span></div>
+</div><div class="conn"></div></div>
+    </div>
+  </div>
+  <div class="bracket-col" style="min-width:152px">
+    <div class="bracket-col-title">Sweet 16</div>
+    <div class="bracket-matches" style="gap:38px;padding-top:30px">
+      <div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">1</span><span class="team-name">Stanford</span><span class="score w">72</span></div>
+  <div class="team loser"><span class="seed">4</span><span class="team-name">Oklahoma</span><span class="score">68</span></div>
+</div><div class="conn"></div></div><div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">2</span><span class="team-name">Ohio St</span><span class="score w">74</span></div>
+  <div class="team loser"><span class="seed">5</span><span class="team-name">NC State</span><span class="score">58</span></div>
+</div><div class="conn"></div></div>
+    </div>
+  </div>
+  <div class="bracket-col" style="min-width:152px">
+    <div class="bracket-col-title">Elite 8</div>
+    <div class="bracket-matches" style="padding-top:72px">
+      <div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">2</span><span class="team-name">Ohio St</span><span class="score w">63</span></div>
+  <div class="team loser"><span class="seed">1</span><span class="team-name">Stanford</span><span class="score">59</span></div>
+</div><div class="conn"></div></div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+<div style="margin-top:20px">
+<div class="region-label">Final Four · Championship</div>
+<div style="display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:wrap">
+  <div class="bracket-col" style="min-width:152px">
+    <div class="bracket-col-title">Final Four</div>
+    <div class="bracket-matches" style="gap:16px">
+      <div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">S1</span><span class="team-name">South Carolina</span><span class="score w">80</span></div>
+  <div class="team loser"><span class="seed">A1</span><span class="team-name">Iowa</span><span class="score">73</span></div>
+</div><div class="conn"></div></div>
+    </div>
+  </div>
+  <div class="bracket-col" style="min-width:152px">
+    <div class="bracket-col-title">Championship</div>
+    <div class="bracket-matches">
+      <div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed"></span><span class="team-name">South Carolina</span><span class="score w">87</span></div>
+  <div class="team loser"><span class="seed"></span><span class="team-name">UConn</span><span class="score">75</span></div>
+</div><div class="conn"></div></div>
+    </div>
+  </div>
+  <div class="champion-col">
+  <div class="champion-title">🏆 Champion</div>
+  <div class="champion-card">
+    <div class="trophy">🌍</div>
+    <div class="champ-name">South Carolina</div>
+    <div class="champ-sub">2025 NCAA Women's Champions</div>
+  </div>
+</div>
+  <div class="bracket-col" style="min-width:152px">
+    <div class="bracket-col-title">Final Four</div>
+    <div class="bracket-matches" style="gap:16px">
+      <div class="match-wrap"><div class="match decided">
+  <div class="team winner"><span class="seed">P2</span><span class="team-name">Connecticut</span><span class="score w">78</span></div>
+  <div class="team loser"><span class="seed">Sp2</span><span class="team-name">Ohio St</span><span class="score">56</span></div>
+</div><div class="conn"></div></div>
+    </div>
+  </div>
+</div>
+</div>
 </div></div>
+</div>
   <div id="womens-bball-standings" class="inner-panel" style="padding:28px 32px"><div class="sec-label">// 2025 Season</div>
   <div class="sec-title">Standings</div>
   <div class="standings-grid"><div class="s-div"><div class="s-div-hdr">AP Top 10</div><div class="s-row hdr"><span>Team</span><span>W</span><span>L</span><span>Conf</span><span>PPG</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/South_Carolina.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />South Carolina</span><span class="hi">22</span><span class="val">0</span><span class="val">10-0</span><span class="val">84.1</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Iowa.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Iowa</span><span class="hi">20</span><span class="val">2</span><span class="val">9-1</span><span class="val">88.4</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/UConn.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />UConn</span><span class="hi">19</span><span class="val">2</span><span class="val">9-1</span><span class="val">80.2</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Stanford.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Stanford</span><span class="hi">18</span><span class="val">3</span><span class="val">8-2</span><span class="val">77.8</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/LSU.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />LSU</span><span class="hi">17</span><span class="val">4</span><span class="val">7-3</span><span class="val">81.2</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Texas.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Texas</span><span class="hi">17</span><span class="val">4</span><span class="val">8-2</span><span class="val">74.8</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Notre_Dame.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Notre Dame</span><span class="hi">16</span><span class="val">4</span><span class="val">7-3</span><span class="val">72.4</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/UCLA.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />UCLA</span><span class="hi">15</span><span class="val">5</span><span class="val">7-3</span><span class="val">70.1</span></div></div></div>
