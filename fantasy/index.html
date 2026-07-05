@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fantasy — The Sports Companion</title>
+  <link rel="icon" type="image/png" href="/assets/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --ink:#0B0D0F; --ink-2:#181B1F; --ink-3:#262A30; --muted:#8A8F98; --line:#2A2E35; --gold:#F2C230; --crimson:#C83A2B; --white:#FFFFFF; }
+    body { font-family: 'Inter', sans-serif; background: var(--ink); color: var(--white); }
+
+    nav { position: sticky; top: 0; z-index: 100; display: flex; align-items: center; background: rgba(11,13,15,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+    .nav-brand { display: flex; align-items: center; gap: 8px; padding: 0 20px; text-decoration: none; border-right: 1px solid var(--line); height: 56px; flex-shrink: 0; }
+    .nav-brand img { height: 28px; }
+    .nav-brand span { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 1rem; letter-spacing: 0.04em; color: var(--white); white-space: nowrap; }
+    .nav-brand span em { font-style: normal; color: var(--gold); }
+    .nav-leagues { display: flex; align-items: center; list-style: none; overflow-x: auto; flex: 1; scrollbar-width: none; }
+    .nav-leagues::-webkit-scrollbar { display: none; }
+    .nav-leagues a { display: flex; align-items: center; height: 56px; padding: 0 18px; font-size: 0.82rem; font-weight: 600; color: var(--muted); text-decoration: none; border-right: 1px solid var(--line); transition: color 0.2s, background 0.2s; white-space: nowrap; }
+    .nav-leagues a:hover { color: var(--white); background: var(--ink-2); }
+    .nav-leagues a.active { color: var(--gold); background: var(--ink-2); border-bottom: 2px solid var(--gold); }
+    .nav-cta { margin-left: auto; padding: 0 20px; height: 56px; display: flex; align-items: center; flex-shrink: 0; }
+    .nav-cta a { background: var(--gold); color: var(--ink); font-weight: 700; font-size: 0.8rem; padding: 8px 18px; border-radius: 5px; text-decoration: none; }
+
+    /* BANNER */
+    .banner { background: var(--ink-2); border-bottom: 1px solid var(--line); padding: 32px 32px 28px; }
+    .banner-top { display: flex; align-items: center; gap: 14px; margin-bottom: 8px; }
+    .banner-top h1 { font-family: 'Barlow Condensed', sans-serif; font-size: 2.4rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.04em; }
+    .badge { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 10px; border-radius: 4px; background: rgba(242,194,48,0.12); color: var(--gold); border: 1px solid rgba(242,194,48,0.3); }
+    .banner-sub { font-size: 0.9rem; color: var(--muted); }
+
+    /* SPORT TABS */
+    .sport-tabs { display: flex; border-top: 1px solid var(--line); overflow-x: auto; scrollbar-width: none; }
+    .sport-tabs::-webkit-scrollbar { display: none; }
+    .sport-tab { padding: 13px 22px; font-family: 'Barlow Condensed', sans-serif; font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); background: none; border: none; border-bottom: 3px solid transparent; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+    .sport-tab:hover { color: var(--white); }
+    .sport-tab.active { color: var(--gold); border-bottom-color: var(--gold); background: rgba(242,194,48,0.04); }
+
+    /* MAIN */
+    .main { max-width: 1100px; margin: 0 auto; padding: 36px 32px; }
+
+    /* SECTION LABEL */
+    .sec-label { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.15em; color: var(--gold); text-transform: uppercase; margin-bottom: 8px; }
+    .sec-title { font-family: 'Barlow Condensed', sans-serif; font-size: 1.8rem; font-weight: 800; text-transform: uppercase; margin-bottom: 6px; }
+    .sec-body { color: var(--muted); font-size: 0.88rem; line-height: 1.6; margin-bottom: 24px; }
+
+    /* SPORT PANELS */
+    .sport-panel { display: none; }
+    .sport-panel.active { display: block; }
+
+    /* GAME CARDS GRID */
+    .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 36px; }
+    .game-card { background: var(--ink-2); border: 1px solid var(--line); border-radius: 12px; padding: 20px; cursor: pointer; transition: border-color 0.2s, transform 0.2s; }
+    .game-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+    .game-card .icon { font-size: 2rem; margin-bottom: 12px; }
+    .game-card h3 { font-family: 'Barlow Condensed', sans-serif; font-size: 1.3rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 6px; }
+    .game-card h3 span { color: var(--gold); }
+    .game-card p { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+    .game-tag { display: inline-block; margin-top: 12px; font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; }
+    .tag-live { background: rgba(34,197,94,0.12); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); }
+    .tag-soon { background: rgba(242,194,48,0.12); color: var(--gold); border: 1px solid rgba(242,194,48,0.3); }
+    .tag-new  { background: rgba(56,189,248,0.12); color: #38BDF8; border: 1px solid rgba(56,189,248,0.3); }
+
+    /* LEADERBOARD */
+    .leaderboard { background: var(--ink-2); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; margin-bottom: 36px; }
+    .lb-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; background: var(--ink-3); border-bottom: 1px solid var(--line); }
+    .lb-title { font-family: 'Barlow Condensed', sans-serif; font-size: 1.1rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; }
+    .lb-badge { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; color: var(--gold); }
+    .lb-row { display: grid; grid-template-columns: 48px 1fr 100px 100px 80px; align-items: center; padding: 11px 20px; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 0.84rem; transition: background 0.15s; }
+    .lb-row:last-child { border-bottom: none; }
+    .lb-row:hover { background: var(--ink-3); }
+    .lb-row.hdr { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+    .lb-rank { font-family: 'Barlow Condensed', sans-serif; font-size: 1.1rem; font-weight: 800; color: var(--muted); }
+    .lb-rank.top { color: var(--gold); }
+    .lb-name { font-weight: 600; color: var(--white); }
+    .lb-score { font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 800; color: var(--gold); text-align: right; }
+    .lb-streak { color: var(--muted); text-align: right; }
+    .lb-acc { color: var(--muted); text-align: right; }
+
+    /* TIPS CARD */
+    .tips-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin-bottom: 36px; }
+    .tip-card { background: var(--ink-2); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; }
+    .tip-card .tip-icon { font-size: 1.4rem; margin-bottom: 8px; }
+    .tip-card h4 { font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 800; text-transform: uppercase; color: var(--gold); margin-bottom: 5px; }
+    .tip-card p { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+
+    /* CTA BANNER */
+    .cta-banner { background: linear-gradient(135deg, rgba(242,194,48,0.08) 0%, rgba(27,42,74,0.4) 100%); border: 1px solid rgba(242,194,48,0.2); border-radius: 14px; padding: 32px 36px; text-align: center; }
+    .cta-banner h2 { font-family: 'Barlow Condensed', sans-serif; font-size: 2rem; font-weight: 900; text-transform: uppercase; margin-bottom: 8px; }
+    .cta-banner h2 span { color: var(--gold); }
+    .cta-banner p { color: var(--muted); font-size: 0.9rem; margin-bottom: 20px; }
+    .cta-btn { display: inline-block; background: var(--gold); color: var(--ink); font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; padding: 12px 32px; border-radius: 6px; text-decoration: none; transition: opacity 0.2s; }
+    .cta-btn:hover { opacity: 0.88; }
+
+    footer { background: var(--ink); border-top: 1px solid var(--line); padding: 28px 32px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; margin-top: 48px; }
+    .ft-brand { display: flex; align-items: center; gap: 8px; }
+    .ft-brand img { height: 22px; }
+    .ft-brand span { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 1rem; }
+    .ft-brand span em { font-style: normal; color: var(--gold); }
+    .ft-copy { font-size: 0.75rem; color: var(--muted); }
+    .ft-links { display: flex; gap: 18px; }
+    .ft-links a { font-size: 0.75rem; color: var(--muted); text-decoration: none; }
+    .ft-links a:hover { color: var(--white); }
+    @media(max-width:768px) { .main { padding: 24px 16px; } .nav-brand span { display: none; } .banner { padding: 20px 16px 0; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/index.html" class="nav-brand">
+    <img src="/assets/logo.png" alt="SSC" />
+    <span>The Sports <em>Companion</em></span>
+  </a>
+  <ul class="nav-leagues">
+    <li><a href="/nfl/index.html">🏈 NFL</a></li>
+    <li><a href="/mlb/index.html">⚾ MLB</a></li>
+    <li><a href="/nba/index.html">🏀 NBA</a></li>
+    <li><a href="/ncaa/index.html">🎓 NCAA</a></li>
+    <li><a href="/futbol/index.html">⚽ Fútbol</a></li>
+    <li><a href="/fantasy/index.html" class="active">🏆 Fantasy</a></li>
+    <li><a href="/more/index.html">• • •</a></li>
+  </ul>
+  <div class="nav-cta" id="nav-cta">
+    <a href="/login/index.html" style="color:var(--muted);font-size:.8rem;font-weight:600;text-decoration:none;padding:8px 12px;">Log In</a>
+    <a href="/signup/index.html" style="background:var(--gold);color:var(--ink);font-weight:700;font-size:.8rem;padding:8px 18px;border-radius:5px;text-decoration:none;">Sign Up</a>
+  </div>
+  <div class="nav-avatar-btn" id="nav-avatar" style="display:none;align-items:center;gap:8px;background:var(--ink-2);border:1px solid var(--line);border-radius:6px;padding:6px 12px;cursor:pointer;margin-right:16px;position:relative" onclick="this.classList.toggle('open')">
+    <div class="nav-avatar-initials" id="nav-initials" style="width:24px;height:24px;border-radius:50%;background:var(--gold);color:var(--ink);font-family:'Barlow Condensed',sans-serif;font-size:.8rem;font-weight:800;display:flex;align-items:center;justify-content:center">?</div>
+    <span class="nav-avatar-name" id="nav-username" style="font-size:.8rem;font-weight:600;color:var(--white);max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Account</span>
+    <div style="display:none;position:absolute;top:calc(100% + 8px);right:0;background:var(--ink-2);border:1px solid var(--line);border-radius:8px;min-width:180px;z-index:200;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.4)" class="nav-dropdown">
+      <a href="/profile/index.html" style="display:block;padding:11px 16px;font-size:.82rem;color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line)">⚙️ My Profile</a>
+      <a href="/profile/index.html#favorites" style="display:block;padding:11px 16px;font-size:.82rem;color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line)">⭐ Favorites</a>
+      <a href="/profile/index.html#notifications" style="display:block;padding:11px 16px;font-size:.82rem;color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line)">🔔 Notifications</a>
+      <a href="#" onclick="signOutUser(event)" style="display:block;padding:11px 16px;font-size:.82rem;color:#FF6B6B;text-decoration:none">↩ Sign Out</a>
+    </div>
+  </div>
+</nav>
+
+<div class="banner">
+  <div class="banner-top">
+    <h1>🏆 Fantasy</h1>
+    <span class="badge">2025 Season</span>
+  </div>
+  <p class="banner-sub">Games, predictions, leaderboards — all your fantasy tools in one place.</p>
+  <div class="sport-tabs">
+    <button class="sport-tab active" onclick="showSport('nfl',this)">🏈 NFL</button>
+    <button class="sport-tab" onclick="showSport('mlb',this)">⚾ MLB</button>
+    <button class="sport-tab" onclick="showSport('nba',this)">🏀 NBA</button>
+    <button class="sport-tab" onclick="showSport('ncaa',this)">🎓 NCAA</button>
+    <button class="sport-tab" onclick="showSport('futbol',this)">⚽ Fútbol</button>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- ── NFL ── -->
+  <div id="sport-nfl" class="sport-panel active">
+    <div class="sec-label">// NFL Fantasy & Games</div>
+    <div class="sec-title">NFL Games</div>
+    <div class="sec-body">Test your football IQ with Guess the Play, track weekly leaders, and get insider tips.</div>
+
+    <div class="games-grid">
+      <div class="game-card" onclick="window.location='/nfl/index.html#guess'">
+        <div class="icon">🏈</div>
+        <h3>Guess the <span>Play</span></h3>
+        <p>Real NFL scenarios. Predict the next play call — run, pass, or trick — before the snap. Speed bonus points for quick picks.</p>
+        <span class="game-tag tag-live">Live Now</span>
+      </div>
+      <div class="game-card">
+        <div class="icon">📋</div>
+        <h3>Weekly <span>Picks</span></h3>
+        <p>Pick the winner of every NFL game each week. Compete against other fans on the global leaderboard.</p>
+        <span class="game-tag tag-soon">Coming Soon</span>
+      </div>
+      <div class="game-card">
+        <div class="icon">📊</div>
+        <h3>Draft <span>Analyzer</span></h3>
+        <p>Get OVR-powered rankings and suggested picks for your fantasy draft based on Chris Cain's YPPG and WAR models.</p>
+        <span class="game-tag tag-soon">Coming Soon</span>
+      </div>
+      <div class="game-card">
+        <div class="icon">🎯</div>
+        <h3>Kicker <span>Challenge</span></h3>
+        <p>Predict whether a field goal attempt is good or no good based on distance, weather, and kicker stats (PPK rating).</p>
+        <span class="game-tag tag-soon">Coming Soon</span>
+      </div>
+    </div>
+
+    <div class="sec-label">// Guess the Play — Leaderboard</div>
+    <div class="leaderboard">
+      <div class="lb-header">
+        <span class="lb-title">Top Players This Week</span>
+        <span class="lb-badge">// Week 14 · 2025</span>
+      </div>
+      <div class="lb-row hdr">
+        <div>Rank</div><div>Player</div><div>Score</div><div>Streak</div><div>Acc %</div>
+      </div>
+      <div class="lb-row"><div class="lb-rank top">🥇</div><div class="lb-name">GridironGuru_88</div><div class="lb-score">142.6</div><div class="lb-streak">🔥 12</div><div class="lb-acc">84%</div></div>
+      <div class="lb-row"><div class="lb-rank top">🥈</div><div class="lb-name">BlitzQueen</div><div class="lb-score">138.2</div><div class="lb-streak">🔥 9</div><div class="lb-acc">81%</div></div>
+      <div class="lb-row"><div class="lb-rank top">🥉</div><div class="lb-name">ChrisC_Sports</div><div class="lb-score">134.8</div><div class="lb-streak">🔥 7</div><div class="lb-acc">79%</div></div>
+      <div class="lb-row"><div class="lb-rank">4</div><div class="lb-name">TDThrower</div><div class="lb-score">128.4</div><div class="lb-streak">5</div><div class="lb-acc">76%</div></div>
+      <div class="lb-row"><div class="lb-rank">5</div><div class="lb-name">FourthDownFred</div><div class="lb-score">121.0</div><div class="lb-streak">4</div><div class="lb-acc">74%</div></div>
+      <div class="lb-row"><div class="lb-rank">6</div><div class="lb-name">RedZoneRita</div><div class="lb-score">118.6</div><div class="lb-streak">3</div><div class="lb-acc">72%</div></div>
+      <div class="lb-row"><div class="lb-rank">7</div><div class="lb-name">SackMasterPro</div><div class="lb-score">112.2</div><div class="lb-streak">2</div><div class="lb-acc">70%</div></div>
+      <div class="lb-row"><div class="lb-rank">8</div><div class="lb-name">StatlineSteve</div><div class="lb-score">108.8</div><div class="lb-streak">1</div><div class="lb-acc">68%</div></div>
+    </div>
+
+    <div class="sec-label">// Strategy Tips</div>
+    <div class="tips-grid">
+      <div class="tip-card"><div class="tip-icon">⚡</div><h4>Speed Bonus</h4><p>Answer within 5 seconds for maximum bonus points. Score = 1 + (timeLeft ÷ 15). Fast and correct beats slow and correct.</p></div>
+      <div class="tip-card"><div class="tip-icon">📈</div><h4>Study YPPG Diff</h4><p>Teams with high YPPG Diff pass more on 1st down. When in doubt, pass-heavy offenses throw — especially up by 10+.</p></div>
+      <div class="tip-card"><div class="tip-icon">🔥</div><h4>Protect Your Streak</h4><p>A long streak multiplies your leaderboard ranking impact. When unsure, pick the statistically most common play type for the situation.</p></div>
+      <div class="tip-card"><div class="tip-icon">🎯</div><h4>Down & Distance</h4><p>3rd & long = pass 78% of the time league-wide. 3rd & short = run or QB sneak. 2nd & 10+ = mix, lean pass.</p></div>
+    </div>
+  </div>
+
+  <!-- ── MLB ── -->
+  <div id="sport-mlb" class="sport-panel">
+    <div class="sec-label">// MLB Fantasy & Games</div>
+    <div class="sec-title">MLB Games</div>
+    <div class="sec-body">Predict pitch location and type with Guess the Pitch. Study RPI and ERA trends to gain an edge.</div>
+
+    <div class="games-grid">
+      <div class="game-card" onclick="window.location='/mlb/index.html#guess'">
+        <div class="icon">⚾</div>
+        <h3>Guess the <span>Pitch</span></h3>
+        <p>Every at-bat, predict pitch type and location inside the 3×3 strike zone before the delivery. Speed bonus applies.</p>
+        <span class="game-tag tag-live">Live Now</span>
+      </div>
+      <div class="game-card">
+        <div class="icon">🧢</div>
+        <h3>Starting <span>Lineup</span></h3>
+        <p>Set your daily fantasy lineup using OVR and RPI-powered ratings. Optimize for matchup, park factors, and weather.</p>
+        <span class="game-tag tag-soon">Coming Soon</span>
+      </div>
+      <div class="game-card">
+        <div class="icon">📊</div>
+        <h3>Pitcher <span>Predictor</span></h3>
+        <p>Forecast a starter's performance using RPI trend, opponent OPS, and ballpark ERA adjustments from the SSC model.</p>
+        <span class="game-tag tag-soon">Coming Soon</span>
+      </div>
+      <div class="game-card">
+        <div class="icon">💥</div>
+        <h3>HR <span>Derby</span></h3>
+        <p>Pick which players hit home runs today based on launch angle tendencies, pitcher xFIP, and wind conditions.</p>
+        <span class="game-tag tag-soon">Coming Soon</span>
+      </div>
+    </div>
+
+    <div class="sec-label">// Guess the Pitch — Leaderboard</div>
+    <div class="leaderboard">
+      <div class="lb-header">
+        <span class="lb-title">Top Pitch Predictors</span>
+        <span class="lb-badge">// This Week · 2025</span>
+      </div>
+      <div class="lb-row hdr"><div>Rank</div><div>Player</div><div>Score</div><div>Streak</div><div>Acc %</div></div>
+      <div class="lb-row"><div class="lb-rank top">🥇</div><div class="lb-name">PitchWizard_K</div><div class="lb-score">156.4</div><div class="lb-streak">🔥 14</div><div class="lb-acc">88%</div></div>
+      <div class="lb-row"><div class="lb-rank top">🥈</div><div class="lb-name">SliderSavant</div><div class="lb-score">148.2</div><div class="lb-streak">🔥 11</div><div class="lb-acc">84%</div></div>
+      <div class="lb-row"><div class="lb-rank top">🥉</div><div class="lb-name">ChrisC_Sports</div><div class="lb-score">141.6</div><div class="lb-streak">🔥 8</div><div class="lb-acc">81%</div></div>
+      <div class="lb-row"><div class="lb-rank">4</div><div class="lb-name">CurveballCarla</div><div class="lb-score">134.8</div><div class="lb-streak">6</div><div class="lb-acc">78%</div></div>
+      <div class="lb-row"><div class="lb-rank">5</div><div class="lb-name">FastballFan99</div><div class="lb-score">128.2</div><div class="lb-streak">4</div><div class="lb-acc">75%</div></div>
+    </div>
+
+    <div class="sec-label">// Strategy Tips</div>
+    <div class="tips-grid">
+      <div class="tip-card"><div class="tip-icon">🎯</div><h4>0-2 Count = Waste Pitch</h4><p>On 0-2, pitchers throw out of the zone 62% of the time. Expect a breaking ball low or a fastball up and in.</p></div>
+      <div class="tip-card"><div class="tip-icon">📐</div><h4>Study the Zone</h4><p>Middle of the zone = most common location on 3-0 counts. Away = most common vs. right-handed batters with runners on.</p></div>
+      <div class="tip-card"><div class="tip-icon">⚡</div><h4>Pick Fast</h4><p>Same speed bonus as Guess the Play: score += 1 + (timeLeft ÷ 15). Correct in 3 seconds beats correct in 13.</p></div>
+      <div class="tip-card"><div class="tip-icon">📈</div><h4>Use RPI</h4><p>Low RPI pitchers (elite control) throw more strikes. Expect In Zone picks more often when facing a sub-2.50 RPI arm.</p></div>
+    </div>
+  </div>
+
+  <!-- ── NBA ── -->
+  <div id="sport-nba" class="sport-panel">
+    <div class="sec-label">// NBA Fantasy & Games</div>
+    <div class="sec-title">NBA Games</div>
+    <div class="sec-body">PPM-powered rankings, daily lineup tools, and prediction games built on the SSC model.</div>
+
+    <div class="games-grid">
+      <div class="game-card">
+        <div class="icon">🏀</div>
+        <h3>Daily <span>Lineup</span></h3>
+        <p>Build your daily fantasy lineup using PPM ratings, matchup data, and pace-adjusted projections.</p>
+        <span class="game-tag tag-soon">Coming Soon</span>
+      </div>
+      <div class="game-card">
+        <div class="icon">🎯</div>
+        <h3>Shot <span>Predictor</span></h3>
+        <p>Predict whether a shot attempt goes in based on shot location, defender proximity, and player TS% rating.</p>
+        <span class="game-tag tag-soon">Coming Soon</span>
+      </div>
+      <div class="game-card">
+        <div class="icon">📊</div>
+        <h3>PPM <span>Leaders</span></h3>
+        <p>Live Points Per Minute leaderboard updated nightly. The SSC's primary NBA efficiency metric — see who's truly dominating.</p>
+        <span class="game-tag tag-new">New</span>
+      </div>
+      <div class="game-card">
+        <div class="icon">🔮</div>
+        <h3>Game <span>Predictor</span></h3>
+        <p>Forecast final scores using Net Rating differentials and pace data. Pick the winner and margin before tip-off.</p>
+        <span class="game-tag tag-soon">Coming Soon</span>
+      </div>
+    </div>
+
+    <div class="sec-label">// Strategy Tips</div>
+    <div class="tips-grid">
+      <div class="tip-card"><div class="tip-icon">⏱️</div><h4>Think PPM, Not PPG</h4><p>A player averaging 18 PPG in 28 minutes outperforms a 22 PPG player in 40 minutes on a per-minute basis. Always check PPM.</p></div>
+      <div class="tip-card"><div class="tip-icon">📈</div><h4>Net Rating Wins Games</h4><p>Teams with Net Rating +6 or better win 74% of games. Back the team with the larger positive net rating in close matchups.</p></div>
+      <div class="tip-card"><div class="tip-icon">🎯</div><h4>TS% Over FG%</h4><p>True Shooting % accounts for threes and free throws. A 55% TS player is elite. Use this over FG% for all lineup decisions.</p></div>
+      <div class="tip-card"><div class="tip-icon">🔥</div><h4>Pace Matters</h4><p>High-pace teams (100+ possessions/game) generate more fantasy points. Target players on fast-paced teams in daily lineups.</p></div>
+    </div>
+  </div>
+
+  <!-- ── NCAA ── -->
+  <div id="sport-ncaa" class="sport-panel">
+    <div class="sec-label">// NCAA Fantasy & Games</div>
+    <div class="sec-title">NCAA Games</div>
+    <div class="sec-body">Bracket challenges, bowl game picks, and tournament predictions powered by SSC rankings.</div>
+
+    <div class="games-grid">
+      <div class="game-card">
+        <div class="icon">🏆</div>
+        <h3>Bowl <span>Picks</span></h3>
+        <p>Pick every college football bowl game. Rankings use YPPG Differential and OVR to help guide your selections.</p>
+        <span class="game-tag tag-soon">Coming Soon</span>
+      </div>
+      <div class="game-card">
+        <div class="icon">🗓️</div>
+        <h3>March <span>Madness</span></h3>
+        <p>Fill out your bracket with SSC-powered KenPom and PPM data. 68-team bracket challenge open to all users.</p>
+        <span class="game-tag tag-soon">Coming Soon</span>
+      </div>
+      <div class="game-card">
+        <div class="icon">👑</div>
+        <h3>Heisman <span>Predictor</span></h3>
+        <p>Track the Heisman race with live OVR, passing yards, and rushing yards leaderboards. Cast your prediction vote.</p>
+        <span class="game-tag tag-soon">Coming Soon</span>
+      </div>
+      <div class="game-card">
+        <div class="icon">📊</div>
+        <h3>Transfer <span>Tracker</span></h3>
+        <p>Follow the transfer portal with OVR ratings for incoming and outgoing players. See how rosters are shaping up.</p>
+        <span class="game-tag tag-soon">Coming Soon</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FUTBOL ── -->
+  <div id="sport-futbol" class="sport-panel">
+    <div class="sec-label">// Fútbol Fantasy & Games</div>
+    <div class="sec-title">Fútbol Games</div>
+    <div class="sec-body">xG-powered predictions, golden boot tracking, and match result challenges across all major leagues.</div>
+
+    <div class="games-grid">
+      <div class="game-card">
+        <div class="icon">⚽</div>
+        <h3>Match <span>Predictor</span></h3>
+        <p>Predict match outcomes using xG trends, possession data, and OVR differentials. Pick score, result, or both.</p>
+        <span class="game-tag tag-soon">Coming Soon</span>
+      </div>
+      <div class="game-card">
+        <div class="icon">👟</div>
+        <h3>Golden <span>Boot</span></h3>
+        <p>Track top scorers across MLS, EPL, La Liga, UCL, and FIFA. Live xG vs actual goals — spot the over/under-performers.</p>
+        <span class="game-tag tag-soon">Coming Soon</span>
+      </div>
+      <div class="game-card">
+        <div class="icon">🧤</div>
+        <h3>GK <span>Challenge</span></h3>
+        <p>Predict whether a shot on target is saved or scores based on xG value, shot location, and keeper OVR rating.</p>
+        <span class="game-tag tag-soon">Coming Soon</span>
+      </div>
+      <div class="game-card">
+        <div class="icon">🏆</div>
+        <h3>League <span>Table Pick</span></h3>
+        <p>Predict the final standings for any league at the start of the season. Score points based on how close your picks land.</p>
+        <span class="game-tag tag-soon">Coming Soon</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM CTA -->
+  <div class="cta-banner">
+    <h2>More <span>Fantasy</span> Coming Soon</h2>
+    <p>Daily lineups, live scoring, full draft tools, and head-to-head leagues are all in development. Join the waitlist for priority access when we launch.</p>
+    <a href="/index.html#cta" class="cta-btn">Join the Waitlist</a>
+  </div>
+
+</div>
+
+<footer>
+  <div class="ft-brand"><img src="/assets/logo.png" alt="SSC" /><span>The Sports <em>Companion</em></span></div>
+  <div class="ft-links">
+    <a href="/index.html">Home</a>
+    <a href="/nfl/index.html">NFL</a>
+    <a href="/mlb/index.html">MLB</a>
+    <a href="/nba/index.html">NBA</a>
+    <a href="/ncaa/index.html">NCAA</a>
+    <a href="/futbol/index.html">Fútbol</a>
+    <a href="/fantasy/index.html">Fantasy</a>
+  </div>
+  <div class="ft-copy">© 2026 The Sports Companion</div>
+</footer>
+
+<script>
+function showSport(id, btn) {
+  document.querySelectorAll('.sport-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sport-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('sport-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+    const firebaseConfig = {
+      apiKey:"YOUR_API_KEY", authDomain:"YOUR_PROJECT.firebaseapp.com",
+      projectId:"YOUR_PROJECT_ID", storageBucket:"YOUR_PROJECT.appspot.com",
+      messagingSenderId:"YOUR_SENDER_ID", appId:"YOUR_APP_ID"
+    };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    onAuthStateChanged(auth, user => {
+      const cta = document.getElementById('nav-cta');
+      const av  = document.getElementById('nav-avatar');
+      if (!cta || !av) return;
+      if (user) {
+        cta.style.display = 'none'; av.style.display = 'flex';
+        const name = user.displayName || user.email || '';
+        const initials = name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+        const el = document.getElementById('nav-initials');
+        if (el) el.textContent = initials;
+        const nm = document.getElementById('nav-username');
+        if (nm) nm.textContent = name.split(' ')[0] || 'Account';
+        if (user.photoURL && el) el.innerHTML = `<img src="${user.photoURL}" style="width:24px;height:24px;border-radius:50%;object-fit:cover"/>`;
+        // open/close dropdown
+        av.addEventListener('click', () => {
+          const dd = av.querySelector('.nav-dropdown');
+          if (dd) dd.style.display = dd.style.display === 'block' ? 'none' : 'block';
+        });
+        document.addEventListener('click', e => {
+          if (!av.contains(e.target)) {
+            const dd = av.querySelector('.nav-dropdown');
+            if (dd) dd.style.display = 'none';
+          }
+        });
+      } else {
+        cta.style.display = 'flex'; av.style.display = 'none';
+      }
+    });
+    window.signOutUser = async (e) => { e.preventDefault(); await signOut(auth); window.location.href = '/index.html'; };
+  </script>
+</body>
+</html>

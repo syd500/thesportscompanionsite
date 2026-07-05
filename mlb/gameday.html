@@ -25,14 +25,14 @@
 
     /* SCOREBOARD */
     .scoreboard{background:var(--ink-2);border-bottom:1px solid var(--line);padding:20px 32px}
-    .sb-top{display:flex;align-items:center;justify-content:space-between;gap:20px}
-    .sb-team{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:120px}
-    .sb-team-name{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;text-align:center;display:flex;align-items:center;justify-content:center;gap:6px}
+    .sb-top{display:flex;align-items:center;justify-content:center;gap:0;}
+    .sb-team{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0;flex:1;max-width:200px;}
+    .sb-team-name{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.03em;text-align:center;display:flex;align-items:center;justify-content:center;gap:5px;flex-wrap:wrap;}
     .sb-team-record{font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
-    .sb-score-wrap{display:flex;align-items:center;gap:16px}
-    .sb-score{font-family:'Barlow Condensed',sans-serif;font-size:4rem;font-weight:900;line-height:1}
+    .sb-score-wrap{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+    .sb-score{font-family:'Barlow Condensed',sans-serif;font-size:4rem;font-weight:900;line-height:1;}
     .sb-score.leader{color:var(--gold)}
-    .sb-divider{font-family:'Barlow Condensed',sans-serif;font-size:2rem;color:var(--line);font-weight:700}
+    .sb-divider{font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;color:var(--line);font-weight:700;}
     .sb-inning-info{display:flex;flex-direction:column;align-items:center;gap:3px;margin-top:12px}
     .sb-inning{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;color:var(--gold)}
     .sb-half{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--muted)}
@@ -68,9 +68,9 @@
     @media(max-width:700px){.gamecast-layout{grid-template-columns:1fr}}
 
     /* BASEBALL DIAMOND */
-    .diamond-wrap{background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:20px;display:flex;flex-direction:column;align-items:center;gap:12px}
+    .diamond-wrap{background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;align-items:center;gap:10px;width:100%}
     .diamond-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
-    .diamond-svg{width:200px;height:200px}
+    .diamond-svg{width:100%;max-width:320px;height:auto}
 
     /* BATTER/PITCHER INFO */
     .matchup-card{background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:18px}
@@ -103,13 +103,13 @@
     .pbp-feed{border:1px solid var(--line);border-radius:10px;overflow:hidden;max-height:320px;overflow-y:auto;margin-top:16px}
     .pbp-feed::-webkit-scrollbar{width:4px}
     .pbp-feed::-webkit-scrollbar-thumb{background:var(--line);border-radius:2px}
-    .pbp-item{padding:11px 15px;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;transition:background .15s}
+    .pbp-item{padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.04);transition:background .15s;cursor:pointer;text-align:center;}
     .pbp-item:hover{background:var(--ink-2)}.pbp-item:last-child{border-bottom:none}
     .pbp-item.active{background:rgba(242,194,48,.07);border-left:2px solid var(--gold)}
     .pbp-item.unseen{opacity:.4}
-    .pbp-item-meta{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--gold);margin-bottom:4px;letter-spacing:.05em}
-    .pbp-item-text{font-size:.92rem;color:var(--muted);line-height:1.5}
-    .pbp-item.hr .pbp-item-text{color:#FF6B6B}
+    .pbp-item-meta{font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--gold);margin-bottom:4px;letter-spacing:.06em;text-align:center;}
+    .pbp-item-text{font-size:.88rem;color:var(--muted);line-height:1.6;text-align:center;}
+    .pbp-item.hr .pbp-item-text{font-size:.88rem;color:var(--muted);line-height:1.6;text-align:center;}
     .pbp-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.58rem;font-weight:600;text-transform:uppercase;padding:2px 6px;border-radius:3px;margin-left:6px}
     .badge-hr{background:rgba(255,107,107,.15);color:#FF6B6B}
     .badge-hit{background:rgba(242,194,48,.12);color:var(--gold)}
@@ -123,11 +123,11 @@
     .bs-tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
     .bs-tbl{width:100%;border-collapse:collapse;font-size:.82rem}
     .bs-tbl thead tr{background:var(--ink-3);border-bottom:1px solid var(--line)}
-    .bs-tbl th{font-family:'JetBrains Mono',monospace;font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:9px 12px;text-align:left;white-space:nowrap}
+    .bs-tbl th{font-family:'JetBrains Mono',monospace;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:9px 12px;text-align:center;white-space:nowrap;}
     .bs-tbl tbody tr{border-bottom:1px solid rgba(255,255,255,.04);transition:background .15s}
     .bs-tbl tbody tr:hover{background:var(--ink-2)}.bs-tbl tbody tr:last-child{border-bottom:none}
-    .bs-tbl td{padding:9px 12px;color:var(--muted);white-space:nowrap}
-    .bs-tbl td.player{color:var(--white);font-weight:600}.bs-tbl td.hi{color:var(--gold);font-weight:700}
+    .bs-tbl td{padding:9px 12px;color:var(--muted);white-space:nowrap;text-align:center;}
+    .bs-tbl td.player{color:var(--white);font-weight:600;text-align:left}.bs-tbl td.hi{color:var(--gold);font-weight:700}
 
     footer{background:var(--ink);border-top:1px solid var(--line);padding:28px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-top:48px}
     .ft-brand{display:flex;align-items:center;gap:8px}.ft-brand img{height:22px}
@@ -228,13 +228,13 @@
 
 <!-- TABS -->
 <div class="game-tabs">
-  <button class="game-tab active" onclick="showPanel('gamecast')">Gamecast</button>
+  <button class="game-tab active" onclick="showPanel('gameday')">Gameday</button>
   <button class="game-tab" onclick="showPanel('boxscore')">Box Score</button>
   <button class="game-tab" onclick="showPanel('pbp')">Play-by-Play</button>
 </div>
 
 <!-- GAMECAST -->
-<div id="panel-gamecast" class="panel active">
+<div id="panel-gameday" class="panel active">
   <div class="panel-inner">
   <div class="gamecast-layout">
 
@@ -242,45 +242,100 @@
     <div>
       <div class="diamond-wrap">
         <div class="diamond-title">Base Runners</div>
-        <svg class="diamond-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-          <!-- Outfield grass -->
-          <ellipse cx="100" cy="90" rx="95" ry="85" fill="#2d6b24" opacity="0.4"/>
-          <!-- Infield dirt -->
-          <polygon points="100,30 170,100 100,170 30,100" fill="#8B6914" opacity="0.35"/>
-          <!-- Grass overlay on infield -->
-          <polygon points="100,55 148,103 100,151 52,103" fill="#2d6b24" opacity="0.3"/>
+        <svg class="diamond-svg" viewBox="0 0 320 300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="grassGrad" cx="50%" cy="60%" r="55%">
+      <stop offset="0%" stop-color="#2e7d28"/>
+      <stop offset="100%" stop-color="#1a4f16"/>
+    </radialGradient>
+    <radialGradient id="dirtGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#9b7240"/>
+      <stop offset="100%" stop-color="#7a5a2e"/>
+    </radialGradient>
+  </defs>
 
-          <!-- Foul lines -->
-          <line x1="100" y1="170" x2="20" y2="20" stroke="white" stroke-width="1" opacity="0.3"/>
-          <line x1="100" y1="170" x2="180" y2="20" stroke="white" stroke-width="1" opacity="0.3"/>
+  <!-- Sky/background -->
+  <rect width="320" height="300" fill="#141820"/>
 
-          <!-- Base paths -->
-          <line x1="100" y1="170" x2="170" y2="100" stroke="white" stroke-width="1.5" opacity="0.4"/>
-          <line x1="170" y1="100" x2="100" y2="30"  stroke="white" stroke-width="1.5" opacity="0.4"/>
-          <line x1="100" y1="30"  x2="30"  y2="100" stroke="white" stroke-width="1.5" opacity="0.4"/>
-          <line x1="30"  y1="100" x2="100" y2="170" stroke="white" stroke-width="1.5" opacity="0.4"/>
+  <!-- Outfield grass semicircle -->
+  <ellipse cx="160" cy="230" rx="148" ry="145" fill="url(#grassGrad)"/>
 
-          <!-- Bases (diamonds) -->
-          <!-- 1B (right) -->
-          <rect id="base-1b" x="162" y="93" width="14" height="14" rx="2" transform="rotate(45 169 100)" fill="#2A2E35" stroke="white" stroke-width="1.5"/>
-          <!-- 2B (top) -->
-          <rect id="base-2b" x="93" y="23" width="14" height="14" rx="2" transform="rotate(45 100 30)" fill="#2A2E35" stroke="white" stroke-width="1.5"/>
-          <!-- 3B (left) -->
-          <rect id="base-3b" x="23" y="93" width="14" height="14" rx="2" transform="rotate(45 30 100)" fill="#2A2E35" stroke="white" stroke-width="1.5"/>
-          <!-- Home plate -->
-          <polygon points="100,178 108,170 108,162 92,162 92,170" fill="white" opacity="0.9"/>
+  <!-- Foul lines (extending to corners) -->
+  <line x1="160" y1="230" x2="10"  y2="30"  stroke="white" stroke-width="1.2" opacity="0.35"/>
+  <line x1="160" y1="230" x2="310" y2="30"  stroke="white" stroke-width="1.2" opacity="0.35"/>
 
-          <!-- Pitcher's mound -->
-          <circle cx="100" cy="100" r="5" fill="#8B6914" stroke="white" stroke-width="1" opacity="0.7"/>
+  <!-- Infield dirt diamond -->
+  <polygon points="160,80 255,168 160,256 65,168" fill="url(#dirtGrad)" opacity="0.9"/>
 
-          <!-- Runner indicators (shown/hidden by JS) -->
-          <circle id="runner-1b" cx="169" cy="100" r="7" fill="#F2C230" stroke="white" stroke-width="1.5" opacity="0" style="transition:opacity .4s"/>
-          <circle id="runner-2b" cx="100" cy="30"  r="7" fill="#F2C230" stroke="white" stroke-width="1.5" opacity="0" style="transition:opacity .4s"/>
-          <circle id="runner-3b" cx="30"  cy="100" r="7" fill="#F2C230" stroke="white" stroke-width="1.5" opacity="0" style="transition:opacity .4s"/>
+  <!-- Infield grass (inner square) -->
+  <polygon points="160,105 232,168 160,231 88,168" fill="#2a7024" opacity="0.7"/>
 
-          <!-- HR flash ring -->
-          <circle id="hr-ring" cx="100" cy="100" r="80" fill="none" stroke="#FF6B6B" stroke-width="3" opacity="0" style="transition:opacity .3s"/>
-        </svg>
+  <!-- Base paths -->
+  <line x1="160" y1="256" x2="255" y2="168" stroke="#c8a96e" stroke-width="1.5" opacity="0.5"/>
+  <line x1="255" y1="168" x2="160" y2="80"  stroke="#c8a96e" stroke-width="1.5" opacity="0.5"/>
+  <line x1="160" y1="80"  x2="65"  y2="168" stroke="#c8a96e" stroke-width="1.5" opacity="0.5"/>
+  <line x1="65"  y1="168" x2="160" y2="256" stroke="#c8a96e" stroke-width="1.5" opacity="0.5"/>
+
+  <!-- Pitcher's mound circle -->
+  <circle cx="160" cy="168" r="14" fill="#9b7240" stroke="#c8a96e" stroke-width="1" opacity="0.9"/>
+  <circle cx="160" cy="168" r="3"  fill="#c8a96e" opacity="0.8"/>
+
+  <!-- Pitcher rubber -->
+  <rect x="154" y="166" width="12" height="4" rx="1" fill="white" opacity="0.8"/>
+
+  <!-- Bases -->
+  <!-- 1B (right) -->
+  <rect id="base-1b" x="247" y="160" width="16" height="16" rx="2" transform="rotate(45 255 168)" fill="#181B1F" stroke="white" stroke-width="2"/>
+  <!-- 2B (top) -->
+  <rect id="base-2b" x="152" y="72"  width="16" height="16" rx="2" transform="rotate(45 160 80)"  fill="#181B1F" stroke="white" stroke-width="2"/>
+  <!-- 3B (left) -->
+  <rect id="base-3b" x="57"  y="160" width="16" height="16" rx="2" transform="rotate(45 65 168)"  fill="#181B1F" stroke="white" stroke-width="2"/>
+  <!-- Home plate -->
+  <polygon points="160,264 170,256 170,248 150,248 150,256" fill="white" opacity="0.95"/>
+
+  <!-- Batter's box outlines -->
+  <rect x="138" y="248" width="10" height="20" fill="none" stroke="white" stroke-width="0.8" opacity="0.3"/>
+  <rect x="172" y="248" width="10" height="20" fill="none" stroke="white" stroke-width="0.8" opacity="0.3"/>
+
+  <!-- Runner indicators (JS-controlled) -->
+  <circle id="runner-1b" cx="255" cy="168" r="9" fill="#F2C230" stroke="white" stroke-width="1.5" opacity="0" style="transition:opacity .4s"/>
+  <circle id="runner-2b" cx="160" cy="80"  r="9" fill="#F2C230" stroke="white" stroke-width="1.5" opacity="0" style="transition:opacity .4s"/>
+  <circle id="runner-3b" cx="65"  cy="168" r="9" fill="#F2C230" stroke="white" stroke-width="1.5" opacity="0" style="transition:opacity .4s"/>
+
+  <!-- HR flash ring -->
+  <circle id="hr-ring" cx="160" cy="160" r="120" fill="none" stroke="#FF6B6B" stroke-width="3" opacity="0" style="transition:opacity .3s"/>
+
+  <!-- Player position numbers -->
+  <g font-family="'Inter',sans-serif" font-size="11" font-weight="700" fill="white" text-anchor="middle">
+    <!-- P (1) on mound -->
+    <circle cx="160" cy="140" r="11" fill="#1e3a1a" stroke="#3a6e34" stroke-width="1.2"/>
+    <text x="160" y="144">1</text>
+    <!-- C (2) behind plate -->
+    <circle cx="160" cy="278" r="11" fill="#1e3a1a" stroke="#3a6e34" stroke-width="1.2"/>
+    <text x="160" y="282">2</text>
+    <!-- 1B (3) -->
+    <circle cx="282" cy="185" r="11" fill="#1e3a1a" stroke="#3a6e34" stroke-width="1.2"/>
+    <text x="282" y="189">3</text>
+    <!-- 2B (4) -->
+    <circle cx="210" cy="130" r="11" fill="#1e3a1a" stroke="#3a6e34" stroke-width="1.2"/>
+    <text x="210" y="134">4</text>
+    <!-- SS (6) -->
+    <circle cx="110" cy="130" r="11" fill="#1e3a1a" stroke="#3a6e34" stroke-width="1.2"/>
+    <text x="110" y="134">6</text>
+    <!-- 3B (5) -->
+    <circle cx="38"  cy="185" r="11" fill="#1e3a1a" stroke="#3a6e34" stroke-width="1.2"/>
+    <text x="38"  y="189">5</text>
+    <!-- LF (7) -->
+    <circle cx="60"  cy="60"  r="11" fill="#1e3a1a" stroke="#3a6e34" stroke-width="1.2"/>
+    <text x="60"  y="64">7</text>
+    <!-- CF (8) -->
+    <circle cx="160" cy="35"  r="11" fill="#1e3a1a" stroke="#3a6e34" stroke-width="1.2"/>
+    <text x="160" y="39">8</text>
+    <!-- RF (9) -->
+    <circle cx="260" cy="60"  r="11" fill="#1e3a1a" stroke="#3a6e34" stroke-width="1.2"/>
+    <text x="260" y="64">9</text>
+  </g>
+</svg>
       </div>
 
       <!-- MATCHUP INFO -->
@@ -329,69 +384,151 @@
 
 <!-- BOX SCORE -->
   </div><!-- /panel-inner -->
+
+<!-- BOX SCORE PANEL -->
 <div id="panel-boxscore" class="panel">
   <div class="panel-inner">
-  <div class="bs-team-toggle">
-    <button class="bs-toggle-btn active" onclick="showBS('nyy')">New York Yankees</button>
-    <button class="bs-toggle-btn" onclick="showBS('bos')">Boston Red Sox</button>
-  </div>
-  <div id="bs-nyy">
-    <div class="bs-section">
-      <div class="bs-section-title">Batting</div>
-      <div class="bs-tbl-wrap"><table class="bs-tbl">
-        <thead><tr><th>Player</th><th>Pos</th><th>AB</th><th>R</th><th>H</th><th>RBI</th><th>HR</th><th>BB</th><th>AVG</th></tr></thead>
-        <tbody>
-          <tr><td class="player">D. Jeter</td><td>SS</td><td>4</td><td>1</td><td class="hi">2</td><td>0</td><td>0</td><td>0</td><td>.328</td></tr>
-          <tr><td class="player">A. Judge</td><td>RF</td><td>3</td><td class="hi">2</td><td class="hi">1</td><td class="hi">2</td><td class="hi">1</td><td>1</td><td>.312</td></tr>
-          <tr><td class="player">G. Stanton</td><td>DH</td><td>4</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>.241</td></tr>
-          <tr><td class="player">A. Rizzo</td><td>1B</td><td>2</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>.265</td></tr>
-          <tr><td class="player">J. Soto</td><td>LF</td><td>4</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>.295</td></tr>
-        </tbody>
-      </table></div>
+
+    <!-- SCORE HEADER -->
+    <div class="bs-score-header">
+      <div class="bs-team-side">
+        <img src="/assets/mlb/yankees.png" class="bs-team-logo" onerror="this.style.display='none'" />
+        <div class="bs-team-name-blue">New York Yankees</div>
+        <div class="bs-final-score">2</div>
+      </div>
+      <div class="bs-center-info">
+        <div class="bs-final-label">Final</div>
+        <div class="bs-game-date">Sep 14, 2025 · Fenway Park · Boston, MA</div>
+      </div>
+      <div class="bs-team-side">
+        <img src="/assets/mlb/red_sox.png" class="bs-team-logo" onerror="this.style.display='none'" />
+        <div class="bs-team-name-blue">Boston Red Sox</div>
+        <div class="bs-final-score">3</div>
+      </div>
     </div>
-    <div class="bs-section">
-      <div class="bs-section-title">Pitching</div>
-      <div class="bs-tbl-wrap"><table class="bs-tbl">
-        <thead><tr><th>Player</th><th>IP</th><th>H</th><th>R</th><th>ER</th><th>BB</th><th>SO</th><th>ERA</th></tr></thead>
-        <tbody>
-          <tr><td class="player">G. Cole</td><td class="hi">6.0</td><td>1</td><td>0</td><td>0</td><td>1</td><td class="hi">7</td><td class="hi">2.21</td></tr>
-        </tbody>
-      </table></div>
+
+    <!-- BETTING LINES -->
+    <div class="bs-card">
+      <div class="bs-card-title">Betting Lines <span class="bs-sample-tag">sample</span></div>
+      <div class="bs-card-body">Run line: Yankees +1.5<br>Total: O/U 9.5<br>Moneyline: Yankees +148 · Red Sox -168</div>
     </div>
+
+    <!-- GAME SUMMARY -->
+    <div class="bs-card">
+      <div class="bs-card-title">Game Summary</div>
+      <div class="bs-card-body">The Red Sox edged the Yankees in a tight pitching duel. Chris Sale was dominant through seven innings, striking out eight. Devers's two-run single in the fourth proved to be the difference.</div>
+    </div>
+
+    <!-- LINE SCORE -->
+    <div class="bs-card">
+      <div class="bs-card-title">Line Score <span class="bs-sample-tag">sample</span></div>
+      <div class="bs-linescore-wrap"><table class="bs-linescore"><thead><tr><th>Team</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>R</th></tr></thead><tbody><tr><td>New York Yankees</td><td>0</td><td>2</td><td>0</td><td>1</td><td>0</td><td>0</td><td>3</td><td>0</td><td>1</td><td class="total">2</td></tr><tr><td>Boston Red Sox</td><td>1</td><td>0</td><td>0</td><td>2</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td class="total">3</td></tr></tbody></table></div>
+    </div>
+
+    <!-- TEAM STATS -->
+    <div class="bs-card">
+      <div class="bs-card-title">Team Stats <span class="bs-sample-tag">sample</span></div>
+      <div class="bs-teamstats-header">
+        <span class="bs-team-name-blue">New York Yankees</span>
+        <span class="bs-team-name-blue">Boston Red Sox</span>
+      </div>
+      
+      <div class="bs-stat-row"><div class="bs-stat-val">2</div><div class="bs-stat-label">Runs</div><div class="bs-stat-val hi">3</div></div>
+      <div class="bs-stat-row"><div class="bs-stat-val">9</div><div class="bs-stat-label">Hits</div><div class="bs-stat-val">7</div></div>
+      <div class="bs-stat-row"><div class="bs-stat-val" style="color:#FF6B6B">1</div><div class="bs-stat-label">Errors</div><div class="bs-stat-val">0</div></div>
+      <div class="bs-stat-row"><div class="bs-stat-val">6</div><div class="bs-stat-label">Left on Base</div><div class="bs-stat-val">5</div></div>
+      <div class="bs-stat-row"><div class="bs-stat-val">8</div><div class="bs-stat-label">Strikeouts</div><div class="bs-stat-val">7</div></div>
+      <div class="bs-stat-row"><div class="bs-stat-val">3</div><div class="bs-stat-label">Walks</div><div class="bs-stat-val">2</div></div>
+    </div>
+
+    <!-- PLAYER STATS -->
+    <div class="bs-team-toggle" style="margin-top:20px">
+      <button class="bs-toggle-btn active" onclick="showBS('nyy')">New York Yankees</button>
+      <button class="bs-toggle-btn" onclick="showBS('bos')">Boston Red Sox</button>
+    </div>
+      <div id="bs-nyy">
+    <div class="bs-section"><div class="bs-section-title">Batting</div><div class="bs-table-wrap"><table class="bs-tbl"><thead><tr><th>Player</th><th>AB</th><th>R</th><th>H</th><th>RBI</th><th>BB</th><th>K</th><th>AVG</th></tr></thead><tbody>
+      <tr><td class="player">D. Jeter</td><td>4</td><td>1</td><td class="hi">2</td><td>0</td><td>0</td><td>1</td><td>.285</td></tr>
+      <tr><td class="player">A. Judge</td><td>4</td><td>1</td><td class="hi">2</td><td class="hi">2</td><td>1</td><td>2</td><td>.312</td></tr>
+      <tr><td class="player">G. Stanton</td><td>3</td><td>0</td><td>0</td><td>0</td><td>0</td><td class="hi" style="color:#FF6B6B">3</td><td>.244</td></tr>
+      <tr><td class="player">A. Rizzo</td><td>3</td><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>.268</td></tr>
+      <tr><td class="player">J. Soto</td><td>4</td><td>0</td><td class="hi">2</td><td>0</td><td>0</td><td>1</td><td>.298</td></tr>
+    </tbody></table></div></div>
+    <div class="bs-section"><div class="bs-section-title">Pitching</div><div class="bs-table-wrap"><table class="bs-tbl"><thead><tr><th>Player</th><th>IP</th><th>H</th><th>R</th><th>ER</th><th>BB</th><th>K</th><th>ERA</th></tr></thead><tbody>
+      <tr><td class="player">G. Cole (L)</td><td>6.0</td><td>6</td><td>3</td><td>3</td><td>1</td><td class="hi">7</td><td>3.24</td></tr>
+      <tr><td class="player">T. Holmes</td><td>2.0</td><td>1</td><td>0</td><td>0</td><td>1</td><td>2</td><td>2.84</td></tr>
+    </tbody></table></div></div>
   </div>
   <div id="bs-bos" style="display:none">
-    <div class="bs-section">
-      <div class="bs-section-title">Batting</div>
-      <div class="bs-tbl-wrap"><table class="bs-tbl">
-        <thead><tr><th>Player</th><th>Pos</th><th>AB</th><th>R</th><th>H</th><th>RBI</th><th>HR</th><th>BB</th><th>AVG</th></tr></thead>
-        <tbody>
-          <tr><td class="player">X. Bogaerts</td><td>SS</td><td>3</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>.282</td></tr>
-          <tr><td class="player">R. Devers</td><td>3B</td><td>3</td><td>0</td><td class="hi">1</td><td>0</td><td>0</td><td>0</td><td>.271</td></tr>
-          <tr><td class="player">J. Martinez</td><td>DH</td><td>3</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>.255</td></tr>
-          <tr><td class="player">T. Turner</td><td>1B</td><td>3</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>.261</td></tr>
-        </tbody>
-      </table></div>
+    <div class="bs-section"><div class="bs-section-title">Batting</div><div class="bs-table-wrap"><table class="bs-tbl"><thead><tr><th>Player</th><th>AB</th><th>R</th><th>H</th><th>RBI</th><th>BB</th><th>K</th><th>AVG</th></tr></thead><tbody>
+      <tr><td class="player">X. Bogaerts</td><td>4</td><td>1</td><td class="hi">2</td><td>1</td><td>0</td><td>1</td><td>.302</td></tr>
+      <tr><td class="player">R. Devers</td><td>4</td><td>1</td><td class="hi">2</td><td class="hi">2</td><td>0</td><td>1</td><td>.276</td></tr>
+      <tr><td class="player">J. Martinez</td><td>3</td><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td><td>.274</td></tr>
+      <tr><td class="player">T. Turner</td><td>4</td><td>1</td><td>1</td><td>0</td><td>0</td><td>2</td><td>.255</td></tr>
+    </tbody></table></div></div>
+    <div class="bs-section"><div class="bs-section-title">Pitching</div><div class="bs-table-wrap"><table class="bs-tbl"><thead><tr><th>Player</th><th>IP</th><th>H</th><th>R</th><th>ER</th><th>BB</th><th>K</th><th>ERA</th></tr></thead><tbody>
+      <tr><td class="player">C. Sale (W)</td><td class="hi">7.0</td><td>7</td><td>2</td><td>2</td><td>2</td><td class="hi">8</td><td>2.84</td></tr>
+      <tr><td class="player">K. Jansen (S)</td><td>2.0</td><td>2</td><td>0</td><td>0</td><td>1</td><td>3</td><td>1.92</td></tr>
+    </tbody></table></div></div>
+
+  </div>
+</div>
+
+<div id="panel-pbp" class="panel">
+  <div class="panel-inner">
+    <div class="pbp-header">
+      <div class="sec-label">// Play-by-Play</div>
     </div>
-    <div class="bs-section">
-      <div class="bs-section-title">Pitching</div>
-      <div class="bs-tbl-wrap"><table class="bs-tbl">
-        <thead><tr><th>Player</th><th>IP</th><th>H</th><th>R</th><th>ER</th><th>BB</th><th>SO</th><th>ERA</th></tr></thead>
-        <tbody>
-          <tr><td class="player">C. Sale</td><td>2.0</td><td>3</td><td class="hi" style="color:#FF6B6B">2</td><td>2</td><td>1</td><td>4</td><td>3.84</td></tr>
-        </tbody>
-      </table></div>
+    <div class="pbp-feed-full">
+<div class="pbp-item">
+      <div class="pbp-item-meta">Top 1 ·  <span class="pbp-score-badge">NYY 0–BOS 0</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">⚾</span><span class="pbp-item-text">Jeter hits a sharp single to left field. Runner at 1B.</span></div>
+    </div>
+<div class="pbp-item td">
+      <div class="pbp-item-meta">Top 1 ·  <span class="pbp-score-badge">NYY 2–BOS 0</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">💥</span><span class="pbp-item-text">Judge crushes a 2-run home run to deep center field! Yankees lead 2–0!</span></div>
+    </div>
+<div class="pbp-item">
+      <div class="pbp-item-meta">Top 1 ·  <span class="pbp-score-badge">NYY 2–BOS 0</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">🔥</span><span class="pbp-item-text">Stanton called out on strikes. 1 out.</span></div>
+    </div>
+<div class="pbp-item">
+      <div class="pbp-item-meta">Top 1 ·  <span class="pbp-score-badge">NYY 2–BOS 0</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">👀</span><span class="pbp-item-text">Rizzo draws a full-count walk. Runner at 1B.</span></div>
+    </div>
+<div class="pbp-item">
+      <div class="pbp-item-meta">Top 1 ·  <span class="pbp-score-badge">NYY 2–BOS 0</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">❌</span><span class="pbp-item-text">LeMahieu grounds into a 4-6-3 double play. Inning over.</span></div>
+    </div>
+<div class="pbp-item">
+      <div class="pbp-item-meta">Bot 1 ·  <span class="pbp-score-badge">NYY 2–BOS 1</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">⚾</span><span class="pbp-item-text">Bogaerts singles up the middle. Devers drives him in with a line drive to right. Red Sox trail 2–1.</span></div>
+    </div>
+<div class="pbp-item">
+      <div class="pbp-item-meta">Bot 1 ·  <span class="pbp-score-badge">NYY 2–BOS 1</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">🔥</span><span class="pbp-item-text">Stanton fans on a nasty slider from Sale. 2 outs.</span></div>
+    </div>
+<div class="pbp-item">
+      <div class="pbp-item-meta">Top 2 ·  <span class="pbp-score-badge">NYY 2–BOS 1</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">⚾</span><span class="pbp-item-text">Soto rips a double down the left-field line!</span></div>
+    </div>
+<div class="pbp-item">
+      <div class="pbp-item-meta">Bot 4 ·  <span class="pbp-score-badge">NYY 2–BOS 3</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">⚾</span><span class="pbp-item-text">Devers singles to center, scores Bogaerts and Turner. Red Sox take the lead 3–2!</span></div>
+    </div>
+<div class="pbp-item">
+      <div class="pbp-item-meta">Top 7 ·  <span class="pbp-score-badge">NYY 2–BOS 3</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">⚾</span><span class="pbp-item-text">Judge sends a deep fly to the warning track — Turner hauls it in at the wall. 2 outs.</span></div>
+    </div>
+<div class="pbp-item">
+      <div class="pbp-item-meta">Bot 9 ·  <span class="pbp-score-badge">Final</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">🔥</span><span class="pbp-item-text">Jansen strikes out Stanton to end the game. Red Sox win 3–2!</span></div>
+    </div>
     </div>
   </div>
 </div>
 
-<!-- PLAY BY PLAY -->
-  </div><!-- /panel-inner -->
-<div id="panel-pbp" class="panel">
-  <div class="panel-inner">
-  <div style="border:1px solid var(--line);border-radius:10px;overflow:hidden" id="full-pbp-feed"></div>
-</div>
 
-  </div><!-- /panel-inner -->
 <footer>
   <div class="ft-brand"><img src="/assets/logo.png" alt="SSC" /><span>The Sports <em>Companion</em></span></div>
   <div class="ft-links"><a href="/index.html">Home</a><a href="/nfl/index.html">NFL</a><a href="/mlb/index.html" class="active">MLB</a><a href="/nba/index.html">NBA</a></div>
@@ -562,5 +699,46 @@ function showBS(team) {
 renderPlay(currentIdx);
 startLive();
 </script>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+    const firebaseConfig = {
+      apiKey:"YOUR_API_KEY", authDomain:"YOUR_PROJECT.firebaseapp.com",
+      projectId:"YOUR_PROJECT_ID", storageBucket:"YOUR_PROJECT.appspot.com",
+      messagingSenderId:"YOUR_SENDER_ID", appId:"YOUR_APP_ID"
+    };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    onAuthStateChanged(auth, user => {
+      const cta = document.getElementById('nav-cta');
+      const av  = document.getElementById('nav-avatar');
+      if (!cta || !av) return;
+      if (user) {
+        cta.style.display = 'none'; av.style.display = 'flex';
+        const name = user.displayName || user.email || '';
+        const initials = name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+        const el = document.getElementById('nav-initials');
+        if (el) el.textContent = initials;
+        const nm = document.getElementById('nav-username');
+        if (nm) nm.textContent = name.split(' ')[0] || 'Account';
+        if (user.photoURL && el) el.innerHTML = `<img src="${user.photoURL}" style="width:24px;height:24px;border-radius:50%;object-fit:cover"/>`;
+        // open/close dropdown
+        av.addEventListener('click', () => {
+          const dd = av.querySelector('.nav-dropdown');
+          if (dd) dd.style.display = dd.style.display === 'block' ? 'none' : 'block';
+        });
+        document.addEventListener('click', e => {
+          if (!av.contains(e.target)) {
+            const dd = av.querySelector('.nav-dropdown');
+            if (dd) dd.style.display = 'none';
+          }
+        });
+      } else {
+        cta.style.display = 'flex'; av.style.display = 'none';
+      }
+    });
+    window.signOutUser = async (e) => { e.preventDefault(); await signOut(auth); window.location.href = '/index.html'; };
+  </script>
 </body>
 </html>

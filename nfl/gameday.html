@@ -27,25 +27,27 @@
 
     /* SCOREBOARD */
     .scoreboard{background:var(--ink-2);border-bottom:1px solid var(--line);padding:24px 32px}
-    .sb-top{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
-    .sb-team{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:120px}
-    .sb-team-name{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;text-align:center;display:flex;align-items:center;justify-content:center;gap:6px}
+    .sb-top{display:flex;align-items:center;justify-content:center;gap:0;}
+    .sb-team{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0;flex:1;max-width:200px;}
+    .sb-team-name{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.03em;text-align:center;display:flex;align-items:center;justify-content:center;gap:5px;flex-wrap:wrap;}
     .sb-team-record{font-size:.75rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
-    .sb-score-wrap{display:flex;align-items:center;gap:20px}
-    .sb-score{font-family:'Barlow Condensed',sans-serif;font-size:4.5rem;font-weight:900;line-height:1}
+    .sb-score-wrap{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+    .sb-score{font-family:'Barlow Condensed',sans-serif;font-size:4rem;font-weight:900;line-height:1;}
     .sb-score.leader{color:var(--gold)}
-    .sb-divider{font-family:'Barlow Condensed',sans-serif;font-size:2rem;color:var(--line);font-weight:700}
-    .sb-game-info{display:flex;flex-direction:column;align-items:center;gap:4px}
+    .sb-divider{font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;color:var(--line);font-weight:700;}
+    .sb-game-info{display:flex;flex-direction:column;align-items:center;gap:3px;padding:0 8px;}
     .sb-quarter{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:800;text-transform:uppercase;color:var(--gold)}
     .sb-clock{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--muted)}
     .sb-possession{font-size:.72rem;color:var(--muted);margin-top:2px}
 
+    
+    .sb-inner{max-width:600px;margin:0 auto;}
     /* QUARTER SCORES */
     .quarter-scores{margin-top:16px;display:flex;justify-content:center}
     .qs-table{border-collapse:collapse;font-size:.72rem;text-align:center}
     .qs-table th{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;padding:4px 10px;text-align:center;border-bottom:1px solid var(--line)}
     .qs-table td{padding:5px 10px;text-align:center;border-bottom:1px solid rgba(255,255,255,.04);color:var(--muted)}
-    .qs-table td:first-child{font-weight:600;color:var(--white);text-align:left;padding-right:16px}
+    .qs-table td:first-child{font-weight:600;color:var(--white);text-align:left;padding-right:12px}
     .qs-table td.total{font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:800;color:var(--gold)}
     .qs-table td.active-q{color:var(--gold);font-weight:700}
 
@@ -92,15 +94,15 @@
     .pbp-feed::-webkit-scrollbar{width:4px}
     .pbp-feed::-webkit-scrollbar-track{background:var(--ink-2)}
     .pbp-feed::-webkit-scrollbar-thumb{background:var(--line);border-radius:2px}
-    .pbp-item{padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.04);transition:background .15s;cursor:pointer}
+    .pbp-item{padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.04);transition:background .15s;cursor:pointer;text-align:center;}
     .pbp-item:last-child{border-bottom:none}
     .pbp-item:hover{background:var(--ink-2)}
     .pbp-item.active{background:rgba(242,194,48,.08);border-left:2px solid var(--gold)}
     .pbp-item.seen{opacity:1}
     .pbp-item.unseen{opacity:.4}
-    .pbp-item-meta{font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--gold);margin-bottom:4px;letter-spacing:.06em}
-    .pbp-item-text{font-size:.92rem;color:var(--muted);line-height:1.6}
-    .pbp-item.td .pbp-item-text{color:var(--green)}
+    .pbp-item-meta{font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--gold);margin-bottom:4px;letter-spacing:.06em;text-align:center;}
+    .pbp-item-text{font-size:.88rem;color:var(--muted);line-height:1.6;text-align:center;}
+    .pbp-item.td .pbp-item-text{font-size:.88rem;color:var(--muted);line-height:1.6;text-align:center;}
     .pbp-item-td-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:2px 6px;border-radius:3px;background:rgba(34,197,94,.15);color:var(--green);margin-left:6px}
 
     /* BOX SCORE */
@@ -113,12 +115,12 @@
     .bs-table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
     .bs-tbl{width:100%;border-collapse:collapse;font-size:.82rem}
     .bs-tbl thead tr{background:var(--ink-3);border-bottom:1px solid var(--line)}
-    .bs-tbl th{font-family:'JetBrains Mono',monospace;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:9px 12px;text-align:left;white-space:nowrap}
+    .bs-tbl th{font-family:'JetBrains Mono',monospace;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:9px 12px;text-align:center;white-space:nowrap;}
     .bs-tbl tbody tr{border-bottom:1px solid rgba(255,255,255,.04);transition:background .15s}
     .bs-tbl tbody tr:hover{background:var(--ink-2)}
     .bs-tbl tbody tr:last-child{border-bottom:none}
-    .bs-tbl td{padding:9px 12px;color:var(--muted);white-space:nowrap}
-    .bs-tbl td.player{color:var(--white);font-weight:600}
+    .bs-tbl td{padding:9px 12px;color:var(--muted);white-space:nowrap;text-align:center;}
+    .bs-tbl td.player{color:var(--white);font-weight:600;text-align:left}
     .bs-tbl td.hi{color:var(--gold);font-weight:700}
 
     /* FOOTER */
@@ -132,7 +134,7 @@
     @media(max-width:768px){
       .panel{padding:16px}.panel-inner{max-width:860px;margin:0 auto}
       .scoreboard{padding:18px 16px}
-      .sb-score{font-size:3rem}
+      .sb-score{font-family:'Barlow Condensed',sans-serif;font-size:4rem;font-weight:900;line-height:1;}
       .nav-brand span{display:none}
     }
   </style>
@@ -151,6 +153,7 @@
 
 <!-- SCOREBOARD -->
 <div class="scoreboard">
+  <div class="sb-inner">
   <div class="sb-top">
     <div class="sb-team">
       <div class="sb-team-name"><img src="/assets/nfl/eagles.png" style="width:28px;height:28px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Philadelphia Eagles</div>
@@ -188,17 +191,18 @@
       </tbody>
     </table>
   </div>
+  </div>
 </div>
 
 <!-- TABS -->
 <div class="game-tabs">
-  <button class="game-tab active" onclick="showPanel('gamecast')">Gamecast</button>
+  <button class="game-tab active" onclick="showPanel('gameday')">Gameday</button>
   <button class="game-tab" onclick="showPanel('boxscore')">Box Score</button>
   <button class="game-tab" onclick="showPanel('pbp')">Play-by-Play</button>
 </div>
 
 <!-- GAMECAST PANEL -->
-<div id="panel-gamecast" class="panel active">
+<div id="panel-gameday" class="panel active">
   <div class="panel-inner">
 
   <!-- FOOTBALL FIELD - Vertical Madden Style -->
@@ -369,115 +373,141 @@
   <div class="pbp-feed" id="mini-feed" style="max-height:240px"></div>
 </div>
 
+
 <!-- BOX SCORE PANEL -->
-  </div><!-- /panel-inner -->
 <div id="panel-boxscore" class="panel">
   <div class="panel-inner">
-  <div class="bs-team-toggle">
-    <button class="bs-toggle-btn active" onclick="showBS('phi')">Philadelphia Eagles</button>
-    <button class="bs-toggle-btn" onclick="showBS('dal')">Dallas Cowboys</button>
-  </div>
 
-  <!-- PHI BOX SCORE -->
-  <div id="bs-phi">
-    <div class="bs-section">
-      <div class="bs-section-title">Passing</div>
-      <div class="bs-table-wrap"><table class="bs-tbl">
-        <thead><tr><th>Player</th><th>CMP</th><th>ATT</th><th>YDS</th><th>TD</th><th>INT</th><th>RTG</th></tr></thead>
-        <tbody>
-          <tr><td class="player">J. Hurts</td><td>18</td><td>26</td><td class="hi">247</td><td class="hi">2</td><td>0</td><td class="hi">118.4</td></tr>
-        </tbody>
-      </table></div>
+    <!-- SCORE HEADER -->
+    <div class="bs-score-header">
+      <div class="bs-team-side">
+        <img src="/assets/nfl/eagles.png" class="bs-team-logo" onerror="this.style.display='none'" />
+        <div class="bs-team-name-blue">Philadelphia Eagles</div>
+        <div class="bs-final-score">28</div>
+      </div>
+      <div class="bs-center-info">
+        <div class="bs-final-label">Final</div>
+        <div class="bs-game-date">Dec 10, 2025 · AT&T Stadium · Dallas, TX</div>
+      </div>
+      <div class="bs-team-side">
+        <img src="/assets/nfl/cowboys.png" class="bs-team-logo" onerror="this.style.display='none'" />
+        <div class="bs-team-name-blue">Dallas Cowboys</div>
+        <div class="bs-final-score">14</div>
+      </div>
     </div>
-    <div class="bs-section">
-      <div class="bs-section-title">Rushing</div>
-      <div class="bs-table-wrap"><table class="bs-tbl">
-        <thead><tr><th>Player</th><th>CAR</th><th>YDS</th><th>AVG</th><th>LNG</th><th>TD</th></tr></thead>
-        <tbody>
-          <tr><td class="player">S. Barkley</td><td>14</td><td class="hi">88</td><td>6.3</td><td>22</td><td class="hi">1</td></tr>
-          <tr><td class="player">J. Hurts</td><td>5</td><td>31</td><td>6.2</td><td>12</td><td>0</td></tr>
-        </tbody>
-      </table></div>
-    </div>
-    <div class="bs-section">
-      <div class="bs-section-title">Receiving</div>
-      <div class="bs-table-wrap"><table class="bs-tbl">
-        <thead><tr><th>Player</th><th>REC</th><th>TGT</th><th>YDS</th><th>AVG</th><th>TD</th><th>LNG</th></tr></thead>
-        <tbody>
-          <tr><td class="player">A.J. Brown</td><td>6</td><td>8</td><td class="hi">94</td><td>15.7</td><td class="hi">1</td><td>38</td></tr>
-          <tr><td class="player">D. Smith</td><td>5</td><td>7</td><td>72</td><td>14.4</td><td>1</td><td>24</td></tr>
-          <tr><td class="player">D. Goedert</td><td>4</td><td>5</td><td>48</td><td>12.0</td><td>0</td><td>18</td></tr>
-          <tr><td class="player">S. Barkley</td><td>3</td><td>6</td><td>33</td><td>11.0</td><td>0</td><td>14</td></tr>
-        </tbody>
-      </table></div>
-    </div>
-    <div class="bs-section">
-      <div class="bs-section-title">Defense</div>
-      <div class="bs-table-wrap"><table class="bs-tbl">
-        <thead><tr><th>Player</th><th>TKL</th><th>AST</th><th>SACK</th><th>INT</th><th>PD</th><th>FF</th></tr></thead>
-        <tbody>
-          <tr><td class="player">Z. White</td><td class="hi">9</td><td>2</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
-          <tr><td class="player">H. Reddick</td><td>4</td><td>1</td><td class="hi">2.0</td><td>0</td><td>0</td><td>1</td></tr>
-          <tr><td class="player">D. Slay</td><td>3</td><td>0</td><td>0</td><td class="hi">1</td><td>2</td><td>0</td></tr>
-        </tbody>
-      </table></div>
-    </div>
-  </div>
 
-  <!-- DAL BOX SCORE -->
+    <!-- BETTING LINES -->
+    <div class="bs-card">
+      <div class="bs-card-title">Betting Lines <span class="bs-sample-tag">sample</span></div>
+      <div class="bs-card-body">Run line: Eagles -13.5<br>Total: O/U 47.5<br>Moneyline: Eagles -420 · Cowboys +340</div>
+    </div>
+
+    <!-- GAME SUMMARY -->
+    <div class="bs-card">
+      <div class="bs-card-title">Game Summary</div>
+      <div class="bs-card-body">The Eagles controlled this game from start to finish. Jalen Hurts rushed for a score and threw two TDs, while Saquon Barkley added a ground score. A Darius Slay interception killed a Dallas drive in the second quarter.</div>
+    </div>
+
+    <!-- LINE SCORE -->
+    <div class="bs-card">
+      <div class="bs-card-title">Line Score <span class="bs-sample-tag">sample</span></div>
+      <div class="bs-linescore-wrap"><table class="bs-linescore"><thead><tr><th>Team</th><th>Q1</th><th>Q2</th><th>Q3</th><th>Q4</th><th>F</th></tr></thead><tbody><tr><td>Philadelphia Eagles</td><td>7</td><td>14</td><td>7</td><td>0</td><td class="total">28</td></tr><tr><td>Dallas Cowboys</td><td>7</td><td>0</td><td>7</td><td>0</td><td class="total">14</td></tr></tbody></table></div>
+    </div>
+
+    <!-- TEAM STATS -->
+    <div class="bs-card">
+      <div class="bs-card-title">Team Stats <span class="bs-sample-tag">sample</span></div>
+      <div class="bs-teamstats-header">
+        <span class="bs-team-name-blue">Philadelphia Eagles</span>
+        <span class="bs-team-name-blue">Dallas Cowboys</span>
+      </div>
+      
+      <div class="bs-stat-row"><div class="bs-stat-val hi">28</div><div class="bs-stat-label">Final Score</div><div class="bs-stat-val">14</div></div>
+      <div class="bs-stat-row"><div class="bs-stat-val hi">388</div><div class="bs-stat-label">Total Yards</div><div class="bs-stat-val">242</div></div>
+      <div class="bs-stat-row"><div class="bs-stat-val hi">247</div><div class="bs-stat-label">Passing Yards</div><div class="bs-stat-val">161</div></div>
+      <div class="bs-stat-row"><div class="bs-stat-val hi">141</div><div class="bs-stat-label">Rushing Yards</div><div class="bs-stat-val">81</div></div>
+      <div class="bs-stat-row"><div class="bs-stat-val hi">3</div><div class="bs-stat-label">Touchdowns</div><div class="bs-stat-val">2</div></div>
+      <div class="bs-stat-row"><div class="bs-stat-val">0</div><div class="bs-stat-label">Turnovers</div><div class="bs-stat-val" style="color:#FF6B6B">1</div></div>
+      <div class="bs-stat-row"><div class="bs-stat-val hi">7/14</div><div class="bs-stat-label">3rd Down</div><div class="bs-stat-val">4/12</div></div>
+      <div class="bs-stat-row"><div class="bs-stat-val hi">32:18</div><div class="bs-stat-label">Time of Poss.</div><div class="bs-stat-val">27:42</div></div>
+    </div>
+
+    <!-- PLAYER STATS -->
+    <div class="bs-team-toggle" style="margin-top:20px">
+      <button class="bs-toggle-btn active" onclick="showBS('phi')">Philadelphia Eagles</button>
+      <button class="bs-toggle-btn" onclick="showBS('dal')">Dallas Cowboys</button>
+    </div>
+      <div id="bs-phi">
+    <div class="bs-section"><div class="bs-section-title">Passing</div><div class="bs-table-wrap"><table class="bs-tbl"><thead><tr><th>Player</th><th>CMP</th><th>ATT</th><th>YDS</th><th>TD</th><th>INT</th><th>RTG</th></tr></thead><tbody><tr><td class="player">J. Hurts</td><td>18</td><td>26</td><td class="hi">247</td><td class="hi">2</td><td>0</td><td class="hi">118.4</td></tr></tbody></table></div></div>
+    <div class="bs-section"><div class="bs-section-title">Rushing</div><div class="bs-table-wrap"><table class="bs-tbl"><thead><tr><th>Player</th><th>CAR</th><th>YDS</th><th>AVG</th><th>TD</th></tr></thead><tbody><tr><td class="player">S. Barkley</td><td>14</td><td class="hi">88</td><td>6.3</td><td class="hi">1</td></tr><tr><td class="player">J. Hurts</td><td>5</td><td>31</td><td>6.2</td><td>0</td></tr></tbody></table></div></div>
+    <div class="bs-section"><div class="bs-section-title">Receiving</div><div class="bs-table-wrap"><table class="bs-tbl"><thead><tr><th>Player</th><th>REC</th><th>TGT</th><th>YDS</th><th>TD</th></tr></thead><tbody><tr><td class="player">A.J. Brown</td><td>6</td><td>8</td><td class="hi">94</td><td class="hi">1</td></tr><tr><td class="player">D. Smith</td><td>5</td><td>7</td><td>72</td><td>1</td></tr><tr><td class="player">D. Goedert</td><td>4</td><td>5</td><td>48</td><td>0</td></tr></tbody></table></div></div>
+    <div class="bs-section"><div class="bs-section-title">Defense</div><div class="bs-table-wrap"><table class="bs-tbl"><thead><tr><th>Player</th><th>TKL</th><th>AST</th><th>SACK</th><th>INT</th></tr></thead><tbody><tr><td class="player">Z. White</td><td class="hi">9</td><td>2</td><td>0</td><td>0</td></tr><tr><td class="player">H. Reddick</td><td>4</td><td>1</td><td class="hi">2.0</td><td>0</td></tr><tr><td class="player">D. Slay</td><td>3</td><td>0</td><td>0</td><td class="hi">1</td></tr></tbody></table></div></div>
+  </div>
   <div id="bs-dal" style="display:none">
-    <div class="bs-section">
-      <div class="bs-section-title">Passing</div>
-      <div class="bs-table-wrap"><table class="bs-tbl">
-        <thead><tr><th>Player</th><th>CMP</th><th>ATT</th><th>YDS</th><th>TD</th><th>INT</th><th>RTG</th></tr></thead>
-        <tbody>
-          <tr><td class="player">D. Prescott</td><td>14</td><td>24</td><td>161</td><td>1</td><td class="hi" style="color:#FF6B6B">1</td><td>74.2</td></tr>
-        </tbody>
-      </table></div>
-    </div>
-    <div class="bs-section">
-      <div class="bs-section-title">Rushing</div>
-      <div class="bs-table-wrap"><table class="bs-tbl">
-        <thead><tr><th>Player</th><th>CAR</th><th>YDS</th><th>AVG</th><th>LNG</th><th>TD</th></tr></thead>
-        <tbody>
-          <tr><td class="player">R. Pollard</td><td>11</td><td>54</td><td>4.9</td><td>14</td><td class="hi">1</td></tr>
-          <tr><td class="player">D. Prescott</td><td>3</td><td>18</td><td>6.0</td><td>10</td><td>0</td></tr>
-        </tbody>
-      </table></div>
-    </div>
-    <div class="bs-section">
-      <div class="bs-section-title">Receiving</div>
-      <div class="bs-table-wrap"><table class="bs-tbl">
-        <thead><tr><th>Player</th><th>REC</th><th>TGT</th><th>YDS</th><th>AVG</th><th>TD</th><th>LNG</th></tr></thead>
-        <tbody>
-          <tr><td class="player">C. Lamb</td><td>7</td><td>11</td><td class="hi">88</td><td>12.6</td><td>1</td><td>28</td></tr>
-          <tr><td class="player">J. Ferguson</td><td>4</td><td>6</td><td>44</td><td>11.0</td><td>0</td><td>16</td></tr>
-          <tr><td class="player">R. Pollard</td><td>3</td><td>7</td><td>29</td><td>9.7</td><td>0</td><td>12</td></tr>
-        </tbody>
-      </table></div>
-    </div>
-    <div class="bs-section">
-      <div class="bs-section-title">Defense</div>
-      <div class="bs-table-wrap"><table class="bs-tbl">
-        <thead><tr><th>Player</th><th>TKL</th><th>AST</th><th>SACK</th><th>INT</th><th>PD</th><th>FF</th></tr></thead>
-        <tbody>
-          <tr><td class="player">M. Parsons</td><td>6</td><td>2</td><td class="hi">1.5</td><td>0</td><td>1</td><td>1</td></tr>
-          <tr><td class="player">T. Smith</td><td class="hi">8</td><td>3</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
-          <tr><td class="player">D. Diggs</td><td>4</td><td>1</td><td>0</td><td class="hi">1</td><td>3</td><td>0</td></tr>
-        </tbody>
-      </table></div>
-    </div>
+    <div class="bs-section"><div class="bs-section-title">Passing</div><div class="bs-table-wrap"><table class="bs-tbl"><thead><tr><th>Player</th><th>CMP</th><th>ATT</th><th>YDS</th><th>TD</th><th>INT</th><th>RTG</th></tr></thead><tbody><tr><td class="player">D. Prescott</td><td>14</td><td>24</td><td>161</td><td>1</td><td style="color:#FF6B6B">1</td><td>74.2</td></tr></tbody></table></div></div>
+    <div class="bs-section"><div class="bs-section-title">Rushing</div><div class="bs-table-wrap"><table class="bs-tbl"><thead><tr><th>Player</th><th>CAR</th><th>YDS</th><th>AVG</th><th>TD</th></tr></thead><tbody><tr><td class="player">R. Pollard</td><td>11</td><td>54</td><td>4.9</td><td class="hi">1</td></tr><tr><td class="player">D. Prescott</td><td>3</td><td>18</td><td>6.0</td><td>0</td></tr></tbody></table></div></div>
+    <div class="bs-section"><div class="bs-section-title">Receiving</div><div class="bs-table-wrap"><table class="bs-tbl"><thead><tr><th>Player</th><th>REC</th><th>TGT</th><th>YDS</th><th>TD</th></tr></thead><tbody><tr><td class="player">C. Lamb</td><td>5</td><td>9</td><td class="hi">72</td><td>1</td></tr><tr><td class="player">M. Gallup</td><td>3</td><td>5</td><td>44</td><td>0</td></tr><tr><td class="player">D. Schultz</td><td>4</td><td>6</td><td>38</td><td>0</td></tr></tbody></table></div></div>
+    <div class="bs-section"><div class="bs-section-title">Defense</div><div class="bs-table-wrap"><table class="bs-tbl"><thead><tr><th>Player</th><th>TKL</th><th>AST</th><th>SACK</th><th>INT</th></tr></thead><tbody><tr><td class="player">M. Parsons</td><td>6</td><td>2</td><td class="hi">1.5</td><td>0</td></tr><tr><td class="player">T. Diggs</td><td>7</td><td>1</td><td>0</td><td>0</td></tr><tr><td class="player">L. Vander Esch</td><td class="hi">10</td><td>3</td><td>0</td><td>0</td></tr></tbody></table></div></div>
+  </div>
+
   </div>
 </div>
 
-<!-- PLAY BY PLAY PANEL -->
-  </div><!-- /panel-inner -->
 <div id="panel-pbp" class="panel">
   <div class="panel-inner">
-  <div style="border:1px solid var(--line);border-radius:10px;overflow:hidden" id="full-pbp-feed"></div>
+    <div class="pbp-header">
+      <div class="sec-label">// Play-by-Play</div>
+    </div>
+    <div class="pbp-feed-full">
+<div class="pbp-item td">
+      <div class="pbp-item-meta">Q1 · 12:34 <span class="pbp-score-badge">PHI 7–0</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">🏈</span><span class="pbp-item-text">Hurts scrambles right and dives into the end zone. TOUCHDOWN Eagles! 1-yard TD run.</span></div>
+    </div>
+<div class="pbp-item td">
+      <div class="pbp-item-meta">Q1 · 8:22 <span class="pbp-score-badge">PHI 7–7</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">🏈</span><span class="pbp-item-text">Prescott rolls right, fires to Lamb in the back corner. TOUCHDOWN Cowboys! 12-yard TD pass.</span></div>
+    </div>
+<div class="pbp-item">
+      <div class="pbp-item-meta">Q1 · 4:11 <span class="pbp-score-badge">PHI 7–7</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">👟</span><span class="pbp-item-text">Eagles punt 48 yards, downed at the Dallas 22.</span></div>
+    </div>
+<div class="pbp-item td">
+      <div class="pbp-item-meta">Q2 · 14:02 <span class="pbp-score-badge">PHI 14–7</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">🏈</span><span class="pbp-item-text">Barkley breaks through the left side and outruns the secondary 22 yards. TOUCHDOWN Eagles!</span></div>
+    </div>
+<div class="pbp-item">
+      <div class="pbp-item-meta">Q2 · 9:55 <span class="pbp-score-badge">PHI 14–7</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">⚡</span><span class="pbp-item-text">Prescott forces it over the middle — Slay picks it off at the PHI 38! Eagles ball.</span></div>
+    </div>
+<div class="pbp-item td">
+      <div class="pbp-item-meta">Q2 · 7:33 <span class="pbp-score-badge">PHI 21–7</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">🏈</span><span class="pbp-item-text">Hurts fires to Brown in double coverage at the back of the end zone. TOUCHDOWN Eagles! 18-yard TD.</span></div>
+    </div>
+<div class="pbp-item">
+      <div class="pbp-item-meta">Q2 · 2:01 <span class="pbp-score-badge">PHI 21–7</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">🎯</span><span class="pbp-item-text">Elliott drills a 42-yarder as time expires in the first half. Eagles extend the lead.</span></div>
+    </div>
+<div class="pbp-item td">
+      <div class="pbp-item-meta">Q3 · 11:44 <span class="pbp-score-badge">PHI 21–14</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">🏈</span><span class="pbp-item-text">Pollard takes the toss sweep left and walks in untouched. TOUCHDOWN Cowboys! 8-yard TD run.</span></div>
+    </div>
+<div class="pbp-item td">
+      <div class="pbp-item-meta">Q3 · 2:55 <span class="pbp-score-badge">PHI 28–14</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">🏈</span><span class="pbp-item-text">Smith runs a slant behind the linebacker — Hurts hits him in stride. TOUCHDOWN Eagles! 24-yard TD.</span></div>
+    </div>
+<div class="pbp-item">
+      <div class="pbp-item-meta">Q4 · 8:12 <span class="pbp-score-badge">PHI 28–14</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">▸</span><span class="pbp-item-text">Reddick sacks Prescott for a 7-yard loss on 3rd and 4. Cowboys will punt.</span></div>
+    </div>
+<div class="pbp-item">
+      <div class="pbp-item-meta">Q4 · 0:00 <span class="pbp-score-badge">Final</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">▸</span><span class="pbp-item-text">Game over. Philadelphia Eagles defeat the Dallas Cowboys 28–14.</span></div>
+    </div>
+    </div>
+  </div>
 </div>
 
-  </div><!-- /panel-inner -->
+
 <footer>
   <div class="ft-brand"><img src="/assets/logo.png" alt="SSC" /><span>The Sports <em>Companion</em></span></div>
   <div class="ft-links"><a href="/index.html">Home</a><a href="/nfl/index.html" class="active">NFL</a><a href="/mlb/index.html">MLB</a><a href="/nba/index.html">NBA</a></div>
@@ -641,5 +671,46 @@ function showBS(team) {
 renderPlay(currentIdx);
 startLive();
 </script>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+    const firebaseConfig = {
+      apiKey:"YOUR_API_KEY", authDomain:"YOUR_PROJECT.firebaseapp.com",
+      projectId:"YOUR_PROJECT_ID", storageBucket:"YOUR_PROJECT.appspot.com",
+      messagingSenderId:"YOUR_SENDER_ID", appId:"YOUR_APP_ID"
+    };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    onAuthStateChanged(auth, user => {
+      const cta = document.getElementById('nav-cta');
+      const av  = document.getElementById('nav-avatar');
+      if (!cta || !av) return;
+      if (user) {
+        cta.style.display = 'none'; av.style.display = 'flex';
+        const name = user.displayName || user.email || '';
+        const initials = name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+        const el = document.getElementById('nav-initials');
+        if (el) el.textContent = initials;
+        const nm = document.getElementById('nav-username');
+        if (nm) nm.textContent = name.split(' ')[0] || 'Account';
+        if (user.photoURL && el) el.innerHTML = `<img src="${user.photoURL}" style="width:24px;height:24px;border-radius:50%;object-fit:cover"/>`;
+        // open/close dropdown
+        av.addEventListener('click', () => {
+          const dd = av.querySelector('.nav-dropdown');
+          if (dd) dd.style.display = dd.style.display === 'block' ? 'none' : 'block';
+        });
+        document.addEventListener('click', e => {
+          if (!av.contains(e.target)) {
+            const dd = av.querySelector('.nav-dropdown');
+            if (dd) dd.style.display = 'none';
+          }
+        });
+      } else {
+        cta.style.display = 'flex'; av.style.display = 'none';
+      }
+    });
+    window.signOutUser = async (e) => { e.preventDefault(); await signOut(auth); window.location.href = '/index.html'; };
+  </script>
 </body>
 </html>

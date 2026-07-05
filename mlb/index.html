@@ -103,6 +103,17 @@
       font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em;
     }
     .season-notice.show { display: block; }
+  
+    /* PITCH ZONE */
+    .pitch-zone-wrap{background:var(--ink-3);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:16px}
+    .pitch-zone-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--ink-2);border-bottom:1px solid var(--line)}
+    .pitch-zone-label{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--white)}
+    .pitch-zone-status{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;letter-spacing:.08em;color:var(--gold)}
+    .pitch-zone-canvas{position:relative;background:#141820}
+    .pitch-result-badge{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;padding:5px 16px;border-radius:20px;border:2px solid transparent;opacity:0;transition:opacity .3s;white-space:nowrap;pointer-events:none}
+    .pitch-result-badge.show-hit{opacity:1;background:rgba(242,194,48,.15);border-color:var(--gold);color:var(--gold)}
+    .pitch-result-badge.show-miss{opacity:1;background:rgba(200,58,43,.12);border-color:var(--crimson);color:#FF6B6B}
+    .pitch-result-badge.show-ball{opacity:1;background:rgba(56,189,248,.12);border-color:#38BDF8;color:#38BDF8}
   </style>
 </head>
 <body>
@@ -113,10 +124,24 @@
     <li><a href="/mlb/index.html" class="active">⚾ MLB</a></li>
     <li><a href="/nba/index.html">🏀 NBA</a></li>
     <li><a href="/ncaa/index.html">🎓 NCAA</a></li>
-    <li><a href="/soccer/mls/index.html">⚽ Soccer</a></li>
+    <li><a href="/futbol/index.html">⚽ Fútbol</a></li>
+    <li><a href="/fantasy/index.html">🏆 Fantasy</a></li>
     <li><a href="/more/index.html">• • •</a></li>
   </ul>
-  <div class="nav-cta"><a href="/index.html#cta">Get Early Access</a></div>
+  <div class="nav-cta" id="nav-cta">
+    <a href="/login/index.html" style="color:var(--muted);font-size:.8rem;font-weight:600;text-decoration:none;padding:8px 12px;">Log In</a>
+    <a href="/signup/index.html" style="background:var(--gold);color:var(--ink);font-weight:700;font-size:.8rem;padding:8px 18px;border-radius:5px;text-decoration:none;">Sign Up</a>
+  </div>
+  <div class="nav-avatar-btn" id="nav-avatar" style="display:none;align-items:center;gap:8px;background:var(--ink-2);border:1px solid var(--line);border-radius:6px;padding:6px 12px;cursor:pointer;margin-right:16px;position:relative" onclick="this.classList.toggle('open')">
+    <div class="nav-avatar-initials" id="nav-initials" style="width:24px;height:24px;border-radius:50%;background:var(--gold);color:var(--ink);font-family:'Barlow Condensed',sans-serif;font-size:.8rem;font-weight:800;display:flex;align-items:center;justify-content:center">?</div>
+    <span class="nav-avatar-name" id="nav-username" style="font-size:.8rem;font-weight:600;color:var(--white);max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Account</span>
+    <div style="display:none;position:absolute;top:calc(100% + 8px);right:0;background:var(--ink-2);border:1px solid var(--line);border-radius:8px;min-width:180px;z-index:200;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.4)" class="nav-dropdown">
+      <a href="/profile/index.html" style="display:block;padding:11px 16px;font-size:.82rem;color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line)">⚙️ My Profile</a>
+      <a href="/profile/index.html#favorites" style="display:block;padding:11px 16px;font-size:.82rem;color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line)">⭐ Favorites</a>
+      <a href="/profile/index.html#notifications" style="display:block;padding:11px 16px;font-size:.82rem;color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line)">🔔 Notifications</a>
+      <a href="#" onclick="signOutUser(event)" style="display:block;padding:11px 16px;font-size:.82rem;color:#FF6B6B;text-decoration:none">↩ Sign Out</a>
+    </div>
+  </div>
 </nav>
 
 <div class="league-banner">
@@ -329,7 +354,88 @@
     </div>
     <div class="guess-game">
       <div class="guess-ctx" id="ctx">Loading scenario...</div>
-      <div class="guess-q">What pitch is thrown?</div>
+      <div class="pitch-zone-wrap">
+  <div class="pitch-zone-header">
+    <span class="pitch-zone-label">Pitch Zone</span>
+    <span class="pitch-zone-status" id="zone-status"></span>
+  </div>
+  <div class="pitch-zone-canvas" id="pitch-canvas">
+    <svg viewBox="0 0 360 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
+      <defs>
+        <linearGradient id="skyGz" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#1a2a4a"/>
+          <stop offset="60%" stop-color="#2a4a2a"/>
+          <stop offset="100%" stop-color="#3d6e2a"/>
+        </linearGradient>
+        <linearGradient id="groundGz" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#5a8a3a"/>
+          <stop offset="100%" stop-color="#3a5a20"/>
+        </linearGradient>
+      </defs>
+
+      <!-- Stadium background sky -->
+      <rect width="360" height="220" fill="url(#skyGz)"/>
+
+      <!-- Stadium lights glow -->
+      <ellipse cx="60"  cy="20" rx="30" ry="15" fill="#fff7d6" opacity="0.08"/>
+      <ellipse cx="300" cy="20" rx="30" ry="15" fill="#fff7d6" opacity="0.08"/>
+      <ellipse cx="40"  cy="30" rx="15" ry="8"  fill="white"   opacity="0.12"/>
+      <ellipse cx="320" cy="30" rx="15" ry="8"  fill="white"   opacity="0.12"/>
+
+      <!-- Outfield wall (arc) -->
+      <path d="M 10 100 Q 180 20 350 100" fill="none" stroke="#5a7a3a" stroke-width="6" opacity="0.6"/>
+
+      <!-- Infield grass -->
+      <ellipse cx="180" cy="160" rx="160" ry="80" fill="url(#groundGz)" opacity="0.9"/>
+
+      <!-- Infield dirt -->
+      <ellipse cx="180" cy="175" rx="80" ry="35" fill="#9b7240" opacity="0.7"/>
+
+      <!-- Home plate area -->
+      <ellipse cx="180" cy="212" rx="30" ry="8"  fill="#7a5a2e" opacity="0.8"/>
+      <polygon points="180,208 188,202 188,196 172,196 172,202" fill="white" opacity="0.9"/>
+
+      <!-- Batter silhouette (left-handed stance — right side of plate) -->
+      <!-- Body -->
+      <ellipse cx="136" cy="180" rx="10" ry="20" fill="#1a1a2e" opacity="0.85"/>
+      <!-- Head -->
+      <circle cx="136" cy="158" r="8" fill="#1a1a2e" opacity="0.85"/>
+      <!-- Helmet brim -->
+      <ellipse cx="133" cy="158" rx="10" ry="4" fill="#111" opacity="0.9" transform="rotate(-15 133 158)"/>
+      <!-- Bat -->
+      <line x1="146" y1="172" x2="220" y2="148" stroke="#8B5E3C" stroke-width="3" stroke-linecap="round" opacity="0.9"/>
+      <!-- Hands on bat -->
+      <circle cx="150" cy="170" r="5" fill="#c8956c" opacity="0.8"/>
+      <!-- Legs -->
+      <line x1="130" y1="198" x2="124" y2="215" stroke="#1a1a2e" stroke-width="6" stroke-linecap="round" opacity="0.85"/>
+      <line x1="142" y1="198" x2="148" y2="215" stroke="#1a1a2e" stroke-width="6" stroke-linecap="round" opacity="0.85"/>
+
+      <!-- Strike zone box (3x3 grid) — centered, slightly right of batter -->
+      <!-- Outer box -->
+      <rect x="195" y="115" width="96" height="90" fill="rgba(255,255,255,0.06)" stroke="white" stroke-width="2" rx="2"/>
+      <!-- Grid lines vertical -->
+      <line x1="227" y1="115" x2="227" y2="205" stroke="white" stroke-width="1" opacity="0.5"/>
+      <line x1="259" y1="115" x2="259" y2="205" stroke="white" stroke-width="1" opacity="0.5"/>
+      <!-- Grid lines horizontal -->
+      <line x1="195" y1="145" x2="291" y2="145" stroke="white" stroke-width="1" opacity="0.5"/>
+      <line x1="195" y1="175" x2="291" y2="175" stroke="white" stroke-width="1" opacity="0.5"/>
+
+      <!-- Zone cell labels (tiny, for reference) -->
+      <g font-family="monospace" font-size="7" fill="white" opacity="0.25" text-anchor="middle">
+        <text x="211" y="133">HI-IN</text><text x="243" y="133">HI-MID</text><text x="275" y="133">HI-AW</text>
+        <text x="211" y="163">MID-IN</text><text x="243" y="163">MIDDLE</text><text x="275" y="163">MID-AW</text>
+        <text x="211" y="193">LO-IN</text><text x="243" y="193">LO-MID</text><text x="275" y="193">LO-AW</text>
+      </g>
+
+      <!-- Ball dot (animated, JS-positioned) -->
+      <circle id="pitch-ball" cx="243" cy="160" r="7" fill="#F2C230" stroke="white" stroke-width="1.5" opacity="0" style="transition:cx .3s,cy .3s,opacity .3s"/>
+      <!-- Ball seam lines -->
+      <path id="pitch-seam" d="M240,156 Q243,160 240,164 M246,156 Q243,160 246,164" stroke="#C83A2B" stroke-width="1" fill="none" opacity="0" style="transition:opacity .3s"/>
+    </svg>
+    <div class="pitch-result-badge" id="pitch-result"></div>
+  </div>
+</div>
+      <div class="guess-q">Where will the pitch land?</div>
       <div class="timer-row"><div class="timer-track"><div class="timer-fill" id="timer-fill" style="width:100%"></div></div><div class="timer-num" id="timer-num">15</div></div>
       <div class="opts" id="opts"></div>
       <button class="next-btn" id="next-btn" onclick="nextPlay()">Next Pitch →</button>
@@ -386,8 +492,125 @@ function renderPlay(){const p=plays[idx%plays.length];document.getElementById('c
 function startTimer(){clearInterval(timer);timeLeft=15;updateTimer();timer=setInterval(()=>{timeLeft--;updateTimer();if(timeLeft<=0){clearInterval(timer);timeUp()}},1000)}
 function updateTimer(){document.getElementById('timer-num').textContent=timeLeft;document.getElementById('timer-fill').style.width=(timeLeft/15*100)+'%'}
 function timeUp(){total++;streak=0;document.querySelectorAll('.opt').forEach(b=>b.disabled=true);const p=plays[idx%plays.length];document.querySelectorAll('.opt').forEach(b=>{if(b.textContent===p.correct)b.classList.add('correct')});updateScores();document.getElementById('next-btn').classList.add('show')}
-function pick(btn,choice,correct){clearInterval(timer);total++;document.querySelectorAll('.opt').forEach(b=>b.disabled=true);if(choice===correct){btn.classList.add('correct');score+=1+(timeLeft/15);correctCount++;streak++}else{btn.classList.add('wrong');streak=0;document.querySelectorAll('.opt').forEach(b=>{if(b.textContent===correct)b.classList.add('correct')})}updateScores();document.getElementById('next-btn').classList.add('show')}
+
+// Zone cell positions (cx, cy) for each of 9 pitch locations
+const ZONE_POSITIONS = {
+  "Up & In":       {cx:211, cy:130, inZone:true},
+  "Up & Middle":   {cx:243, cy:130, inZone:true},
+  "Up & Away":     {cx:275, cy:130, inZone:true},
+  "Middle-In":     {cx:211, cy:160, inZone:true},
+  "Middle":        {cx:243, cy:160, inZone:true},
+  "Middle-Away":   {cx:275, cy:160, inZone:true},
+  "Down & In":     {cx:211, cy:190, inZone:true},
+  "Down & Middle": {cx:243, cy:190, inZone:true},
+  "Down & Away":   {cx:275, cy:190, inZone:true},
+  "Low & Away":    {cx:300, cy:208, inZone:false},
+  "Bounce":        {cx:243, cy:215, inZone:false},
+  "Way Outside":   {cx:315, cy:160, inZone:false},
+  "High":          {cx:243, cy:108, inZone:false},
+  "Inside":        {cx:182, cy:160, inZone:false},
+  "Backdoor":      {cx:295, cy:175, inZone:true},
+  "12-6":          {cx:243, cy:192, inZone:true},
+  "Arm Side":      {cx:211, cy:160, inZone:true},
+  "Glove Side":    {cx:275, cy:160, inZone:true},
+  "Down the Middle":{cx:243, cy:160, inZone:true},
+};
+
+function getPitchZonePos(pitchLabel) {
+  // Extract location from pitch label e.g. "Slider — Down & Away" → "Down & Away"
+  const parts = pitchLabel.split('—');
+  const loc = parts.length > 1 ? parts[1].trim() : pitchLabel.trim();
+  for (const [key, val] of Object.entries(ZONE_POSITIONS)) {
+    if (loc.toLowerCase().includes(key.toLowerCase()) || key.toLowerCase().includes(loc.toLowerCase())) return val;
+  }
+  return {cx:243, cy:160, inZone:true}; // default middle
+}
+
+function showPitchZone(pitchLabel, isCorrect) {
+  const pos = getPitchZonePos(pitchLabel);
+  const ball = document.getElementById('pitch-ball');
+  const seam = document.getElementById('pitch-seam');
+  const status = document.getElementById('zone-status');
+  const badge = document.getElementById('pitch-result');
+  if (!ball) return;
+
+  ball.setAttribute('cx', pos.cx);
+  ball.setAttribute('cy', pos.cy);
+  ball.setAttribute('opacity', '1');
+  ball.setAttribute('fill', isCorrect ? '#F2C230' : '#FF6B6B');
+  if (seam) { seam.setAttribute('opacity','1'); }
+
+  if (pos.inZone) {
+    status.textContent = 'In Zone';
+    status.style.color = '#F2C230';
+  } else {
+    status.textContent = 'Out of Zone';
+    status.style.color = '#8A8F98';
+  }
+
+  badge.className = 'pitch-result-badge';
+  if (isCorrect) {
+    badge.textContent = '✓ Correct Spot';
+    badge.classList.add('show-hit');
+  } else {
+    badge.textContent = pos.inZone ? '✗ Missed Spot' : '✗ Out of Zone';
+    badge.classList.add('show-miss');
+  }
+}
+
+function resetPitchZone() {
+  const ball = document.getElementById('pitch-ball');
+  const seam = document.getElementById('pitch-seam');
+  const status = document.getElementById('zone-status');
+  const badge = document.getElementById('pitch-result');
+  if (ball) { ball.setAttribute('opacity','0'); ball.setAttribute('fill','#F2C230'); }
+  if (seam) { seam.setAttribute('opacity','0'); }
+  if (status) { status.textContent = ''; }
+  if (badge) { badge.className = 'pitch-result-badge'; badge.textContent = ''; }
+}
+function pick(btn,choice,correct){clearInterval(timer);total++;document.querySelectorAll('.opt').forEach(b=>b.disabled=true);if(choice===correct){btn.classList.add('correct');score+=1+(timeLeft/15);correctCount++;streak++;showPitchZone(correct,true)}else{btn.classList.add('wrong');streak=0;document.querySelectorAll('.opt').forEach(b=>{if(b.textContent===correct)b.classList.add('correct')});showPitchZone(correct,false)}updateScores();document.getElementById('next-btn').classList.add('show')}
 function updateScores(){document.getElementById('score').textContent=score.toFixed(1);document.getElementById('correct').textContent=correctCount+' / '+total;document.getElementById('streak').textContent=streak}
-function nextPlay(){idx++;renderPlay()}
+function nextPlay(){idx++;resetPitchZone();renderPlay()}
 </script>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+    const firebaseConfig = {
+      apiKey:"YOUR_API_KEY", authDomain:"YOUR_PROJECT.firebaseapp.com",
+      projectId:"YOUR_PROJECT_ID", storageBucket:"YOUR_PROJECT.appspot.com",
+      messagingSenderId:"YOUR_SENDER_ID", appId:"YOUR_APP_ID"
+    };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    onAuthStateChanged(auth, user => {
+      const cta = document.getElementById('nav-cta');
+      const av  = document.getElementById('nav-avatar');
+      if (!cta || !av) return;
+      if (user) {
+        cta.style.display = 'none'; av.style.display = 'flex';
+        const name = user.displayName || user.email || '';
+        const initials = name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+        const el = document.getElementById('nav-initials');
+        if (el) el.textContent = initials;
+        const nm = document.getElementById('nav-username');
+        if (nm) nm.textContent = name.split(' ')[0] || 'Account';
+        if (user.photoURL && el) el.innerHTML = `<img src="${user.photoURL}" style="width:24px;height:24px;border-radius:50%;object-fit:cover"/>`;
+        // open/close dropdown
+        av.addEventListener('click', () => {
+          const dd = av.querySelector('.nav-dropdown');
+          if (dd) dd.style.display = dd.style.display === 'block' ? 'none' : 'block';
+        });
+        document.addEventListener('click', e => {
+          if (!av.contains(e.target)) {
+            const dd = av.querySelector('.nav-dropdown');
+            if (dd) dd.style.display = 'none';
+          }
+        });
+      } else {
+        cta.style.display = 'flex'; av.style.display = 'none';
+      }
+    });
+    window.signOutUser = async (e) => { e.preventDefault(); await signOut(auth); window.location.href = '/index.html'; };
+  </script>
 </body></html>

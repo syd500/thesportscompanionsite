@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fútbol — The Sports Companion</title>
+  <link rel="icon" type="image/png" href="/assets/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --ink:#0B0D0F; --ink-2:#181B1F; --ink-3:#262A30; --muted:#8A8F98; --line:#2A2E35; --gold:#F2C230; --white:#FFFFFF; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--ink); color: var(--white); overflow-x: hidden; }
+
+    /* NAV */
+    nav { position: sticky; top: 0; z-index: 100; display: flex; align-items: center; background: rgba(11,13,15,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+    .nav-brand { display: flex; align-items: center; gap: 8px; padding: 0 20px; text-decoration: none; border-right: 1px solid var(--line); height: 56px; flex-shrink: 0; }
+    .nav-brand img { height: 28px; }
+    .nav-brand span { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 1rem; letter-spacing: 0.04em; color: var(--white); white-space: nowrap; }
+    .nav-brand span em { font-style: normal; color: var(--gold); }
+    .nav-leagues { display: flex; align-items: center; list-style: none; overflow-x: auto; flex: 1; scrollbar-width: none; }
+    .nav-leagues::-webkit-scrollbar { display: none; }
+    .nav-leagues a { display: flex; align-items: center; height: 56px; padding: 0 18px; font-size: 0.82rem; font-weight: 600; color: var(--muted); text-decoration: none; border-right: 1px solid var(--line); transition: color 0.2s, background 0.2s; white-space: nowrap; }
+    .nav-leagues a:hover { color: var(--white); background: var(--ink-2); }
+    .nav-leagues a.active { color: var(--gold); background: var(--ink-2); border-bottom: 2px solid var(--gold); }
+    .nav-cta { margin-left: auto; padding: 0 20px; height: 56px; display: flex; align-items: center; flex-shrink: 0; }
+    .nav-cta a { background: var(--gold); color: var(--ink); font-weight: 700; font-size: 0.8rem; padding: 8px 18px; border-radius: 5px; text-decoration: none; }
+
+    /* BANNER */
+    .league-banner { background: var(--ink-2); border-bottom: 1px solid var(--line); padding: 24px 32px 0; }
+    .league-banner-top { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+    .league-banner-top h1 { font-family: 'Barlow Condensed', sans-serif; font-size: 2.2rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.04em; }
+    .league-badge { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 10px; border-radius: 4px; background: rgba(242,194,48,0.12); color: var(--gold); border: 1px solid rgba(242,194,48,0.3); }
+
+    /* LEAGUE SELECTOR */
+    .league-selector-wrap { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+    .league-selector-label { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+    .league-select {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+      background: var(--ink-3); color: var(--white);
+      border: 1px solid var(--line); border-radius: 6px;
+      padding: 8px 32px 8px 14px; cursor: pointer; outline: none;
+      appearance: none; -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23F2C230'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 10px center;
+      transition: border-color 0.2s;
+    }
+    .league-select:hover { border-color: var(--gold); }
+    .league-select option { background: #1a1d22; color: var(--white); font-weight: 600; }
+
+    /* SEASON SELECTOR */
+    .season-select {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em;
+      background: var(--ink-3); color: var(--gold);
+      border: 1px solid rgba(242,194,48,0.3); border-radius: 4px; padding: 5px 24px 5px 10px;
+      cursor: pointer; outline: none; appearance: none; -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23F2C230'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 8px center;
+    }
+    .season-select:hover { border-color: var(--gold); }
+    .season-select option { background: var(--ink-3); color: var(--white); }
+    .season-notice {
+      display: none; margin-top: 0; margin-bottom: 12px; padding: 8px 14px;
+      background: rgba(242,194,48,0.06); border: 1px solid rgba(242,194,48,0.2);
+      border-radius: 5px; font-size: 0.78rem; color: var(--muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .season-notice.show { display: block; }
+
+    /* LEAGUE PANELS & TABS */
+    .tab-bar { display: flex; overflow-x: auto; scrollbar-width: none; }
+    .tab-bar::-webkit-scrollbar { display: none; }
+    .tab-btn { padding: 11px 20px; font-size: 0.82rem; font-weight: 600; color: var(--muted); background: none; border: none; border-bottom: 2px solid transparent; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+    .tab-btn:hover { color: var(--white); }
+    .tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+    .inner-panel { display: none; }
+    .inner-panel.active { display: block; }
+
+    /* SHARED CONTENT STYLES */
+    .sec-label { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.15em; color: var(--gold); text-transform: uppercase; margin-bottom: 10px; }
+    .sec-title { font-family: 'Barlow Condensed', sans-serif; font-size: 1.6rem; font-weight: 800; text-transform: uppercase; margin-bottom: 6px; }
+    .sec-body { color: var(--muted); font-size: 0.88rem; line-height: 1.6; margin-bottom: 20px; }
+    .sub-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+    .sub-tab { background: var(--ink-2); border: 1px solid var(--line); color: var(--muted); font-size: 0.78rem; font-weight: 500; padding: 7px 14px; border-radius: 5px; cursor: pointer; transition: all 0.2s; }
+    .sub-tab:hover { border-color: var(--gold); color: var(--white); }
+    .sub-tab.active { background: var(--gold); border-color: var(--gold); color: var(--ink); font-weight: 700; }
+    .sub-panel { display: none; }
+    .sub-panel.active { display: block; }
+    .tbl-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; }
+    .tbl { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
+    .tbl thead tr { background: var(--ink-3); border-bottom: 1px solid var(--line); }
+    .tbl th { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); padding: 11px 13px; text-align: left; white-space: nowrap; }
+    .tbl tbody tr { border-bottom: 1px solid rgba(255,255,255,0.04); transition: background 0.15s; }
+    .tbl tbody tr:hover { background: var(--ink-2); }
+    .tbl tbody tr:last-child { border-bottom: none; }
+    .tbl td { padding: 10px 13px; color: var(--muted); white-space: nowrap; }
+    .tbl td.pl { color: var(--white); font-weight: 600; }
+    .tbl td.hi { color: var(--gold); font-weight: 700; }
+    .tbl td.ng { color: #FF6B6B; }
+    .ovr { display: inline-block; font-family: 'Barlow Condensed', sans-serif; font-size: 0.88rem; font-weight: 800; padding: 2px 7px; border-radius: 4px; }
+    .ovr-hi { background: rgba(242,194,48,0.2); color: var(--gold); }
+    .ovr-mid { background: rgba(56,189,248,0.15); color: #38BDF8; }
+    .ovr-lo { background: rgba(255,107,107,0.12); color: #FF6B6B; }
+    .scores-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+    .score-card { background: var(--ink-2); border: 1px solid var(--line); border-radius: 10px; padding: 16px; transition: border-color 0.2s; }
+    .score-card:hover { border-color: var(--gold); }
+    .score-hdr { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; margin-bottom: 12px; }
+    .score-team { font-weight: 600; font-size: .88rem; display: flex; align-items: center; gap: 6px; }
+    .score-val { font-family: 'Barlow Condensed', sans-serif; font-size: 1.5rem; font-weight: 800; }
+    .score-val.w { color: var(--gold); }
+    .score-row { display: flex; align-items: center; justify-content: space-between; padding: 5px 0; }
+    .score-div { height: 1px; background: var(--line); margin: 4px 0; }
+    .score-status { margin-top: 10px; font-size: 0.7rem; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.08em; color: var(--muted); text-transform: uppercase; }
+    .live-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #22c55e; margin-right: 5px; animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.3} }
+    .standings-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+    .s-div { background: var(--ink-2); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+    .s-div-hdr { padding: 11px 16px; background: var(--ink-3); border-bottom: 1px solid var(--line); font-family: 'Barlow Condensed', sans-serif; font-size: 0.95rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; }
+    .s-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; padding: 9px 16px; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 0.83rem; align-items: center; }
+    .s-row:last-child { border-bottom: none; }
+    .s-row.hdr { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; }
+    .s-row .team { font-weight: 600; color: var(--white); }
+    .s-row .val { color: var(--muted); }
+    .s-row .hi { color: var(--gold); font-weight: 700; }
+    .f-card { background: var(--ink-2); border: 1px solid var(--line); border-radius: 12px; padding: 28px 24px; text-decoration: none; display: block; transition: all 0.2s; }
+    .f-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+    .f-icon { font-size: 2rem; margin-bottom: 14px; }
+    .f-card h3 { font-family: 'Barlow Condensed', sans-serif; font-size: 1.4rem; font-weight: 800; text-transform: uppercase; margin-bottom: 8px; }
+    .f-card h3 span { color: var(--gold); }
+    .f-card p { font-size: 0.84rem; color: var(--muted); line-height: 1.6; }
+    .f-tag { display: inline-block; margin-top: 14px; font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 9px; border-radius: 4px; background: rgba(242,194,48,0.12); color: var(--gold); }
+    .fantasy-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; }
+    .type-btn { font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:9px 22px;border-radius:6px;border:2px solid var(--line);background:var(--ink-2);color:var(--muted);cursor:pointer;transition:all .2s;margin-right:8px;margin-bottom:16px; }
+    .panel-inner { max-width:860px;margin:0 auto; }
+    footer { background: var(--ink); border-top: 1px solid var(--line); padding: 28px 32px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; margin-top: 48px; }
+    .ft-brand { display: flex; align-items: center; gap: 8px; }
+    .ft-brand img { height: 22px; }
+    .ft-brand span { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 1rem; }
+    .ft-brand span em { font-style: normal; color: var(--gold); }
+    .ft-copy { font-size: 0.75rem; color: var(--muted); }
+    .ft-links { display: flex; gap: 18px; }
+    .ft-links a { font-size: 0.75rem; color: var(--muted); text-decoration: none; }
+    .ft-links a:hover { color: var(--white); }
+    @media(max-width:768px) { .nav-brand span{display:none;} .inner-panel{padding:18px 16px !important;} .league-banner{padding:18px 16px 0;} }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/index.html" class="nav-brand">
+    <img src="/assets/logo.png" alt="SSC" />
+    <span>The Sports <em>Companion</em></span>
+  </a>
+  <ul class="nav-leagues">
+    <li><a href="/nfl/index.html">🏈 NFL</a></li>
+    <li><a href="/mlb/index.html">⚾ MLB</a></li>
+    <li><a href="/nba/index.html">🏀 NBA</a></li>
+    <li><a href="/ncaa/index.html">🎓 NCAA</a></li>
+    <li><a href="/futbol/index.html" class="active">⚽ Fútbol</a></li>
+    <li><a href="/fantasy/index.html">🏆 Fantasy</a></li>
+    <li><a href="/more/index.html">• • •</a></li>
+  </ul>
+  <div class="nav-cta" id="nav-cta">
+    <a href="/login/index.html" style="color:var(--muted);font-size:.8rem;font-weight:600;text-decoration:none;padding:8px 12px;">Log In</a>
+    <a href="/signup/index.html" style="background:var(--gold);color:var(--ink);font-weight:700;font-size:.8rem;padding:8px 18px;border-radius:5px;text-decoration:none;">Sign Up</a>
+  </div>
+  <div class="nav-avatar-btn" id="nav-avatar" style="display:none;align-items:center;gap:8px;background:var(--ink-2);border:1px solid var(--line);border-radius:6px;padding:6px 12px;cursor:pointer;margin-right:16px;position:relative" onclick="this.classList.toggle('open')">
+    <div class="nav-avatar-initials" id="nav-initials" style="width:24px;height:24px;border-radius:50%;background:var(--gold);color:var(--ink);font-family:'Barlow Condensed',sans-serif;font-size:.8rem;font-weight:800;display:flex;align-items:center;justify-content:center">?</div>
+    <span class="nav-avatar-name" id="nav-username" style="font-size:.8rem;font-weight:600;color:var(--white);max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Account</span>
+    <div style="display:none;position:absolute;top:calc(100% + 8px);right:0;background:var(--ink-2);border:1px solid var(--line);border-radius:8px;min-width:180px;z-index:200;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.4)" class="nav-dropdown">
+      <a href="/profile/index.html" style="display:block;padding:11px 16px;font-size:.82rem;color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line)">⚙️ My Profile</a>
+      <a href="/profile/index.html#favorites" style="display:block;padding:11px 16px;font-size:.82rem;color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line)">⭐ Favorites</a>
+      <a href="/profile/index.html#notifications" style="display:block;padding:11px 16px;font-size:.82rem;color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line)">🔔 Notifications</a>
+      <a href="#" onclick="signOutUser(event)" style="display:block;padding:11px 16px;font-size:.82rem;color:#FF6B6B;text-decoration:none">↩ Sign Out</a>
+    </div>
+  </div>
+</nav>
+
+<div class="league-banner">
+  <div class="league-banner-top">
+    <h1>⚽ Fútbol</h1>
+    <span class="league-badge" id="league-badge">MLS · 2025</span>
+    <select class="season-select" id="season-sel" onchange="changeSeason(this.value)" aria-label="Select season">
+      <option value="2025" selected>2025 Season</option>
+      <option value="2024">2024 Season</option>
+      <option value="2023">2023 Season</option>
+      <option value="2022">2022 Season</option>
+      <option value="2021">2021 Season</option>
+      <option value="2020">2020 Season</option>
+      <option value="2019">2019 Season</option>
+      <option value="2018">2018 Season</option>
+      <option value="2017">2017 Season</option>
+      <option value="2016">2016 Season</option>
+      <option value="2015">2015 Season</option>
+    </select>
+  </div>
+
+  <div class="league-selector-wrap">
+    <span class="league-selector-label">League //</span>
+    <select class="league-select" id="league-sel" onchange="changeLeague(this.value)" aria-label="Select league">
+      <option value="mls"    selected>🇺🇸 MLS — Major League Soccer</option>
+      <option value="epl"           >🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League</option>
+      <option value="laliga"        >🇪🇸 La Liga</option>
+      <option value="ucl"           >🏆 UEFA Champions League</option>
+      <option value="fifa"          >🌍 FIFA World Cup</option>
+    </select>
+  </div>
+
+  <div class="season-notice" id="season-notice">// Historical view — stats shown are representative samples for this season.</div>
+
+  <div class="tab-bar" style="border-top:1px solid var(--line)">
+    <button class="tab-btn active" id="inner-btn-scores"    onclick="showInner('scores',this)">Scores</button>
+    <button class="tab-btn"        id="inner-btn-standings" onclick="showInner('standings',this)">Standings</button>
+    <button class="tab-btn"        id="inner-btn-stats"     onclick="showInner('stats',this)">Stats</button>
+    <button class="tab-btn"        id="inner-btn-fantasy"   onclick="showInner('fantasy',this)">Fantasy &amp; Games</button>
+  </div>
+</div>
+
+
+<div id="league-mls" class="league-panel" style="display:none">
+  <div class="tab-bar" style="background:var(--ink-3);border-bottom:1px solid var(--line)">
+    <button class="tab-btn active" onclick="showInner('mls','scores',this)">Scores</button>
+    <button class="tab-btn" onclick="showInner('mls','standings',this)">Standings</button>
+    <button class="tab-btn" onclick="showInner('mls','stats',this)">Stats</button>
+    <button class="tab-btn" onclick="showInner('mls','fantasy',this)">Fantasy &amp; Games</button>
+  </div>
+  <div id="mls-scores"    class="inner-panel active" style="padding:28px 32px"><div class="sec-label">// Latest Results</div>
+  <div class="sec-title">Scores & Results</div>
+  <p style="font-size:.8rem;color:var(--muted);margin-bottom:16px;font-family:'JetBrains Mono',monospace">Tap any game to open Gamecast & Box Score</p>
+  <div class="scores-grid"><div class="score-card">
+      <div class="score-hdr">Sat · Jul 5 · Final</div>
+      <div class="score-row"><span class="score-team">LAFC</span><span class="score-val w">3</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">LA Galaxy</span><span class="score-val">1</span></div>
+      <div class="score-status">Final</div>
+    </div><div class="score-card">
+      <div class="score-hdr">Sat · Jul 5</div>
+      <div class="score-row"><span class="score-team">Inter Miami</span><span class="score-val">2</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">Atlanta United</span><span class="score-val">2</span></div>
+      <div class="score-status"><span class="live-dot"></span>Live · 78'</div>
+    </div><div class="score-card">
+      <div class="score-hdr">Sat · Jul 5 · Final</div>
+      <div class="score-row"><span class="score-team">Seattle Sounders</span><span class="score-val w">1</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">Portland Timbers</span><span class="score-val">0</span></div>
+      <div class="score-status">Final</div>
+    </div><div class="score-card">
+      <div class="score-hdr">Sat · Jul 5 · Final</div>
+      <div class="score-row"><span class="score-team">NYCFC</span><span class="score-val w">2</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">Red Bulls</span><span class="score-val">1</span></div>
+      <div class="score-status">Final</div>
+    </div><div class="score-card">
+      <div class="score-hdr">Sun · Jul 6</div>
+      <div class="score-row"><span class="score-team">Austin FC</span><span class="score-val">—</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">FC Dallas</span><span class="score-val">—</span></div>
+      <div class="score-status"><span class="live-dot"></span>3:00 PM ET</div>
+    </div><div class="score-card">
+      <div class="score-hdr">Sun · Jul 6</div>
+      <div class="score-row"><span class="score-team">Columbus Crew</span><span class="score-val">—</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">CF Montréal</span><span class="score-val">—</span></div>
+      <div class="score-status"><span class="live-dot"></span>5:00 PM ET</div>
+    </div></div>
+</div></div>
+  <div id="mls-standings" class="inner-panel"        style="padding:28px 32px"><div class="sec-label">// 2025 Season</div>
+  <div class="sec-title">Standings</div>
+  <div class="standings-grid"><div class="s-div">
+      <div class="s-div-hdr">Western Conference</div>
+      <div class="s-row hdr"><span>Team</span><span>W</span><span>L</span><span>D</span><span>PTS</span></div>
+      <div class="s-row"><span class="team">LAFC</span><span class="val">14</span><span class="hi">5</span><span class="val">4</span><span class="val">46</span></div><div class="s-row"><span class="team">Seattle Sounders</span><span class="val">12</span><span class="hi">6</span><span class="val">5</span><span class="val">41</span></div><div class="s-row"><span class="team">LA Galaxy</span><span class="val">11</span><span class="hi">7</span><span class="val">5</span><span class="val">38</span></div><div class="s-row"><span class="team">Austin FC</span><span class="val">10</span><span class="hi">8</span><span class="val">5</span><span class="val">35</span></div><div class="s-row"><span class="team">Portland Timbers</span><span class="val">9</span><span class="hi">9</span><span class="val">5</span><span class="val">32</span></div><div class="s-row"><span class="team">FC Dallas</span><span class="val">8</span><span class="hi">10</span><span class="val">5</span><span class="val">29</span></div>
+    </div><div class="s-div">
+      <div class="s-div-hdr">Eastern Conference</div>
+      <div class="s-row hdr"><span>Team</span><span>W</span><span>L</span><span>D</span><span>PTS</span></div>
+      <div class="s-row"><span class="team">Inter Miami</span><span class="val">15</span><span class="hi">3</span><span class="val">5</span><span class="val">50</span></div><div class="s-row"><span class="team">NYCFC</span><span class="val">12</span><span class="hi">5</span><span class="val">6</span><span class="val">42</span></div><div class="s-row"><span class="team">Columbus Crew</span><span class="val">11</span><span class="hi">6</span><span class="val">6</span><span class="val">39</span></div><div class="s-row"><span class="team">Atlanta United</span><span class="val">10</span><span class="hi">8</span><span class="val">5</span><span class="val">35</span></div><div class="s-row"><span class="team">Red Bulls</span><span class="val">9</span><span class="hi">9</span><span class="val">5</span><span class="val">32</span></div><div class="s-row"><span class="team">CF Montréal</span><span class="val">7</span><span class="hi">11</span><span class="val">5</span><span class="val">26</span></div>
+    </div></div>
+</div></div>
+  <div id="mls-stats"     class="inner-panel"        style="padding:28px 32px"><div class="sec-label">// 2025 Season</div>
+  <div class="sec-title">MLS Stats</div>
+  <div style="display:flex;gap:10px;margin-bottom:22px;align-items:center">
+    <button class="type-btn active" onclick="showType('player',this)" style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:9px 22px;border-radius:6px;border:2px solid var(--gold);background:var(--gold);color:var(--ink);cursor:pointer;transition:all .2s">👤 Player Stats</button>
+    <button class="type-btn" onclick="showType('team',this)" style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:9px 22px;border-radius:6px;border:2px solid var(--line);background:var(--ink-2);color:var(--muted);cursor:pointer;transition:all .2s">🏟️ Team Stats</button>
+  </div>
+
+  <!-- PLAYER STATS -->
+  <div id="type-player" class="type-panel">
+    <div class="sub-tabs">
+      <button class="sub-tab active" onclick="showSub('mls-scoring')">Top Scorers</button>
+      <button class="sub-tab" onclick="showSub('mls-assists')">Assists</button>
+      <button class="sub-tab" onclick="showSub('mls-gk')">Goalkeepers</button>
+    </div>
+    <div id="sub-mls-scoring" class="sub-panel active"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Player</th><th>Club</th><th>GP</th><th>Goals</th><th>xG</th><th>Shots</th><th>SoT</th></tr></thead><tbody><tr><td class="pl">Lionel Messi</td><td class="">Inter Miami</td><td class="">22</td><td class="hi">18</td><td class="">15.2</td><td class="">94</td><td class="">44</td></tr><tr><td class="pl">Carlos Vela</td><td class="">LAFC</td><td class="">24</td><td class="hi">14</td><td class="">12.8</td><td class="">76</td><td class="">38</td></tr><tr><td class="pl">Jordan Morris</td><td class="">Seattle</td><td class="">26</td><td class="hi">12</td><td class="">11.1</td><td class="">68</td><td class="">32</td></tr><tr><td class="pl">Cucho Hernandez</td><td class="">Columbus</td><td class="">25</td><td class="hi">11</td><td class="">10.4</td><td class="">72</td><td class="">34</td></tr><tr><td class="pl">Taxiarchis Fountas</td><td class="">Red Bulls</td><td class="">24</td><td class="hi">10</td><td class="">9.8</td><td class="">65</td><td class="">30</td></tr></tbody></table></div></div>
+    <div id="sub-mls-assists" class="sub-panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Player</th><th>Club</th><th>GP</th><th>AST</th><th>Key Passes</th><th>Chances Created</th></tr></thead><tbody><tr><td class="pl">Lionel Messi</td><td class="">Inter Miami</td><td class="">22</td><td class="hi">14</td><td class="">68</td><td class="">82</td></tr><tr><td class="pl">Riqui Puig</td><td class="">LA Galaxy</td><td class="">24</td><td class="hi">11</td><td class="">54</td><td class="">61</td></tr><tr><td class="pl">Xherdan Shaqiri</td><td class="">Chicago Fire</td><td class="">23</td><td class="hi">9</td><td class="">48</td><td class="">55</td></tr><tr><td class="pl">Cucho Hernandez</td><td class="">Columbus</td><td class="">25</td><td class="hi">8</td><td class="">42</td><td class="">49</td></tr><tr><td class="pl">Xavi Hernandez</td><td class="">Charlotte</td><td class="">24</td><td class="hi">7</td><td class="">38</td><td class="">44</td></tr></tbody></table></div></div>
+    <div id="sub-mls-gk" class="sub-panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Player</th><th>Club</th><th>GP</th><th>Saves</th><th>GA</th><th>CS</th><th>Save%</th></tr></thead><tbody><tr><td class="pl">Matt Turner</td><td class="">NYCFC</td><td class="">26</td><td class="">94</td><td class="">22</td><td class="">10</td><td class="hi">81%</td></tr><tr><td class="pl">Stefan Frei</td><td class="">Seattle</td><td class="">26</td><td class="">88</td><td class="">18</td><td class="">12</td><td class="hi">83%</td></tr><tr><td class="pl">John McCarthy</td><td class="">LAFC</td><td class="">25</td><td class="">79</td><td class="">20</td><td class="">11</td><td class="hi">80%</td></tr><tr><td class="pl">Eloy Room</td><td class="">Columbus</td><td class="">25</td><td class="">74</td><td class="">19</td><td class="">10</td><td class="hi">80%</td></tr><tr><td class="pl">Andre Blake</td><td class="">Philadelphia</td><td class="">24</td><td class="">72</td><td class="">22</td><td class="">9</td><td class="hi">77%</td></tr></tbody></table></div></div>
+  </div>
+
+  <!-- TEAM STATS -->
+  <div id="type-team" class="type-panel" style="display:none">
+    <div class="sub-tabs">
+      <button class="sub-tab active" onclick="showSub('mls-team-off')">Attack</button>
+      <button class="sub-tab" onclick="showSub('mls-team-def')">Defense</button>
+    </div>
+    <div id="sub-mls-team-off" class="sub-panel active"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Team</th><th>Goals</th><th>xG</th><th>Shots/G</th><th>Possession%</th><th>Passes/G</th></tr></thead><tbody><tr><td class="pl">Inter Miami</td><td class="hi">48</td><td class="">41.2</td><td class="">16.4</td><td class="">58.4%</td><td class="">524</td></tr><tr><td class="pl">LAFC</td><td class="hi">42</td><td class="">37.8</td><td class="">14.8</td><td class="">54.2%</td><td class="">488</td></tr><tr><td class="pl">Columbus Crew</td><td class="hi">38</td><td class="">34.4</td><td class="">13.8</td><td class="">52.8%</td><td class="">468</td></tr><tr><td class="pl">Seattle Sounders</td><td class="hi">36</td><td class="">32.8</td><td class="">13.2</td><td class="">51.4%</td><td class="">454</td></tr><tr><td class="pl">NYCFC</td><td class="hi">34</td><td class="">31.4</td><td class="">12.8</td><td class="">50.8%</td><td class="">444</td></tr><tr><td class="pl">LA Galaxy</td><td class="hi">32</td><td class="">29.8</td><td class="">12.4</td><td class="">49.4%</td><td class="">432</td></tr></tbody></table></div></div>
+    <div id="sub-mls-team-def" class="sub-panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Team</th><th>Goals Against</th><th>xGA</th><th>Clean Sheets</th><th>Saves</th><th>Tackles/G</th></tr></thead><tbody><tr><td class="pl">Seattle Sounders</td><td class="hi">18</td><td class="">20.4</td><td class="">12</td><td class="">88</td><td class="">18.4</td></tr><tr><td class="pl">LAFC</td><td class="hi">20</td><td class="">22.8</td><td class="">11</td><td class="">79</td><td class="">17.8</td></tr><tr><td class="pl">NYCFC</td><td class="hi">22</td><td class="">24.2</td><td class="">10</td><td class="">94</td><td class="">17.2</td></tr><tr><td class="pl">Columbus Crew</td><td class="hi">24</td><td class="">26.4</td><td class="">9</td><td class="">82</td><td class="">16.8</td></tr><tr><td class="pl">Inter Miami</td><td class="hi">26</td><td class="">28.8</td><td class="">8</td><td class="">74</td><td class="">16.4</td></tr><tr><td class="pl">Atlanta United</td><td class="hi">28</td><td class="">30.4</td><td class="">7</td><td class="">68</td><td class="">15.8</td></tr></tbody></table></div></div>
+  </div>
+
+<div style="margin-top:24px;border-top:1px solid var(--line);padding-top:20px">
+  <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;letter-spacing:.12em;color:var(--gold);text-transform:uppercase;margin-bottom:14px">// Stat Definitions — from The Sports Statistics Manual by Chris Cain</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px">
+    <div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">OVR</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#FF6B6B">Soccer</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Overall Rating</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">A 0–99 composite score combining goals, assists, xG, shots on target, and defensive contributions relative to all players in the same league.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">xG</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#FF6B6B">Soccer</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Expected Goals</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">The probability that a shot results in a goal based on shot location, angle, shot type, and assist type. Goals scored above xG = clinical finishing; below = poor finishing or bad luck.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">xGA</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#FF6B6B">Soccer</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Expected Goals Against</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">xG conceded by the defense/goalkeeper. A keeper's save percentage vs. xGA reveals true shot-stopping ability beyond what raw goals allowed shows.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">SoT</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#FF6B6B">Soccer</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Shots on Target</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">Shots that would have gone in without a save or hit the post. Divided by total shots to get shot accuracy.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">CS</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#FF6B6B">Soccer</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Clean Sheets</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">Games where the team/goalkeeper conceded zero goals. One of the primary metrics in the goalkeeper OVR calculation.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">POSS%</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#FF6B6B">Soccer</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Possession Percentage</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">Share of total playing time a team controls the ball. High possession + high xG = dominant team; high possession + low xG = inefficient.</div>
+  </div>
+  </div>
+  <p style="font-size:.72rem;color:var(--muted);margin-top:16px;font-family:'JetBrains Mono',monospace">Methodology from <em style="color:var(--white)">The Sports Statistics Manual</em> by Chris Cain · <a href="https://www.amazon.com/Sports-Statistics-Manual-Baseball-Basketball/dp/B0DDHVR5MK/" target="_blank" style="color:var(--gold);text-decoration:none">Available on Amazon</a></p>
+</div>
+</div></div>
+  <div id="mls-fantasy"   class="inner-panel"        style="padding:28px 32px"><div class="sec-label">// Fantasy</div>
+  <div class="sec-title">Fantasy & Games</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px"><div style="background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:28px 24px">
+        <div style="font-size:2rem;margin-bottom:14px">⚽</div>
+        <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:800;text-transform:uppercase;margin-bottom:8px">Fantasy MLS</h3>
+        <p style="font-size:.84rem;color:var(--muted);line-height:1.6">Build your squad, track points, manage waivers across the whole season.</p>
+        <span style="display:inline-block;margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:4px;background:rgba(242,194,48,.12);color:var(--gold)">Coming Soon</span>
+      </div><div style="background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:28px 24px">
+        <div style="font-size:2rem;margin-bottom:14px">📊</div>
+        <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:800;text-transform:uppercase;margin-bottom:8px">xG Analytics</h3>
+        <p style="font-size:.84rem;color:var(--muted);line-height:1.6">Expected goals, shot maps, and pressing intensity for every MLS team.</p>
+        <span style="display:inline-block;margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:4px;background:rgba(242,194,48,.12);color:var(--gold)">Analytics</span>
+      </div><div style="background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:28px 24px">
+        <div style="font-size:2rem;margin-bottom:14px">🏆</div>
+        <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:800;text-transform:uppercase;margin-bottom:8px">Leaderboards</h3>
+        <p style="font-size:.84rem;color:var(--muted);line-height:1.6">Compare your prediction accuracy with fans globally.</p>
+        <span style="display:inline-block;margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:4px;background:rgba(242,194,48,.12);color:var(--gold)">Coming Soon</span>
+      </div></div>
+</div></div>
+</div>
+
+<div id="league-epl" class="league-panel" style="display:none">
+  <div class="tab-bar" style="background:var(--ink-3);border-bottom:1px solid var(--line)">
+    <button class="tab-btn active" onclick="showInner('epl','scores',this)">Scores</button>
+    <button class="tab-btn" onclick="showInner('epl','standings',this)">Standings</button>
+    <button class="tab-btn" onclick="showInner('epl','stats',this)">Stats</button>
+    <button class="tab-btn" onclick="showInner('epl','fantasy',this)">Fantasy &amp; Games</button>
+  </div>
+  <div id="epl-scores"    class="inner-panel active" style="padding:28px 32px"><div class="sec-label">// Latest Results</div>
+  <div class="sec-title">Scores & Results</div>
+  <p style="font-size:.8rem;color:var(--muted);margin-bottom:16px;font-family:'JetBrains Mono',monospace">Tap any game to open Gamecast & Box Score</p>
+  <div class="scores-grid"><div class="score-card">
+      <div class="score-hdr">Sat · Jul 5 · Final</div>
+      <div class="score-row"><span class="score-team">Manchester City</span><span class="score-val w">3</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">Arsenal</span><span class="score-val">1</span></div>
+      <div class="score-status">Final</div>
+    </div><div class="score-card">
+      <div class="score-hdr">Sat · Jul 5 · Final</div>
+      <div class="score-row"><span class="score-team">Liverpool</span><span class="score-val">2</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">Chelsea</span><span class="score-val">2</span></div>
+      <div class="score-status">Final</div>
+    </div><div class="score-card">
+      <div class="score-hdr">Sat · Jul 5</div>
+      <div class="score-row"><span class="score-team">Manchester United</span><span class="score-val">1</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">Tottenham</span><span class="score-val w">2</span></div>
+      <div class="score-status"><span class="live-dot"></span>Live · 67'</div>
+    </div><div class="score-card">
+      <div class="score-hdr">Sat · Jul 5 · Final</div>
+      <div class="score-row"><span class="score-team">Newcastle</span><span class="score-val w">1</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">Aston Villa</span><span class="score-val">0</span></div>
+      <div class="score-status">Final</div>
+    </div><div class="score-card">
+      <div class="score-hdr">Sun · Jul 6</div>
+      <div class="score-row"><span class="score-team">Brighton</span><span class="score-val">—</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">West Ham</span><span class="score-val">—</span></div>
+      <div class="score-status"><span class="live-dot"></span>2:00 PM ET</div>
+    </div><div class="score-card">
+      <div class="score-hdr">Sun · Jul 6</div>
+      <div class="score-row"><span class="score-team">Everton</span><span class="score-val">—</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">Wolves</span><span class="score-val">—</span></div>
+      <div class="score-status"><span class="live-dot"></span>9:00 AM ET</div>
+    </div></div>
+</div></div>
+  <div id="epl-standings" class="inner-panel"        style="padding:28px 32px"><div class="sec-label">// 2025 Season</div>
+  <div class="sec-title">Standings</div>
+  <div class="standings-grid"><div class="s-div">
+      <div class="s-div-hdr">Premier League 2024-25</div>
+      <div class="s-row hdr"><span>Team</span><span>W</span><span>D</span><span>L</span><span>GD</span><span>PTS</span></div>
+      <div class="s-row"><span class="team">Manchester City</span><span class="val">26</span><span class="hi">5</span><span class="val">3</span><span class="val">+48</span><span class="val">83</span></div><div class="s-row"><span class="team">Arsenal</span><span class="val">24</span><span class="hi">6</span><span class="val">4</span><span class="val">+41</span><span class="val">78</span></div><div class="s-row"><span class="team">Liverpool</span><span class="val">23</span><span class="hi">7</span><span class="val">4</span><span class="val">+38</span><span class="val">76</span></div><div class="s-row"><span class="team">Aston Villa</span><span class="val">20</span><span class="hi">6</span><span class="val">8</span><span class="val">+22</span><span class="val">66</span></div><div class="s-row"><span class="team">Tottenham</span><span class="val">18</span><span class="hi">5</span><span class="val">11</span><span class="val">+14</span><span class="val">59</span></div><div class="s-row"><span class="team">Chelsea</span><span class="val">17</span><span class="hi">7</span><span class="val">10</span><span class="val">+9</span><span class="val">58</span></div><div class="s-row"><span class="team">Newcastle</span><span class="val">17</span><span class="hi">6</span><span class="val">11</span><span class="val">+11</span><span class="val">57</span></div><div class="s-row"><span class="team">Manchester United</span><span class="val">14</span><span class="hi">4</span><span class="val">16</span><span class="val">-5</span><span class="val">46</span></div><div class="s-row"><span class="team">Brighton</span><span class="val">13</span><span class="hi">8</span><span class="val">13</span><span class="val">+2</span><span class="val">47</span></div><div class="s-row"><span class="team">West Ham</span><span class="val">11</span><span class="hi">6</span><span class="val">17</span><span class="val">-15</span><span class="val">39</span></div>
+    </div></div>
+</div></div>
+  <div id="epl-stats"     class="inner-panel"        style="padding:28px 32px"><div class="sec-label">// 2025 Season</div>
+  <div class="sec-title">Premier League Stats</div>
+  <div style="display:flex;gap:10px;margin-bottom:22px;align-items:center">
+    <button class="type-btn active" onclick="showType('player',this)" style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:9px 22px;border-radius:6px;border:2px solid var(--gold);background:var(--gold);color:var(--ink);cursor:pointer;transition:all .2s">👤 Player Stats</button>
+    <button class="type-btn" onclick="showType('team',this)" style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:9px 22px;border-radius:6px;border:2px solid var(--line);background:var(--ink-2);color:var(--muted);cursor:pointer;transition:all .2s">🏟️ Team Stats</button>
+  </div>
+
+  <!-- PLAYER STATS -->
+  <div id="type-player" class="type-panel">
+    <div class="sub-tabs">
+      <button class="sub-tab active" onclick="showSub('epl-scoring')">Top Scorers</button>
+      <button class="sub-tab" onclick="showSub('epl-assists')">Assists</button>
+    </div>
+    <div id="sub-epl-scoring" class="sub-panel active"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Player</th><th>Club</th><th>GP</th><th>Goals</th><th>xG</th><th>Shots</th></tr></thead><tbody><tr><td class="pl">Erling Haaland</td><td class="">Man City</td><td class="">34</td><td class="hi">28</td><td class="">26.1</td><td class="">142</td></tr><tr><td class="pl">Mohamed Salah</td><td class="">Liverpool</td><td class="">34</td><td class="hi">22</td><td class="">19.8</td><td class="">118</td></tr><tr><td class="pl">Cole Palmer</td><td class="">Chelsea</td><td class="">33</td><td class="hi">18</td><td class="">16.1</td><td class="">109</td></tr><tr><td class="pl">Bukayo Saka</td><td class="">Arsenal</td><td class="">33</td><td class="hi">17</td><td class="">15.2</td><td class="">98</td></tr><tr><td class="pl">Ollie Watkins</td><td class="">Aston Villa</td><td class="">34</td><td class="hi">16</td><td class="">14.8</td><td class="">102</td></tr><tr><td class="pl">Son Heung-min</td><td class="">Tottenham</td><td class="">32</td><td class="hi">14</td><td class="">12.9</td><td class="">88</td></tr></tbody></table></div></div>
+    <div id="sub-epl-assists" class="sub-panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Player</th><th>Club</th><th>GP</th><th>AST</th><th>Key Passes</th></tr></thead><tbody><tr><td class="pl">Kevin De Bruyne</td><td class="">Man City</td><td class="">28</td><td class="hi">14</td><td class="">98</td></tr><tr><td class="pl">Mohamed Salah</td><td class="">Liverpool</td><td class="">34</td><td class="hi">13</td><td class="">88</td></tr><tr><td class="pl">Bukayo Saka</td><td class="">Arsenal</td><td class="">33</td><td class="hi">12</td><td class="">82</td></tr><tr><td class="pl">Cole Palmer</td><td class="">Chelsea</td><td class="">33</td><td class="hi">11</td><td class="">79</td></tr><tr><td class="pl">Trent Alexander-Arnold</td><td class="">Liverpool</td><td class="">34</td><td class="hi">10</td><td class="">74</td></tr></tbody></table></div></div>
+  </div>
+
+  <!-- TEAM STATS -->
+  <div id="type-team" class="type-panel" style="display:none">
+    <div class="sub-tabs">
+      <button class="sub-tab active" onclick="showSub('epl-team-off')">Attack</button>
+      <button class="sub-tab" onclick="showSub('epl-team-def')">Defense</button>
+    </div>
+    <div id="sub-epl-team-off" class="sub-panel active"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Team</th><th>Goals</th><th>xG</th><th>Shots/G</th><th>Possession%</th></tr></thead><tbody><tr><td class="pl">Manchester City</td><td class="hi">82</td><td class="">76.4</td><td class="">18.8</td><td class="">62.4%</td></tr><tr><td class="pl">Arsenal</td><td class="hi">74</td><td class="">68.8</td><td class="">16.4</td><td class="">58.8%</td></tr><tr><td class="pl">Liverpool</td><td class="hi">78</td><td class="">72.2</td><td class="">17.4</td><td class="">56.4%</td></tr><tr><td class="pl">Chelsea</td><td class="hi">68</td><td class="">62.4</td><td class="">15.8</td><td class="">54.2%</td></tr><tr><td class="pl">Aston Villa</td><td class="hi">64</td><td class="">58.8</td><td class="">14.8</td><td class="">52.8%</td></tr><tr><td class="pl">Tottenham</td><td class="hi">58</td><td class="">54.4</td><td class="">14.2</td><td class="">50.4%</td></tr></tbody></table></div></div>
+    <div id="sub-epl-team-def" class="sub-panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Team</th><th>Goals Against</th><th>Clean Sheets</th><th>Tackles/G</th><th>Interceptions/G</th></tr></thead><tbody><tr><td class="pl">Arsenal</td><td class="hi">28</td><td class="">18</td><td class="">22.4</td><td class="">14.8</td></tr><tr><td class="pl">Manchester City</td><td class="hi">32</td><td class="">16</td><td class="">20.8</td><td class="">13.4</td></tr><tr><td class="pl">Liverpool</td><td class="hi">34</td><td class="">14</td><td class="">21.4</td><td class="">14.2</td></tr><tr><td class="pl">Chelsea</td><td class="hi">38</td><td class="">12</td><td class="">19.8</td><td class="">12.8</td></tr><tr><td class="pl">Newcastle</td><td class="hi">42</td><td class="">10</td><td class="">20.4</td><td class="">13.2</td></tr><tr><td class="pl">Aston Villa</td><td class="hi">44</td><td class="">10</td><td class="">19.2</td><td class="">12.4</td></tr></tbody></table></div></div>
+  </div>
+
+<div style="margin-top:24px;border-top:1px solid var(--line);padding-top:20px">
+  <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;letter-spacing:.12em;color:var(--gold);text-transform:uppercase;margin-bottom:14px">// Stat Definitions — from The Sports Statistics Manual by Chris Cain</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px">
+    <div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">OVR</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#FF6B6B">Soccer</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Overall Rating</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">A 0–99 composite score combining goals, assists, xG, shots on target, and defensive contributions relative to all players in the same league.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">xG</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#FF6B6B">Soccer</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Expected Goals</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">The probability that a shot results in a goal based on shot location, angle, shot type, and assist type. Goals scored above xG = clinical finishing; below = poor finishing or bad luck.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">xGA</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#FF6B6B">Soccer</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Expected Goals Against</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">xG conceded by the defense/goalkeeper. A keeper's save percentage vs. xGA reveals true shot-stopping ability beyond what raw goals allowed shows.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">SoT</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#FF6B6B">Soccer</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Shots on Target</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">Shots that would have gone in without a save or hit the post. Divided by total shots to get shot accuracy.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">CS</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#FF6B6B">Soccer</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Clean Sheets</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">Games where the team/goalkeeper conceded zero goals. One of the primary metrics in the goalkeeper OVR calculation.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">POSS%</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#FF6B6B">Soccer</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Possession Percentage</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">Share of total playing time a team controls the ball. High possession + high xG = dominant team; high possession + low xG = inefficient.</div>
+  </div>
+  </div>
+  <p style="font-size:.72rem;color:var(--muted);margin-top:16px;font-family:'JetBrains Mono',monospace">Methodology from <em style="color:var(--white)">The Sports Statistics Manual</em> by Chris Cain · <a href="https://www.amazon.com/Sports-Statistics-Manual-Baseball-Basketball/dp/B0DDHVR5MK/" target="_blank" style="color:var(--gold);text-decoration:none">Available on Amazon</a></p>
+</div>
+</div></div>
+  <div id="epl-fantasy"   class="inner-panel"        style="padding:28px 32px"><div class="sec-label">// Fantasy</div>
+  <div class="sec-title">Fantasy & Games</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px"><div style="background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:28px 24px">
+        <div style="font-size:2rem;margin-bottom:14px">⚽</div>
+        <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:800;text-transform:uppercase;margin-bottom:8px">Fantasy Premier League</h3>
+        <p style="font-size:.84rem;color:var(--muted);line-height:1.6">Draft and manage your FPL squad with SSC stat integration.</p>
+        <span style="display:inline-block;margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:4px;background:rgba(242,194,48,.12);color:var(--gold)">Coming Soon</span>
+      </div><div style="background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:28px 24px">
+        <div style="font-size:2rem;margin-bottom:14px">📊</div>
+        <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:800;text-transform:uppercase;margin-bottom:8px">Advanced Metrics</h3>
+        <p style="font-size:.84rem;color:var(--muted);line-height:1.6">xG, progressive passes, pressing stats and more for every EPL team.</p>
+        <span style="display:inline-block;margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:4px;background:rgba(242,194,48,.12);color:var(--gold)">Analytics</span>
+      </div><div style="background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:28px 24px">
+        <div style="font-size:2rem;margin-bottom:14px">🏆</div>
+        <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:800;text-transform:uppercase;margin-bottom:8px">Match Predictions</h3>
+        <p style="font-size:.84rem;color:var(--muted);line-height:1.6">AI-powered match outcome predictions based on form and xG.</p>
+        <span style="display:inline-block;margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:4px;background:rgba(242,194,48,.12);color:var(--gold)">Coming Soon</span>
+      </div></div>
+</div></div>
+</div>
+
+<div id="league-laliga" class="league-panel" style="display:none">
+  <div class="tab-bar" style="background:var(--ink-3);border-bottom:1px solid var(--line)">
+    <button class="tab-btn active" onclick="showInner('laliga','scores',this)">Scores</button>
+    <button class="tab-btn" onclick="showInner('laliga','standings',this)">Standings</button>
+    <button class="tab-btn" onclick="showInner('laliga','stats',this)">Stats</button>
+    <button class="tab-btn" onclick="showInner('laliga','fantasy',this)">Fantasy &amp; Games</button>
+  </div>
+  <div id="laliga-scores"    class="inner-panel active" style="padding:28px 32px"><div class="sec-label">// Latest Results</div>
+  <div class="sec-title">Scores & Results</div>
+  <p style="font-size:.8rem;color:var(--muted);margin-bottom:16px;font-family:'JetBrains Mono',monospace">Tap any game to open Gamecast & Box Score</p>
+  <div class="scores-grid"><div class="score-card">
+      <div class="score-hdr">Sat · Jul 5 · Final</div>
+      <div class="score-row"><span class="score-team">Real Madrid</span><span class="score-val w">4</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">Barcelona</span><span class="score-val">2</span></div>
+      <div class="score-status">Final</div>
+    </div><div class="score-card">
+      <div class="score-hdr">Sat · Jul 5 · Final</div>
+      <div class="score-row"><span class="score-team">Atletico Madrid</span><span class="score-val w">1</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">Sevilla</span><span class="score-val">0</span></div>
+      <div class="score-status">Final</div>
+    </div><div class="score-card">
+      <div class="score-hdr">Sun · Jul 6</div>
+      <div class="score-row"><span class="score-team">Valencia</span><span class="score-val">—</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">Villarreal</span><span class="score-val">—</span></div>
+      <div class="score-status"><span class="live-dot"></span>10:00 AM ET</div>
+    </div><div class="score-card">
+      <div class="score-hdr">Sun · Jul 6</div>
+      <div class="score-row"><span class="score-team">Athletic Club</span><span class="score-val">—</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">Real Sociedad</span><span class="score-val">—</span></div>
+      <div class="score-status"><span class="live-dot"></span>12:30 PM ET</div>
+    </div></div>
+</div></div>
+  <div id="laliga-standings" class="inner-panel"        style="padding:28px 32px"><div class="sec-label">// 2025 Season</div>
+  <div class="sec-title">Standings</div>
+  <div class="standings-grid"><div class="s-div">
+      <div class="s-div-hdr">La Liga 2024-25</div>
+      <div class="s-row hdr"><span>Team</span><span>W</span><span>D</span><span>L</span><span>GD</span><span>PTS</span></div>
+      <div class="s-row"><span class="team">Real Madrid</span><span class="val">27</span><span class="hi">4</span><span class="val">3</span><span class="val">+52</span><span class="val">85</span></div><div class="s-row"><span class="team">Barcelona</span><span class="val">25</span><span class="hi">5</span><span class="val">4</span><span class="val">+44</span><span class="val">80</span></div><div class="s-row"><span class="team">Atletico Madrid</span><span class="val">22</span><span class="hi">6</span><span class="val">6</span><span class="val">+28</span><span class="val">72</span></div><div class="s-row"><span class="team">Athletic Club</span><span class="val">18</span><span class="hi">7</span><span class="val">9</span><span class="val">+15</span><span class="val">61</span></div><div class="s-row"><span class="team">Real Sociedad</span><span class="val">17</span><span class="hi">6</span><span class="val">11</span><span class="val">+8</span><span class="val">57</span></div><div class="s-row"><span class="team">Villarreal</span><span class="val">15</span><span class="hi">8</span><span class="val">11</span><span class="val">+5</span><span class="val">53</span></div><div class="s-row"><span class="team">Sevilla</span><span class="val">12</span><span class="hi">6</span><span class="val">16</span><span class="val">-8</span><span class="val">42</span></div><div class="s-row"><span class="team">Valencia</span><span class="val">10</span><span class="hi">7</span><span class="val">17</span><span class="val">-14</span><span class="val">37</span></div>
+    </div></div>
+</div></div>
+  <div id="laliga-stats"     class="inner-panel"        style="padding:28px 32px"><div class="sec-label">// 2025 Season</div>
+  <div class="sec-title">Stats</div>
+  <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Player</th><th>Club</th><th>GP</th><th>Goals</th><th>xG</th><th>Assists</th><th>OVR</th></tr></thead><tbody><tr><td class="pl">Kylian Mbappe</td><td class="">Real Madrid</td><td class="">32</td><td class="">26</td><td class="">24.1</td><td class="">11</td><td class="">99</td></tr><tr><td class="pl">Robert Lewandowski</td><td class="">Barcelona</td><td class="">33</td><td class="">22</td><td class="">20.8</td><td class="">8</td><td class="">97</td></tr><tr><td class="pl">Antoine Griezmann</td><td class="">Atletico</td><td class="">34</td><td class="">18</td><td class="">16.2</td><td class="">10</td><td class="">95</td></tr><tr><td class="pl">Vinicius Jr</td><td class="">Real Madrid</td><td class="">30</td><td class="">16</td><td class="">14.8</td><td class="">14</td><td class="">97</td></tr><tr><td class="pl">Pedri</td><td class="">Barcelona</td><td class="">31</td><td class="">8</td><td class="">7.1</td><td class="">12</td><td class="">94</td></tr></tbody></table></div>
+
+<div style="margin-top:24px;border-top:1px solid var(--line);padding-top:20px">
+  <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;letter-spacing:.12em;color:var(--gold);text-transform:uppercase;margin-bottom:14px">// Stat Definitions — from The Sports Statistics Manual by Chris Cain</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px">
+    <div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">OVR</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#FF6B6B">Soccer</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Overall Rating</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">A 0–99 composite score combining goals, assists, xG, shots on target, and defensive contributions relative to all players in the same league.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">xG</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#FF6B6B">Soccer</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Expected Goals</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">The probability that a shot results in a goal based on shot location, angle, shot type, and assist type. Goals scored above xG = clinical finishing; below = poor finishing or bad luck.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">xGA</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#FF6B6B">Soccer</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Expected Goals Against</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">xG conceded by the defense/goalkeeper. A keeper's save percentage vs. xGA reveals true shot-stopping ability beyond what raw goals allowed shows.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">SoT</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#FF6B6B">Soccer</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Shots on Target</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">Shots that would have gone in without a save or hit the post. Divided by total shots to get shot accuracy.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">CS</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#FF6B6B">Soccer</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Clean Sheets</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">Games where the team/goalkeeper conceded zero goals. One of the primary metrics in the goalkeeper OVR calculation.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">POSS%</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#FF6B6B">Soccer</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Possession Percentage</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">Share of total playing time a team controls the ball. High possession + high xG = dominant team; high possession + low xG = inefficient.</div>
+  </div>
+  </div>
+  <p style="font-size:.72rem;color:var(--muted);margin-top:16px;font-family:'JetBrains Mono',monospace">Methodology from <em style="color:var(--white)">The Sports Statistics Manual</em> by Chris Cain · <a href="https://www.amazon.com/Sports-Statistics-Manual-Baseball-Basketball/dp/B0DDHVR5MK/" target="_blank" style="color:var(--gold);text-decoration:none">Available on Amazon</a></p>
+</div>
+</div></div>
+  <div id="laliga-fantasy"   class="inner-panel"        style="padding:28px 32px"><div class="sec-label">// Fantasy</div>
+  <div class="sec-title">Fantasy & Games</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px"><div style="background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:28px 24px">
+        <div style="font-size:2rem;margin-bottom:14px">⚽</div>
+        <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:800;text-transform:uppercase;margin-bottom:8px">Fantasy La Liga</h3>
+        <p style="font-size:.84rem;color:var(--muted);line-height:1.6">Build your squad from Spain's top division.</p>
+        <span style="display:inline-block;margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:4px;background:rgba(242,194,48,.12);color:var(--gold)">Coming Soon</span>
+      </div><div style="background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:28px 24px">
+        <div style="font-size:2rem;margin-bottom:14px">📊</div>
+        <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:800;text-transform:uppercase;margin-bottom:8px">Liga Analytics</h3>
+        <p style="font-size:.84rem;color:var(--muted);line-height:1.6">xG, pressing maps and possession metrics.</p>
+        <span style="display:inline-block;margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:4px;background:rgba(242,194,48,.12);color:var(--gold)">Coming Soon</span>
+      </div></div>
+</div></div>
+</div>
+
+<div id="league-ucl" class="league-panel" style="display:none">
+  <div class="tab-bar" style="background:var(--ink-3);border-bottom:1px solid var(--line)">
+    <button class="tab-btn active" onclick="showInner('ucl','scores',this)">Scores</button>
+    <button class="tab-btn" onclick="showInner('ucl','standings',this)">Standings</button>
+    <button class="tab-btn" onclick="showInner('ucl','stats',this)">Stats</button>
+    <button class="tab-btn" onclick="showInner('ucl','fantasy',this)">Fantasy &amp; Games</button>
+  </div>
+  <div id="ucl-scores"    class="inner-panel active" style="padding:28px 32px"><div class="sec-label">// Latest Results</div>
+  <div class="sec-title">Scores & Results</div>
+  <p style="font-size:.8rem;color:var(--muted);margin-bottom:16px;font-family:'JetBrains Mono',monospace">Tap any game to open Gamecast & Box Score</p>
+  <div class="scores-grid"><div class="score-card">
+      <div class="score-hdr">UCL QF · Apr 9 · Final</div>
+      <div class="score-row"><span class="score-team">Real Madrid</span><span class="score-val w">3</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">Manchester City</span><span class="score-val">2</span></div>
+      <div class="score-status">Final (AET)</div>
+    </div><div class="score-card">
+      <div class="score-hdr">UCL QF · Apr 9 · Final</div>
+      <div class="score-row"><span class="score-team">Bayern Munich</span><span class="score-val w">1</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">Arsenal</span><span class="score-val">0</span></div>
+      <div class="score-status">Final</div>
+    </div><div class="score-card">
+      <div class="score-hdr">UCL SF · Apr 30 · Final</div>
+      <div class="score-row"><span class="score-team">Real Madrid</span><span class="score-val w">2</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">Bayern Munich</span><span class="score-val">1</span></div>
+      <div class="score-status">Final</div>
+    </div><div class="score-card">
+      <div class="score-hdr">UCL Final · Jun 1 · Final</div>
+      <div class="score-row"><span class="score-team">Real Madrid</span><span class="score-val w">2</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">Dortmund</span><span class="score-val">0</span></div>
+      <div class="score-status">Final — Wembley</div>
+    </div></div>
+</div></div>
+  <div id="ucl-standings" class="inner-panel"        style="padding:28px 32px"><div class="sec-label">// 2025 Season</div>
+  <div class="sec-title">Standings</div>
+  <div class="standings-grid"><div class="s-div">
+      <div class="s-div-hdr">Group A</div>
+      <div class="s-row hdr"><span>Team</span><span>W</span><span>D</span><span>L</span><span>GD</span><span>PTS</span></div>
+      <div class="s-row"><span class="team">Real Madrid</span><span class="val">5</span><span class="hi">1</span><span class="val">0</span><span class="val">+12</span><span class="val">16</span></div><div class="s-row"><span class="team">Napoli</span><span class="val">3</span><span class="hi">1</span><span class="val">2</span><span class="val">+4</span><span class="val">10</span></div><div class="s-row"><span class="team">Braga</span><span class="val">1</span><span class="hi">2</span><span class="val">3</span><span class="val">-6</span><span class="val">5</span></div><div class="s-row"><span class="team">Union Berlin</span><span class="val">0</span><span class="hi">2</span><span class="val">4</span><span class="val">-10</span><span class="val">2</span></div>
+    </div><div class="s-div">
+      <div class="s-div-hdr">Group B</div>
+      <div class="s-row hdr"><span>Team</span><span>W</span><span>D</span><span>L</span><span>GD</span><span>PTS</span></div>
+      <div class="s-row"><span class="team">Arsenal</span><span class="val">4</span><span class="hi">2</span><span class="val">0</span><span class="val">+9</span><span class="val">14</span></div><div class="s-row"><span class="team">PSV</span><span class="val">3</span><span class="hi">1</span><span class="val">2</span><span class="val">+3</span><span class="val">10</span></div><div class="s-row"><span class="team">Lens</span><span class="val">1</span><span class="hi">2</span><span class="val">3</span><span class="val">-4</span><span class="val">5</span></div><div class="s-row"><span class="team">Sevilla</span><span class="val">0</span><span class="hi">1</span><span class="val">5</span><span class="val">-8</span><span class="val">1</span></div>
+    </div><div class="s-div">
+      <div class="s-div-hdr">Group C</div>
+      <div class="s-row hdr"><span>Team</span><span>W</span><span>D</span><span>L</span><span>GD</span><span>PTS</span></div>
+      <div class="s-row"><span class="team">Bayern Munich</span><span class="val">5</span><span class="hi">0</span><span class="val">1</span><span class="val">+14</span><span class="val">15</span></div><div class="s-row"><span class="team">Man United</span><span class="val">3</span><span class="hi">1</span><span class="val">2</span><span class="val">+5</span><span class="val">10</span></div><div class="s-row"><span class="team">Galatasaray</span><span class="val">1</span><span class="hi">2</span><span class="val">3</span><span class="val">-7</span><span class="val">5</span></div><div class="s-row"><span class="team">Copenhagen</span><span class="val">0</span><span class="hi">1</span><span class="val">5</span><span class="val">-12</span><span class="val">1</span></div>
+    </div><div class="s-div">
+      <div class="s-div-hdr">Group D</div>
+      <div class="s-row hdr"><span>Team</span><span>W</span><span>D</span><span>L</span><span>GD</span><span>PTS</span></div>
+      <div class="s-row"><span class="team">Barcelona</span><span class="val">4</span><span class="hi">1</span><span class="val">1</span><span class="val">+8</span><span class="val">13</span></div><div class="s-row"><span class="team">Porto</span><span class="val">3</span><span class="hi">0</span><span class="val">3</span><span class="val">+2</span><span class="val">9</span></div><div class="s-row"><span class="team">Shakhtar</span><span class="val">1</span><span class="hi">2</span><span class="val">3</span><span class="val">-4</span><span class="val">5</span></div><div class="s-row"><span class="team">Antwerp</span><span class="val">0</span><span class="hi">1</span><span class="val">5</span><span class="val">-6</span><span class="val">1</span></div>
+    </div></div>
+</div></div>
+  <div id="ucl-stats"     class="inner-panel"        style="padding:28px 32px"><div class="sec-label">// 2025 Season</div>
+  <div class="sec-title">Stats</div>
+  <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Player</th><th>Club</th><th>GP</th><th>Goals</th><th>Assists</th><th>OVR</th></tr></thead><tbody><tr><td class="pl">Kylian Mbappe</td><td class="">Real Madrid</td><td class="">12</td><td class="">9</td><td class="">5</td><td class="">99</td></tr><tr><td class="pl">Erling Haaland</td><td class="">Man City</td><td class="">11</td><td class="">8</td><td class="">3</td><td class="">99</td></tr><tr><td class="pl">Vinicius Jr</td><td class="">Real Madrid</td><td class="">12</td><td class="">7</td><td class="">6</td><td class="">97</td></tr><tr><td class="pl">Harry Kane</td><td class="">Bayern Munich</td><td class="">12</td><td class="">8</td><td class="">2</td><td class="">96</td></tr><tr><td class="pl">Bukayo Saka</td><td class="">Arsenal</td><td class="">11</td><td class="">6</td><td class="">4</td><td class="">95</td></tr></tbody></table></div>
+
+<div style="margin-top:24px;border-top:1px solid var(--line);padding-top:20px">
+  <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;letter-spacing:.12em;color:var(--gold);text-transform:uppercase;margin-bottom:14px">// Stat Definitions — from The Sports Statistics Manual by Chris Cain</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px">
+    <div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">OVR</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#FF6B6B">Soccer</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Overall Rating</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">A 0–99 composite score combining goals, assists, xG, shots on target, and defensive contributions relative to all players in the same league.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">xG</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#FF6B6B">Soccer</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Expected Goals</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">The probability that a shot results in a goal based on shot location, angle, shot type, and assist type. Goals scored above xG = clinical finishing; below = poor finishing or bad luck.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">xGA</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#FF6B6B">Soccer</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Expected Goals Against</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">xG conceded by the defense/goalkeeper. A keeper's save percentage vs. xGA reveals true shot-stopping ability beyond what raw goals allowed shows.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">SoT</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#FF6B6B">Soccer</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Shots on Target</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">Shots that would have gone in without a save or hit the post. Divided by total shots to get shot accuracy.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">CS</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#FF6B6B">Soccer</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Clean Sheets</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">Games where the team/goalkeeper conceded zero goals. One of the primary metrics in the goalkeeper OVR calculation.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">POSS%</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#FF6B6B">Soccer</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Possession Percentage</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">Share of total playing time a team controls the ball. High possession + high xG = dominant team; high possession + low xG = inefficient.</div>
+  </div>
+  </div>
+  <p style="font-size:.72rem;color:var(--muted);margin-top:16px;font-family:'JetBrains Mono',monospace">Methodology from <em style="color:var(--white)">The Sports Statistics Manual</em> by Chris Cain · <a href="https://www.amazon.com/Sports-Statistics-Manual-Baseball-Basketball/dp/B0DDHVR5MK/" target="_blank" style="color:var(--gold);text-decoration:none">Available on Amazon</a></p>
+</div>
+</div></div>
+  <div id="ucl-fantasy"   class="inner-panel"        style="padding:28px 32px"><div class="sec-label">// Fantasy</div>
+  <div class="sec-title">Fantasy & Games</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px"><div style="background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:28px 24px">
+        <div style="font-size:2rem;margin-bottom:14px">⚽</div>
+        <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:800;text-transform:uppercase;margin-bottom:8px">Fantasy UCL</h3>
+        <p style="font-size:.84rem;color:var(--muted);line-height:1.6">Pick your Champions League squad each round.</p>
+        <span style="display:inline-block;margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:4px;background:rgba(242,194,48,.12);color:var(--gold)">Coming Soon</span>
+      </div><div style="background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:28px 24px">
+        <div style="font-size:2rem;margin-bottom:14px">📊</div>
+        <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:800;text-transform:uppercase;margin-bottom:8px">European Stats</h3>
+        <p style="font-size:.84rem;color:var(--muted);line-height:1.6">Advanced metrics across all major European leagues.</p>
+        <span style="display:inline-block;margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:4px;background:rgba(242,194,48,.12);color:var(--gold)">Coming Soon</span>
+      </div></div>
+</div></div>
+</div>
+
+<div id="league-fifa" class="league-panel" style="display:none">
+  <div class="tab-bar" style="background:var(--ink-3);border-bottom:1px solid var(--line)">
+    <button class="tab-btn active" onclick="showInner('fifa','scores',this)">Scores</button>
+    <button class="tab-btn" onclick="showInner('fifa','standings',this)">Standings</button>
+    <button class="tab-btn" onclick="showInner('fifa','stats',this)">Stats</button>
+    <button class="tab-btn" onclick="showInner('fifa','fantasy',this)">Fantasy &amp; Games</button>
+  </div>
+  <div id="fifa-scores"    class="inner-panel active" style="padding:28px 32px"><div class="sec-label">// Latest Results</div>
+  <div class="sec-title">Scores & Results</div>
+  <p style="font-size:.8rem;color:var(--muted);margin-bottom:16px;font-family:'JetBrains Mono',monospace">Tap any game to open Gamecast & Box Score</p>
+  <div class="scores-grid"><div class="score-card">
+      <div class="score-hdr">FIFA Club WC · Jul 4 · Final</div>
+      <div class="score-row"><span class="score-team">Real Madrid</span><span class="score-val w">3</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">Al Hilal</span><span class="score-val">0</span></div>
+      <div class="score-status">Final</div>
+    </div><div class="score-card">
+      <div class="score-hdr">FIFA Club WC · Jul 3 · Final</div>
+      <div class="score-row"><span class="score-team">Man City</span><span class="score-val w">2</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">Flamengo</span><span class="score-val">1</span></div>
+      <div class="score-status">Final (AET)</div>
+    </div><div class="score-card">
+      <div class="score-hdr">WC Qual · Jun 10 · Final</div>
+      <div class="score-row"><span class="score-team">USA</span><span class="score-val w">2</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">Mexico</span><span class="score-val">0</span></div>
+      <div class="score-status">Final</div>
+    </div><div class="score-card">
+      <div class="score-hdr">WC Qual · Jun 10 · Final</div>
+      <div class="score-row"><span class="score-team">Brazil</span><span class="score-val w">3</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">Argentina</span><span class="score-val">1</span></div>
+      <div class="score-status">Final</div>
+    </div><div class="score-card">
+      <div class="score-hdr">WC Qual · Jun 10 · Final</div>
+      <div class="score-row"><span class="score-team">England</span><span class="score-val w">2</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">Germany</span><span class="score-val">1</span></div>
+      <div class="score-status">Final</div>
+    </div><div class="score-card">
+      <div class="score-hdr">WC Qual · Jun 10 · Final</div>
+      <div class="score-row"><span class="score-team">France</span><span class="score-val">2</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team">Spain</span><span class="score-val">2</span></div>
+      <div class="score-status">Final</div>
+    </div></div>
+</div></div>
+  <div id="fifa-standings" class="inner-panel"        style="padding:28px 32px"><div class="sec-label">// 2025 Season</div>
+  <div class="sec-title">Standings</div>
+  <div class="standings-grid"><div class="s-div">
+      <div class="s-div-hdr">FIFA World Rankings (Top 10)</div>
+      <div class="s-row hdr"><span>Team</span><span>Pts</span><span>Change</span></div>
+      <div class="s-row"><span class="team">Argentina</span><span class="val">1869</span><span class="hi">+0</span></div><div class="s-row"><span class="team">France</span><span class="val">1851</span><span class="hi">+0</span></div><div class="s-row"><span class="team">England</span><span class="val">1810</span><span class="hi">+1</span></div><div class="s-row"><span class="team">Belgium</span><span class="val">1792</span><span class="hi">-1</span></div><div class="s-row"><span class="team">Brazil</span><span class="val">1786</span><span class="hi">+0</span></div><div class="s-row"><span class="team">Portugal</span><span class="val">1764</span><span class="hi">+0</span></div><div class="s-row"><span class="team">Spain</span><span class="val">1745</span><span class="hi">+2</span></div><div class="s-row"><span class="team">Netherlands</span><span class="val">1738</span><span class="hi">-1</span></div><div class="s-row"><span class="team">USA</span><span class="val">1720</span><span class="hi">+3</span></div><div class="s-row"><span class="team">Germany</span><span class="val">1701</span><span class="hi">-2</span></div>
+    </div><div class="s-div">
+      <div class="s-div-hdr">FIFA Club World Cup 2025 — Group A</div>
+      <div class="s-row hdr"><span>Team</span><span>W</span><span>D</span><span>L</span><span>PTS</span></div>
+      <div class="s-row"><span class="team">Real Madrid</span><span class="val">3</span><span class="hi">0</span><span class="val">0</span><span class="val">9</span></div><div class="s-row"><span class="team">Al Hilal</span><span class="val">2</span><span class="hi">0</span><span class="val">1</span><span class="val">6</span></div><div class="s-row"><span class="team">Pachuca</span><span class="val">1</span><span class="hi">0</span><span class="val">2</span><span class="val">3</span></div><div class="s-row"><span class="team">Urawa Red Diamonds</span><span class="val">0</span><span class="hi">0</span><span class="val">3</span><span class="val">0</span></div>
+    </div><div class="s-div">
+      <div class="s-div-hdr">FIFA Club World Cup 2025 — Group B</div>
+      <div class="s-row hdr"><span>Team</span><span>W</span><span>D</span><span>L</span><span>PTS</span></div>
+      <div class="s-row"><span class="team">Manchester City</span><span class="val">3</span><span class="hi">0</span><span class="val">0</span><span class="val">9</span></div><div class="s-row"><span class="team">Juventus</span><span class="val">2</span><span class="hi">0</span><span class="val">1</span><span class="val">6</span></div><div class="s-row"><span class="team">Wydad</span><span class="val">1</span><span class="hi">0</span><span class="val">2</span><span class="val">3</span></div><div class="s-row"><span class="team">Al Ain</span><span class="val">0</span><span class="hi">0</span><span class="val">3</span><span class="val">0</span></div>
+    </div></div>
+</div></div>
+  <div id="fifa-stats"     class="inner-panel"        style="padding:28px 32px"><div class="sec-label">// 2025 Season</div>
+  <div class="sec-title">Stats</div>
+  <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Player</th><th>Nation</th><th>GP</th><th>Goals</th><th>Assists</th><th>OVR</th></tr></thead><tbody><tr><td class="pl">Lionel Messi</td><td class="">Argentina</td><td class="">18</td><td class="">14</td><td class="">11</td><td class="">99</td></tr><tr><td class="pl">Kylian Mbappe</td><td class="">France</td><td class="">20</td><td class="">16</td><td class="">8</td><td class="">99</td></tr><tr><td class="pl">Vinicius Jr</td><td class="">Brazil</td><td class="">19</td><td class="">13</td><td class="">9</td><td class="">97</td></tr><tr><td class="pl">Erling Haaland</td><td class="">Norway</td><td class="">18</td><td class="">15</td><td class="">4</td><td class="">97</td></tr><tr><td class="pl">Bukayo Saka</td><td class="">England</td><td class="">20</td><td class="">11</td><td class="">10</td><td class="">95</td></tr><tr><td class="pl">Pedri</td><td class="">Spain</td><td class="">18</td><td class="">7</td><td class="">12</td><td class="">93</td></tr></tbody></table></div>
+
+<div style="margin-top:24px;border-top:1px solid var(--line);padding-top:20px">
+  <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;letter-spacing:.12em;color:var(--gold);text-transform:uppercase;margin-bottom:14px">// Stat Definitions — from The Sports Statistics Manual by Chris Cain</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px">
+    <div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">OVR</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#FF6B6B">Soccer</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Overall Rating</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">A 0–99 composite score combining goals, assists, xG, shots on target, and defensive contributions relative to all players in the same league.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">xG</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#FF6B6B">Soccer</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Expected Goals</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">The probability that a shot results in a goal based on shot location, angle, shot type, and assist type. Goals scored above xG = clinical finishing; below = poor finishing or bad luck.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">xGA</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#FF6B6B">Soccer</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Expected Goals Against</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">xG conceded by the defense/goalkeeper. A keeper's save percentage vs. xGA reveals true shot-stopping ability beyond what raw goals allowed shows.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">SoT</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#FF6B6B">Soccer</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Shots on Target</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">Shots that would have gone in without a save or hit the post. Divided by total shots to get shot accuracy.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">CS</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#FF6B6B">Soccer</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Clean Sheets</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">Games where the team/goalkeeper conceded zero goals. One of the primary metrics in the goalkeeper OVR calculation.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">POSS%</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#FF6B6B">Soccer</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Possession Percentage</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">Share of total playing time a team controls the ball. High possession + high xG = dominant team; high possession + low xG = inefficient.</div>
+  </div>
+  </div>
+  <p style="font-size:.72rem;color:var(--muted);margin-top:16px;font-family:'JetBrains Mono',monospace">Methodology from <em style="color:var(--white)">The Sports Statistics Manual</em> by Chris Cain · <a href="https://www.amazon.com/Sports-Statistics-Manual-Baseball-Basketball/dp/B0DDHVR5MK/" target="_blank" style="color:var(--gold);text-decoration:none">Available on Amazon</a></p>
+</div>
+</div></div>
+  <div id="fifa-fantasy"   class="inner-panel"        style="padding:28px 32px"><div class="sec-label">// Fantasy</div>
+  <div class="sec-title">Fantasy & Games</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px"><div style="background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:28px 24px">
+        <div style="font-size:2rem;margin-bottom:14px">🌍</div>
+        <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:800;text-transform:uppercase;margin-bottom:8px">World Cup Fantasy</h3>
+        <p style="font-size:.84rem;color:var(--muted);line-height:1.6">Pick your 15-man international squad.</p>
+        <span style="display:inline-block;margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:4px;background:rgba(242,194,48,.12);color:var(--gold)">Coming Soon</span>
+      </div><div style="background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:28px 24px">
+        <div style="font-size:2rem;margin-bottom:14px">📊</div>
+        <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:800;text-transform:uppercase;margin-bottom:8px">International Stats</h3>
+        <p style="font-size:.84rem;color:var(--muted);line-height:1.6">Goals, assists and ratings across all FIFA competitions.</p>
+        <span style="display:inline-block;margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:4px;background:rgba(242,194,48,.12);color:var(--gold)">Coming Soon</span>
+      </div><div style="background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:28px 24px">
+        <div style="font-size:2rem;margin-bottom:14px">🏆</div>
+        <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:800;text-transform:uppercase;margin-bottom:8px">Prediction Game</h3>
+        <p style="font-size:.84rem;color:var(--muted);line-height:1.6">Predict match outcomes across international tournaments.</p>
+        <span style="display:inline-block;margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:4px;background:rgba(242,194,48,.12);color:var(--gold)">Coming Soon</span>
+      </div></div>
+</div></div>
+</div>
+
+<footer>
+  <div class="ft-brand"><img src="/assets/logo.png" alt="SSC" /><span>The Sports <em>Companion</em></span></div>
+  <div class="ft-links">
+    <a href="/index.html">Home</a>
+    <a href="/nfl/index.html">NFL</a>
+    <a href="/mlb/index.html">MLB</a>
+    <a href="/nba/index.html">NBA</a>
+    <a href="/ncaa/index.html">NCAA</a>
+    <a href="/futbol/index.html" class="active">Fútbol</a>
+  </div>
+  <div class="ft-copy">© 2026 The Sports Companion</div>
+</footer>
+
+<script>
+const LEAGUE_LABELS = {
+  mls:    'MLS',
+  epl:    'Premier League',
+  laliga: 'La Liga',
+  ucl:    'UEFA Champions League',
+  fifa:   'FIFA World Cup'
+};
+
+let currentLeague = 'mls';
+let currentPanel  = 'scores';
+let currentSeason = 2025;
+
+function changeLeague(id) {
+  // Hide all league panels
+  document.querySelectorAll('.league-panel').forEach(p => p.style.display = 'none');
+  const el = document.getElementById('league-' + id);
+  if (el) el.style.display = 'block';
+  currentLeague = id;
+  // Restore the active inner tab in the new league
+  showInner(currentPanel, document.getElementById('inner-btn-' + currentPanel));
+  // Update badge
+  updateBadge();
+}
+
+function showInner(panel, btn) {
+  // Hide all inner panels in current league block
+  const leagueEl = document.getElementById('league-' + currentLeague);
+  if (leagueEl) {
+    leagueEl.querySelectorAll('.inner-panel').forEach(p => p.classList.remove('active'));
+    leagueEl.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    const target = document.getElementById(currentLeague + '-' + panel);
+    if (target) target.classList.add('active');
+  }
+  // Update top tab bar active state
+  document.querySelectorAll('.tab-bar .tab-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  currentPanel = panel;
+}
+
+function showSub(id) {
+  const el = document.getElementById('sub-' + id);
+  if (!el) return;
+  const parent = el.closest('.inner-panel');
+  if (parent) {
+    parent.querySelectorAll('.sub-panel').forEach(p => p.classList.remove('active'));
+    parent.querySelectorAll('.sub-tab').forEach(b => b.classList.remove('active'));
+  }
+  el.classList.add('active');
+  event.target.classList.add('active');
+}
+
+function showType(type, btn) {
+  const parent = btn.closest('.inner-panel');
+  if (parent) {
+    parent.querySelectorAll('.type-panel').forEach(p => p.style.display = 'none');
+    parent.querySelectorAll('.type-btn').forEach(b => {
+      b.style.background = 'var(--ink-2)'; b.style.color = 'var(--muted)'; b.style.borderColor = 'var(--line)';
+    });
+  }
+  const tp = document.getElementById('type-' + type);
+  if (tp) tp.style.display = 'block';
+  btn.style.background = 'var(--gold)'; btn.style.color = 'var(--ink)'; btn.style.borderColor = 'var(--gold)';
+  const panel = document.getElementById('type-' + type);
+  if (panel) { const firstSub = panel.querySelector('.sub-tab'); if (firstSub) firstSub.click(); }
+}
+
+function changeSeason(yr) {
+  currentSeason = parseInt(yr);
+  updateBadge();
+  document.querySelectorAll('.sec-label').forEach(el => {
+    el.textContent = el.textContent.replace(/20\d\d/, currentSeason);
+  });
+  const notice = document.getElementById('season-notice');
+  if (notice) notice.classList.toggle('show', currentSeason < 2025);
+}
+
+function updateBadge() {
+  const badge = document.getElementById('league-badge');
+  if (badge) badge.textContent = LEAGUE_LABELS[currentLeague] + ' · ' + currentSeason;
+}
+
+// Init — show MLS on load
+document.getElementById('league-mls').style.display = 'block';
+</script>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+    const firebaseConfig = {
+      apiKey:"YOUR_API_KEY", authDomain:"YOUR_PROJECT.firebaseapp.com",
+      projectId:"YOUR_PROJECT_ID", storageBucket:"YOUR_PROJECT.appspot.com",
+      messagingSenderId:"YOUR_SENDER_ID", appId:"YOUR_APP_ID"
+    };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    onAuthStateChanged(auth, user => {
+      const cta = document.getElementById('nav-cta');
+      const av  = document.getElementById('nav-avatar');
+      if (!cta || !av) return;
+      if (user) {
+        cta.style.display = 'none'; av.style.display = 'flex';
+        const name = user.displayName || user.email || '';
+        const initials = name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+        const el = document.getElementById('nav-initials');
+        if (el) el.textContent = initials;
+        const nm = document.getElementById('nav-username');
+        if (nm) nm.textContent = name.split(' ')[0] || 'Account';
+        if (user.photoURL && el) el.innerHTML = `<img src="${user.photoURL}" style="width:24px;height:24px;border-radius:50%;object-fit:cover"/>`;
+        // open/close dropdown
+        av.addEventListener('click', () => {
+          const dd = av.querySelector('.nav-dropdown');
+          if (dd) dd.style.display = dd.style.display === 'block' ? 'none' : 'block';
+        });
+        document.addEventListener('click', e => {
+          if (!av.contains(e.target)) {
+            const dd = av.querySelector('.nav-dropdown');
+            if (dd) dd.style.display = 'none';
+          }
+        });
+      } else {
+        cta.style.display = 'flex'; av.style.display = 'none';
+      }
+    });
+    window.signOutUser = async (e) => { e.preventDefault(); await signOut(auth); window.location.href = '/index.html'; };
+  </script>
+</body>
+</html>

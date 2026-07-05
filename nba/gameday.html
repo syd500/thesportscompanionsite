@@ -25,24 +25,26 @@
 
     /* SCOREBOARD */
     .scoreboard{background:var(--ink-2);border-bottom:1px solid var(--line);padding:20px 32px}
-    .sb-top{display:flex;align-items:center;justify-content:space-between;gap:20px}
-    .sb-team{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:120px}
-    .sb-team-name{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;text-align:center;display:flex;align-items:center;justify-content:center;gap:6px}
+    .sb-top{display:flex;align-items:center;justify-content:center;gap:0;}
+    .sb-team{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0;flex:1;max-width:200px;}
+    .sb-team-name{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.03em;text-align:center;display:flex;align-items:center;justify-content:center;gap:5px;flex-wrap:wrap;}
     .sb-team-record{font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
-    .sb-score-wrap{display:flex;align-items:center;gap:16px}
-    .sb-score{font-family:'Barlow Condensed',sans-serif;font-size:4rem;font-weight:900;line-height:1}
+    .sb-score-wrap{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+    .sb-score{font-family:'Barlow Condensed',sans-serif;font-size:4rem;font-weight:900;line-height:1;}
     .sb-score.leader{color:var(--gold)}
-    .sb-divider{font-family:'Barlow Condensed',sans-serif;font-size:2rem;color:var(--line);font-weight:700}
+    .sb-divider{font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;color:var(--line);font-weight:700;}
     .sb-game-status{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:12px}
     .sb-quarter{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;color:var(--gold)}
     .sb-clock{font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--muted)}
 
+    
+    .sb-inner{max-width:600px;margin:0 auto;}
     /* QUARTER SCORES */
     .quarter-scores{margin-top:14px;display:flex;justify-content:center}
     .qs-table{border-collapse:collapse;font-size:.72rem;text-align:center}
     .qs-table th{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;padding:4px 10px;border-bottom:1px solid var(--line);text-align:center}
     .qs-table td{padding:5px 10px;text-align:center;color:var(--muted)}
-    .qs-table td:first-child{font-weight:600;color:var(--white);text-align:left;padding-right:16px}
+    .qs-table td:first-child{font-weight:600;color:var(--white);text-align:left;padding-right:12px}
     .qs-table td.total{font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:800;color:var(--gold)}
     .qs-table td.active-q{color:var(--gold);font-weight:700}
 
@@ -85,12 +87,12 @@
     .pbp-feed{border:1px solid var(--line);border-radius:10px;overflow:hidden;max-height:320px;overflow-y:auto}
     .pbp-feed::-webkit-scrollbar{width:4px}
     .pbp-feed::-webkit-scrollbar-thumb{background:var(--line);border-radius:2px}
-    .pbp-item{padding:11px 15px;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;transition:background .15s}
+    .pbp-item{padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.04);transition:background .15s;cursor:pointer;text-align:center;}
     .pbp-item:hover{background:var(--ink-2)}.pbp-item:last-child{border-bottom:none}
     .pbp-item.active{background:rgba(242,194,48,.07);border-left:2px solid var(--gold)}
     .pbp-item.unseen{opacity:.4}
-    .pbp-item-meta{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--gold);margin-bottom:4px}
-    .pbp-item-text{font-size:.92rem;color:var(--muted);line-height:1.5}
+    .pbp-item-meta{font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--gold);margin-bottom:4px;letter-spacing:.06em;text-align:center;}
+    .pbp-item-text{font-size:.88rem;color:var(--muted);line-height:1.6;text-align:center;}
     .pbp-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.58rem;font-weight:600;text-transform:uppercase;padding:2px 6px;border-radius:3px;margin-left:6px}
     .badge-made{background:rgba(34,197,94,.15);color:var(--green)}
     .badge-3pt{background:rgba(56,189,248,.15);color:var(--sky)}
@@ -104,11 +106,11 @@
     .bs-tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
     .bs-tbl{width:100%;border-collapse:collapse;font-size:.82rem}
     .bs-tbl thead tr{background:var(--ink-3);border-bottom:1px solid var(--line)}
-    .bs-tbl th{font-family:'JetBrains Mono',monospace;font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:9px 12px;text-align:left;white-space:nowrap}
+    .bs-tbl th{font-family:'JetBrains Mono',monospace;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:9px 12px;text-align:center;white-space:nowrap;}
     .bs-tbl tbody tr{border-bottom:1px solid rgba(255,255,255,.04);transition:background .15s}
     .bs-tbl tbody tr:hover{background:var(--ink-2)}.bs-tbl tbody tr:last-child{border-bottom:none}
-    .bs-tbl td{padding:9px 12px;color:var(--muted);white-space:nowrap}
-    .bs-tbl td.player{color:var(--white);font-weight:600}.bs-tbl td.hi{color:var(--gold);font-weight:700}
+    .bs-tbl td{padding:9px 12px;color:var(--muted);white-space:nowrap;text-align:center;}
+    .bs-tbl td.player{color:var(--white);font-weight:600;text-align:left}.bs-tbl td.hi{color:var(--gold);font-weight:700}
 
     footer{background:var(--ink);border-top:1px solid var(--line);padding:28px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-top:48px}
     .ft-brand{display:flex;align-items:center;gap:8px}.ft-brand img{height:22px}
@@ -132,6 +134,7 @@
 
 <!-- SCOREBOARD -->
 <div class="scoreboard">
+  <div class="sb-inner">
   <div class="sb-top">
     <div class="sb-team">
       <div class="sb-team-name"><img src="/assets/nba/warriors.png" style="width:28px;height:28px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Golden State Warriors</div>
@@ -153,7 +156,6 @@
     <span class="sb-clock" id="sb-clock">11:45</span>
     <span style="font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--muted)" id="sb-possession">🏀 GSW Possession</span>
   </div>
-
   <div class="quarter-scores">
     <table class="qs-table">
       <thead><tr><th>Team</th><th>Q1</th><th>Q2</th><th>Q3</th><th>Q4</th><th>T</th></tr></thead>
@@ -171,17 +173,18 @@
       </tbody>
     </table>
   </div>
+  </div>
 </div>
 
 <!-- TABS -->
 <div class="game-tabs">
-  <button class="game-tab active" onclick="showPanel('gamecast')">Gamecast</button>
+  <button class="game-tab active" onclick="showPanel('gameday')">Gameday</button>
   <button class="game-tab" onclick="showPanel('boxscore')">Box Score</button>
   <button class="game-tab" onclick="showPanel('pbp')">Play-by-Play</button>
 </div>
 
 <!-- GAMECAST -->
-<div id="panel-gamecast" class="panel active">
+<div id="panel-gameday" class="panel active">
   <div class="panel-inner">
   <div class="gamecast-layout">
 
@@ -306,52 +309,140 @@
 
 <!-- BOX SCORE -->
   </div><!-- /panel-inner -->
+
+<!-- BOX SCORE PANEL -->
 <div id="panel-boxscore" class="panel">
   <div class="panel-inner">
-  <div class="bs-team-toggle">
-    <button class="bs-toggle-btn active" onclick="showBS('gsw')">Golden State Warriors</button>
-    <button class="bs-toggle-btn" onclick="showBS('lal')">Los Angeles Lakers</button>
-  </div>
-  <div id="bs-gsw">
-    <div class="bs-section">
-      <div class="bs-section-title">Player Stats</div>
-      <div class="bs-tbl-wrap"><table class="bs-tbl">
-        <thead><tr><th>Player</th><th>POS</th><th>PTS</th><th>REB</th><th>AST</th><th>STL</th><th>BLK</th><th>FG</th><th>3PT</th><th>+/-</th></tr></thead>
-        <tbody>
-          <tr><td class="player">S. Curry</td><td>PG</td><td class="hi">34</td><td>5</td><td>7</td><td>2</td><td>0</td><td>11/22</td><td class="hi">6/12</td><td class="hi">+14</td></tr>
-          <tr><td class="player">K. Thompson</td><td>SG</td><td>18</td><td>3</td><td>2</td><td>1</td><td>0</td><td>6/14</td><td>4/9</td><td>+8</td></tr>
-          <tr><td class="player">A. Wiggins</td><td>SF</td><td>12</td><td>6</td><td>1</td><td>2</td><td>1</td><td>5/10</td><td>2/4</td><td>+6</td></tr>
-          <tr><td class="player">D. Green</td><td>PF</td><td>4</td><td>8</td><td class="hi">9</td><td>3</td><td>2</td><td>2/5</td><td>0/1</td><td>+10</td></tr>
-          <tr><td class="player">K. Looney</td><td>C</td><td>6</td><td class="hi">12</td><td>2</td><td>0</td><td>2</td><td>3/5</td><td>0/0</td><td>+4</td></tr>
-        </tbody>
-      </table></div>
+
+    <!-- SCORE HEADER -->
+    <div class="bs-score-header">
+      <div class="bs-team-side">
+        <img src="/assets/nba/warriors.png" class="bs-team-logo" onerror="this.style.display='none'" />
+        <div class="bs-team-name-blue">Golden State Warriors</div>
+        <div class="bs-final-score">118</div>
+      </div>
+      <div class="bs-center-info">
+        <div class="bs-final-label">Final</div>
+        <div class="bs-game-date">Jan 25, 2026 · Chase Center · San Francisco, CA</div>
+      </div>
+      <div class="bs-team-side">
+        <img src="/assets/nba/lakers.png" class="bs-team-logo" onerror="this.style.display='none'" />
+        <div class="bs-team-name-blue">Los Angeles Lakers</div>
+        <div class="bs-final-score">112</div>
+      </div>
     </div>
+
+    <!-- BETTING LINES -->
+    <div class="bs-card">
+      <div class="bs-card-title">Betting Lines <span class="bs-sample-tag">sample</span></div>
+      <div class="bs-card-body">Spread: Warriors -4.5<br>Total: O/U 228.5<br>Moneyline: Warriors -188 · Lakers +158</div>
+    </div>
+
+    <!-- GAME SUMMARY -->
+    <div class="bs-card">
+      <div class="bs-card-title">Game Summary</div>
+      <div class="bs-card-body">Steph Curry poured in 34 points on 6-of-12 shooting from three to lift the Warriors past the Lakers. LeBron James had 28 and 10 assists but couldn't overcome a slow third quarter for LA.</div>
+    </div>
+
+    <!-- LINE SCORE -->
+    <div class="bs-card">
+      <div class="bs-card-title">Line Score <span class="bs-sample-tag">sample</span></div>
+      <div class="bs-linescore-wrap"><table class="bs-linescore"><thead><tr><th>Team</th><th>Q1</th><th>Q2</th><th>Q3</th><th>Q4</th><th>F</th></tr></thead><tbody><tr><td>Golden State Warriors</td><td>32</td><td>28</td><td>30</td><td>28</td><td class="total">118</td></tr><tr><td>Los Angeles Lakers</td><td>28</td><td>30</td><td>26</td><td>28</td><td class="total">112</td></tr></tbody></table></div>
+    </div>
+
+    <!-- TEAM STATS -->
+    <div class="bs-card">
+      <div class="bs-card-title">Team Stats <span class="bs-sample-tag">sample</span></div>
+      <div class="bs-teamstats-header">
+        <span class="bs-team-name-blue">Golden State Warriors</span>
+        <span class="bs-team-name-blue">Los Angeles Lakers</span>
+      </div>
+      
+      <div class="bs-stat-row"><div class="bs-stat-val hi">118</div><div class="bs-stat-label">Final Score</div><div class="bs-stat-val">112</div></div>
+      <div class="bs-stat-row"><div class="bs-stat-val hi">48.2%</div><div class="bs-stat-label">Field Goal %</div><div class="bs-stat-val">44.8%</div></div>
+      <div class="bs-stat-row"><div class="bs-stat-val hi">38.4%</div><div class="bs-stat-label">3-Point %</div><div class="bs-stat-val">33.2%</div></div>
+      <div class="bs-stat-row"><div class="bs-stat-val hi">48</div><div class="bs-stat-label">Rebounds</div><div class="bs-stat-val">42</div></div>
+      <div class="bs-stat-row"><div class="bs-stat-val hi">28</div><div class="bs-stat-label">Assists</div><div class="bs-stat-val">22</div></div>
+      <div class="bs-stat-row"><div class="bs-stat-val">14</div><div class="bs-stat-label">Turnovers</div><div class="bs-stat-val hi">12</div></div>
+      <div class="bs-stat-row"><div class="bs-stat-val hi">52</div><div class="bs-stat-label">Points in Paint</div><div class="bs-stat-val">38</div></div>
+    </div>
+
+    <!-- PLAYER STATS -->
+    <div class="bs-team-toggle" style="margin-top:20px">
+      <button class="bs-toggle-btn active" onclick="showBS('gsw')">Golden State Warriors</button>
+      <button class="bs-toggle-btn" onclick="showBS('lal')">Los Angeles Lakers</button>
+    </div>
+      <div id="bs-gsw">
+    <div class="bs-section"><div class="bs-section-title">Warriors</div><div class="bs-table-wrap"><table class="bs-tbl"><thead><tr><th>Player</th><th>MIN</th><th>PTS</th><th>REB</th><th>AST</th><th>FG</th><th>3PT</th><th>+/-</th></tr></thead><tbody>
+      <tr><td class="player">S. Curry</td><td>36</td><td class="hi">34</td><td>5</td><td class="hi">8</td><td>12/22</td><td>6/12</td><td class="hi">+14</td></tr>
+      <tr><td class="player">K. Thompson</td><td>32</td><td>18</td><td>3</td><td>2</td><td>7/16</td><td>4/9</td><td>+6</td></tr>
+      <tr><td class="player">D. Green</td><td>34</td><td>8</td><td class="hi">12</td><td class="hi">9</td><td>3/6</td><td>0/1</td><td>+8</td></tr>
+      <tr><td class="player">A. Wiggins</td><td>30</td><td>16</td><td>6</td><td>2</td><td>6/13</td><td>2/5</td><td>+4</td></tr>
+      <tr><td class="player">K. Looney</td><td>22</td><td>6</td><td>9</td><td>1</td><td>3/5</td><td>0/0</td><td>+2</td></tr>
+    </tbody></table></div></div>
   </div>
   <div id="bs-lal" style="display:none">
-    <div class="bs-section">
-      <div class="bs-section-title">Player Stats</div>
-      <div class="bs-tbl-wrap"><table class="bs-tbl">
-        <thead><tr><th>Player</th><th>POS</th><th>PTS</th><th>REB</th><th>AST</th><th>STL</th><th>BLK</th><th>FG</th><th>3PT</th><th>+/-</th></tr></thead>
-        <tbody>
-          <tr><td class="player">LeBron James</td><td>SF</td><td class="hi">29</td><td>8</td><td class="hi">10</td><td>2</td><td>1</td><td>11/19</td><td>2/5</td><td>-8</td></tr>
-          <tr><td class="player">A. Davis</td><td>C</td><td>22</td><td class="hi">14</td><td>3</td><td>1</td><td class="hi">4</td><td>9/16</td><td>0/1</td><td>-6</td></tr>
-          <tr><td class="player">A. Reaves</td><td>SG</td><td>16</td><td>4</td><td>5</td><td>2</td><td>0</td><td>6/11</td><td>3/6</td><td>-4</td></tr>
-          <tr><td class="player">D. Russell</td><td>PG</td><td>12</td><td>2</td><td>6</td><td>1</td><td>0</td><td>4/10</td><td>2/5</td><td>-10</td></tr>
-          <tr><td class="player">J. Vanderbilt</td><td>PF</td><td>8</td><td>9</td><td>2</td><td>3</td><td>2</td><td>3/7</td><td>1/3</td><td>-5</td></tr>
-        </tbody>
-      </table></div>
+    <div class="bs-section"><div class="bs-section-title">Lakers</div><div class="bs-table-wrap"><table class="bs-tbl"><thead><tr><th>Player</th><th>MIN</th><th>PTS</th><th>REB</th><th>AST</th><th>FG</th><th>3PT</th><th>+/-</th></tr></thead><tbody>
+      <tr><td class="player">L. James</td><td>38</td><td class="hi">28</td><td>8</td><td class="hi">10</td><td>10/20</td><td>2/6</td><td>-6</td></tr>
+      <tr><td class="player">A. Davis</td><td>36</td><td>22</td><td class="hi">14</td><td>3</td><td>9/16</td><td>0/1</td><td>-4</td></tr>
+      <tr><td class="player">D. Russell</td><td>32</td><td>18</td><td>3</td><td>6</td><td>6/14</td><td>4/9</td><td>-8</td></tr>
+      <tr><td class="player">A. Reaves</td><td>28</td><td>14</td><td>4</td><td>4</td><td>5/11</td><td>2/4</td><td>-6</td></tr>
+    </tbody></table></div></div>
+
+  </div>
+</div>
+
+<div id="panel-pbp" class="panel">
+  <div class="panel-inner">
+    <div class="pbp-header">
+      <div class="sec-label">// Play-by-Play</div>
+    </div>
+    <div class="pbp-feed-full">
+<div class="pbp-item td">
+      <div class="pbp-item-meta">Q1 · 11:24 <span class="pbp-score-badge">GSW 5–0</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">🎯</span><span class="pbp-item-text">Curry pulls up from the logo — BANG! Golden State jumps out to a 5-0 run.</span></div>
+    </div>
+<div class="pbp-item td">
+      <div class="pbp-item-meta">Q1 · 9:02 <span class="pbp-score-badge">GSW 5–5</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">💪</span><span class="pbp-item-text">LeBron catches the lob from Davis and throws down a monster one-handed jam. Lakers tie it.</span></div>
+    </div>
+<div class="pbp-item td">
+      <div class="pbp-item-meta">Q1 · 6:44 <span class="pbp-score-badge">GSW 12–8</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">🎯</span><span class="pbp-item-text">Thompson catches in the corner, ball fakes the closeout and knocks down the triple.</span></div>
+    </div>
+<div class="pbp-item">
+      <div class="pbp-item-meta">Q1 · 2:18 <span class="pbp-score-badge">GSW 18–14</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">⚡</span><span class="pbp-item-text">Davis fumbles the entry pass out of bounds. Green pushes the ball in transition.</span></div>
+    </div>
+<div class="pbp-item td">
+      <div class="pbp-item-meta">Q2 · 10:33 <span class="pbp-score-badge">GSW 28–26</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">🎯</span><span class="pbp-item-text">Curry off the dribble from the wing, step-back three. And one on the way!</span></div>
+    </div>
+<div class="pbp-item td">
+      <div class="pbp-item-meta">Q3 · 8:14 <span class="pbp-score-badge">GSW 72–68</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">🎯</span><span class="pbp-item-text">Thompson fires from the right corner on a skip pass from Green. Splash Brothers working tonight.</span></div>
+    </div>
+<div class="pbp-item td">
+      <div class="pbp-item-meta">Q4 · 4:22 <span class="pbp-score-badge">GSW 106–104</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">🎯</span><span class="pbp-item-text">Curry shakes his defender off a screen, pulls up from 30 feet — it's good! GSW leads by 2.</span></div>
+    </div>
+<div class="pbp-item">
+      <div class="pbp-item-meta">Q4 · 1:08 <span class="pbp-score-badge">GSW 112–110</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">▸</span><span class="pbp-item-text">LeBron drives baseline and gets the layup to fall plus the foul. Free throw to tie...</span></div>
+    </div>
+<div class="pbp-item td">
+      <div class="pbp-item-meta">Q4 · 0:44 <span class="pbp-score-badge">GSW 118–110</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">🎯</span><span class="pbp-item-text">Curry drills the dagger three off the timeout play. Warriors all but seal it!</span></div>
+    </div>
+<div class="pbp-item">
+      <div class="pbp-item-meta">Q4 · 0:00 <span class="pbp-score-badge">Final</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">▸</span><span class="pbp-item-text">Warriors win 118–112. Curry finishes with 34 points, 6 threes, 8 assists.</span></div>
+    </div>
     </div>
   </div>
 </div>
 
-<!-- PLAY BY PLAY -->
-  </div><!-- /panel-inner -->
-<div id="panel-pbp" class="panel">
-  <div class="panel-inner">
-  <div style="border:1px solid var(--line);border-radius:10px;overflow:hidden" id="full-pbp-feed"></div>
-</div>
 
-  </div><!-- /panel-inner -->
 <footer>
   <div class="ft-brand"><img src="/assets/logo.png" alt="SSC" /><span>The Sports <em>Companion</em></span></div>
   <div class="ft-links"><a href="/index.html">Home</a><a href="/nfl/index.html">NFL</a><a href="/mlb/index.html">MLB</a><a href="/nba/index.html" class="active">NBA</a></div>
@@ -527,5 +618,46 @@ function showBS(team) {
 renderPlay(currentIdx);
 startLive();
 </script>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+    const firebaseConfig = {
+      apiKey:"YOUR_API_KEY", authDomain:"YOUR_PROJECT.firebaseapp.com",
+      projectId:"YOUR_PROJECT_ID", storageBucket:"YOUR_PROJECT.appspot.com",
+      messagingSenderId:"YOUR_SENDER_ID", appId:"YOUR_APP_ID"
+    };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    onAuthStateChanged(auth, user => {
+      const cta = document.getElementById('nav-cta');
+      const av  = document.getElementById('nav-avatar');
+      if (!cta || !av) return;
+      if (user) {
+        cta.style.display = 'none'; av.style.display = 'flex';
+        const name = user.displayName || user.email || '';
+        const initials = name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+        const el = document.getElementById('nav-initials');
+        if (el) el.textContent = initials;
+        const nm = document.getElementById('nav-username');
+        if (nm) nm.textContent = name.split(' ')[0] || 'Account';
+        if (user.photoURL && el) el.innerHTML = `<img src="${user.photoURL}" style="width:24px;height:24px;border-radius:50%;object-fit:cover"/>`;
+        // open/close dropdown
+        av.addEventListener('click', () => {
+          const dd = av.querySelector('.nav-dropdown');
+          if (dd) dd.style.display = dd.style.display === 'block' ? 'none' : 'block';
+        });
+        document.addEventListener('click', e => {
+          if (!av.contains(e.target)) {
+            const dd = av.querySelector('.nav-dropdown');
+            if (dd) dd.style.display = 'none';
+          }
+        });
+      } else {
+        cta.style.display = 'flex'; av.style.display = 'none';
+      }
+    });
+    window.signOutUser = async (e) => { e.preventDefault(); await signOut(auth); window.location.href = '/index.html'; };
+  </script>
 </body>
 </html>
