@@ -29,24 +29,42 @@
     .lc-feat.gold{background:rgba(242,194,48,.1);color:var(--gold);border-color:rgba(242,194,48,.3)}
     footer{background:var(--ink);border-top:1px solid var(--line);padding:28px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-top:0}.ft-brand{display:flex;align-items:center;gap:8px}.ft-brand img{height:22px}.ft-brand span{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem}.ft-brand span em{font-style:normal;color:var(--gold)}.ft-copy{font-size:.75rem;color:var(--muted)}.ft-links{display:flex;gap:18px}.ft-links a{font-size:.75rem;color:var(--muted);text-decoration:none}.ft-links a:hover{color:var(--white)}
     @media(max-width:768px){.leagues-grid{padding:20px 16px}.page-header{padding:28px 16px}.nav-brand span{display:none}}
+  
+    /* SEASON SELECTOR */
+    .season-select {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em;
+      background: var(--ink-3); color: var(--gold);
+      border: 1px solid rgba(242,194,48,0.3);
+      border-radius: 4px; padding: 5px 10px;
+      cursor: pointer; outline: none;
+      appearance: none; -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23F2C230'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+      padding-right: 24px;
+    }
+    .season-select:hover { border-color: var(--gold); }
+    .season-select option { background: var(--ink-3); color: var(--white); }
+    .season-notice {
+      display: none; margin-top: 12px; padding: 8px 14px;
+      background: rgba(242,194,48,0.06); border: 1px solid rgba(242,194,48,0.2);
+      border-radius: 5px; font-size: 0.78rem; color: var(--muted);
+      font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em;
+    }
+    .season-notice.show { display: block; }
   </style>
 </head>
 <body>
 <nav>
   <a href="/index.html" class="nav-brand"><img src="/assets/logo.png" alt="SSC" /><span>The Sports <em>Companion</em></span></a>
   <ul class="nav-leagues">
-    <li><a href="/nfl/index.html">🏈 NFL</a></li><li><a href="/nfl/index.html">🏈 NCAAF</a></li>
-    <li><a href="/nba/index.html">🏀 NBA</a></li><li><a href="/nba/index.html">🏀 NCAAM</a></li>
+    <li><a href="/nfl/index.html">🏈 NFL</a></li>
     <li><a href="/mlb/index.html">⚾ MLB</a></li>
-    <li><a href="/more/index.html" class="active">🏒 NHL</a></li>
-    <li><a href="/soccer/mls/index.html">⚽ MLS</a></li>
-    <li><a href="/soccer/epl/index.html">⚽ EPL</a></li>
-    <li><a href="/soccer/fifa/index.html">🌍 FIFA</a></li>
-    <li><a href="/ncaaf/index.html">🏈 NCAAF</a></li>
-    <li><a href="/ncaab/mens/index.html">🏀 NCAAM</a></li>
-    <li><a href="/ncaab/womens/index.html">🏀 NCAAW</a></li>
-    <li><a href="/ncaasoftball/index.html">🥎 Softball</a></li>
-    <li><a href="/more/index.html" class="active">⛳ More</a></li>
+    <li><a href="/nba/index.html">🏀 NBA</a></li>
+    <li><a href="/ncaa/index.html">🎓 NCAA</a></li>
+    <li><a href="/soccer/mls/index.html">⚽ Soccer</a></li>
+    <li><a href="/more/index.html">• • •</a></li>
   </ul>
   <div class="nav-cta"><a href="/index.html#cta">Get Early Access</a></div>
 </nav>
@@ -184,4 +202,19 @@
   <div class="ft-links"><a href="/index.html">Home</a><a href="/nfl/index.html">NFL</a><a href="/mlb/index.html">MLB</a><a href="/nba/index.html">NBA</a></div>
   <div class="ft-copy">© 2026 The Sports Companion</div>
 </footer>
+<script>
+function changeSeason(yr) {
+  yr = parseInt(yr);
+  // Update all sec-label year references
+  document.querySelectorAll('.sec-label').forEach(el => {
+    el.textContent = el.textContent.replace(/20\d\d/, yr);
+  });
+  // Update badge
+  const badge = document.querySelector('.league-badge');
+  if (badge) badge.textContent = yr + ' Season';
+  // Show/hide historical notice
+  const notice = document.getElementById('season-notice');
+  if (notice) notice.classList.toggle('show', yr < 2025);
+}
+</script>
 </body></html>

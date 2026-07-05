@@ -29,7 +29,7 @@
     .scoreboard{background:var(--ink-2);border-bottom:1px solid var(--line);padding:24px 32px}
     .sb-top{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
     .sb-team{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:120px}
-    .sb-team-name{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;text-align:center}
+    .sb-team-name{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;text-align:center;display:flex;align-items:center;justify-content:center;gap:6px}
     .sb-team-record{font-size:.75rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
     .sb-score-wrap{display:flex;align-items:center;gap:20px}
     .sb-score{font-family:'Barlow Condensed',sans-serif;font-size:4.5rem;font-weight:900;line-height:1}
@@ -153,7 +153,7 @@
 <div class="scoreboard">
   <div class="sb-top">
     <div class="sb-team">
-      <div class="sb-team-name"><img src="/assets/ncaa/Ohio_State.png" style="width:28px;height:28px;object-fit:contain" onerror="this.style.display='none'" /> Ohio State Buckeyes</div>
+      <div class="sb-team-name"><img src="/assets/ncaa/Ohio_State.png" style="width:28px;height:28px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Ohio State Buckeyes</div>
       <div class="sb-team-record">(8-0)</div>
     </div>
     <div class="sb-score-wrap">
@@ -162,7 +162,7 @@
       <div class="sb-score" id="home-score">14</div>
     </div>
     <div class="sb-team">
-      <div class="sb-team-name"><img src="/assets/ncaa/Michigan.png" style="width:28px;height:28px;object-fit:contain" onerror="this.style.display='none'" /> Michigan Wolverines</div>
+      <div class="sb-team-name"><img src="/assets/ncaa/Michigan.png" style="width:28px;height:28px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Michigan Wolverines</div>
       <div class="sb-team-record">(7-1)</div>
     </div>
   </div>
@@ -180,10 +180,10 @@
       </thead>
       <tbody>
         <tr>
-          <td><img src="/assets/ncaa/Ohio_State.png" style="width:16px;height:16px;object-fit:contain;vertical-align:middle;margin-right:4px" onerror="this.style.display='none'" />OSU</td><td>7</td><td>14</td><td class="active-q" id="osu-q3">7</td><td>—</td><td class="total" id="osu-total">28</td>
+          <td><img src="/assets/ncaa/Ohio_State.png" style="width:16px;height:16px;object-fit:contain;display:inline-block;vertical-align:-.2em;margin-right:4px" onerror="this.style.display='none'" />OSU</td><td>7</td><td>14</td><td class="active-q" id="osu-q3">7</td><td>—</td><td class="total" id="osu-total">28</td>
         </tr>
         <tr>
-          <td><img src="/assets/ncaa/Michigan.png" style="width:16px;height:16px;object-fit:contain;vertical-align:middle;margin-right:4px" onerror="this.style.display='none'" />MICH</td><td>7</td><td>0</td><td class="active-q" id="mich-q3">7</td><td>—</td><td class="total" id="mich-total">14</td>
+          <td><img src="/assets/ncaa/Michigan.png" style="width:16px;height:16px;object-fit:contain;display:inline-block;vertical-align:-.2em;margin-right:4px" onerror="this.style.display='none'" />MICH</td><td>7</td><td>0</td><td class="active-q" id="mich-q3">7</td><td>—</td><td class="total" id="mich-total">14</td>
         </tr>
       </tbody>
     </table>

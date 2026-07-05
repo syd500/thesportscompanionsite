@@ -76,6 +76,30 @@
     .ft-copy{font-size:.75rem;color:var(--muted)}.ft-links{display:flex;gap:18px;flex-wrap:wrap}
     .ft-links a{font-size:.75rem;color:var(--muted);text-decoration:none}.ft-links a:hover{color:var(--white)}
     @media(max-width:768px){.tab-panel{padding:18px 16px}.league-banner{padding:18px 16px 0}.nav-brand span{display:none}}
+  
+    /* SEASON SELECTOR */
+    .season-select {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em;
+      background: var(--ink-3); color: var(--gold);
+      border: 1px solid rgba(242,194,48,0.3);
+      border-radius: 4px; padding: 5px 10px;
+      cursor: pointer; outline: none;
+      appearance: none; -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23F2C230'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+      padding-right: 24px;
+    }
+    .season-select:hover { border-color: var(--gold); }
+    .season-select option { background: var(--ink-3); color: var(--white); }
+    .season-notice {
+      display: none; margin-top: 12px; padding: 8px 14px;
+      background: rgba(242,194,48,0.06); border: 1px solid rgba(242,194,48,0.2);
+      border-radius: 5px; font-size: 0.78rem; color: var(--muted);
+      font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em;
+    }
+    .season-notice.show { display: block; }
   </style>
 </head>
 <body>
@@ -83,20 +107,11 @@
   <a href="/index.html" class="nav-brand"><img src="/assets/logo.png" alt="SSC" /><span>The Sports <em>Companion</em></span></a>
   <ul class="nav-leagues">
     <li><a href="/nfl/index.html">🏈 NFL</a></li>
-    <li><a href="/ncaaf/index.html">🏈 NCAAF</a></li>
-    <li><a href="/nba/index.html">🏀 NBA</a></li>
-    <li><a href="/ncaab/mens/index.html">🏀 NCAAM</a></li>
-    <li><a href="/ncaab/womens/index.html">🏀 NCAAW</a></li>
     <li><a href="/mlb/index.html">⚾ MLB</a></li>
-    <li><a href="/ncaasoftball/index.html">🥎 Softball</a></li>
-    <li><a href="/nhl/index.html">🏒 NHL</a></li>
-    <li><a href="/soccer/mls/index.html">⚽ MLS</a></li>
-    <li><a href="/soccer/epl/index.html">⚽ EPL</a></li>
-    <li><a href="/soccer/laliga/index.html">⚽ La Liga</a></li>
-    <li><a href="/soccer/champions-league/index.html">⚽ UCL</a></li>
-    <li><a href="/soccer/fifa/index.html">⚽ FIFA</a></li>
-    <li><a href="/more/index.html">⛳ PGA</a></li>
-    
+    <li><a href="/nba/index.html">🏀 NBA</a></li>
+    <li><a href="/ncaa/index.html" class="active">🎓 NCAA</a></li>
+    <li><a href="/soccer/mls/index.html">⚽ Soccer</a></li>
+    <li><a href="/more/index.html">• • •</a></li>
   </ul>
   <div class="nav-cta"><a href="/index.html#cta">Get the App</a></div>
 </nav>
@@ -105,7 +120,22 @@
   <div class="league-banner-top">
     <h1>🏀 NCAA Men's Basketball</h1>
     <span class="league-badge">2024-25 Season</span>
-  </div>
+    <select class="season-select" id="season-sel" onchange="changeSeason(this.value)" aria-label="Select season">
+      <option value="2025" selected>2025 Season</option>
+      <option value="2024">2024 Season</option>
+      <option value="2023">2023 Season</option>
+      <option value="2022">2022 Season</option>
+      <option value="2021">2021 Season</option>
+      <option value="2020">2020 Season</option>
+      <option value="2019">2019 Season</option>
+      <option value="2018">2018 Season</option>
+      <option value="2017">2017 Season</option>
+      <option value="2016">2016 Season</option>
+      <option value="2015">2015 Season</option>
+    </select>
+  
+  <div class="season-notice" id="season-notice">// Historical view — stats shown are representative samples for this season.</div>
+</div>
   <div class="tab-bar">
     <button class="tab-btn active" onclick="showTab('scores')">Scores</button>
     <button class="tab-btn" onclick="showTab('standings')">Standings</button>
@@ -119,30 +149,31 @@
   <div class="sec-label">// Latest Results</div>
   <div class="sec-title">Scores & Results</div>
   <p style="font-size:.8rem;color:var(--muted);margin-bottom:16px;font-family:'JetBrains Mono',monospace">Tap any game to open Gamecast & Box Score</p>
-  <div class="scores-grid"><div class="score-card"><div class="score-hdr">Sat · Jan 18 · Final</div>
-      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Kansas.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> Kansas</span><span class="score-val w">88</span></div>
+  <p style="font-size:.8rem;color:var(--muted);margin-bottom:16px;font-family:'JetBrains Mono',monospace">Tap any game to open Gamecast &amp; Box Score</p>
+  <div class="scores-grid"><div class="score-card" onclick="window.location='/ncaab/mens/gameday.html'" style="cursor:pointer"><div class="score-hdr">Sat · Jan 18 · Final</div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Kansas.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Kansas</span><span class="score-val w">88</span></div>
       <div class="score-div"></div>
-      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Baylor.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> Baylor</span><span class="score-val">74</span></div>
-      <div class="score-status">Final</div></div><div class="score-card"><div class="score-hdr">Sat · Jan 18 · Final</div>
-      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Duke.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> Duke</span><span class="score-val w">91</span></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Baylor.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Baylor</span><span class="score-val">74</span></div>
+      <div class="score-status">Final</div></div><div class="score-card" onclick="window.location='/ncaab/mens/gameday.html'" style="cursor:pointer"><div class="score-hdr">Sat · Jan 18 · Final</div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Duke.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Duke</span><span class="score-val w">91</span></div>
       <div class="score-div"></div>
-      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/North_Carolina.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> North Carolina</span><span class="score-val">84</span></div>
-      <div class="score-status">Final</div></div><div class="score-card"><div class="score-hdr">Sat · Jan 18</div>
-      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Kentucky.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> Kentucky</span><span class="score-val w">72</span></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/North_Carolina.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> North Carolina</span><span class="score-val">84</span></div>
+      <div class="score-status">Final</div></div><div class="score-card" onclick="window.location='/ncaab/mens/gameday.html'" style="cursor:pointer"><div class="score-hdr">Sat · Jan 18</div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Kentucky.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Kentucky</span><span class="score-val w">72</span></div>
       <div class="score-div"></div>
-      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Tennesse.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> Tennessee</span><span class="score-val">68</span></div>
-      <div class="score-status"><span class="live-dot"></span>H2 14:22</div></div><div class="score-card"><div class="score-hdr">Sat · Jan 18 · Final</div>
-      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Gonzaga.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> Gonzaga</span><span class="score-val w">84</span></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Tennesse.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Tennessee</span><span class="score-val">68</span></div>
+      <div class="score-status"><span class="live-dot"></span>H2 14:22</div></div><div class="score-card" onclick="window.location='/ncaab/mens/gameday.html'" style="cursor:pointer"><div class="score-hdr">Sat · Jan 18 · Final</div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Gonzaga.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Gonzaga</span><span class="score-val w">84</span></div>
       <div class="score-div"></div>
-      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/UCLA.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> UCLA</span><span class="score-val">71</span></div>
-      <div class="score-status">Final</div></div><div class="score-card"><div class="score-hdr">Sat · Jan 18 · Final</div>
-      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/UConn.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> UConn</span><span class="score-val w">77</span></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/UCLA.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> UCLA</span><span class="score-val">71</span></div>
+      <div class="score-status">Final</div></div><div class="score-card" onclick="window.location='/ncaab/mens/gameday.html'" style="cursor:pointer"><div class="score-hdr">Sat · Jan 18 · Final</div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/UConn.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> UConn</span><span class="score-val w">77</span></div>
       <div class="score-div"></div>
-      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Villanova.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> Villanova</span><span class="score-val">62</span></div>
-      <div class="score-status">Final</div></div><div class="score-card"><div class="score-hdr">Sun · Jan 19</div>
-      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Purdue.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> Purdue</span><span class="score-val">—</span></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Villanova.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Villanova</span><span class="score-val">62</span></div>
+      <div class="score-status">Final</div></div><div class="score-card" onclick="window.location='/ncaab/mens/gameday.html'" style="cursor:pointer"><div class="score-hdr">Sun · Jan 19</div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Purdue.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Purdue</span><span class="score-val">—</span></div>
       <div class="score-div"></div>
-      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Indiana.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> Indiana</span><span class="score-val">—</span></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Indiana.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Indiana</span><span class="score-val">—</span></div>
       <div class="score-status"><span class="live-dot"></span>2:00 PM ET</div></div></div>
 </div>
 
@@ -154,10 +185,70 @@
 
 <div id="tab-stats" class="tab-panel">
   <div class="sec-label">// 2025 Season</div>
-  <div class="sec-title">Stats</div>
-  <div class="sub-tabs"><button class="sub-tab active" onclick="showSub('ncaabm-pts')">Scoring</button><button class="sub-tab" onclick="showSub('ncaabm-reb')">Rebounding</button><button class="sub-tab" onclick="showSub('ncaabm-ast')">Assists</button></div><div id="sub-ncaabm-pts" class="sub-panel active"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Player</th><th>School</th><th>G</th><th>PPG</th><th>FG%</th><th>3P%</th><th>FT%</th></tr></thead><tbody><tr><td class="pl">Zach Edey</td><td><img src="/assets/ncaa/Purdue.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Purdue</td><td class="">20</td><td class="">24.2</td><td class="">62.1</td><td class="">0.0</td><td class="">78.4</td></tr><tr><td class="pl">R.J. Davis</td><td><img src="/assets/ncaa/North_Carolina.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />North_Carolina</td><td class="">20</td><td class="">20.8</td><td class="">46.2</td><td class="">38.1</td><td class="">84.2</td></tr><tr><td class="pl">Johni Broome</td><td><img src="/assets/ncaa/Auburn.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Auburn</td><td class="">19</td><td class="">19.4</td><td class="">54.8</td><td class="">22.1</td><td class="">74.1</td></tr><tr><td class="pl">Hunter Dickinson</td><td><img src="/assets/ncaa/Kansas.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Kansas</td><td class="">20</td><td class="">18.8</td><td class="">58.4</td><td class="">14.2</td><td class="">72.8</td></tr><tr><td class="pl">Dalton Knecht</td><td><img src="/assets/ncaa/Tennesse.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Tennesse</td><td class="">20</td><td class="">18.4</td><td class="">44.1</td><td class="">40.8</td><td class="">88.1</td></tr></tbody></table></div></div><div id="sub-ncaabm-reb" class="sub-panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Player</th><th>School</th><th>G</th><th>RPG</th><th>OREB</th><th>DREB</th></tr></thead><tbody><tr><td class="pl">Zach Edey</td><td><img src="/assets/ncaa/Purdue.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Purdue</td><td class="">20</td><td class="">12.2</td><td class="">4.1</td><td class="">8.1</td></tr><tr><td class="pl">Johni Broome</td><td><img src="/assets/ncaa/Auburn.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Auburn</td><td class="">19</td><td class="">10.8</td><td class="">3.8</td><td class="">7.0</td></tr><tr><td class="pl">Hunter Dickinson</td><td><img src="/assets/ncaa/Kansas.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Kansas</td><td class="">20</td><td class="">10.4</td><td class="">3.4</td><td class="">7.0</td></tr><tr><td class="pl">Armando Bacot</td><td><img src="/assets/ncaa/North_Carolina.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />North_Carolina</td><td class="">20</td><td class="">9.8</td><td class="">3.2</td><td class="">6.6</td></tr></tbody></table></div></div><div id="sub-ncaabm-ast" class="sub-panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Player</th><th>School</th><th>G</th><th>APG</th><th>TO</th><th>AST/TO</th></tr></thead><tbody><tr><td class="pl">Markquis Nowell</td><td><img src="/assets/ncaa/Kansas_State.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Kansas_State</td><td class="">19</td><td class="">8.1</td><td class="">1.8</td><td class="">4.5</td></tr><tr><td class="pl">Marcus Sasser</td><td><img src="/assets/ncaa/Houston.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Houston</td><td class="">20</td><td class="">6.4</td><td class="">1.4</td><td class="">4.6</td></tr><tr><td class="pl">R.J. Davis</td><td><img src="/assets/ncaa/North_Carolina.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />North_Carolina</td><td class="">20</td><td class="">5.8</td><td class="">1.6</td><td class="">3.6</td></tr></tbody></table></div></div>
-</div>
+  <div class="sec-title">NCAA Men's Basketball Stats</div>
+  <div style="display:flex;gap:10px;margin-bottom:22px;align-items:center">
+    <button class="type-btn active" onclick="showType('player',this)" style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:9px 22px;border-radius:6px;border:2px solid var(--gold);background:var(--gold);color:var(--ink);cursor:pointer;transition:all .2s">👤 Player Stats</button>
+    <button class="type-btn" onclick="showType('team',this)" style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:9px 22px;border-radius:6px;border:2px solid var(--line);background:var(--ink-2);color:var(--muted);cursor:pointer;transition:all .2s">🏟️ Team Stats</button>
+  </div>
 
+  <!-- PLAYER STATS -->
+  <div id="type-player" class="type-panel">
+    <div class="sub-tabs">
+      <button class="sub-tab active" onclick="showSub('ncaabm-pts')">Scoring</button>
+      <button class="sub-tab" onclick="showSub('ncaabm-reb')">Rebounding</button>
+      <button class="sub-tab" onclick="showSub('ncaabm-ast')">Assists</button>
+    </div>
+    <div id="sub-ncaabm-pts" class="sub-panel active"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Player</th><th>School</th><th>G</th><th>PPG</th><th>FG%</th><th>3P%</th><th>FT%</th></tr></thead><tbody><tr><td class="pl">Zach Edey</td><td class="">Purdue</td><td class="">20</td><td class="hi">24.2</td><td class="">62.1%</td><td class="">0.0%</td><td class="">78.4%</td></tr><tr><td class="pl">R.J. Davis</td><td class="">North Carolina</td><td class="">20</td><td class="hi">20.8</td><td class="">46.2%</td><td class="">38.1%</td><td class="">84.2%</td></tr><tr><td class="pl">Johni Broome</td><td class="">Auburn</td><td class="">19</td><td class="hi">19.4</td><td class="">54.8%</td><td class="">22.1%</td><td class="">74.1%</td></tr><tr><td class="pl">Hunter Dickinson</td><td class="">Kansas</td><td class="">20</td><td class="hi">18.8</td><td class="">58.4%</td><td class="">14.2%</td><td class="">72.8%</td></tr><tr><td class="pl">Dalton Knecht</td><td class="">Tennessee</td><td class="">20</td><td class="hi">18.4</td><td class="">44.1%</td><td class="">40.8%</td><td class="">88.1%</td></tr></tbody></table></div></div>
+    <div id="sub-ncaabm-reb" class="sub-panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Player</th><th>School</th><th>G</th><th>RPG</th><th>OREB</th><th>DREB</th></tr></thead><tbody><tr><td class="pl">Zach Edey</td><td class="">Purdue</td><td class="">20</td><td class="hi">12.2</td><td class="">4.1</td><td class="">8.1</td></tr><tr><td class="pl">Johni Broome</td><td class="">Auburn</td><td class="">19</td><td class="hi">10.8</td><td class="">3.8</td><td class="">7.0</td></tr><tr><td class="pl">Hunter Dickinson</td><td class="">Kansas</td><td class="">20</td><td class="hi">10.4</td><td class="">3.4</td><td class="">7.0</td></tr><tr><td class="pl">Armando Bacot</td><td class="">North Carolina</td><td class="">20</td><td class="hi">9.8</td><td class="">3.2</td><td class="">6.6</td></tr><tr><td class="pl">Kel Ware</td><td class="">Indiana</td><td class="">20</td><td class="hi">9.4</td><td class="">3.0</td><td class="">6.4</td></tr></tbody></table></div></div>
+    <div id="sub-ncaabm-ast" class="sub-panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Player</th><th>School</th><th>G</th><th>APG</th><th>TO</th><th>AST/TO</th></tr></thead><tbody><tr><td class="pl">Markquis Nowell</td><td class="">Kansas State</td><td class="">19</td><td class="">8.1</td><td class="">1.8</td><td class="hi">4.5</td></tr><tr><td class="pl">Marcus Sasser</td><td class="">Houston</td><td class="">20</td><td class="">6.4</td><td class="">1.4</td><td class="hi">4.6</td></tr><tr><td class="pl">R.J. Davis</td><td class="">North Carolina</td><td class="">20</td><td class="">5.8</td><td class="">1.6</td><td class="hi">3.6</td></tr><tr><td class="pl">Tyrese Hunter</td><td class="">Texas</td><td class="">20</td><td class="">5.4</td><td class="">1.8</td><td class="hi">3.0</td></tr><tr><td class="pl">Dajuan Harris Jr</td><td class="">Kansas</td><td class="">20</td><td class="">5.2</td><td class="">1.2</td><td class="hi">4.3</td></tr></tbody></table></div></div>
+  </div>
+
+  <!-- TEAM STATS -->
+  <div id="type-team" class="type-panel" style="display:none">
+    <div class="sub-tabs">
+      <button class="sub-tab active" onclick="showSub('ncaabm-team-off')">Offense</button>
+      <button class="sub-tab" onclick="showSub('ncaabm-team-def')">Defense</button>
+    </div>
+    <div id="sub-ncaabm-team-off" class="sub-panel active"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Team</th><th>PPG</th><th>FG%</th><th>3P%</th><th>AST/TO</th><th>PACE</th></tr></thead><tbody><tr><td class="pl">Gonzaga</td><td class="hi">88.1</td><td class="">52.4%</td><td class="">38.2%</td><td class="">1.84</td><td class="">72.4</td></tr><tr><td class="pl">Kansas</td><td class="hi">84.2</td><td class="">50.8%</td><td class="">36.4%</td><td class="">1.72</td><td class="">70.8</td></tr><tr><td class="pl">UConn</td><td class="hi">82.4</td><td class="">49.4%</td><td class="">36.8%</td><td class="">1.68</td><td class="">69.2</td></tr><tr><td class="pl">Duke</td><td class="hi">81.4</td><td class="">48.8%</td><td class="">37.2%</td><td class="">1.64</td><td class="">70.4</td></tr><tr><td class="pl">Purdue</td><td class="hi">79.1</td><td class="">52.2%</td><td class="">34.4%</td><td class="">1.58</td><td class="">68.8</td></tr><tr><td class="pl">Houston</td><td class="hi">76.4</td><td class="">47.8%</td><td class="">34.8%</td><td class="">1.54</td><td class="">67.2</td></tr></tbody></table></div></div>
+    <div id="sub-ncaabm-team-def" class="sub-panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Team</th><th>PPG Allowed</th><th>OPP FG%</th><th>OPP 3P%</th><th>BLK/G</th><th>STL/G</th></tr></thead><tbody><tr><td class="pl">Houston</td><td class="hi">58.4</td><td class="">38.2%</td><td class="">28.4%</td><td class="">4.8</td><td class="">8.2</td></tr><tr><td class="pl">Tennessee</td><td class="hi">60.2</td><td class="">39.4%</td><td class="">29.2%</td><td class="">4.4</td><td class="">7.8</td></tr><tr><td class="pl">UConn</td><td class="hi">62.4</td><td class="">40.8%</td><td class="">30.4%</td><td class="">4.2</td><td class="">7.4</td></tr><tr><td class="pl">Virginia</td><td class="hi">63.8</td><td class="">41.2%</td><td class="">31.2%</td><td class="">3.8</td><td class="">6.8</td></tr><tr><td class="pl">Kansas</td><td class="hi">64.4</td><td class="">41.8%</td><td class="">31.8%</td><td class="">3.6</td><td class="">7.2</td></tr><tr><td class="pl">Purdue</td><td class="hi">65.2</td><td class="">42.4%</td><td class="">32.4%</td><td class="">4.8</td><td class="">6.4</td></tr></tbody></table></div></div>
+  </div>
+
+<div style="margin-top:24px;border-top:1px solid var(--line);padding-top:20px">
+  <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;letter-spacing:.12em;color:var(--gold);text-transform:uppercase;margin-bottom:14px">// Stat Definitions — from The Sports Statistics Manual by Chris Cain</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px">
+    <div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">OVR</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#22c55e">NBA</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Overall Rating</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">A 0–99 composite score based on PPM (Points Per Minute) normalized against the current college season's top and bottom performers at each position.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">PPM</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#22c55e">NBA</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Points Per Minute</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">Total points ÷ total minutes. The primary metric in the college basketball OVR system — accounts for varying playing time across starters and bench players.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">PPG+</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#22c55e">NBA</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Adjusted Points Per Game</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">PPM × 40 minutes (college game length). Projects a player's scoring over a full college game.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">KenPom</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#8A8F98">All</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Ken Pomeroy Rating</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">Adjusted efficiency margin — offensive efficiency minus defensive efficiency per 100 possessions, adjusted for opponent strength. The gold standard in college basketball analytics.</div>
+  </div>
+  </div>
+  <p style="font-size:.72rem;color:var(--muted);margin-top:16px;font-family:'JetBrains Mono',monospace">Methodology from <em style="color:var(--white)">The Sports Statistics Manual</em> by Chris Cain · <a href="https://www.amazon.com/Sports-Statistics-Manual-Baseball-Basketball/dp/B0DDHVR5MK/" target="_blank" style="color:var(--gold);text-decoration:none">Available on Amazon</a></p>
+</div>
+</div>
 <div id="tab-fantasy" class="tab-panel">
   <div class="sec-label">// Fantasy</div>
   <div class="sec-title">Fantasy & Games</div>
@@ -192,7 +283,34 @@
 </footer>
 
 <script>
+
+function changeSeason(yr) {
+  yr = parseInt(yr);
+  // Update all sec-label year references
+  document.querySelectorAll('.sec-label').forEach(el => {
+    el.textContent = el.textContent.replace(/20\d\d/, yr);
+  });
+  // Update badge
+  const badge = document.querySelector('.league-badge');
+  if (badge) badge.textContent = yr + ' Season';
+  // Show/hide historical notice
+  const notice = document.getElementById('season-notice');
+  if (notice) notice.classList.toggle('show', yr < 2025);
+}
+
 function showTab(id){document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');event.target.classList.add('active')}
+function showType(type, btn) {
+  document.querySelectorAll('.type-panel').forEach(p => p.style.display='none');
+  document.getElementById('type-' + type).style.display = 'block';
+  document.querySelectorAll('.type-btn').forEach(b => {
+    b.style.background = 'var(--ink-2)'; b.style.color = 'var(--muted)'; b.style.borderColor = 'var(--line)';
+  });
+  btn.style.background = 'var(--gold)'; btn.style.color = 'var(--ink)'; btn.style.borderColor = 'var(--gold)';
+  // Reset sub-tabs in active panel
+  const panel = document.getElementById('type-' + type);
+  const firstSub = panel.querySelector('.sub-tab');
+  if (firstSub) firstSub.click();
+}
 function showSub(id){document.querySelectorAll('.sub-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.sub-tab').forEach(b=>b.classList.remove('active'));document.getElementById('sub-'+id).classList.add('active');event.target.classList.add('active')}
 </script>
 </body></html>

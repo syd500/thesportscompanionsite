@@ -27,7 +27,7 @@
     .scoreboard{background:var(--ink-2);border-bottom:1px solid var(--line);padding:20px 32px}
     .sb-top{display:flex;align-items:center;justify-content:space-between;gap:20px}
     .sb-team{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:120px}
-    .sb-team-name{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;text-align:center}
+    .sb-team-name{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;text-align:center;display:flex;align-items:center;justify-content:center;gap:6px}
     .sb-team-record{font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
     .sb-score-wrap{display:flex;align-items:center;gap:16px}
     .sb-score{font-family:'Barlow Condensed',sans-serif;font-size:4rem;font-weight:900;line-height:1}
@@ -153,7 +153,7 @@
 <div class="scoreboard">
   <div class="sb-top">
     <div class="sb-team">
-      <div class="sb-team-name"><img src="/assets/mlb/yankees.png" style="width:28px;height:28px;object-fit:contain" onerror="this.style.display='none'" /> New York Yankees</div>
+      <div class="sb-team-name"><img src="/assets/mlb/yankees.png" style="width:28px;height:28px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> New York Yankees</div>
       <div class="sb-team-record">(52-32)</div>
     </div>
     <div class="sb-score-wrap">
@@ -162,7 +162,7 @@
       <div class="sb-score" id="home-score">0</div>
     </div>
     <div class="sb-team">
-      <div class="sb-team-name"><img src="/assets/mlb/red_sox.png" style="width:28px;height:28px;object-fit:contain" onerror="this.style.display='none'" /> Boston Red Sox</div>
+      <div class="sb-team-name"><img src="/assets/mlb/red_sox.png" style="width:28px;height:28px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Boston Red Sox</div>
       <div class="sb-team-record">(46-38)</div>
     </div>
   </div>
@@ -208,14 +208,14 @@
       </tr></thead>
       <tbody>
         <tr>
-          <td><img src="/assets/mlb/yankees.png" style="width:16px;height:16px;object-fit:contain;vertical-align:middle;margin-right:4px" onerror="this.style.display='none'" />NYY</td>
+          <td><img src="/assets/mlb/yankees.png" style="width:16px;height:16px;object-fit:contain;display:inline-block;vertical-align:-.2em;margin-right:4px" onerror="this.style.display='none'" />NYY</td>
           <td class="active" id="nyy-1">2</td><td id="nyy-2">—</td><td id="nyy-3">—</td>
           <td id="nyy-4">—</td><td id="nyy-5">—</td><td id="nyy-6">—</td>
           <td id="nyy-7">—</td><td id="nyy-8">—</td><td id="nyy-9">—</td>
           <td class="total" id="nyy-r">2</td><td id="nyy-h">3</td><td>0</td>
         </tr>
         <tr>
-          <td><img src="/assets/mlb/red_sox.png" style="width:16px;height:16px;object-fit:contain;vertical-align:middle;margin-right:4px" onerror="this.style.display='none'" />BOS</td>
+          <td><img src="/assets/mlb/red_sox.png" style="width:16px;height:16px;object-fit:contain;display:inline-block;vertical-align:-.2em;margin-right:4px" onerror="this.style.display='none'" />BOS</td>
           <td class="active" id="bos-1">0</td><td id="bos-2">—</td><td id="bos-3">—</td>
           <td id="bos-4">—</td><td id="bos-5">—</td><td id="bos-6">—</td>
           <td id="bos-7">—</td><td id="bos-8">—</td><td id="bos-9">—</td>
@@ -394,7 +394,7 @@
   </div><!-- /panel-inner -->
 <footer>
   <div class="ft-brand"><img src="/assets/logo.png" alt="SSC" /><span>The Sports <em>Companion</em></span></div>
-  <div class="ft-links"><a href="/index.html">Home</a><a href="/nfl/index.html">NFL</a><a href="/mlb/index.html">MLB</a><a href="/nba/index.html">NBA</a></div>
+  <div class="ft-links"><a href="/index.html">Home</a><a href="/nfl/index.html">NFL</a><a href="/mlb/index.html" class="active">MLB</a><a href="/nba/index.html">NBA</a></div>
   <div class="ft-copy">© 2026 The Sports Companion</div>
 </footer>
 

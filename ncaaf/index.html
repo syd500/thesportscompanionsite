@@ -76,6 +76,30 @@
     .ft-copy{font-size:.75rem;color:var(--muted)}.ft-links{display:flex;gap:18px;flex-wrap:wrap}
     .ft-links a{font-size:.75rem;color:var(--muted);text-decoration:none}.ft-links a:hover{color:var(--white)}
     @media(max-width:768px){.tab-panel{padding:18px 16px}.league-banner{padding:18px 16px 0}.nav-brand span{display:none}}
+  
+    /* SEASON SELECTOR */
+    .season-select {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em;
+      background: var(--ink-3); color: var(--gold);
+      border: 1px solid rgba(242,194,48,0.3);
+      border-radius: 4px; padding: 5px 10px;
+      cursor: pointer; outline: none;
+      appearance: none; -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23F2C230'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+      padding-right: 24px;
+    }
+    .season-select:hover { border-color: var(--gold); }
+    .season-select option { background: var(--ink-3); color: var(--white); }
+    .season-notice {
+      display: none; margin-top: 12px; padding: 8px 14px;
+      background: rgba(242,194,48,0.06); border: 1px solid rgba(242,194,48,0.2);
+      border-radius: 5px; font-size: 0.78rem; color: var(--muted);
+      font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em;
+    }
+    .season-notice.show { display: block; }
   </style>
 </head>
 <body>
@@ -83,20 +107,11 @@
   <a href="/index.html" class="nav-brand"><img src="/assets/logo.png" alt="SSC" /><span>The Sports <em>Companion</em></span></a>
   <ul class="nav-leagues">
     <li><a href="/nfl/index.html">🏈 NFL</a></li>
-    <li><a href="/ncaaf/index.html">🏈 NCAAF</a></li>
-    <li><a href="/nba/index.html">🏀 NBA</a></li>
-    <li><a href="/ncaab/mens/index.html">🏀 NCAAM</a></li>
-    <li><a href="/ncaab/womens/index.html">🏀 NCAAW</a></li>
     <li><a href="/mlb/index.html">⚾ MLB</a></li>
-    <li><a href="/ncaasoftball/index.html">🥎 Softball</a></li>
-    <li><a href="/nhl/index.html">🏒 NHL</a></li>
-    <li><a href="/soccer/mls/index.html">⚽ MLS</a></li>
-    <li><a href="/soccer/epl/index.html">⚽ EPL</a></li>
-    <li><a href="/soccer/laliga/index.html">⚽ La Liga</a></li>
-    <li><a href="/soccer/champions-league/index.html">⚽ UCL</a></li>
-    <li><a href="/soccer/fifa/index.html">⚽ FIFA</a></li>
-    <li><a href="/more/index.html">⛳ PGA</a></li>
-    
+    <li><a href="/nba/index.html">🏀 NBA</a></li>
+    <li><a href="/ncaa/index.html" class="active">🎓 NCAA</a></li>
+    <li><a href="/soccer/mls/index.html">⚽ Soccer</a></li>
+    <li><a href="/more/index.html">• • •</a></li>
   </ul>
   <div class="nav-cta"><a href="/index.html#cta">Get the App</a></div>
 </nav>
@@ -105,7 +120,22 @@
   <div class="league-banner-top">
     <h1>🏈 NCAA Football</h1>
     <span class="league-badge">2025 Season</span>
-  </div>
+    <select class="season-select" id="season-sel" onchange="changeSeason(this.value)" aria-label="Select season">
+      <option value="2025" selected>2025 Season</option>
+      <option value="2024">2024 Season</option>
+      <option value="2023">2023 Season</option>
+      <option value="2022">2022 Season</option>
+      <option value="2021">2021 Season</option>
+      <option value="2020">2020 Season</option>
+      <option value="2019">2019 Season</option>
+      <option value="2018">2018 Season</option>
+      <option value="2017">2017 Season</option>
+      <option value="2016">2016 Season</option>
+      <option value="2015">2015 Season</option>
+    </select>
+  
+  <div class="season-notice" id="season-notice">// Historical view — stats shown are representative samples for this season.</div>
+</div>
   <div class="tab-bar">
     <button class="tab-btn active" onclick="showTab('scores')">Scores</button>
     <button class="tab-btn" onclick="showTab('standings')">Standings</button>
@@ -119,30 +149,31 @@
   <div class="sec-label">// Latest Results</div>
   <div class="sec-title">Scores & Results</div>
   <p style="font-size:.8rem;color:var(--muted);margin-bottom:16px;font-family:'JetBrains Mono',monospace">Tap any game to open Gamecast & Box Score</p>
-  <div class="scores-grid"><div class="score-card"><div class="score-hdr">Sat · Oct 12 · Final</div>
-      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Alabama.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> Alabama</span><span class="score-val w">35</span></div>
+  <p style="font-size:.8rem;color:var(--muted);margin-bottom:16px;font-family:'JetBrains Mono',monospace">Tap any game to open Gamecast &amp; Box Score</p>
+  <div class="scores-grid"><div class="score-card" onclick="window.location='/ncaaf/gameday.html'" style="cursor:pointer"><div class="score-hdr">Sat · Oct 12 · Final</div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Alabama.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Alabama</span><span class="score-val w">35</span></div>
       <div class="score-div"></div>
-      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Georgia.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> Georgia</span><span class="score-val">28</span></div>
-      <div class="score-status">Final</div></div><div class="score-card"><div class="score-hdr">Sat · Oct 12 · Final</div>
-      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Ohio_State.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> Ohio State</span><span class="score-val w">42</span></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Georgia.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Georgia</span><span class="score-val">28</span></div>
+      <div class="score-status">Final</div></div><div class="score-card" onclick="window.location='/ncaaf/gameday.html'" style="cursor:pointer"><div class="score-hdr">Sat · Oct 12 · Final</div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Ohio_State.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Ohio State</span><span class="score-val w">42</span></div>
       <div class="score-div"></div>
-      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Michigan.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> Michigan</span><span class="score-val">17</span></div>
-      <div class="score-status">Final</div></div><div class="score-card"><div class="score-hdr">Sat · Oct 12 · Final</div>
-      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Texas.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> Texas</span><span class="score-val w">31</span></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Michigan.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Michigan</span><span class="score-val">17</span></div>
+      <div class="score-status">Final</div></div><div class="score-card" onclick="window.location='/ncaaf/gameday.html'" style="cursor:pointer"><div class="score-hdr">Sat · Oct 12 · Final</div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Texas.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Texas</span><span class="score-val w">31</span></div>
       <div class="score-div"></div>
-      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Oklahoma.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> Oklahoma</span><span class="score-val">24</span></div>
-      <div class="score-status">Final</div></div><div class="score-card"><div class="score-hdr">Sat · Oct 12</div>
-      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Notre_Dame.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> Notre Dame</span><span class="score-val w">21</span></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Oklahoma.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Oklahoma</span><span class="score-val">24</span></div>
+      <div class="score-status">Final</div></div><div class="score-card" onclick="window.location='/ncaaf/gameday.html'" style="cursor:pointer"><div class="score-hdr">Sat · Oct 12</div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Notre_Dame.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Notre Dame</span><span class="score-val w">21</span></div>
       <div class="score-div"></div>
-      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Southern_California.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> USC</span><span class="score-val">17</span></div>
-      <div class="score-status"><span class="live-dot"></span>Q3 8:22</div></div><div class="score-card"><div class="score-hdr">Sat · Oct 12 · Final</div>
-      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Penn_State.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> Penn State</span><span class="score-val w">28</span></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Southern_California.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> USC</span><span class="score-val">17</span></div>
+      <div class="score-status"><span class="live-dot"></span>Q3 8:22</div></div><div class="score-card" onclick="window.location='/ncaaf/gameday.html'" style="cursor:pointer"><div class="score-hdr">Sat · Oct 12 · Final</div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Penn_State.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Penn State</span><span class="score-val w">28</span></div>
       <div class="score-div"></div>
-      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Iowa.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> Iowa</span><span class="score-val">7</span></div>
-      <div class="score-status">Final</div></div><div class="score-card"><div class="score-hdr">Sat · Oct 12 · Final</div>
-      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/LSU.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> LSU</span><span class="score-val w">24</span></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Iowa.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Iowa</span><span class="score-val">7</span></div>
+      <div class="score-status">Final</div></div><div class="score-card" onclick="window.location='/ncaaf/gameday.html'" style="cursor:pointer"><div class="score-hdr">Sat · Oct 12 · Final</div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/LSU.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> LSU</span><span class="score-val w">24</span></div>
       <div class="score-div"></div>
-      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Florida.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> Florida</span><span class="score-val">20</span></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Florida.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Florida</span><span class="score-val">20</span></div>
       <div class="score-status">Final</div></div></div>
 </div>
 
@@ -154,10 +185,100 @@
 
 <div id="tab-stats" class="tab-panel">
   <div class="sec-label">// 2025 Season</div>
-  <div class="sec-title">Stats</div>
-  <div class="sub-tabs"><button class="sub-tab active" onclick="showSub('ncaaf-pass')">Passing</button><button class="sub-tab" onclick="showSub('ncaaf-rush')">Rushing</button><button class="sub-tab" onclick="showSub('ncaaf-recv')">Receiving</button></div><div id="sub-ncaaf-pass" class="sub-panel active"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Player</th><th>School</th><th>G</th><th>CMP</th><th>ATT</th><th>YDS</th><th>TD</th><th>RTG</th></tr></thead><tbody><tr><td class="pl">Caleb Williams</td><td><img src="/assets/ncaa/Southern_California.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Southern_California</td><td class="">8</td><td class="">198</td><td class="">281</td><td class="">2641</td><td class="">28</td><td class="">168.4</td></tr><tr><td class="pl">Drake Maye</td><td><img src="/assets/ncaa/North_Carolina.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />North_Carolina</td><td class="">8</td><td class="">188</td><td class="">265</td><td class="">2488</td><td class="">26</td><td class="">161.2</td></tr><tr><td class="pl">Michael Penix Jr</td><td><img src="/assets/ncaa/Washington.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Washington</td><td class="">8</td><td class="">176</td><td class="">248</td><td class="">2312</td><td class="">24</td><td class="">158.8</td></tr><tr><td class="pl">Bo Nix</td><td><img src="/assets/ncaa/Oregon.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Oregon</td><td class="">8</td><td class="">182</td><td class="">261</td><td class="">2298</td><td class="">22</td><td class="">155.1</td></tr><tr><td class="pl">Jayden Daniels</td><td><img src="/assets/ncaa/LSU.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />LSU</td><td class="">8</td><td class="">174</td><td class="">242</td><td class="">2189</td><td class="">21</td><td class="">153.4</td></tr></tbody></table></div></div><div id="sub-ncaaf-rush" class="sub-panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Player</th><th>School</th><th>G</th><th>CAR</th><th>YDS</th><th>AVG</th><th>TD</th></tr></thead><tbody><tr><td class="pl">Jonathon Brooks</td><td><img src="/assets/ncaa/Texas.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Texas</td><td class="">8</td><td class="">148</td><td class="">1121</td><td class="">7.6</td><td class="">14</td></tr><tr><td class="pl">Quinshon Judkins</td><td><img src="/assets/ncaa/Mississippi.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Mississippi</td><td class="">8</td><td class="">141</td><td class="">1088</td><td class="">7.7</td><td class="">13</td></tr><tr><td class="pl">MarShawn Lloyd</td><td><img src="/assets/ncaa/Southern_California.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Southern_California</td><td class="">8</td><td class="">132</td><td class="">998</td><td class="">7.6</td><td class="">12</td></tr><tr><td class="pl">TreVeyon Henderson</td><td><img src="/assets/ncaa/Ohio_State.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Ohio_State</td><td class="">8</td><td class="">128</td><td class="">964</td><td class="">7.5</td><td class="">11</td></tr></tbody></table></div></div><div id="sub-ncaaf-recv" class="sub-panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Player</th><th>School</th><th>G</th><th>REC</th><th>YDS</th><th>AVG</th><th>TD</th></tr></thead><tbody><tr><td class="pl">Rome Odunze</td><td><img src="/assets/ncaa/Washington.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Washington</td><td class="">8</td><td class="">58</td><td class="">924</td><td class="">15.9</td><td class="">10</td></tr><tr><td class="pl">Marvin Harrison Jr</td><td><img src="/assets/ncaa/Ohio_State.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Ohio_State</td><td class="">8</td><td class="">52</td><td class="">888</td><td class="">17.1</td><td class="">12</td></tr><tr><td class="pl">Keon Coleman</td><td><img src="/assets/ncaa/Florida_State.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Florida_State</td><td class="">8</td><td class="">49</td><td class="">812</td><td class="">16.6</td><td class="">9</td></tr><tr><td class="pl">Malik Nabers</td><td><img src="/assets/ncaa/LSU.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />LSU</td><td class="">8</td><td class="">54</td><td class="">841</td><td class="">15.6</td><td class="">8</td></tr></tbody></table></div></div>
-</div>
+  <div class="sec-title">NCAAF Stats</div>
+  <div style="display:flex;gap:10px;margin-bottom:22px;align-items:center">
+    <button class="type-btn active" onclick="showType('player',this)" style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:9px 22px;border-radius:6px;border:2px solid var(--gold);background:var(--gold);color:var(--ink);cursor:pointer;transition:all .2s">👤 Player Stats</button>
+    <button class="type-btn" onclick="showType('team',this)" style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:9px 22px;border-radius:6px;border:2px solid var(--line);background:var(--ink-2);color:var(--muted);cursor:pointer;transition:all .2s">🏟️ Team Stats</button>
+  </div>
 
+  <!-- PLAYER STATS -->
+  <div id="type-player" class="type-panel">
+    <div class="sub-tabs">
+      <button class="sub-tab active" onclick="showSub('ncaaf-pass')">Passing</button>
+      <button class="sub-tab" onclick="showSub('ncaaf-rush')">Rushing</button>
+      <button class="sub-tab" onclick="showSub('ncaaf-recv')">Receiving</button>
+    </div>
+    <div id="sub-ncaaf-pass" class="sub-panel active"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Player</th><th>School</th><th>G</th><th>CMP</th><th>ATT</th><th>YDS</th><th>TD</th><th>RTG</th></tr></thead><tbody><tr><td class="pl">Caleb Williams</td><td class="">Southern California</td><td class="">8</td><td class="">198</td><td class="">281</td><td class="">2641</td><td class="">28</td><td class="hi">168.4</td></tr><tr><td class="pl">Drake Maye</td><td class="">North Carolina</td><td class="">8</td><td class="">188</td><td class="">265</td><td class="">2488</td><td class="">26</td><td class="hi">161.2</td></tr><tr><td class="pl">Michael Penix Jr</td><td class="">Washington</td><td class="">8</td><td class="">176</td><td class="">248</td><td class="">2312</td><td class="">24</td><td class="hi">158.8</td></tr><tr><td class="pl">Bo Nix</td><td class="">Oregon</td><td class="">8</td><td class="">182</td><td class="">261</td><td class="">2298</td><td class="">22</td><td class="hi">155.1</td></tr><tr><td class="pl">Jayden Daniels</td><td class="">LSU</td><td class="">8</td><td class="">174</td><td class="">242</td><td class="">2189</td><td class="">21</td><td class="hi">153.4</td></tr></tbody></table></div></div>
+    <div id="sub-ncaaf-rush" class="sub-panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Player</th><th>School</th><th>G</th><th>CAR</th><th>YDS</th><th>AVG</th><th>TD</th></tr></thead><tbody><tr><td class="pl">Jonathon Brooks</td><td class="">Texas</td><td class="">8</td><td class="">148</td><td class="">1121</td><td class="">7.6</td><td class="hi">14</td></tr><tr><td class="pl">Quinshon Judkins</td><td class="">Mississippi</td><td class="">8</td><td class="">141</td><td class="">1088</td><td class="">7.7</td><td class="hi">13</td></tr><tr><td class="pl">TreVeyon Henderson</td><td class="">Ohio State</td><td class="">8</td><td class="">128</td><td class="">964</td><td class="">7.5</td><td class="hi">11</td></tr><tr><td class="pl">MarShawn Lloyd</td><td class="">Southern California</td><td class="">8</td><td class="">132</td><td class="">998</td><td class="">7.6</td><td class="hi">12</td></tr><tr><td class="pl">Blake Corum</td><td class="">Michigan</td><td class="">8</td><td class="">144</td><td class="">1042</td><td class="">7.2</td><td class="hi">12</td></tr></tbody></table></div></div>
+    <div id="sub-ncaaf-recv" class="sub-panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Player</th><th>School</th><th>G</th><th>REC</th><th>YDS</th><th>AVG</th><th>TD</th></tr></thead><tbody><tr><td class="pl">Marvin Harrison Jr</td><td class="">Ohio State</td><td class="">8</td><td class="">52</td><td class="">888</td><td class="">17.1</td><td class="hi">12</td></tr><tr><td class="pl">Rome Odunze</td><td class="">Washington</td><td class="">8</td><td class="">58</td><td class="">924</td><td class="">15.9</td><td class="hi">10</td></tr><tr><td class="pl">Keon Coleman</td><td class="">Florida State</td><td class="">8</td><td class="">49</td><td class="">812</td><td class="">16.6</td><td class="hi">9</td></tr><tr><td class="pl">Malik Nabers</td><td class="">LSU</td><td class="">8</td><td class="">54</td><td class="">841</td><td class="">15.6</td><td class="hi">8</td></tr><tr><td class="pl">Xavier Worthy</td><td class="">Texas</td><td class="">8</td><td class="">46</td><td class="">768</td><td class="">16.7</td><td class="hi">9</td></tr></tbody></table></div></div>
+  </div>
+
+  <!-- TEAM STATS -->
+  <div id="type-team" class="type-panel" style="display:none">
+    <div class="sub-tabs">
+      <button class="sub-tab active" onclick="showSub('ncaaf-team-off')">Offense</button>
+      <button class="sub-tab" onclick="showSub('ncaaf-team-def')">Defense</button>
+      <button class="sub-tab" onclick="showSub('ncaaf-team-sp')">Special Teams</button>
+    </div>
+    <div id="sub-ncaaf-team-off" class="sub-panel active"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Team</th><th>PPG</th><th>YPPG</th><th>PASS YPG</th><th>RUSH YPG</th><th>3D%</th></tr></thead><tbody><tr><td class="pl">Ohio State</td><td class="hi">44.3</td><td class="">528.4</td><td class="">318.2</td><td class="">210.2</td><td class="">52.4%</td></tr><tr><td class="pl">Texas</td><td class="hi">38.9</td><td class="">488.8</td><td class="">298.4</td><td class="">190.4</td><td class="">48.8%</td></tr><tr><td class="pl">Michigan</td><td class="hi">36.8</td><td class="">468.2</td><td class="">278.8</td><td class="">189.4</td><td class="">46.2%</td></tr><tr><td class="pl">Alabama</td><td class="hi">42.1</td><td class="">508.4</td><td class="">308.8</td><td class="">199.6</td><td class="">50.4%</td></tr><tr><td class="pl">Florida State</td><td class="hi">37.2</td><td class="">472.4</td><td class="">282.4</td><td class="">190.0</td><td class="">47.2%</td></tr><tr><td class="pl">Georgia</td><td class="hi">38.4</td><td class="">484.2</td><td class="">292.8</td><td class="">191.4</td><td class="">48.4%</td></tr></tbody></table></div></div>
+    <div id="sub-ncaaf-team-def" class="sub-panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Team</th><th>PPG Allowed</th><th>YPPG Allowed</th><th>SACK</th><th>INT</th><th>TFL</th></tr></thead><tbody><tr><td class="pl">Georgia</td><td class="hi">12.4</td><td class="">248.4</td><td class="">28</td><td class="">14</td><td class="">58</td></tr><tr><td class="pl">Michigan</td><td class="hi">14.2</td><td class="">268.8</td><td class="">24</td><td class="">12</td><td class="">52</td></tr><tr><td class="pl">Ohio State</td><td class="hi">16.8</td><td class="">288.2</td><td class="">22</td><td class="">10</td><td class="">48</td></tr><tr><td class="pl">Alabama</td><td class="hi">18.4</td><td class="">298.8</td><td class="">26</td><td class="">11</td><td class="">54</td></tr><tr><td class="pl">Penn State</td><td class="hi">17.2</td><td class="">278.4</td><td class="">24</td><td class="">13</td><td class="">56</td></tr><tr><td class="pl">Oregon</td><td class="hi">19.4</td><td class="">308.4</td><td class="">20</td><td class="">9</td><td class="">44</td></tr></tbody></table></div></div>
+    <div id="sub-ncaaf-team-sp" class="sub-panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Team</th><th>FG%</th><th>Punt AVG</th><th>KO Ret AVG</th><th>ST Rating</th></tr></thead><tbody><tr><td class="pl">Michigan</td><td class="">88.4%</td><td class="">44.8</td><td class="hi">24.2</td><td class="">92.4</td></tr><tr><td class="pl">Georgia</td><td class="">86.2%</td><td class="">43.4</td><td class="hi">23.8</td><td class="">90.8</td></tr><tr><td class="pl">Ohio State</td><td class="">84.8%</td><td class="">42.8</td><td class="hi">23.4</td><td class="">88.4</td></tr><tr><td class="pl">Alabama</td><td class="">86.4%</td><td class="">43.8</td><td class="hi">24.0</td><td class="">89.2</td></tr><tr><td class="pl">Penn State</td><td class="">84.2%</td><td class="">42.4</td><td class="hi">23.2</td><td class="">87.8</td></tr></tbody></table></div></div>
+  </div>
+
+<div style="margin-top:24px;border-top:1px solid var(--line);padding-top:20px">
+  <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;letter-spacing:.12em;color:var(--gold);text-transform:uppercase;margin-bottom:14px">// Stat Definitions — from The Sports Statistics Manual by Chris Cain</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px">
+    <div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">OVR</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#F2C230">NFL</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Overall Rating</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">A 0–99 composite score comparing a player or team to all others in the same category across the current season. 99 = best in the league, 60 = average, below 60 = below league standard.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">YPPG</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#F2C230">NFL</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Yards Per Play — Offensive</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">Total offensive yards divided by total offensive plays. Measures how efficiently an offense generates yardage on every single play, regardless of play type.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">OYPPG</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#F2C230">NFL</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Opponent YPPG</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">Yards per play allowed by the defense. Lower is better. Used to measure defensive efficiency against the offensive YPPG of opponents.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">YPPG Diff</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#F2C230">NFL</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">YPPG Differential</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">Offensive YPPG minus Opponent YPPG. A positive number means the team gains more yards per play than it gives up — the single strongest predictor of team success.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">PPK</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#F2C230">NFL</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Points Per Kick</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">A kicker rating metric: (FGM × weighted distance value + XPM) ÷ total attempts. Weights longer kicks more heavily — a 50-yard FG is worth more than a 25-yarder.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">PPP</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#F2C230">NFL</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Points Per Punt</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">A punter efficiency metric combining net yards, touchbacks, and punts inside the 20. Higher = better field position created per punt.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">WAR</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#8A8F98">All</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Wins Above Replacement</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">How many wins a player contributes above what a league-average replacement would. Combines offensive, defensive, and special teams contributions.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">RTG</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#F2C230">NFL</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Passer Rating</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">NFL passer rating formula combining completion %, yards per attempt, TD%, and INT%. Scale of 0–158.3; 100+ = elite.</div>
+  </div>
+  </div>
+  <p style="font-size:.72rem;color:var(--muted);margin-top:16px;font-family:'JetBrains Mono',monospace">Methodology from <em style="color:var(--white)">The Sports Statistics Manual</em> by Chris Cain · <a href="https://www.amazon.com/Sports-Statistics-Manual-Baseball-Basketball/dp/B0DDHVR5MK/" target="_blank" style="color:var(--gold);text-decoration:none">Available on Amazon</a></p>
+</div>
+</div>
 <div id="tab-fantasy" class="tab-panel">
   <div class="sec-label">// Fantasy</div>
   <div class="sec-title">Fantasy & Games</div>
@@ -192,7 +313,34 @@
 </footer>
 
 <script>
+
+function changeSeason(yr) {
+  yr = parseInt(yr);
+  // Update all sec-label year references
+  document.querySelectorAll('.sec-label').forEach(el => {
+    el.textContent = el.textContent.replace(/20\d\d/, yr);
+  });
+  // Update badge
+  const badge = document.querySelector('.league-badge');
+  if (badge) badge.textContent = yr + ' Season';
+  // Show/hide historical notice
+  const notice = document.getElementById('season-notice');
+  if (notice) notice.classList.toggle('show', yr < 2025);
+}
+
 function showTab(id){document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');event.target.classList.add('active')}
+function showType(type, btn) {
+  document.querySelectorAll('.type-panel').forEach(p => p.style.display='none');
+  document.getElementById('type-' + type).style.display = 'block';
+  document.querySelectorAll('.type-btn').forEach(b => {
+    b.style.background = 'var(--ink-2)'; b.style.color = 'var(--muted)'; b.style.borderColor = 'var(--line)';
+  });
+  btn.style.background = 'var(--gold)'; btn.style.color = 'var(--ink)'; btn.style.borderColor = 'var(--gold)';
+  // Reset sub-tabs in active panel
+  const panel = document.getElementById('type-' + type);
+  const firstSub = panel.querySelector('.sub-tab');
+  if (firstSub) firstSub.click();
+}
 function showSub(id){document.querySelectorAll('.sub-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.sub-tab').forEach(b=>b.classList.remove('active'));document.getElementById('sub-'+id).classList.add('active');event.target.classList.add('active')}
 </script>
 </body></html>

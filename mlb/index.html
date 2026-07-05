@@ -79,22 +79,63 @@
     .ft-brand span{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem}.ft-brand span em{font-style:normal;color:var(--gold)}
     .ft-copy{font-size:.75rem;color:var(--muted)}.ft-links{display:flex;gap:18px}.ft-links a{font-size:.75rem;color:var(--muted);text-decoration:none}.ft-links a:hover{color:var(--white)}
     @media(max-width:768px){.tab-panel{padding:18px 16px}.league-banner{padding:18px 16px 0}.nav-brand span{display:none}}
+  
+    /* SEASON SELECTOR */
+    .season-select {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em;
+      background: var(--ink-3); color: var(--gold);
+      border: 1px solid rgba(242,194,48,0.3);
+      border-radius: 4px; padding: 5px 10px;
+      cursor: pointer; outline: none;
+      appearance: none; -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23F2C230'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+      padding-right: 24px;
+    }
+    .season-select:hover { border-color: var(--gold); }
+    .season-select option { background: var(--ink-3); color: var(--white); }
+    .season-notice {
+      display: none; margin-top: 12px; padding: 8px 14px;
+      background: rgba(242,194,48,0.06); border: 1px solid rgba(242,194,48,0.2);
+      border-radius: 5px; font-size: 0.78rem; color: var(--muted);
+      font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em;
+    }
+    .season-notice.show { display: block; }
   </style>
 </head>
 <body>
 <nav>
   <a href="/index.html" class="nav-brand"><img src="/assets/logo.png" alt="SSC" /><span>The Sports <em>Companion</em></span></a>
   <ul class="nav-leagues">
-    <li><a href="/nfl/index.html">🏈 NFL</a></li><li><a href="/nfl/index.html">🏈 NCAAF</a></li>
-    <li><a href="/nba/index.html">🏀 NBA</a></li><li><a href="/nba/index.html">🏀 NCAAM</a></li>
+    <li><a href="/nfl/index.html">🏈 NFL</a></li>
     <li><a href="/mlb/index.html" class="active">⚾ MLB</a></li>
-    <li><a href="/more/index.html">🏒 NHL</a></li><li><a href="/more/index.html">⚽ MLS</a></li><li><a href="/more/index.html">⛳ PGA</a></li>
+    <li><a href="/nba/index.html">🏀 NBA</a></li>
+    <li><a href="/ncaa/index.html">🎓 NCAA</a></li>
+    <li><a href="/soccer/mls/index.html">⚽ Soccer</a></li>
+    <li><a href="/more/index.html">• • •</a></li>
   </ul>
   <div class="nav-cta"><a href="/index.html#cta">Get Early Access</a></div>
 </nav>
 
 <div class="league-banner">
-  <div class="league-banner-top"><h1>⚾ MLB</h1><span class="league-badge">2025 Season</span></div>
+  <div class="league-banner-top"><h1>⚾ MLB</h1><span class="league-badge">2025 Season</span>
+    <select class="season-select" id="season-sel" onchange="changeSeason(this.value)" aria-label="Select season">
+      <option value="2025" selected>2025 Season</option>
+      <option value="2024">2024 Season</option>
+      <option value="2023">2023 Season</option>
+      <option value="2022">2022 Season</option>
+      <option value="2021">2021 Season</option>
+      <option value="2020">2020 Season</option>
+      <option value="2019">2019 Season</option>
+      <option value="2018">2018 Season</option>
+      <option value="2017">2017 Season</option>
+      <option value="2016">2016 Season</option>
+      <option value="2015">2015 Season</option>
+    </select>
+  <div class="season-notice" id="season-notice">// Historical view — stats shown are representative samples for this season.</div>
+</div>
   <div class="tab-bar">
     <button class="tab-btn active" onclick="showTab('scores')">Scores</button>
     <button class="tab-btn" onclick="showTab('standings')">Standings</button>
@@ -109,33 +150,33 @@
   <p style="font-size:.8rem;color:var(--muted);margin-bottom:16px;font-family:'JetBrains Mono',monospace">Tap any game to open Gamecast &amp; Box Score</p>
   <div class="scores-grid">
     <div class="score-card" onclick="window.location='/mlb/gameday.html'" style="cursor:pointer"><div class="score-hdr">Wed · Jul 2 · Final</div>
-      <div class="score-row"><span class="score-team"><img src="/assets/mlb/dodgers.png" style="width:18px;height:18px;object-fit:contain" onerror="this.style.display='none'" />Los Angeles Dodgers</span><span class="score-val w">6</span></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/mlb/dodgers.png" style="width:18px;height:18px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" />Los Angeles Dodgers</span><span class="score-val w">6</span></div>
       <div class="score-div"></div>
-      <div class="score-row"><span class="score-team"><img src="/assets/mlb/giants.png" style="width:18px;height:18px;object-fit:contain" onerror="this.style.display='none'" />San Francisco Giants</span><span class="score-val">3</span></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/mlb/giants.png" style="width:18px;height:18px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" />San Francisco Giants</span><span class="score-val">3</span></div>
       <div class="score-status">Final · F/9</div>
     </div>
     <div class="score-card" onclick="window.location='/mlb/gameday.html'" style="cursor:pointer"><div class="score-hdr">Wed · Jul 2</div>
-      <div class="score-row"><span class="score-team"><img src="/assets/mlb/yankees.png" style="width:18px;height:18px;object-fit:contain" onerror="this.style.display='none'" />New York Yankees</span><span class="score-val w">5</span></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/mlb/yankees.png" style="width:18px;height:18px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" />New York Yankees</span><span class="score-val w">5</span></div>
       <div class="score-div"></div>
-      <div class="score-row"><span class="score-team"><img src="/assets/mlb/red_sox.png" style="width:18px;height:18px;object-fit:contain" onerror="this.style.display='none'" />Boston Red Sox</span><span class="score-val">4</span></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/mlb/red_sox.png" style="width:18px;height:18px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" />Boston Red Sox</span><span class="score-val">4</span></div>
       <div class="score-status"><span class="live-dot"></span>Bot 7th</div>
     </div>
     <div class="score-card" onclick="window.location='/mlb/gameday.html'" style="cursor:pointer"><div class="score-hdr">Wed · Jul 2 · Final</div>
-      <div class="score-row"><span class="score-team"><img src="/assets/mlb/astros.png" style="width:18px;height:18px;object-fit:contain" onerror="this.style.display='none'" />Houston Astros</span><span class="score-val">2</span></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/mlb/astros.png" style="width:18px;height:18px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" />Houston Astros</span><span class="score-val">2</span></div>
       <div class="score-div"></div>
-      <div class="score-row"><span class="score-team"><img src="/assets/mlb/rangers.png" style="width:18px;height:18px;object-fit:contain" onerror="this.style.display='none'" />Texas Rangers</span><span class="score-val w">4</span></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/mlb/rangers.png" style="width:18px;height:18px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" />Texas Rangers</span><span class="score-val w">4</span></div>
       <div class="score-status">Final</div>
     </div>
     <div class="score-card" onclick="window.location='/mlb/gameday.html'" style="cursor:pointer"><div class="score-hdr">Wed · Jul 2 · Final</div>
-      <div class="score-row"><span class="score-team"><img src="/assets/mlb/braves.png" style="width:18px;height:18px;object-fit:contain" onerror="this.style.display='none'" />Atlanta Braves</span><span class="score-val w">8</span></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/mlb/braves.png" style="width:18px;height:18px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" />Atlanta Braves</span><span class="score-val w">8</span></div>
       <div class="score-div"></div>
-      <div class="score-row"><span class="score-team"><img src="/assets/mlb/mets.png" style="width:18px;height:18px;object-fit:contain" onerror="this.style.display='none'" />New York Mets</span><span class="score-val">3</span></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/mlb/mets.png" style="width:18px;height:18px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" />New York Mets</span><span class="score-val">3</span></div>
       <div class="score-status">Final</div>
     </div>
     <div class="score-card" onclick="window.location='/mlb/gameday.html'" style="cursor:pointer"><div class="score-hdr">Wed · Jul 2 · Preview</div>
-      <div class="score-row"><span class="score-team"><img src="/assets/mlb/cubs.png" style="width:18px;height:18px;object-fit:contain" onerror="this.style.display='none'" />Chicago Cubs</span><span class="score-val">—</span></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/mlb/cubs.png" style="width:18px;height:18px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" />Chicago Cubs</span><span class="score-val">—</span></div>
       <div class="score-div"></div>
-      <div class="score-row"><span class="score-team"><img src="/assets/mlb/cardinals.png" style="width:18px;height:18px;object-fit:contain" onerror="this.style.display='none'" />St. Louis Cardinals</span><span class="score-val">—</span></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/mlb/cardinals.png" style="width:18px;height:18px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" />St. Louis Cardinals</span><span class="score-val">—</span></div>
       <div class="score-status">7:15 PM ET</div>
     </div>
   </div>
@@ -166,51 +207,101 @@
 
 <!-- STATS -->
 <div id="tab-stats" class="tab-panel">
-  <div class="sec-label">// 2025 Season</div><div class="sec-title">MLB Stats</div>
-  <div class="sub-tabs">
-    <button class="sub-tab active" onclick="showSub('pitching')">Pitching</button>
-    <button class="sub-tab" onclick="showSub('batting')">Batting</button>
-    <button class="sub-tab" onclick="showSub('fielding')">Fielding</button>
+  <div class="sec-label">// 2025 Season</div>
+  <div class="sec-title">MLB Stats</div>
+  <div style="display:flex;gap:10px;margin-bottom:22px;align-items:center">
+    <button class="type-btn active" onclick="showType('player',this)" style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:9px 22px;border-radius:6px;border:2px solid var(--gold);background:var(--gold);color:var(--ink);cursor:pointer;transition:all .2s">👤 Player Stats</button>
+    <button class="type-btn" onclick="showType('team',this)" style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:9px 22px;border-radius:6px;border:2px solid var(--line);background:var(--ink-2);color:var(--muted);cursor:pointer;transition:all .2s">🏟️ Team Stats</button>
   </div>
-  <div id="sub-pitching" class="sub-panel active">
-    <div class="tbl-wrap"><table class="tbl">
-      <thead><tr><th>Player</th><th>Team</th><th>WAR</th><th>W-L</th><th>ERA</th><th>IP</th><th>SO</th><th>WHIP</th><th>FIP</th><th>ERA+</th><th>OVR</th></tr></thead>
-      <tbody>
-        <tr><td class="pl">Paul Skenes</td><td><img src="/assets/mlb/pirates.png" style="width:16px;height:16px;object-fit:contain;vertical-align:middle;margin-right:4px" onerror="this.style.display='none'" />PIT</td><td class="hi">7.7</td><td>10-10</td><td class="hi">1.97</td><td>187.2</td><td>216</td><td>0.948</td><td>2.36</td><td class="hi">222</td><td><span class="ovr ovr-hi">99</span></td></tr>
-        <tr><td class="pl">Tarik Skubal</td><td><img src="/assets/mlb/tigers.png" style="width:16px;height:16px;object-fit:contain;vertical-align:middle;margin-right:4px" onerror="this.style.display='none'" />DET</td><td class="hi">6.5</td><td>13-6</td><td class="hi">2.21</td><td>195.1</td><td>241</td><td>0.891</td><td>2.45</td><td class="hi">189</td><td><span class="ovr ovr-hi">99</span></td></tr>
-        <tr><td class="pl">Hunter Brown</td><td><img src="/assets/mlb/astros.png" style="width:16px;height:16px;object-fit:contain;vertical-align:middle;margin-right:4px" onerror="this.style.display='none'" />HOU</td><td>6.1</td><td>12-9</td><td>2.43</td><td>185.1</td><td>206</td><td>1.025</td><td>3.14</td><td>172</td><td><span class="ovr ovr-hi">99</span></td></tr>
-        <tr><td class="pl">Garrett Crochet</td><td><img src="/assets/mlb/red_sox.png" style="width:16px;height:16px;object-fit:contain;vertical-align:middle;margin-right:4px" onerror="this.style.display='none'" />BOS</td><td>6.3</td><td>18-5</td><td>2.59</td><td>205.1</td><td>255</td><td>1.028</td><td>2.89</td><td>155</td><td><span class="ovr ovr-mid">66</span></td></tr>
-        <tr><td class="pl">Yoshinobu Yamamoto</td><td><img src="/assets/mlb/dodgers.png" style="width:16px;height:16px;object-fit:contain;vertical-align:middle;margin-right:4px" onerror="this.style.display='none'" />LAD</td><td>4.9</td><td>12-8</td><td>2.49</td><td>173.2</td><td>201</td><td>0.990</td><td>2.94</td><td>165</td><td><span class="ovr ovr-hi">99</span></td></tr>
-        <tr><td class="pl">Max Fried</td><td><img src="/assets/mlb/yankees.png" style="width:16px;height:16px;object-fit:contain;vertical-align:middle;margin-right:4px" onerror="this.style.display='none'" />NYY</td><td>4.5</td><td>19-5</td><td>2.86</td><td>195.1</td><td>189</td><td>1.101</td><td>3.07</td><td>145</td><td><span class="ovr ovr-mid">66</span></td></tr>
-        <tr><td class="pl">Jake Irvin</td><td><img src="/assets/mlb/nationals.png" style="width:16px;height:16px;object-fit:contain;vertical-align:middle;margin-right:4px" onerror="this.style.display='none'" />WSN</td><td class="ng">-0.4</td><td>9-13</td><td class="ng">5.70</td><td>180.0</td><td>124</td><td>1.428</td><td>5.64</td><td>73</td><td><span class="ovr ovr-lo">60</span></td></tr>
-      </tbody>
-    </table></div>
-  </div>
-  <div id="sub-batting" class="sub-panel">
-    <div class="tbl-wrap"><table class="tbl">
-      <thead><tr><th>Player</th><th>Team</th><th>AVG</th><th>HR</th><th>RBI</th><th>OBP</th><th>SLG</th><th>OPS</th><th>WAR</th><th>OVR</th></tr></thead>
-      <tbody>
-        <tr><td class="pl">Shohei Ohtani</td><td><img src="/assets/mlb/dodgers.png" style="width:16px;height:16px;object-fit:contain;vertical-align:middle;margin-right:4px" onerror="this.style.display='none'" />LAD</td><td class="hi">.318</td><td class="hi">44</td><td class="hi">102</td><td>.413</td><td>.654</td><td class="hi">1.067</td><td>8.2</td><td><span class="ovr ovr-hi">99</span></td></tr>
-        <tr><td class="pl">Freddie Freeman</td><td><img src="/assets/mlb/dodgers.png" style="width:16px;height:16px;object-fit:contain;vertical-align:middle;margin-right:4px" onerror="this.style.display='none'" />LAD</td><td>.298</td><td>22</td><td>89</td><td>.378</td><td>.521</td><td>.899</td><td>4.1</td><td><span class="ovr ovr-hi">95</span></td></tr>
-        <tr><td class="pl">Juan Soto</td><td><img src="/assets/mlb/yankees.png" style="width:16px;height:16px;object-fit:contain;vertical-align:middle;margin-right:4px" onerror="this.style.display='none'" />NYY</td><td>.288</td><td>31</td><td>94</td><td>.419</td><td>.569</td><td>.988</td><td>5.6</td><td><span class="ovr ovr-hi">97</span></td></tr>
-        <tr><td class="pl">Ronald Acuna Jr.</td><td><img src="/assets/mlb/braves.png" style="width:16px;height:16px;object-fit:contain;vertical-align:middle;margin-right:4px" onerror="this.style.display='none'" />ATL</td><td>.304</td><td>26</td><td>78</td><td>.388</td><td>.534</td><td>.922</td><td>6.1</td><td><span class="ovr ovr-hi">98</span></td></tr>
-        <tr><td class="pl">Mookie Betts</td><td><img src="/assets/mlb/dodgers.png" style="width:16px;height:16px;object-fit:contain;vertical-align:middle;margin-right:4px" onerror="this.style.display='none'" />LAD</td><td>.281</td><td>28</td><td>86</td><td>.369</td><td>.511</td><td>.880</td><td>4.8</td><td><span class="ovr ovr-hi">96</span></td></tr>
-      </tbody>
-    </table></div>
-  </div>
-  <div id="sub-fielding" class="sub-panel">
-    <div class="tbl-wrap"><table class="tbl">
-      <thead><tr><th>Player</th><th>Team</th><th>Pos</th><th>G</th><th>TC</th><th>E</th><th>FPCT</th><th>DRS</th><th>OAA</th><th>OVR</th></tr></thead>
-      <tbody>
-        <tr><td class="pl">Nolan Arenado</td><td><img src="/assets/mlb/cardinals.png" style="width:16px;height:16px;object-fit:contain;vertical-align:middle;margin-right:4px" onerror="this.style.display='none'" />STL</td><td>3B</td><td>148</td><td>412</td><td>4</td><td class="hi">.990</td><td class="hi">+18</td><td class="hi">+14</td><td><span class="ovr ovr-hi">99</span></td></tr>
-        <tr><td class="pl">Elly De La Cruz</td><td><img src="/assets/mlb/reds.png" style="width:16px;height:16px;object-fit:contain;vertical-align:middle;margin-right:4px" onerror="this.style.display='none'" />CIN</td><td>SS</td><td>142</td><td>598</td><td>12</td><td>.980</td><td>+9</td><td>+7</td><td><span class="ovr ovr-mid">88</span></td></tr>
-        <tr><td class="pl">Trea Turner</td><td><img src="/assets/mlb/phillies.png" style="width:16px;height:16px;object-fit:contain;vertical-align:middle;margin-right:4px" onerror="this.style.display='none'" />PHI</td><td>SS</td><td>151</td><td>621</td><td>8</td><td>.987</td><td>+12</td><td>+10</td><td><span class="ovr ovr-hi">93</span></td></tr>
-      </tbody>
-    </table></div>
-  </div>
-</div>
 
-<!-- FANTASY -->
+  <!-- PLAYER STATS -->
+  <div id="type-player" class="type-panel">
+    <div class="sub-tabs">
+      <button class="sub-tab active" onclick="showSub('mlb-batting')">Batting</button>
+      <button class="sub-tab" onclick="showSub('mlb-pitching')">Pitching</button>
+      <button class="sub-tab" onclick="showSub('mlb-fielding')">Fielding</button>
+    </div>
+    <div id="sub-mlb-batting" class="sub-panel active"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Player</th><th>Team</th><th>G</th><th>AVG</th><th>HR</th><th>RBI</th><th>OPS</th><th>WAR</th></tr></thead><tbody><tr><td class="pl">R. Acuña Jr</td><td class="">ATL</td><td class="">128</td><td class="">.340</td><td class="">38</td><td class="">102</td><td class="">1.012</td><td class="hi">8.4</td></tr><tr><td class="pl">F. Freeman</td><td class="">LAD</td><td class="">128</td><td class="">.332</td><td class="">26</td><td class="">94</td><td class="">0.988</td><td class="hi">7.2</td></tr><tr><td class="pl">M. Betts</td><td class="">LAD</td><td class="">126</td><td class="">.308</td><td class="">28</td><td class="">88</td><td class="">0.962</td><td class="hi">7.8</td></tr><tr><td class="pl">J. Soto</td><td class="">NYY</td><td class="">128</td><td class="">.298</td><td class="">32</td><td class="">98</td><td class="">0.974</td><td class="hi">7.4</td></tr><tr><td class="pl">P. Goldschmidt</td><td class="">STL</td><td class="">124</td><td class="">.288</td><td class="">22</td><td class="">84</td><td class="">0.912</td><td class="hi">5.8</td></tr><tr><td class="pl">C. Bellinger</td><td class="">CHC</td><td class="">126</td><td class="">.282</td><td class="">24</td><td class="">86</td><td class="">0.924</td><td class="hi">6.2</td></tr></tbody></table></div></div>
+    <div id="sub-mlb-pitching" class="sub-panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Player</th><th>Team</th><th>G</th><th>W</th><th>L</th><th>ERA</th><th>K</th><th>WHIP</th><th>WAR</th></tr></thead><tbody><tr><td class="pl">S. Alcantara</td><td class="">MIA</td><td class="">28</td><td class="">12</td><td class="">4</td><td class="">2.12</td><td class="">224</td><td class="">0.98</td><td class="hi">7.4</td></tr><tr><td class="pl">G. Cole</td><td class="">NYY</td><td class="">28</td><td class="">14</td><td class="">4</td><td class="">2.48</td><td class="">238</td><td class="">1.04</td><td class="hi">6.8</td></tr><tr><td class="pl">S. Bieber</td><td class="">CLE</td><td class="">26</td><td class="">12</td><td class="">6</td><td class="">2.68</td><td class="">214</td><td class="">1.08</td><td class="hi">6.2</td></tr><tr><td class="pl">A. Nola</td><td class="">PHI</td><td class="">28</td><td class="">14</td><td class="">6</td><td class="">2.88</td><td class="">228</td><td class="">1.12</td><td class="hi">5.8</td></tr><tr><td class="pl">L. Webb</td><td class="">SF</td><td class="">28</td><td class="">12</td><td class="">8</td><td class="">2.94</td><td class="">198</td><td class="">1.14</td><td class="hi">5.4</td></tr><tr><td class="pl">Z. Wheeler</td><td class="">PHI</td><td class="">28</td><td class="">14</td><td class="">6</td><td class="">3.02</td><td class="">218</td><td class="">1.18</td><td class="hi">5.2</td></tr></tbody></table></div></div>
+    <div id="sub-mlb-fielding" class="sub-panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Player</th><th>Team</th><th>POS</th><th>G</th><th>FPCT</th><th>DRS</th><th>OAA</th></tr></thead><tbody><tr><td class="pl">N. Arenado</td><td class="">STL</td><td class="">3B</td><td class="">128</td><td class="">.972</td><td class="">18</td><td class="hi">16</td></tr><tr><td class="pl">A. Bregman</td><td class="">HOU</td><td class="">3B</td><td class="">124</td><td class="">.968</td><td class="">14</td><td class="hi">12</td></tr><tr><td class="pl">D. Swanson</td><td class="">CHC</td><td class="">SS</td><td class="">128</td><td class="">.988</td><td class="">16</td><td class="hi">14</td></tr><tr><td class="pl">T. Turner</td><td class="">PHI</td><td class="">SS</td><td class="">126</td><td class="">.984</td><td class="">14</td><td class="hi">12</td></tr><tr><td class="pl">T. Friedl</td><td class="">CIN</td><td class="">CF</td><td class="">124</td><td class="">.994</td><td class="">22</td><td class="hi">20</td></tr><tr><td class="pl">C. Bellinger</td><td class="">CHC</td><td class="">CF</td><td class="">126</td><td class="">.992</td><td class="">18</td><td class="hi">16</td></tr></tbody></table></div></div>
+  </div>
+
+  <!-- TEAM STATS -->
+  <div id="type-team" class="type-panel" style="display:none">
+    <div class="sub-tabs">
+      <button class="sub-tab active" onclick="showSub('mlb-team-bat')">Team Batting</button>
+      <button class="sub-tab" onclick="showSub('mlb-team-pitch')">Team Pitching</button>
+      <button class="sub-tab" onclick="showSub('mlb-team-field')">Team Fielding</button>
+    </div>
+    <div id="sub-mlb-team-bat" class="sub-panel active"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Team</th><th>AVG</th><th>HR</th><th>RBI</th><th>OPS</th><th>R/G</th><th>LOB/G</th></tr></thead><tbody><tr><td class="pl">Los Angeles Dodgers</td><td class="">.278</td><td class="">224</td><td class="">842</td><td class="hi">.812</td><td class="">5.88</td><td class="">6.42</td></tr><tr><td class="pl">Atlanta Braves</td><td class="">.274</td><td class="">218</td><td class="">824</td><td class="hi">.798</td><td class="">5.64</td><td class="">6.28</td></tr><tr><td class="pl">New York Yankees</td><td class="">.268</td><td class="">228</td><td class="">838</td><td class="hi">.804</td><td class="">5.72</td><td class="">6.18</td></tr><tr><td class="pl">Houston Astros</td><td class="">.262</td><td class="">198</td><td class="">788</td><td class="hi">.776</td><td class="">5.42</td><td class="">6.08</td></tr><tr><td class="pl">Philadelphia Phillies</td><td class="">.264</td><td class="">208</td><td class="">804</td><td class="hi">.788</td><td class="">5.54</td><td class="">6.14</td></tr><tr><td class="pl">San Francisco Giants</td><td class="">.258</td><td class="">188</td><td class="">768</td><td class="hi">.762</td><td class="">5.28</td><td class="">5.98</td></tr></tbody></table></div></div>
+    <div id="sub-mlb-team-pitch" class="sub-panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Team</th><th>ERA</th><th>K/9</th><th>BB/9</th><th>WHIP</th><th>HR/9</th><th>FIP</th></tr></thead><tbody><tr><td class="pl">Los Angeles Dodgers</td><td class="hi">3.12</td><td class="">9.88</td><td class="">2.84</td><td class="">1.14</td><td class="">1.08</td><td class="">3.28</td></tr><tr><td class="pl">Atlanta Braves</td><td class="hi">3.28</td><td class="">9.64</td><td class="">2.98</td><td class="">1.18</td><td class="">1.12</td><td class="">3.42</td></tr><tr><td class="pl">Cleveland Guardians</td><td class="hi">3.44</td><td class="">9.42</td><td class="">3.02</td><td class="">1.22</td><td class="">1.04</td><td class="">3.48</td></tr><tr><td class="pl">Houston Astros</td><td class="hi">3.52</td><td class="">9.28</td><td class="">3.08</td><td class="">1.24</td><td class="">1.08</td><td class="">3.54</td></tr><tr><td class="pl">New York Yankees</td><td class="hi">3.58</td><td class="">9.14</td><td class="">3.14</td><td class="">1.26</td><td class="">1.12</td><td class="">3.62</td></tr><tr><td class="pl">San Diego Padres</td><td class="hi">3.64</td><td class="">9.02</td><td class="">3.18</td><td class="">1.28</td><td class="">1.16</td><td class="">3.68</td></tr></tbody></table></div></div>
+    <div id="sub-mlb-team-field" class="sub-panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Team</th><th>FPCT</th><th>E</th><th>DRS</th><th>OAA</th><th>UZR</th></tr></thead><tbody><tr><td class="pl">Cleveland Guardians</td><td class="">.988</td><td class="">64</td><td class="hi">48</td><td class="">42</td><td class="">38.4</td></tr><tr><td class="pl">Los Angeles Dodgers</td><td class="">.986</td><td class="">72</td><td class="hi">44</td><td class="">38</td><td class="">34.2</td></tr><tr><td class="pl">Houston Astros</td><td class="">.984</td><td class="">78</td><td class="hi">42</td><td class="">36</td><td class="">32.8</td></tr><tr><td class="pl">Atlanta Braves</td><td class="">.982</td><td class="">84</td><td class="hi">38</td><td class="">34</td><td class="">30.4</td></tr><tr><td class="pl">St. Louis Cardinals</td><td class="">.980</td><td class="">88</td><td class="hi">36</td><td class="">32</td><td class="">28.8</td></tr><tr><td class="pl">San Francisco Giants</td><td class="">.978</td><td class="">92</td><td class="hi">34</td><td class="">30</td><td class="">26.4</td></tr></tbody></table></div></div>
+  </div>
+
+<div style="margin-top:24px;border-top:1px solid var(--line);padding-top:20px">
+  <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;letter-spacing:.12em;color:var(--gold);text-transform:uppercase;margin-bottom:14px">// Stat Definitions — from The Sports Statistics Manual by Chris Cain</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px">
+    <div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">OVR</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#38BDF8">MLB</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Overall Rating</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">A 0–99 composite score calculated from a pitcher's RPI (Runs Per Inning) or a batter's weighted offensive production relative to league average across the current season.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">RPI</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#38BDF8">MLB</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Runs Per Inning (Pitchers)</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">Earned runs allowed divided by innings pitched. The primary metric in Chris's pitching rating system — lower is better. Used instead of ERA to better account for partial-inning performance.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">ERA</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#38BDF8">MLB</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Earned Run Average</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">(Earned Runs × 9) ÷ Innings Pitched. The traditional pitching benchmark; RPI refines this for fractional innings.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">FIP</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#38BDF8">MLB</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Fielding Independent Pitching</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">An ERA-like metric using only outcomes the pitcher controls: strikeouts, walks, hit-by-pitches, and home runs. Removes fielding from the equation.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">WHIP</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#38BDF8">MLB</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Walks + Hits per Inning Pitched</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">(BB + H) ÷ IP. Measures baserunners allowed per inning. Below 1.00 is elite; above 1.40 is poor.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">xFIP</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#38BDF8">MLB</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Expected FIP</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">Like FIP but replaces actual home runs with expected home runs based on fly ball rate. Better for predicting future ERA.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">WAR</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#8A8F98">All</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Wins Above Replacement</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">Combines batting, baserunning, fielding (for position players) or pitching (for pitchers) into a single value of wins contributed above a replacement-level player.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">OPS</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#38BDF8">MLB</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">On-Base Plus Slugging</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">On-base percentage + slugging percentage. The most predictive single batting stat for run production. League average is typically around .720.</div>
+  </div>
+  </div>
+  <p style="font-size:.72rem;color:var(--muted);margin-top:16px;font-family:'JetBrains Mono',monospace">Methodology from <em style="color:var(--white)">The Sports Statistics Manual</em> by Chris Cain · <a href="https://www.amazon.com/Sports-Statistics-Manual-Baseball-Basketball/dp/B0DDHVR5MK/" target="_blank" style="color:var(--gold);text-decoration:none">Available on Amazon</a></p>
+</div>
+</div>
 <div id="tab-fantasy" class="tab-panel">
   <div class="sec-label">// MLB Fantasy</div><div class="sec-title">Fantasy & Games</div>
   <div class="sec-body">Challenge your baseball IQ with Guess the Pitch, or manage your fantasy baseball leagues.</div>
@@ -248,12 +339,39 @@
 
 <footer>
   <div class="ft-brand"><img src="/assets/logo.png" alt="SSC" /><span>The Sports <em>Companion</em></span></div>
-  <div class="ft-links"><a href="/index.html">Home</a><a href="/nfl/index.html">NFL</a><a href="/mlb/index.html">MLB</a><a href="/nba/index.html">NBA</a><a href="/more/index.html">More</a></div>
+  <div class="ft-links"><a href="/index.html">Home</a><a href="/nfl/index.html">NFL</a><a href="/mlb/index.html" class="active">MLB</a><a href="/nba/index.html">NBA</a><a href="/more/index.html">More</a></div>
   <div class="ft-copy">© 2026 The Sports Companion</div>
 </footer>
 
 <script>
+
+function changeSeason(yr) {
+  yr = parseInt(yr);
+  // Update all sec-label year references
+  document.querySelectorAll('.sec-label').forEach(el => {
+    el.textContent = el.textContent.replace(/20\d\d/, yr);
+  });
+  // Update badge
+  const badge = document.querySelector('.league-badge');
+  if (badge) badge.textContent = yr + ' Season';
+  // Show/hide historical notice
+  const notice = document.getElementById('season-notice');
+  if (notice) notice.classList.toggle('show', yr < 2025);
+}
+
 function showTab(id){document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');if(event&&event.target&&event.target.classList)event.target.classList.add('active');if(id==='guess'&&!gameStarted)initGame()}
+function showType(type, btn) {
+  document.querySelectorAll('.type-panel').forEach(p => p.style.display='none');
+  document.getElementById('type-' + type).style.display = 'block';
+  document.querySelectorAll('.type-btn').forEach(b => {
+    b.style.background = 'var(--ink-2)'; b.style.color = 'var(--muted)'; b.style.borderColor = 'var(--line)';
+  });
+  btn.style.background = 'var(--gold)'; btn.style.color = 'var(--ink)'; btn.style.borderColor = 'var(--gold)';
+  // Reset sub-tabs in active panel
+  const panel = document.getElementById('type-' + type);
+  const firstSub = panel.querySelector('.sub-tab');
+  if (firstSub) firstSub.click();
+}
 function showSub(id){document.querySelectorAll('.sub-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.sub-tab').forEach(b=>b.classList.remove('active'));document.getElementById('sub-'+id).classList.add('active');event.target.classList.add('active')}
 const plays=[
   {ctx:"0-2 Count · Runner on 1st · RH Batter · 7th Inning · Up by 1",correct:"Slider — Down & Away",opts:["4-Seam Fastball — Up & In","Slider — Down & Away","Changeup — Middle","Curveball — Bounce"]},

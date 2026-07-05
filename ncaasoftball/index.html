@@ -76,6 +76,30 @@
     .ft-copy{font-size:.75rem;color:var(--muted)}.ft-links{display:flex;gap:18px;flex-wrap:wrap}
     .ft-links a{font-size:.75rem;color:var(--muted);text-decoration:none}.ft-links a:hover{color:var(--white)}
     @media(max-width:768px){.tab-panel{padding:18px 16px}.league-banner{padding:18px 16px 0}.nav-brand span{display:none}}
+  
+    /* SEASON SELECTOR */
+    .season-select {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em;
+      background: var(--ink-3); color: var(--gold);
+      border: 1px solid rgba(242,194,48,0.3);
+      border-radius: 4px; padding: 5px 10px;
+      cursor: pointer; outline: none;
+      appearance: none; -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23F2C230'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+      padding-right: 24px;
+    }
+    .season-select:hover { border-color: var(--gold); }
+    .season-select option { background: var(--ink-3); color: var(--white); }
+    .season-notice {
+      display: none; margin-top: 12px; padding: 8px 14px;
+      background: rgba(242,194,48,0.06); border: 1px solid rgba(242,194,48,0.2);
+      border-radius: 5px; font-size: 0.78rem; color: var(--muted);
+      font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em;
+    }
+    .season-notice.show { display: block; }
   </style>
 </head>
 <body>
@@ -83,20 +107,11 @@
   <a href="/index.html" class="nav-brand"><img src="/assets/logo.png" alt="SSC" /><span>The Sports <em>Companion</em></span></a>
   <ul class="nav-leagues">
     <li><a href="/nfl/index.html">🏈 NFL</a></li>
-    <li><a href="/ncaaf/index.html">🏈 NCAAF</a></li>
-    <li><a href="/nba/index.html">🏀 NBA</a></li>
-    <li><a href="/ncaab/mens/index.html">🏀 NCAAM</a></li>
-    <li><a href="/ncaab/womens/index.html">🏀 NCAAW</a></li>
     <li><a href="/mlb/index.html">⚾ MLB</a></li>
-    <li><a href="/ncaasoftball/index.html">🥎 Softball</a></li>
-    <li><a href="/nhl/index.html">🏒 NHL</a></li>
-    <li><a href="/soccer/mls/index.html">⚽ MLS</a></li>
-    <li><a href="/soccer/epl/index.html">⚽ EPL</a></li>
-    <li><a href="/soccer/laliga/index.html">⚽ La Liga</a></li>
-    <li><a href="/soccer/champions-league/index.html">⚽ UCL</a></li>
-    <li><a href="/soccer/fifa/index.html">⚽ FIFA</a></li>
-    <li><a href="/more/index.html">⛳ PGA</a></li>
-    
+    <li><a href="/nba/index.html">🏀 NBA</a></li>
+    <li><a href="/ncaa/index.html" class="active">🎓 NCAA</a></li>
+    <li><a href="/soccer/mls/index.html">⚽ Soccer</a></li>
+    <li><a href="/more/index.html">• • •</a></li>
   </ul>
   <div class="nav-cta"><a href="/index.html#cta">Get the App</a></div>
 </nav>
@@ -105,7 +120,22 @@
   <div class="league-banner-top">
     <h1>🥎 NCAA Softball</h1>
     <span class="league-badge">2025 Season</span>
-  </div>
+    <select class="season-select" id="season-sel" onchange="changeSeason(this.value)" aria-label="Select season">
+      <option value="2025" selected>2025 Season</option>
+      <option value="2024">2024 Season</option>
+      <option value="2023">2023 Season</option>
+      <option value="2022">2022 Season</option>
+      <option value="2021">2021 Season</option>
+      <option value="2020">2020 Season</option>
+      <option value="2019">2019 Season</option>
+      <option value="2018">2018 Season</option>
+      <option value="2017">2017 Season</option>
+      <option value="2016">2016 Season</option>
+      <option value="2015">2015 Season</option>
+    </select>
+  
+  <div class="season-notice" id="season-notice">// Historical view — stats shown are representative samples for this season.</div>
+</div>
   <div class="tab-bar">
     <button class="tab-btn active" onclick="showTab('scores')">Scores</button>
     <button class="tab-btn" onclick="showTab('standings')">Standings</button>
@@ -120,25 +150,25 @@
   <div class="sec-title">Scores & Results</div>
   <p style="font-size:.8rem;color:var(--muted);margin-bottom:16px;font-family:'JetBrains Mono',monospace">Tap any game to open Gamecast & Box Score</p>
   <div class="scores-grid"><div class="score-card"><div class="score-hdr">Sat · May 10 · Final</div>
-      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Oklahoma.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> Oklahoma</span><span class="score-val w">6</span></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Oklahoma.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Oklahoma</span><span class="score-val w">6</span></div>
       <div class="score-div"></div>
-      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/UCLA.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> UCLA</span><span class="score-val">2</span></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/UCLA.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> UCLA</span><span class="score-val">2</span></div>
       <div class="score-status">Final</div></div><div class="score-card"><div class="score-hdr">Sat · May 10 · Final</div>
-      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Florida.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> Florida</span><span class="score-val w">4</span></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Florida.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Florida</span><span class="score-val w">4</span></div>
       <div class="score-div"></div>
-      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Alabama.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> Alabama</span><span class="score-val">1</span></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Alabama.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Alabama</span><span class="score-val">1</span></div>
       <div class="score-status">Final</div></div><div class="score-card"><div class="score-hdr">Sat · May 10</div>
-      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Texas.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> Texas</span><span class="score-val w">3</span></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Texas.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Texas</span><span class="score-val w">3</span></div>
       <div class="score-div"></div>
-      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Arizona.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> Arizona</span><span class="score-val">2</span></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Arizona.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Arizona</span><span class="score-val">2</span></div>
       <div class="score-status"><span class="live-dot"></span>Bot 5th</div></div><div class="score-card"><div class="score-hdr">Sat · May 10 · Final</div>
-      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Tennesse.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> Tennessee</span><span class="score-val w">5</span></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Tennesse.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Tennessee</span><span class="score-val w">5</span></div>
       <div class="score-div"></div>
-      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/LSU.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> LSU</span><span class="score-val">3</span></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/LSU.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> LSU</span><span class="score-val">3</span></div>
       <div class="score-status">Final</div></div><div class="score-card"><div class="score-hdr">Sun · May 11</div>
-      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Stanford.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> Stanford</span><span class="score-val">—</span></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Stanford.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Stanford</span><span class="score-val">—</span></div>
       <div class="score-div"></div>
-      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Washington.png" style="width:20px;height:20px;object-fit:contain" onerror="this.style.display='none'" /> Washington</span><span class="score-val">—</span></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Washington.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Washington</span><span class="score-val">—</span></div>
       <div class="score-status"><span class="live-dot"></span>2:00 PM ET</div></div></div>
 </div>
 
@@ -183,6 +213,21 @@
 </footer>
 
 <script>
+
+function changeSeason(yr) {
+  yr = parseInt(yr);
+  // Update all sec-label year references
+  document.querySelectorAll('.sec-label').forEach(el => {
+    el.textContent = el.textContent.replace(/20\d\d/, yr);
+  });
+  // Update badge
+  const badge = document.querySelector('.league-badge');
+  if (badge) badge.textContent = yr + ' Season';
+  // Show/hide historical notice
+  const notice = document.getElementById('season-notice');
+  if (notice) notice.classList.toggle('show', yr < 2025);
+}
+
 function showTab(id){document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');event.target.classList.add('active')}
 function showSub(id){document.querySelectorAll('.sub-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.sub-tab').forEach(b=>b.classList.remove('active'));document.getElementById('sub-'+id).classList.add('active');event.target.classList.add('active')}
 </script>

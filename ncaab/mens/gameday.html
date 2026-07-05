@@ -27,7 +27,7 @@
     .scoreboard{background:var(--ink-2);border-bottom:1px solid var(--line);padding:20px 32px}
     .sb-top{display:flex;align-items:center;justify-content:space-between;gap:20px}
     .sb-team{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:120px}
-    .sb-team-name{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;text-align:center}
+    .sb-team-name{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;text-align:center;display:flex;align-items:center;justify-content:center;gap:6px}
     .sb-team-record{font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
     .sb-score-wrap{display:flex;align-items:center;gap:16px}
     .sb-score{font-family:'Barlow Condensed',sans-serif;font-size:4rem;font-weight:900;line-height:1}
@@ -134,7 +134,7 @@
 <div class="scoreboard">
   <div class="sb-top">
     <div class="sb-team">
-      <div class="sb-team-name"><img src="/assets/nba/warriors.png" style="width:28px;height:28px;object-fit:contain" onerror="this.style.display='none'" /> Golden State Warriors</div>
+      <div class="sb-team-name"><img src="/assets/ncaa/Kansas.png" style="width:28px;height:28px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Kansas Jayhawks</div>
       <div class="sb-team-record">(18-2) Away</div>
     </div>
     <div class="sb-score-wrap">
@@ -143,7 +143,7 @@
       <div class="sb-score leader" id="home-score">0</div>
     </div>
     <div class="sb-team">
-      <div class="sb-team-name"><img src="/assets/nba/lakers.png" style="width:28px;height:28px;object-fit:contain" onerror="this.style.display='none'" /> Los Angeles Lakers</div>
+      <div class="sb-team-name"><img src="/assets/ncaa/Duke.png" style="width:28px;height:28px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Duke Blue Devils</div>
       <div class="sb-team-record">(17-3) Home</div>
     </div>
   </div>
@@ -159,12 +159,12 @@
       <thead><tr><th>Team</th><th>H1</th><th>Q2</th><th>Q3</th><th>Q4</th><th>T</th></tr></thead>
       <tbody>
         <tr>
-          <td><img src="/assets/ncaa/Kansas.png" style="width:14px;height:14px;object-fit:contain;vertical-align:middle;margin-right:4px" onerror="this.style.display='none'" />KU</td>
+          <td><img src="/assets/ncaa/Kansas.png" style="width:14px;height:14px;object-fit:contain;display:inline-block;vertical-align:-.2em;margin-right:4px" onerror="this.style.display='none'" />KU</td>
           <td class="active-q" id="away-h1">38</td><td id="away-h2">—</td><td id="away-ot">—</td>
           <td class="total" id="away-total">38</td>
         </tr>
         <tr>
-          <td><img src="/assets/nba/lakers.png" style="width:16px;height:16px;object-fit:contain;vertical-align:middle;margin-right:4px" onerror="this.style.display='none'" />LAL</td>
+          <td><img src="/assets/ncaa/Duke.png" style="width:16px;height:16px;object-fit:contain;display:inline-block;vertical-align:-.2em;margin-right:4px" onerror="this.style.display='none'" />DUKE</td>
           <td class="active-q" id="lal-q1">0</td><td id="lal-q2">—</td><td id="lal-q3">—</td><td id="lal-q4">—</td>
           <td class="total" id="lal-total">0</td>
         </tr>

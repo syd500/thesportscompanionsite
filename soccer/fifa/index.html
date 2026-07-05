@@ -76,6 +76,30 @@
     .ft-copy{font-size:.75rem;color:var(--muted)}.ft-links{display:flex;gap:18px;flex-wrap:wrap}
     .ft-links a{font-size:.75rem;color:var(--muted);text-decoration:none}.ft-links a:hover{color:var(--white)}
     @media(max-width:768px){.tab-panel{padding:18px 16px}.league-banner{padding:18px 16px 0}.nav-brand span{display:none}}
+  
+    /* SEASON SELECTOR */
+    .season-select {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em;
+      background: var(--ink-3); color: var(--gold);
+      border: 1px solid rgba(242,194,48,0.3);
+      border-radius: 4px; padding: 5px 10px;
+      cursor: pointer; outline: none;
+      appearance: none; -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23F2C230'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+      padding-right: 24px;
+    }
+    .season-select:hover { border-color: var(--gold); }
+    .season-select option { background: var(--ink-3); color: var(--white); }
+    .season-notice {
+      display: none; margin-top: 12px; padding: 8px 14px;
+      background: rgba(242,194,48,0.06); border: 1px solid rgba(242,194,48,0.2);
+      border-radius: 5px; font-size: 0.78rem; color: var(--muted);
+      font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em;
+    }
+    .season-notice.show { display: block; }
   </style>
 </head>
 <body>
@@ -83,20 +107,11 @@
   <a href="/index.html" class="nav-brand"><img src="/assets/logo.png" alt="SSC" /><span>The Sports <em>Companion</em></span></a>
   <ul class="nav-leagues">
     <li><a href="/nfl/index.html">🏈 NFL</a></li>
-    <li><a href="/ncaaf/index.html">🏈 NCAAF</a></li>
-    <li><a href="/nba/index.html">🏀 NBA</a></li>
-    <li><a href="/ncaab/mens/index.html">🏀 NCAAM</a></li>
-    <li><a href="/ncaab/womens/index.html">🏀 NCAAW</a></li>
     <li><a href="/mlb/index.html">⚾ MLB</a></li>
-    <li><a href="/ncaasoftball/index.html">🥎 Softball</a></li>
-    <li><a href="/nhl/index.html">🏒 NHL</a></li>
-    <li><a href="/soccer/mls/index.html">⚽ MLS</a></li>
-    <li><a href="/soccer/epl/index.html">⚽ EPL</a></li>
-    <li><a href="/soccer/laliga/index.html">⚽ La Liga</a></li>
-    <li><a href="/soccer/champions-league/index.html">⚽ UCL</a></li>
-    <li><a href="/soccer/fifa/index.html">⚽ FIFA</a></li>
-    <li><a href="/more/index.html">⛳ PGA</a></li>
-    
+    <li><a href="/nba/index.html">🏀 NBA</a></li>
+    <li><a href="/ncaa/index.html">🎓 NCAA</a></li>
+    <li><a href="/soccer/mls/index.html" class="active">⚽ Soccer</a></li>
+    <li><a href="/more/index.html">• • •</a></li>
   </ul>
   <div class="nav-cta"><a href="/index.html#cta">Get the App</a></div>
 </nav>
@@ -105,7 +120,22 @@
   <div class="league-banner-top">
     <h1>🌍 FIFA & International</h1>
     <span class="league-badge">2025</span>
-  </div>
+    <select class="season-select" id="season-sel" onchange="changeSeason(this.value)" aria-label="Select season">
+      <option value="2025" selected>2025 Season</option>
+      <option value="2024">2024 Season</option>
+      <option value="2023">2023 Season</option>
+      <option value="2022">2022 Season</option>
+      <option value="2021">2021 Season</option>
+      <option value="2020">2020 Season</option>
+      <option value="2019">2019 Season</option>
+      <option value="2018">2018 Season</option>
+      <option value="2017">2017 Season</option>
+      <option value="2016">2016 Season</option>
+      <option value="2015">2015 Season</option>
+    </select>
+  
+  <div class="season-notice" id="season-notice">// Historical view — stats shown are representative samples for this season.</div>
+</div>
   <div class="tab-bar">
     <button class="tab-btn active" onclick="showTab('scores')">Scores</button>
     <button class="tab-btn" onclick="showTab('standings')">Standings</button>
@@ -180,6 +210,56 @@
   <div class="sec-label">// 2025 Season</div>
   <div class="sec-title">Stats</div>
   <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Player</th><th>Nation</th><th>GP</th><th>Goals</th><th>Assists</th><th>OVR</th></tr></thead><tbody><tr><td class="pl">Lionel Messi</td><td class="">Argentina</td><td class="">18</td><td class="">14</td><td class="">11</td><td class="">99</td></tr><tr><td class="pl">Kylian Mbappe</td><td class="">France</td><td class="">20</td><td class="">16</td><td class="">8</td><td class="">99</td></tr><tr><td class="pl">Vinicius Jr</td><td class="">Brazil</td><td class="">19</td><td class="">13</td><td class="">9</td><td class="">97</td></tr><tr><td class="pl">Erling Haaland</td><td class="">Norway</td><td class="">18</td><td class="">15</td><td class="">4</td><td class="">97</td></tr><tr><td class="pl">Bukayo Saka</td><td class="">England</td><td class="">20</td><td class="">11</td><td class="">10</td><td class="">95</td></tr><tr><td class="pl">Pedri</td><td class="">Spain</td><td class="">18</td><td class="">7</td><td class="">12</td><td class="">93</td></tr></tbody></table></div>
+
+<div style="margin-top:24px;border-top:1px solid var(--line);padding-top:20px">
+  <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;letter-spacing:.12em;color:var(--gold);text-transform:uppercase;margin-bottom:14px">// Stat Definitions — from The Sports Statistics Manual by Chris Cain</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px">
+    <div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">OVR</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#FF6B6B">Soccer</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Overall Rating</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">A 0–99 composite score combining goals, assists, xG, shots on target, and defensive contributions relative to all players in the same league.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">xG</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#FF6B6B">Soccer</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Expected Goals</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">The probability that a shot results in a goal based on shot location, angle, shot type, and assist type. Goals scored above xG = clinical finishing; below = poor finishing or bad luck.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">xGA</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#FF6B6B">Soccer</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Expected Goals Against</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">xG conceded by the defense/goalkeeper. A keeper's save percentage vs. xGA reveals true shot-stopping ability beyond what raw goals allowed shows.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">SoT</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#FF6B6B">Soccer</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Shots on Target</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">Shots that would have gone in without a save or hit the post. Divided by total shots to get shot accuracy.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">CS</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#FF6B6B">Soccer</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Clean Sheets</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">Games where the team/goalkeeper conceded zero goals. One of the primary metrics in the goalkeeper OVR calculation.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">POSS%</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#FF6B6B">Soccer</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Possession Percentage</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">Share of total playing time a team controls the ball. High possession + high xG = dominant team; high possession + low xG = inefficient.</div>
+  </div>
+  </div>
+  <p style="font-size:.72rem;color:var(--muted);margin-top:16px;font-family:'JetBrains Mono',monospace">Methodology from <em style="color:var(--white)">The Sports Statistics Manual</em> by Chris Cain · <a href="https://www.amazon.com/Sports-Statistics-Manual-Baseball-Basketball/dp/B0DDHVR5MK/" target="_blank" style="color:var(--gold);text-decoration:none">Available on Amazon</a></p>
+</div>
 </div>
 
 <div id="tab-fantasy" class="tab-panel">
@@ -209,13 +289,28 @@
   <div class="ft-brand"><img src="/assets/logo.png" alt="SSC" /><span>The Sports <em>Companion</em></span></div>
   <div class="ft-links">
     <a href="/index.html">Home</a><a href="/nfl/index.html">NFL</a><a href="/mlb/index.html">MLB</a>
-    <a href="/nba/index.html">NBA</a><a href="/soccer/mls/index.html">MLS</a>
+    <a href="/nba/index.html">NBA</a><a href="/soccer/mls/index.html" class="active">MLS</a>
     <a href="/soccer/epl/index.html">EPL</a><a href="/ncaaf/index.html">NCAAF</a>
   </div>
   <div class="ft-copy">© 2026 The Sports Companion</div>
 </footer>
 
 <script>
+
+function changeSeason(yr) {
+  yr = parseInt(yr);
+  // Update all sec-label year references
+  document.querySelectorAll('.sec-label').forEach(el => {
+    el.textContent = el.textContent.replace(/20\d\d/, yr);
+  });
+  // Update badge
+  const badge = document.querySelector('.league-badge');
+  if (badge) badge.textContent = yr + ' Season';
+  // Show/hide historical notice
+  const notice = document.getElementById('season-notice');
+  if (notice) notice.classList.toggle('show', yr < 2025);
+}
+
 function showTab(id){document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');event.target.classList.add('active')}
 function showSub(id){document.querySelectorAll('.sub-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.sub-tab').forEach(b=>b.classList.remove('active'));document.getElementById('sub-'+id).classList.add('active');event.target.classList.add('active')}
 </script>
