@@ -59,7 +59,7 @@
     .f-card h3 span{color:var(--gold)}.f-card p{font-size:.84rem;color:var(--muted);line-height:1.6}
     .f-tag{display:inline-block;margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:4px;background:rgba(242,194,48,.12);color:var(--gold)}
     .fantasy-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
-    .guess-wrap{max-width:580px}
+    .guess-wrap{max-width:720px;margin:0 auto;width:100%}
     .guess-game{background:var(--ink-2);border:1px solid var(--line);border-radius:14px;padding:28px}
     .guess-ctx{font-family:'JetBrains Mono',monospace;font-size:.73rem;color:var(--muted);letter-spacing:.08em;margin-bottom:18px;line-height:1.8}
     .guess-q{font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;font-weight:800;text-transform:uppercase;margin-bottom:20px}
@@ -105,15 +105,21 @@
     .season-notice.show { display: block; }
   
     /* PITCH ZONE */
-    .pitch-zone-wrap{background:var(--ink-3);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:16px}
-    .pitch-zone-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--ink-2);border-bottom:1px solid var(--line)}
-    .pitch-zone-label{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--white)}
-    .pitch-zone-status{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;letter-spacing:.08em;color:var(--gold)}
-    .pitch-zone-canvas{position:relative;background:#141820}
-    .pitch-result-badge{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;padding:5px 16px;border-radius:20px;border:2px solid transparent;opacity:0;transition:opacity .3s;white-space:nowrap;pointer-events:none}
+    
+    
+    
+    
+    
+    
     .pitch-result-badge.show-hit{opacity:1;background:rgba(242,194,48,.15);border-color:var(--gold);color:var(--gold)}
     .pitch-result-badge.show-miss{opacity:1;background:rgba(200,58,43,.12);border-color:var(--crimson);color:#FF6B6B}
     .pitch-result-badge.show-ball{opacity:1;background:rgba(56,189,248,.12);border-color:#38BDF8;color:#38BDF8}
+  
+    /* LANGUAGE SWITCHER */
+    .lang-switch{display:flex;align-items:center;gap:2px;padding:0 12px;border-right:1px solid var(--line);height:56px;flex-shrink:0}
+    .lang-btn{background:none;border:1px solid transparent;border-radius:5px;padding:5px 9px;font-size:.75rem;font-weight:700;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;font-family:'Barlow Condensed',sans-serif;letter-spacing:.03em}
+    .lang-btn:hover{color:var(--white);border-color:var(--line)}
+    .lang-btn.active{color:var(--gold);border-color:rgba(242,194,48,.4);background:rgba(242,194,48,.08)}
   </style>
 </head>
 <body>
@@ -128,6 +134,10 @@
     <li><a href="/fantasy/index.html">🏆 Fantasy</a></li>
     <li><a href="/more/index.html">• • •</a></li>
   </ul>
+  <div class="lang-switch" id="lang-switch">
+    <button class="lang-btn active" data-lang="en" onclick="setLang('en',this)" aria-label="English">🇺🇸 EN</button>
+    <button class="lang-btn" data-lang="es" onclick="setLang('es',this)" aria-label="Español">🇪🇸 ES</button>
+  </div>
   <div class="nav-cta" id="nav-cta">
     <a href="/login/index.html" style="color:var(--muted);font-size:.8rem;font-weight:600;text-decoration:none;padding:8px 12px;">Log In</a>
     <a href="/signup/index.html" style="background:var(--gold);color:var(--ink);font-weight:700;font-size:.8rem;padding:8px 18px;border-radius:5px;text-decoration:none;">Sign Up</a>
@@ -347,7 +357,7 @@
   <div class="sec-label">// Interactive</div><div class="sec-title">⚾ Guess the Pitch</div>
   <div class="sec-body">Real MLB at-bat scenarios. Predict pitch type and location before the delivery.</div>
   <div class="guess-wrap">
-    <div class="score-bar">
+    <div class="score-bar" style="max-width:720px;margin:0 auto;width:100%">
       <div><div class="score-bar-label">Score</div><div class="score-bar-val" id="score">0.0</div></div>
       <div><div class="score-bar-label">Correct</div><div class="score-bar-val" id="correct">0 / 0</div></div>
       <div><div class="score-bar-label">Streak</div><div class="score-bar-val" id="streak">0</div></div>
@@ -356,85 +366,58 @@
       <div class="guess-ctx" id="ctx">Loading scenario...</div>
       <div class="pitch-zone-wrap">
   <div class="pitch-zone-header">
-    <span class="pitch-zone-label">Pitch Zone</span>
+    <span class="pitch-zone-label" data-i18n="pitch_zone">Pitch Zone</span>
     <span class="pitch-zone-status" id="zone-status"></span>
   </div>
   <div class="pitch-zone-canvas" id="pitch-canvas">
-    <svg viewBox="0 0 360 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
-      <defs>
-        <linearGradient id="skyGz" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#1a2a4a"/>
-          <stop offset="60%" stop-color="#2a4a2a"/>
-          <stop offset="100%" stop-color="#3d6e2a"/>
-        </linearGradient>
-        <linearGradient id="groundGz" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#5a8a3a"/>
-          <stop offset="100%" stop-color="#3a5a20"/>
-        </linearGradient>
-      </defs>
-
-      <!-- Stadium background sky -->
-      <rect width="360" height="220" fill="url(#skyGz)"/>
-
-      <!-- Stadium lights glow -->
-      <ellipse cx="60"  cy="20" rx="30" ry="15" fill="#fff7d6" opacity="0.08"/>
-      <ellipse cx="300" cy="20" rx="30" ry="15" fill="#fff7d6" opacity="0.08"/>
-      <ellipse cx="40"  cy="30" rx="15" ry="8"  fill="white"   opacity="0.12"/>
-      <ellipse cx="320" cy="30" rx="15" ry="8"  fill="white"   opacity="0.12"/>
-
-      <!-- Outfield wall (arc) -->
-      <path d="M 10 100 Q 180 20 350 100" fill="none" stroke="#5a7a3a" stroke-width="6" opacity="0.6"/>
-
-      <!-- Infield grass -->
-      <ellipse cx="180" cy="160" rx="160" ry="80" fill="url(#groundGz)" opacity="0.9"/>
-
+    <!-- Stadium photo background via CSS, batter overlay, strike zone grid -->
+    <div class="pz-stadium">
+      <!-- Sky gradient + stadium lights -->
+      <div class="pz-sky"></div>
+      <!-- Stadium crowd/stands -->
+      <div class="pz-stands"></div>
+      <!-- Outfield grass -->
+      <div class="pz-outfield"></div>
       <!-- Infield dirt -->
-      <ellipse cx="180" cy="175" rx="80" ry="35" fill="#9b7240" opacity="0.7"/>
-
+      <div class="pz-infield"></div>
       <!-- Home plate area -->
-      <ellipse cx="180" cy="212" rx="30" ry="8"  fill="#7a5a2e" opacity="0.8"/>
-      <polygon points="180,208 188,202 188,196 172,196 172,202" fill="white" opacity="0.9"/>
-
-      <!-- Batter silhouette (left-handed stance — right side of plate) -->
-      <!-- Body -->
-      <ellipse cx="136" cy="180" rx="10" ry="20" fill="#1a1a2e" opacity="0.85"/>
-      <!-- Head -->
-      <circle cx="136" cy="158" r="8" fill="#1a1a2e" opacity="0.85"/>
-      <!-- Helmet brim -->
-      <ellipse cx="133" cy="158" rx="10" ry="4" fill="#111" opacity="0.9" transform="rotate(-15 133 158)"/>
-      <!-- Bat -->
-      <line x1="146" y1="172" x2="220" y2="148" stroke="#8B5E3C" stroke-width="3" stroke-linecap="round" opacity="0.9"/>
-      <!-- Hands on bat -->
-      <circle cx="150" cy="170" r="5" fill="#c8956c" opacity="0.8"/>
-      <!-- Legs -->
-      <line x1="130" y1="198" x2="124" y2="215" stroke="#1a1a2e" stroke-width="6" stroke-linecap="round" opacity="0.85"/>
-      <line x1="142" y1="198" x2="148" y2="215" stroke="#1a1a2e" stroke-width="6" stroke-linecap="round" opacity="0.85"/>
-
-      <!-- Strike zone box (3x3 grid) — centered, slightly right of batter -->
-      <!-- Outer box -->
-      <rect x="195" y="115" width="96" height="90" fill="rgba(255,255,255,0.06)" stroke="white" stroke-width="2" rx="2"/>
-      <!-- Grid lines vertical -->
-      <line x1="227" y1="115" x2="227" y2="205" stroke="white" stroke-width="1" opacity="0.5"/>
-      <line x1="259" y1="115" x2="259" y2="205" stroke="white" stroke-width="1" opacity="0.5"/>
-      <!-- Grid lines horizontal -->
-      <line x1="195" y1="145" x2="291" y2="145" stroke="white" stroke-width="1" opacity="0.5"/>
-      <line x1="195" y1="175" x2="291" y2="175" stroke="white" stroke-width="1" opacity="0.5"/>
-
-      <!-- Zone cell labels (tiny, for reference) -->
-      <g font-family="monospace" font-size="7" fill="white" opacity="0.25" text-anchor="middle">
-        <text x="211" y="133">HI-IN</text><text x="243" y="133">HI-MID</text><text x="275" y="133">HI-AW</text>
-        <text x="211" y="163">MID-IN</text><text x="243" y="163">MIDDLE</text><text x="275" y="163">MID-AW</text>
-        <text x="211" y="193">LO-IN</text><text x="243" y="193">LO-MID</text><text x="275" y="193">LO-AW</text>
-      </g>
-
-      <!-- Ball dot (animated, JS-positioned) -->
-      <circle id="pitch-ball" cx="243" cy="160" r="7" fill="#F2C230" stroke="white" stroke-width="1.5" opacity="0" style="transition:cx .3s,cy .3s,opacity .3s"/>
-      <!-- Ball seam lines -->
-      <path id="pitch-seam" d="M240,156 Q243,160 240,164 M246,156 Q243,160 246,164" stroke="#C83A2B" stroke-width="1" fill="none" opacity="0" style="transition:opacity .3s"/>
-    </svg>
-    <div class="pitch-result-badge" id="pitch-result"></div>
+      <div class="pz-plate-area">
+        <!-- Batter silhouette (detailed CSS art) -->
+        <div class="pz-batter">
+          <div class="pz-batter-helmet"></div>
+          <div class="pz-batter-head"></div>
+          <div class="pz-batter-torso"></div>
+          <div class="pz-batter-arm-back"></div>
+          <div class="pz-batter-arm-front"></div>
+          <div class="pz-batter-bat"></div>
+          <div class="pz-batter-leg-front"></div>
+          <div class="pz-batter-leg-back"></div>
+        </div>
+        <!-- Home plate -->
+        <div class="pz-home-plate"></div>
+      </div>
+      <!-- Strike zone overlay (3x3 grid) -->
+      <div class="pz-zone" id="pz-zone">
+        <div class="pz-zone-glow"></div>
+        <!-- 9 clickable cells -->
+        <div class="pz-cell" data-zone="hi-in"></div>
+        <div class="pz-cell" data-zone="hi-mid"></div>
+        <div class="pz-cell" data-zone="hi-out"></div>
+        <div class="pz-cell" data-zone="mid-in"></div>
+        <div class="pz-cell" data-zone="middle"></div>
+        <div class="pz-cell" data-zone="mid-out"></div>
+        <div class="pz-cell" data-zone="lo-in"></div>
+        <div class="pz-cell" data-zone="lo-mid"></div>
+        <div class="pz-cell" data-zone="lo-out"></div>
+      </div>
+      <!-- Ball dot (JS-positioned) -->
+      <div class="pz-ball" id="pz-ball"></div>
+      <!-- Result badge -->
+      <div class="pitch-result-badge" id="pitch-result"></div>
+    </div>
   </div>
 </div>
+      
       <div class="guess-q">Where will the pitch land?</div>
       <div class="timer-row"><div class="timer-track"><div class="timer-fill" id="timer-fill" style="width:100%"></div></div><div class="timer-num" id="timer-num">15</div></div>
       <div class="opts" id="opts"></div>
@@ -494,79 +477,57 @@ function updateTimer(){document.getElementById('timer-num').textContent=timeLeft
 function timeUp(){total++;streak=0;document.querySelectorAll('.opt').forEach(b=>b.disabled=true);const p=plays[idx%plays.length];document.querySelectorAll('.opt').forEach(b=>{if(b.textContent===p.correct)b.classList.add('correct')});updateScores();document.getElementById('next-btn').classList.add('show')}
 
 // Zone cell positions (cx, cy) for each of 9 pitch locations
-const ZONE_POSITIONS = {
-  "Up & In":       {cx:211, cy:130, inZone:true},
-  "Up & Middle":   {cx:243, cy:130, inZone:true},
-  "Up & Away":     {cx:275, cy:130, inZone:true},
-  "Middle-In":     {cx:211, cy:160, inZone:true},
-  "Middle":        {cx:243, cy:160, inZone:true},
-  "Middle-Away":   {cx:275, cy:160, inZone:true},
-  "Down & In":     {cx:211, cy:190, inZone:true},
-  "Down & Middle": {cx:243, cy:190, inZone:true},
-  "Down & Away":   {cx:275, cy:190, inZone:true},
-  "Low & Away":    {cx:300, cy:208, inZone:false},
-  "Bounce":        {cx:243, cy:215, inZone:false},
-  "Way Outside":   {cx:315, cy:160, inZone:false},
-  "High":          {cx:243, cy:108, inZone:false},
-  "Inside":        {cx:182, cy:160, inZone:false},
-  "Backdoor":      {cx:295, cy:175, inZone:true},
-  "12-6":          {cx:243, cy:192, inZone:true},
-  "Arm Side":      {cx:211, cy:160, inZone:true},
-  "Glove Side":    {cx:275, cy:160, inZone:true},
-  "Down the Middle":{cx:243, cy:160, inZone:true},
+const PZ_ZONE_POS = {
+  "Up & In":       {l:31, t:13, inZone:true},
+  "Up & Middle":   {l:38, t:13, inZone:true},
+  "Up & Away":     {l:45, t:13, inZone:true},
+  "Middle-In":     {l:31, t:28, inZone:true},
+  "Middle":        {l:38, t:28, inZone:true},
+  "Middle-Away":   {l:45, t:28, inZone:true},
+  "Down & In":     {l:31, t:44, inZone:true},
+  "Down & Middle": {l:38, t:44, inZone:true},
+  "Down & Away":   {l:45, t:44, inZone:true},
+  "Low & Away":    {l:52, t:62, inZone:false},
+  "Bounce":        {l:38, t:72, inZone:false},
+  "Way Outside":   {l:56, t:30, inZone:false},
+  "High":          {l:38, t:6,  inZone:false},
+  "Inside":        {l:24, t:28, inZone:false},
+  "Backdoor":      {l:49, t:40, inZone:true},
+  "12-6":          {l:38, t:44, inZone:true},
+  "Down the Middle":{l:38, t:28, inZone:true},
+  "Arm Side":      {l:31, t:28, inZone:true},
+  "Glove Side":    {l:45, t:28, inZone:true},
 };
-
-function getPitchZonePos(pitchLabel) {
-  // Extract location from pitch label e.g. "Slider — Down & Away" → "Down & Away"
-  const parts = pitchLabel.split('—');
-  const loc = parts.length > 1 ? parts[1].trim() : pitchLabel.trim();
-  for (const [key, val] of Object.entries(ZONE_POSITIONS)) {
+function getPitchPos(label) {
+  const loc = label.includes("—") ? label.split("—")[1].trim() : label.trim();
+  for (const [key, val] of Object.entries(PZ_ZONE_POS)) {
     if (loc.toLowerCase().includes(key.toLowerCase()) || key.toLowerCase().includes(loc.toLowerCase())) return val;
   }
-  return {cx:243, cy:160, inZone:true}; // default middle
+  return {l:38, t:28, inZone:true};
 }
-
 function showPitchZone(pitchLabel, isCorrect) {
-  const pos = getPitchZonePos(pitchLabel);
-  const ball = document.getElementById('pitch-ball');
-  const seam = document.getElementById('pitch-seam');
-  const status = document.getElementById('zone-status');
-  const badge = document.getElementById('pitch-result');
+  const ball = document.getElementById("pz-ball");
+  const status = document.getElementById("zone-status");
+  const badge = document.getElementById("pitch-result");
   if (!ball) return;
-
-  ball.setAttribute('cx', pos.cx);
-  ball.setAttribute('cy', pos.cy);
-  ball.setAttribute('opacity', '1');
-  ball.setAttribute('fill', isCorrect ? '#F2C230' : '#FF6B6B');
-  if (seam) { seam.setAttribute('opacity','1'); }
-
-  if (pos.inZone) {
-    status.textContent = 'In Zone';
-    status.style.color = '#F2C230';
-  } else {
-    status.textContent = 'Out of Zone';
-    status.style.color = '#8A8F98';
-  }
-
-  badge.className = 'pitch-result-badge';
-  if (isCorrect) {
-    badge.textContent = '✓ Correct Spot';
-    badge.classList.add('show-hit');
-  } else {
-    badge.textContent = pos.inZone ? '✗ Missed Spot' : '✗ Out of Zone';
-    badge.classList.add('show-miss');
-  }
+  const pos = getPitchPos(pitchLabel);
+  ball.style.left = pos.l + "%";
+  ball.style.top  = pos.t + "%";
+  ball.style.opacity = "1";
+  ball.className = "pz-ball" + (isCorrect ? "" : " wrong");
+  status.textContent = pos.inZone ? "In Zone" : "Out of Zone";
+  status.style.color  = pos.inZone ? "var(--gold)" : "var(--muted)";
+  badge.className = "pitch-result-badge";
+  badge.textContent = isCorrect ? "Correct Spot" : (pos.inZone ? "Missed Spot" : "Out of Zone");
+  badge.classList.add(isCorrect ? "show-hit" : "show-miss");
 }
-
 function resetPitchZone() {
-  const ball = document.getElementById('pitch-ball');
-  const seam = document.getElementById('pitch-seam');
-  const status = document.getElementById('zone-status');
-  const badge = document.getElementById('pitch-result');
-  if (ball) { ball.setAttribute('opacity','0'); ball.setAttribute('fill','#F2C230'); }
-  if (seam) { seam.setAttribute('opacity','0'); }
-  if (status) { status.textContent = ''; }
-  if (badge) { badge.className = 'pitch-result-badge'; badge.textContent = ''; }
+  const ball = document.getElementById("pz-ball");
+  const status = document.getElementById("zone-status");
+  const badge = document.getElementById("pitch-result");
+  if (ball) { ball.style.opacity = "0"; ball.className = "pz-ball"; }
+  if (status) status.textContent = "";
+  if (badge) { badge.className = "pitch-result-badge"; badge.textContent = ""; }
 }
 function pick(btn,choice,correct){clearInterval(timer);total++;document.querySelectorAll('.opt').forEach(b=>b.disabled=true);if(choice===correct){btn.classList.add('correct');score+=1+(timeLeft/15);correctCount++;streak++;showPitchZone(correct,true)}else{btn.classList.add('wrong');streak=0;document.querySelectorAll('.opt').forEach(b=>{if(b.textContent===correct)b.classList.add('correct')});showPitchZone(correct,false)}updateScores();document.getElementById('next-btn').classList.add('show')}
 function updateScores(){document.getElementById('score').textContent=score.toFixed(1);document.getElementById('correct').textContent=correctCount+' / '+total;document.getElementById('streak').textContent=streak}
@@ -613,4 +574,104 @@ function nextPlay(){idx++;resetPitchZone();renderPlay()}
     });
     window.signOutUser = async (e) => { e.preventDefault(); await signOut(auth); window.location.href = '/index.html'; };
   </script>
+<script>
+
+// ── LANGUAGE SYSTEM ─────────────────────────────────────────────
+const I18N = {
+  en: {
+    scores:'Scores', standings:'Standings', stats:'Stats',
+    gameday:'Gameday', box_score:'Box Score', play_by_play:'Play-by-Play',
+    player_stats:'\ud83d\udc64 Player Stats', team_stats:'\ud83c\udfd9\ufe0f Team Stats',
+    guess_the_play:'Guess the Play', guess_the_pitch:'Guess the Pitch',
+    pitch_zone:'Pitch Zone', in_zone:'In Zone', out_of_zone:'Out of Zone',
+    missed_spot:'Missed Spot', correct_spot:'Correct Spot',
+    next_play:'Next Play \u2192', next_pitch:'Next Pitch \u2192',
+    log_in:'Log In', sign_up:'Sign Up', my_profile:'My Profile',
+    favorites:'Favorites', notifications:'Notifications', sign_out:'Sign Out',
+    season:'Season', historical_view:'Historical view \u2014 representative stats.',
+    final:'Final', live:'Live', betting_lines:'Betting Lines',
+    game_summary:'Game Summary', line_score:'Line Score',
+  },
+  es: {
+    scores:'Marcadores', standings:'Clasificaci\u00f3n', stats:'Estad\u00edsticas',
+    gameday:'D\u00eda de juego', box_score:'Resumen', play_by_play:'Jugada a jugada',
+    player_stats:'\ud83d\udc64 Stats Jugadores', team_stats:'\ud83c\udfd9\ufe0f Stats Equipos',
+    guess_the_play:'Adivina la Jugada', guess_the_pitch:'Adivina el Lanzamiento',
+    pitch_zone:'Zona de lanzamiento', in_zone:'En zona', out_of_zone:'Fuera de zona',
+    missed_spot:'Punto fallado', correct_spot:'Punto correcto',
+    next_play:'Siguiente jugada \u2192', next_pitch:'Siguiente lanzamiento \u2192',
+    log_in:'Iniciar sesi\u00f3n', sign_up:'Registrarse', my_profile:'Mi perfil',
+    favorites:'Favoritos', notifications:'Notificaciones', sign_out:'Cerrar sesi\u00f3n',
+    season:'Temporada', historical_view:'Vista hist\u00f3rica \u2014 estad\u00edsticas representativas.',
+    final:'Final', live:'En vivo', betting_lines:'L\u00edneas de apuestas',
+    game_summary:'Resumen del partido', line_score:'Marcador por entradas',
+  }
+};
+
+function setLang(lang, btn) {
+  localStorage.setItem('ssc_lang', lang);
+  document.documentElement.setAttribute('lang', lang);
+  // Update buttons
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.lang-btn[data-lang="'+lang+'"]').forEach(b => b.classList.add('active'));
+  applyTranslations(lang);
+}
+
+function applyTranslations(lang) {
+  const t = I18N[lang] || I18N.en;
+  // Translate all elements with data-i18n attribute
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (t[key]) el.textContent = t[key];
+  });
+  // Tab buttons (match by text content proximity)
+  const tabMap = {
+    'Scores':t.scores, 'Standings':t.standings, 'Stats':t.stats,
+    'Gameday':t.gameday, 'Box Score':t.box_score, 'Play-by-Play':t.play_by_play,
+    'Fantasy & Games': lang==='es' ? 'Fantasy' : 'Fantasy & Games',
+  };
+  document.querySelectorAll('.tab-btn, .game-tab, .tab-btn').forEach(btn => {
+    const txt = btn.textContent.trim();
+    if (tabMap[txt]) btn.textContent = tabMap[txt];
+  });
+  // Zone status
+  const zs = document.getElementById('zone-status');
+  if (zs && zs.textContent) {
+    if (zs.textContent.includes('In Zone') || zs.textContent.includes('En zona'))
+      zs.textContent = t.in_zone;
+    else if (zs.textContent)
+      zs.textContent = t.out_of_zone;
+  }
+  // Nav links
+  document.querySelectorAll('#nav-cta a').forEach(a => {
+    if (a.textContent.trim() === 'Log In' || a.textContent.trim() === 'Iniciar sesión')
+      a.textContent = t.log_in;
+    if (a.textContent.trim() === 'Sign Up' || a.textContent.trim() === 'Registrarse')
+      a.textContent = t.sign_up;
+  });
+  const dd = document.querySelector('.nav-dropdown');
+  if (dd) {
+    const links = dd.querySelectorAll('a');
+    const dropKeys = [['My Profile','my_profile'],['Favorites','favorites'],
+                      ['Notifications','notifications'],['Sign Out','sign_out']];
+    links.forEach(a => {
+      const base = a.textContent.replace(/^[^\w]+/,'').trim();
+      dropKeys.forEach(([en, k]) => {
+        if (base.includes(en.split(' ')[0])) {
+          const icon = a.textContent.match(/^[^\w]+/)?.[0] || '';
+          a.textContent = icon + t[k];
+        }
+      });
+    });
+  }
+}
+
+// Init on load
+(function() {
+  const saved = localStorage.getItem('ssc_lang') || 'en';
+  if (saved !== 'en') setLang(saved, null);
+  else document.querySelectorAll('.lang-btn[data-lang="en"]').forEach(b => b.classList.add('active'));
+})();
+
+</script>
 </body></html>
