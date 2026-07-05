@@ -754,7 +754,6 @@ function applyTranslations(lang) {
   const tabMap = {
     'Scores':t.scores, 'Standings':t.standings, 'Stats':t.stats,
     'Gameday':t.gameday, 'Box Score':t.box_score, 'Play-by-Play':t.play_by_play,
-    'Fantasy & Games': lang==='es' ? 'Fantasy' : 'Fantasy & Games',
   };
   document.querySelectorAll('.tab-btn, .game-tab, .tab-btn').forEach(btn => {
     const txt = btn.textContent.trim();

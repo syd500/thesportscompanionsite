@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>FIFA World Cup Bracket — The Sports Companion</title>
+  <link rel="icon" type="image/png" href="/assets/logo.png"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--ink:#0B0D0F;--ink-2:#181B1F;--ink-3:#262A30;--muted:#8A8F98;--line:#2A2E35;--gold:#F2C230;--crimson:#C83A2B;--white:#FFFFFF}
+    body{font-family:'Inter',sans-serif;background:var(--ink);color:var(--white);min-height:100vh}
+    nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;background:rgba(11,13,15,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+    .nav-brand{display:flex;align-items:center;gap:8px;padding:0 20px;text-decoration:none;border-right:1px solid var(--line);height:56px;flex-shrink:0}
+    .nav-brand img{height:28px}
+    .nav-brand span{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;color:var(--white)}
+    .nav-brand span em{font-style:normal;color:var(--gold)}
+    .nav-leagues{display:flex;align-items:center;list-style:none;overflow-x:auto;flex:1;scrollbar-width:none}
+    .nav-leagues::-webkit-scrollbar{display:none}
+    .nav-leagues a{display:flex;align-items:center;height:56px;padding:0 15px;font-size:.8rem;font-weight:600;color:var(--muted);text-decoration:none;border-right:1px solid var(--line);white-space:nowrap}
+    .nav-leagues a:hover{color:var(--white);background:var(--ink-2)}
+    .nav-leagues a.active{color:var(--gold);background:var(--ink-2);border-bottom:2px solid var(--gold)}
+    .nav-cta{margin-left:auto;padding:0 16px;height:56px;display:flex;align-items:center;gap:8px;flex-shrink:0}
+    .nav-cta a{color:var(--muted);font-size:.8rem;font-weight:600;text-decoration:none;padding:8px 12px}
+    .nav-cta a.primary{background:var(--gold);color:var(--ink);border-radius:5px}
+    .banner{background:var(--ink-2);border-bottom:1px solid var(--line);padding:24px 32px}
+    .banner-top{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+    .banner-top h1{font-family:'Barlow Condensed',sans-serif;font-size:2.2rem;font-weight:900;text-transform:uppercase;letter-spacing:.04em}
+    .badge{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:4px;background:rgba(242,194,48,.12);color:var(--gold);border:1px solid rgba(242,194,48,.3)}
+    .banner-note{font-size:.82rem;color:var(--muted);margin-top:8px;font-family:'JetBrains Mono',monospace}
+    .main{padding:28px 20px 64px;max-width:1300px;margin:0 auto}
+    .legend{display:flex;gap:20px;flex-wrap:wrap;padding:10px 14px;background:var(--ink-2);border:1px solid var(--line);border-radius:8px;margin-bottom:24px}
+    .legend-item{display:flex;align-items:center;gap:7px;font-size:.73rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
+    .ldot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+    .bracket-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:16px}
+    .bracket-scroll::-webkit-scrollbar{height:6px}
+    .bracket-scroll::-webkit-scrollbar-track{background:var(--ink-3);border-radius:3px}
+    .bracket-scroll::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px}
+    .bracket{display:flex;align-items:center;gap:0;min-width:1150px;padding:12px 0}
+    .r-col{flex-shrink:0;min-width:175px}
+    .r-col-hdr{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);text-align:center;padding:0 6px 14px}
+    .r-matches{display:flex;flex-direction:column;gap:8px}
+    .match{background:var(--ink-2);border:1px solid var(--line);border-radius:8px;overflow:hidden;width:166px;cursor:pointer;transition:border-color .18s}
+    .match:hover{border-color:rgba(242,194,48,.5)}
+    .match.decided .team.winner{background:rgba(242,194,48,.08)}
+    .match.decided .team.loser{opacity:.35}
+    .team{display:flex;align-items:center;gap:6px;padding:8px 10px;border-bottom:1px solid rgba(255,255,255,.05);min-height:36px}
+    .team:last-child{border-bottom:none}
+    .flag{font-size:1rem;flex-shrink:0;width:20px;text-align:center}
+    .tname{flex:1;font-size:.77rem;font-weight:600;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .sc{font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:800;color:var(--muted);min-width:20px;text-align:right;flex-shrink:0}
+    .sc.w{color:var(--gold)}
+    .team.winner .tname{color:var(--gold)}
+    .conn-col{width:18px;flex-shrink:0;display:flex;flex-direction:column;padding-top:28px}
+    .conn-pair{display:flex;flex-direction:column}
+    .conn-top{flex:1;border-right:1px solid var(--line);border-bottom:1px solid var(--line);border-radius:0 0 3px 0}
+    .conn-bot{flex:1;border-right:1px solid var(--line);border-top:1px solid var(--line);border-radius:0 3px 0 0}
+    .champ-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 20px;flex-shrink:0}
+    .champ-label{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--gold);letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px;text-align:center}
+    .champ-card{background:linear-gradient(135deg,rgba(242,194,48,.16),rgba(27,42,74,.5));border:2px solid var(--gold);border-radius:14px;padding:24px 18px;text-align:center;width:172px;box-shadow:0 0 40px rgba(242,194,48,.15)}
+    .champ-trophy{font-size:2.6rem;margin-bottom:10px}
+    .champ-name{font-family:'Barlow Condensed',sans-serif;font-size:1.15rem;font-weight:900;text-transform:uppercase;color:var(--gold);line-height:1.2}
+    .champ-sub{font-size:.66rem;color:var(--muted);margin-top:6px;font-family:'JetBrains Mono',monospace;line-height:1.5}
+    footer{background:var(--ink);border-top:1px solid var(--line);padding:24px 32px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-top:48px}
+    .ft-brand{display:flex;align-items:center;gap:8px}
+    .ft-brand img{height:20px}
+    .ft-brand span{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.95rem}
+    .ft-brand span em{font-style:normal;color:var(--gold)}
+    .ft-copy{font-size:.73rem;color:var(--muted)}
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/index.html" class="nav-brand">
+    <img src="/assets/logo.png" alt="SSC"/>
+    <span>The Sports <em>Companion</em></span>
+  </a>
+  <ul class="nav-leagues">
+    <li><a href="/nfl/index.html">🏈 NFL</a></li>
+    <li><a href="/mlb/index.html">⚾ MLB</a></li>
+    <li><a href="/nba/index.html">🏀 NBA</a></li>
+    <li><a href="/ncaa/index.html">🎓 NCAA</a></li>
+    <li><a href="/futbol/index.html">⚽ Fútbol</a></li>
+    <li><a href="/fantasy/index.html">🏆 Fantasy</a></li>
+    <li><a href="/brackets/index.html" class="active">🗂 Brackets</a></li>
+  </ul>
+  <div class="nav-cta">
+    <a href="/login/index.html">Log In</a>
+    <a href="/signup/index.html" class="primary">Sign Up</a>
+  </div>
+</nav>
+
+<div class="banner">
+  <div class="banner-top">
+    <h1>🌍 FIFA World Cup 2026</h1>
+    <span class="badge">USA · Canada · Mexico</span>
+  </div>
+  <p class="banner-note">// 48 teams · 8 groups · Knockout bracket from Round of 32</p>
+</div>
+
+<div class="main">
+
+  <div class="legend">
+    <div class="legend-item"><div class="ldot" style="background:var(--gold)"></div>Winner / Advancing</div>
+    <div class="legend-item"><div class="ldot" style="background:rgba(255,255,255,.15)"></div>Eliminated</div>
+  </div>
+
+  <div class="bracket-scroll">
+  <div class="bracket">
+
+    <!-- ── ROUND OF 32 (left half) ── -->
+    <div class="r-col">
+      <div class="r-col-hdr">Round of 32</div>
+      <div class="r-matches">
+        <div class="match decided"><div class="team winner"><span class="flag">🇫🇷</span><span class="tname">France</span><span class="sc w">2</span></div><div class="team loser"><span class="flag">🇵🇱</span><span class="tname">Poland</span><span class="sc">0</span></div></div>
+        <div class="match decided"><div class="team winner"><span class="flag">🇦🇷</span><span class="tname">Argentina</span><span class="sc w">1</span></div><div class="team loser"><span class="flag">🇦🇺</span><span class="tname">Australia</span><span class="sc">0</span></div></div>
+        <div class="match decided"><div class="team winner"><span class="flag">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span><span class="tname">England</span><span class="sc w">2</span></div><div class="team loser"><span class="flag">🇸🇳</span><span class="tname">Senegal</span><span class="sc">0</span></div></div>
+        <div class="match decided"><div class="team winner"><span class="flag">🇪🇸</span><span class="tname">Spain</span><span class="sc w">3</span></div><div class="team loser"><span class="flag">🇲🇦</span><span class="tname">Morocco</span><span class="sc">1</span></div></div>
+      </div>
+    </div>
+
+    <!-- CONN R32→R16 left -->
+    <div class="conn-col" style="padding-top:28px">
+      <div class="conn-pair" style="height:52px"><div class="conn-top"></div><div class="conn-bot"></div></div>
+      <div style="height:8px"></div>
+      <div class="conn-pair" style="height:52px"><div class="conn-top"></div><div class="conn-bot"></div></div>
+    </div>
+
+    <!-- ── ROUND OF 16 (left) ── -->
+    <div class="r-col" style="padding-top:22px">
+      <div class="r-col-hdr">Round of 16</div>
+      <div class="r-matches">
+        <div class="match decided" style="margin-top:14px">
+          <div class="team winner"><span class="flag">🇫🇷</span><span class="tname">France</span><span class="sc w">2</span></div>
+          <div class="team loser"><span class="flag">🇦🇷</span><span class="tname">Argentina</span><span class="sc">1</span></div>
+        </div>
+        <div class="match decided" style="margin-top:40px">
+          <div class="team winner"><span class="flag">🇪🇸</span><span class="tname">Spain</span><span class="sc w">2</span></div>
+          <div class="team loser"><span class="flag">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span><span class="tname">England</span><span class="sc">1</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONN R16→QF left -->
+    <div class="conn-col" style="padding-top:56px">
+      <div class="conn-pair" style="height:100px"><div class="conn-top"></div><div class="conn-bot"></div></div>
+    </div>
+
+    <!-- ── QUARTERFINALS (left) ── -->
+    <div class="r-col" style="padding-top:76px">
+      <div class="r-col-hdr">Quarterfinals</div>
+      <div class="r-matches">
+        <div class="match decided" style="margin-top:30px">
+          <div class="team winner"><span class="flag">🇫🇷</span><span class="tname">France</span><span class="sc w">2</span></div>
+          <div class="team loser"><span class="flag">🇪🇸</span><span class="tname">Spain</span><span class="sc">1</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONN QF→SF left -->
+    <div class="conn-col" style="padding-top:120px">
+      <div style="height:100px;border-right:1px solid var(--line)"></div>
+      <div style="height:1px;background:var(--line)"></div>
+    </div>
+
+    <!-- ── SEMIFINALS (left) ── -->
+    <div class="r-col" style="padding-top:130px">
+      <div class="r-col-hdr">Semifinal</div>
+      <div class="r-matches">
+        <div class="match decided" style="margin-top:16px">
+          <div class="team winner"><span class="flag">🇫🇷</span><span class="tname">France</span><span class="sc w">1</span></div>
+          <div class="team loser"><span class="flag">🇵🇹</span><span class="tname">Portugal</span><span class="sc">0</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONN SF→FINAL left -->
+    <div class="conn-col" style="padding-top:168px">
+      <div style="height:1px;background:var(--line)"></div>
+    </div>
+
+    <!-- ── FINAL ── -->
+    <div class="r-col" style="padding-top:150px">
+      <div class="r-col-hdr">Final · MetLife Stadium</div>
+      <div class="r-matches">
+        <div class="match decided" style="margin-top:18px">
+          <div class="team winner"><span class="flag">🇫🇷</span><span class="tname">France</span><span class="sc w">2</span></div>
+          <div class="team loser"><span class="flag">🇧🇷</span><span class="tname">Brazil</span><span class="sc">1</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── CHAMPION ── -->
+    <div class="champ-wrap">
+      <div class="champ-label">🏆 World Champions</div>
+      <div class="champ-card">
+        <div class="champ-trophy">🌍</div>
+        <div class="champ-name">🇫🇷 France</div>
+        <div class="champ-sub">2026 FIFA World Cup<br>Champions<br><span style="color:var(--gold);font-size:.7rem">East Rutherford, NJ</span></div>
+      </div>
+    </div>
+
+    <!-- CONN SF→FINAL right -->
+    <div class="conn-col" style="padding-top:168px">
+      <div style="height:1px;background:var(--line)"></div>
+    </div>
+
+    <!-- ── SEMIFINALS (right) ── -->
+    <div class="r-col" style="padding-top:130px">
+      <div class="r-col-hdr">Semifinal</div>
+      <div class="r-matches">
+        <div class="match decided" style="margin-top:16px">
+          <div class="team winner"><span class="flag">🇧🇷</span><span class="tname">Brazil</span><span class="sc w">2</span></div>
+          <div class="team loser"><span class="flag">🇩🇪</span><span class="tname">Germany</span><span class="sc">1</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONN QF→SF right -->
+    <div class="conn-col" style="padding-top:120px">
+      <div style="height:100px;border-right:1px solid var(--line)"></div>
+      <div style="height:1px;background:var(--line)"></div>
+    </div>
+
+    <!-- ── QUARTERFINALS (right) ── -->
+    <div class="r-col" style="padding-top:76px">
+      <div class="r-col-hdr">Quarterfinals</div>
+      <div class="r-matches">
+        <div class="match decided" style="margin-top:30px">
+          <div class="team winner"><span class="flag">🇧🇷</span><span class="tname">Brazil</span><span class="sc w">1</span></div>
+          <div class="team loser"><span class="flag">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span><span class="tname">England</span><span class="sc">0</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONN R16→QF right -->
+    <div class="conn-col" style="padding-top:56px">
+      <div class="conn-pair" style="height:100px"><div class="conn-top"></div><div class="conn-bot"></div></div>
+    </div>
+
+    <!-- ── ROUND OF 16 (right) ── -->
+    <div class="r-col" style="padding-top:22px">
+      <div class="r-col-hdr">Round of 16</div>
+      <div class="r-matches">
+        <div class="match decided" style="margin-top:14px">
+          <div class="team winner"><span class="flag">🇧🇷</span><span class="tname">Brazil</span><span class="sc w">2</span></div>
+          <div class="team loser"><span class="flag">🇰🇷</span><span class="tname">South Korea</span><span class="sc">1</span></div>
+        </div>
+        <div class="match decided" style="margin-top:40px">
+          <div class="team winner"><span class="flag">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span><span class="tname">England</span><span class="sc w">2</span></div>
+          <div class="team loser"><span class="flag">🇩🇪</span><span class="tname">Germany</span><span class="sc">1</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONN R32→R16 right -->
+    <div class="conn-col" style="padding-top:28px">
+      <div class="conn-pair" style="height:52px"><div class="conn-top"></div><div class="conn-bot"></div></div>
+      <div style="height:8px"></div>
+      <div class="conn-pair" style="height:52px"><div class="conn-top"></div><div class="conn-bot"></div></div>
+    </div>
+
+    <!-- ── ROUND OF 32 (right half) ── -->
+    <div class="r-col">
+      <div class="r-col-hdr">Round of 32</div>
+      <div class="r-matches">
+        <div class="match decided"><div class="team winner"><span class="flag">🇧🇷</span><span class="tname">Brazil</span><span class="sc w">2</span></div><div class="team loser"><span class="flag">🇯🇵</span><span class="tname">Japan</span><span class="sc">1</span></div></div>
+        <div class="match decided"><div class="team winner"><span class="flag">🇰🇷</span><span class="tname">South Korea</span><span class="sc w">3</span></div><div class="team loser"><span class="flag">🇺🇸</span><span class="tname">USA</span><span class="sc">1</span></div></div>
+        <div class="match decided"><div class="team winner"><span class="flag">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span><span class="tname">England</span><span class="sc w">2</span></div><div class="team loser"><span class="flag">🇲🇽</span><span class="tname">Mexico</span><span class="sc">1</span></div></div>
+        <div class="match decided"><div class="team winner"><span class="flag">🇩🇪</span><span class="tname">Germany</span><span class="sc w">2</span></div><div class="team loser"><span class="flag">🇨🇦</span><span class="tname">Canada</span><span class="sc">1</span></div></div>
+      </div>
+    </div>
+
+  </div><!-- /bracket -->
+  </div><!-- /bracket-scroll -->
+
+  <!-- GROUP STAGE NOTE -->
+  <div style="margin-top:28px;background:var(--ink-2);border:1px solid var(--line);border-radius:10px;padding:18px 20px">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:12px">// Group Stage — Top 2 from each group advance</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px">
+      <div style="font-size:.78rem;color:var(--muted)"><span style="color:var(--gold);font-weight:700">Group A</span> France · Poland · Australia · Tunisia</div>
+      <div style="font-size:.78rem;color:var(--muted)"><span style="color:var(--gold);font-weight:700">Group B</span> Argentina · Mexico · Poland · Saudi Arabia</div>
+      <div style="font-size:.78rem;color:var(--muted)"><span style="color:var(--gold);font-weight:700">Group C</span> England · Senegal · USA · Wales</div>
+      <div style="font-size:.78rem;color:var(--muted)"><span style="color:var(--gold);font-weight:700">Group D</span> Spain · Morocco · Croatia · Belgium</div>
+      <div style="font-size:.78rem;color:var(--muted)"><span style="color:var(--gold);font-weight:700">Group E</span> Brazil · South Korea · Cameroon · Serbia</div>
+      <div style="font-size:.78rem;color:var(--muted)"><span style="color:var(--gold);font-weight:700">Group F</span> Portugal · Uruguay · Ghana · South Korea</div>
+      <div style="font-size:.78rem;color:var(--muted)"><span style="color:var(--gold);font-weight:700">Group G</span> Germany · Japan · Spain · Costa Rica</div>
+      <div style="font-size:.78rem;color:var(--muted)"><span style="color:var(--gold);font-weight:700">Group H</span> Netherlands · Ecuador · Senegal · Qatar</div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<footer>
+  <div class="ft-brand"><img src="/assets/logo.png" alt="SSC"/><span>The Sports <em>Companion</em></span></div>
+  <div class="ft-copy">© 2026 The Sports Companion · Chris Cain</div>
+</footer>
+</body>
+</html>

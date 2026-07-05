@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Brackets — The Sports Companion</title>
+  <link rel="icon" type="image/png" href="/assets/logo.png"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--ink:#0B0D0F;--ink-2:#181B1F;--ink-3:#262A30;--muted:#8A8F98;--line:#2A2E35;--gold:#F2C230;--crimson:#C83A2B;--white:#FFFFFF}
+    body{font-family:'Inter',sans-serif;background:var(--ink);color:var(--white);min-height:100vh}
+    nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;background:rgba(11,13,15,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+    .nav-brand{display:flex;align-items:center;gap:8px;padding:0 20px;text-decoration:none;border-right:1px solid var(--line);height:56px;flex-shrink:0}
+    .nav-brand img{height:28px}
+    .nav-brand span{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;color:var(--white)}
+    .nav-brand span em{font-style:normal;color:var(--gold)}
+    .nav-leagues{display:flex;align-items:center;list-style:none;overflow-x:auto;flex:1;scrollbar-width:none}
+    .nav-leagues::-webkit-scrollbar{display:none}
+    .nav-leagues a{display:flex;align-items:center;height:56px;padding:0 15px;font-size:.8rem;font-weight:600;color:var(--muted);text-decoration:none;border-right:1px solid var(--line);white-space:nowrap}
+    .nav-leagues a:hover{color:var(--white);background:var(--ink-2)}
+    .nav-leagues a.active{color:var(--gold);background:var(--ink-2);border-bottom:2px solid var(--gold)}
+    .nav-cta{margin-left:auto;padding:0 16px;height:56px;display:flex;align-items:center;gap:8px;flex-shrink:0}
+    .nav-cta a{color:var(--muted);font-size:.8rem;font-weight:600;text-decoration:none;padding:8px 12px}
+    .nav-cta a.primary{background:var(--gold);color:var(--ink);border-radius:5px}
+
+    .banner{background:var(--ink-2);border-bottom:1px solid var(--line);padding:28px 32px}
+    .sec-label{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;letter-spacing:.15em;color:var(--gold);text-transform:uppercase;margin-bottom:8px}
+    .sec-title{font-family:'Barlow Condensed',sans-serif;font-size:2.2rem;font-weight:900;text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
+    .sec-body{color:var(--muted);font-size:.9rem;line-height:1.6}
+
+    .main{max-width:1100px;margin:0 auto;padding:36px 24px 64px}
+
+    .brackets-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;margin-top:32px}
+    .bracket-card{background:var(--ink-2);border:1px solid var(--line);border-radius:14px;overflow:hidden;text-decoration:none;display:block;transition:border-color .2s,transform .2s}
+    .bracket-card:hover{border-color:var(--gold);transform:translateY(-3px)}
+    .bc-top{padding:28px 24px 20px;position:relative}
+    .bc-sport-icon{font-size:2.8rem;margin-bottom:14px;display:block}
+    .bc-title{font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;font-weight:900;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
+    .bc-title span{color:var(--gold)}
+    .bc-sub{font-size:.82rem;color:var(--muted);line-height:1.5}
+    .bc-badge{display:inline-block;margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:4px}
+    .bc-badge.live{background:rgba(34,197,94,.1);color:#22c55e;border:1px solid rgba(34,197,94,.3)}
+    .bc-badge.sample{background:rgba(242,194,48,.1);color:var(--gold);border:1px solid rgba(242,194,48,.3)}
+    .bc-bottom{padding:14px 24px;background:var(--ink-3);border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+    .bc-teams{font-size:.76rem;color:var(--muted)}
+    .bc-arrow{font-size:1.1rem;color:var(--gold)}
+
+    /* Champion strip */
+    .champ-strip{background:linear-gradient(90deg,rgba(242,194,48,.08),transparent);border:1px solid rgba(242,194,48,.2);border-radius:10px;padding:14px 20px;margin-top:28px;display:flex;align-items:center;gap:14px}
+    .champ-strip-icon{font-size:1.8rem;flex-shrink:0}
+    .champ-strip-text h3{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--gold)}
+    .champ-strip-text p{font-size:.8rem;color:var(--muted);margin-top:2px}
+
+    footer{background:var(--ink);border-top:1px solid var(--line);padding:24px 32px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-top:48px}
+    .ft-brand{display:flex;align-items:center;gap:8px}
+    .ft-brand img{height:20px}
+    .ft-brand span{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.95rem}
+    .ft-brand span em{font-style:normal;color:var(--gold)}
+    .ft-copy{font-size:.73rem;color:var(--muted)}
+    @media(max-width:768px){.brackets-grid{grid-template-columns:1fr}.banner{padding:20px 16px}.main{padding:24px 14px 48px}}
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/index.html" class="nav-brand">
+    <img src="/assets/logo.png" alt="SSC"/>
+    <span>The Sports <em>Companion</em></span>
+  </a>
+  <ul class="nav-leagues">
+    <li><a href="/nfl/index.html">🏈 NFL</a></li>
+    <li><a href="/mlb/index.html">⚾ MLB</a></li>
+    <li><a href="/nba/index.html">🏀 NBA</a></li>
+    <li><a href="/ncaa/index.html">🎓 NCAA</a></li>
+    <li><a href="/futbol/index.html">⚽ Fútbol</a></li>
+    <li><a href="/fantasy/index.html">🏆 Fantasy</a></li>
+    <li><a href="/brackets/index.html" class="active">🗂 Brackets</a></li>
+  </ul>
+  <div class="nav-cta">
+    <a href="/login/index.html">Log In</a>
+    <a href="/signup/index.html" class="primary">Sign Up</a>
+  </div>
+</nav>
+
+<div class="banner">
+  <div class="sec-label">// Playoff Brackets</div>
+  <div class="sec-title">🗂 Brackets</div>
+  <div class="sec-body">Full interactive playoff brackets for NCAA Basketball, College Football, and FIFA World Cup. Click through each round to follow the path to the championship.</div>
+</div>
+
+<div class="main">
+
+  <div class="brackets-grid">
+
+    <!-- March Madness Men's -->
+    <a href="/brackets/ncaa-basketball.html" class="bracket-card">
+      <div class="bc-top">
+        <span class="bc-sport-icon">🏀</span>
+        <div class="bc-title">March Madness<br><span>Men's Bracket</span></div>
+        <div class="bc-sub">64-team tournament · 4 regions (East, West, South, Midwest) · First Round through National Championship</div>
+        <span class="bc-badge sample">2025 Season</span>
+      </div>
+      <div class="bc-bottom">
+        <span class="bc-teams">64 Teams · 6 Rounds</span>
+        <span class="bc-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- March Madness Women's -->
+    <a href="/brackets/ncaa-basketball.html" class="bracket-card">
+      <div class="bc-top">
+        <span class="bc-sport-icon">🏀</span>
+        <div class="bc-title">March Madness<br><span>Women's Bracket</span></div>
+        <div class="bc-sub">64-team tournament · 4 regions (South, Albany, Portland, Seattle) · First Round through National Championship</div>
+        <span class="bc-badge sample">2025 Season</span>
+      </div>
+      <div class="bc-bottom">
+        <span class="bc-teams">64 Teams · 6 Rounds</span>
+        <span class="bc-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- CFP -->
+    <a href="/brackets/cfp.html" class="bracket-card">
+      <div class="bc-top">
+        <span class="bc-sport-icon">🏈</span>
+        <div class="bc-title">College Football<br><span>Playoff Bracket</span></div>
+        <div class="bc-sub">12-team CFP format · First Round campus sites · Bowl game quarterfinals & semifinals · National Championship</div>
+        <span class="bc-badge sample">2024–25 Season</span>
+      </div>
+      <div class="bc-bottom">
+        <span class="bc-teams">12 Teams · 4 Rounds</span>
+        <span class="bc-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- FIFA -->
+    <a href="/brackets/fifa.html" class="bracket-card">
+      <div class="bc-top">
+        <span class="bc-sport-icon">🌍</span>
+        <div class="bc-title">FIFA World Cup<br><span>2026 Bracket</span></div>
+        <div class="bc-sub">48-team tournament hosted by USA, Canada & Mexico · Round of 32 through Final at MetLife Stadium</div>
+        <span class="bc-badge sample">2026 Tournament</span>
+      </div>
+      <div class="bc-bottom">
+        <span class="bc-teams">48 Teams · 5 Rounds</span>
+        <span class="bc-arrow">→</span>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- Champions strip -->
+  <div style="margin-top:36px">
+    <div class="sec-label" style="margin-bottom:14px">// 2025 Champions</div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div class="champ-strip">
+        <div class="champ-strip-icon">🏀</div>
+        <div class="champ-strip-text">
+          <h3>UConn Huskies — Men's NCAA Champions</h3>
+          <p>Defeated San Diego State 76–59 · Back-to-back national titles · 2025 Final Four</p>
+        </div>
+      </div>
+      <div class="champ-strip">
+        <div class="champ-strip-icon">🏀</div>
+        <div class="champ-strip-text">
+          <h3>South Carolina Gamecocks — Women's NCAA Champions</h3>
+          <p>Defeated Iowa 87–75 · Dawn Staley's third national title · Undefeated season</p>
+        </div>
+      </div>
+      <div class="champ-strip">
+        <div class="champ-strip-icon">🏈</div>
+        <div class="champ-strip-text">
+          <h3>Texas Longhorns — CFP National Champions</h3>
+          <p>Defeated Oregon 30–25 · First CFP title under Steve Sarkisian · Atlanta, GA</p>
+        </div>
+      </div>
+      <div class="champ-strip">
+        <div class="champ-strip-icon">🌍</div>
+        <div class="champ-strip-text">
+          <h3>France — 2026 FIFA World Cup Champions</h3>
+          <p>Defeated Brazil 2–1 in the Final · MetLife Stadium, East Rutherford, NJ</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<footer>
+  <div class="ft-brand"><img src="/assets/logo.png" alt="SSC"/><span>The Sports <em>Companion</em></span></div>
+  <div class="ft-copy">© 2026 The Sports Companion · Chris Cain</div>
+</footer>
+</body>
+</html>

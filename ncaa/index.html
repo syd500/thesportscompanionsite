@@ -96,14 +96,6 @@
     .s-row .team { font-weight: 600; color: var(--white); }
     .s-row .val { color: var(--muted); }
     .s-row .hi { color: var(--gold); font-weight: 700; }
-    .fantasy-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; }
-    .f-card { background: var(--ink-2); border: 1px solid var(--line); border-radius: 12px; padding: 28px 24px; text-decoration: none; display: block; transition: all 0.2s; }
-    .f-card:hover { border-color: var(--gold); transform: translateY(-2px); }
-    .f-icon { font-size: 2rem; margin-bottom: 14px; }
-    .f-card h3 { font-family: 'Barlow Condensed', sans-serif; font-size: 1.4rem; font-weight: 800; text-transform: uppercase; margin-bottom: 8px; }
-    .f-card h3 span { color: var(--gold); }
-    .f-card p { font-size: 0.84rem; color: var(--muted); line-height: 1.6; }
-    .f-tag { display: inline-block; margin-top: 14px; font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 9px; border-radius: 4px; background: rgba(242,194,48,0.12); color: var(--gold); }
     /* type toggle (player/team stats) */
     .type-btn { font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:9px 22px;border-radius:6px;border:2px solid var(--line);background:var(--ink-2);color:var(--muted);cursor:pointer;transition:all .2s; margin-right:8px; margin-bottom:16px; }
     .panel-inner { max-width:860px; margin:0 auto; }
@@ -205,6 +197,7 @@
     <li><a href="/ncaa/index.html" class="active">🎓 NCAA</a></li>
     <li><a href="/futbol/index.html">⚽ Fútbol</a></li>
     <li><a href="/fantasy/index.html">🏆 Fantasy</a></li>
+    <li><a href="/brackets/index.html">🗂 Brackets</a></li>
     <li><a href="/more/index.html">• • •</a></li>
   </ul>
   <div class="lang-switch" id="lang-switch">
@@ -488,23 +481,7 @@
   <p style="font-size:.72rem;color:var(--muted);margin-top:16px;font-family:'JetBrains Mono',monospace">Methodology from <em style="color:var(--white)">The Sports Statistics Manual</em> by Chris Cain · <a href="https://www.amazon.com/Sports-Statistics-Manual-Baseball-Basketball/dp/B0DDHVR5MK/" target="_blank" style="color:var(--gold);text-decoration:none">Available on Amazon</a></p>
 </div>
 </div></div>
-  <div class="sec-title">Fantasy & Games</div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px"><div style="background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:24px">
-      <div style="font-size:1.8rem;margin-bottom:12px">🏈</div>
-      <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:800;text-transform:uppercase;margin-bottom:6px">NCAAF Fantasy</h3>
-      <p style="font-size:.83rem;color:var(--muted);line-height:1.6">Draft college players and track weekly scores.</p>
-      <span style="display:inline-block;margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:3px;background:rgba(242,194,48,.1);color:var(--gold)">Coming Soon</span>
-    </div><div style="background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:24px">
-      <div style="font-size:1.8rem;margin-bottom:12px">📊</div>
-      <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:800;text-transform:uppercase;margin-bottom:6px">CFP Rankings</h3>
-      <p style="font-size:.83rem;color:var(--muted);line-height:1.6">College Football Playoff rankings and analytics.</p>
-      <span style="display:inline-block;margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:3px;background:rgba(242,194,48,.1);color:var(--gold)">Analytics</span>
-    </div><div style="background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:24px">
-      <div style="font-size:1.8rem;margin-bottom:12px">🔮</div>
-      <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:800;text-transform:uppercase;margin-bottom:6px">Guess the Play</h3>
-      <p style="font-size:.83rem;color:var(--muted);line-height:1.6">Predict college play calls using real play-by-play data.</p>
-      <span style="display:inline-block;margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:3px;background:rgba(242,194,48,.1);color:var(--gold)">New</span>
-    </div></div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px">
 </div></div>
 </div>
 
@@ -842,7 +819,6 @@
   <p style="font-size:.72rem;color:var(--muted);margin-top:16px;font-family:'JetBrains Mono',monospace">Methodology from <em style="color:var(--white)">The Sports Statistics Manual</em> by Chris Cain · <a href="https://www.amazon.com/Sports-Statistics-Manual-Baseball-Basketball/dp/B0DDHVR5MK/" target="_blank" style="color:var(--gold);text-decoration:none">Available on Amazon</a></p>
 </div>
 </div></div>
-  <div class="sec-title">Fantasy & Games</div>
   <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px"><div style="background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:24px">
       <div style="font-size:1.8rem;margin-bottom:12px">🏀</div>
       <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:800;text-transform:uppercase;margin-bottom:6px">March Madness Bracket</h3>
@@ -1189,7 +1165,6 @@
   <p style="font-size:.72rem;color:var(--muted);margin-top:16px;font-family:'JetBrains Mono',monospace">Methodology from <em style="color:var(--white)">The Sports Statistics Manual</em> by Chris Cain · <a href="https://www.amazon.com/Sports-Statistics-Manual-Baseball-Basketball/dp/B0DDHVR5MK/" target="_blank" style="color:var(--gold);text-decoration:none">Available on Amazon</a></p>
 </div>
 </div></div>
-  <div class="sec-title">Fantasy & Games</div>
   <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px"><div style="background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:24px">
       <div style="font-size:1.8rem;margin-bottom:12px">🏀</div>
       <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:800;text-transform:uppercase;margin-bottom:6px">NCAAW Bracket</h3>
@@ -1243,18 +1218,7 @@
   <div class="sec-title">Stats</div>
   <div class="sub-tabs"><button class="sub-tab active" onclick="showSub('soft-bat')">Batting</button><button class="sub-tab" onclick="showSub('soft-pitch')">Pitching</button></div><div id="sub-soft-bat" class="sub-panel active"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Player</th><th>School</th><th>G</th><th>AVG</th><th>HR</th><th>RBI</th><th>OPS</th></tr></thead><tbody><tr><td class="pl">Jocelyn Alo</td><td><img src="/assets/ncaa/Oklahoma.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Oklahoma</td><td class="">59</td><td class="">0.508</td><td class="">34</td><td class="">96</td><td class="">1.682</td></tr><tr><td class="pl">Tiare Jennings</td><td><img src="/assets/ncaa/Oklahoma.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Oklahoma</td><td class="">59</td><td class="">0.472</td><td class="">28</td><td class="">88</td><td class="">1.524</td></tr><tr><td class="pl">Kendra Falby</td><td><img src="/assets/ncaa/Florida.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Florida</td><td class="">58</td><td class="">0.448</td><td class="">22</td><td class="">74</td><td class="">1.412</td></tr><tr><td class="pl">Montana Fouts</td><td><img src="/assets/ncaa/Alabama.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Alabama</td><td class="">57</td><td class="">0.421</td><td class="">19</td><td class="">68</td><td class="">1.348</td></tr></tbody></table></div></div><div id="sub-soft-pitch" class="sub-panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Player</th><th>School</th><th>W</th><th>L</th><th>ERA</th><th>K</th><th>WHIP</th></tr></thead><tbody><tr><td class="pl">Jordy Bahl</td><td><img src="/assets/ncaa/Oklahoma.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Oklahoma</td><td class="">24</td><td class="">1</td><td class="">0.98</td><td class="">312</td><td class="">0.72</td></tr><tr><td class="pl">Lexi Kilfoyl</td><td><img src="/assets/ncaa/Alabama.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Alabama</td><td class="">26</td><td class="">2</td><td class="">1.12</td><td class="">288</td><td class="">0.84</td></tr><tr><td class="pl">Elizabeth Hightower</td><td><img src="/assets/ncaa/Florida.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Florida</td><td class="">22</td><td class="">3</td><td class="">1.28</td><td class="">264</td><td class="">0.91</td></tr><tr><td class="pl">NiJoni Taylor</td><td><img src="/assets/ncaa/Tennessee.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Tennessee</td><td class="">21</td><td class="">4</td><td class="">1.44</td><td class="">241</td><td class="">0.98</td></tr></tbody></table></div></div>
 </div></div>
-  <div class="sec-title">Fantasy & Games</div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px"><div style="background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:24px">
-      <div style="font-size:1.8rem;margin-bottom:12px">🥎</div>
-      <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:800;text-transform:uppercase;margin-bottom:6px">Softball Fantasy</h3>
-      <p style="font-size:.83rem;color:var(--muted);line-height:1.6">Draft players from top softball programs.</p>
-      <span style="display:inline-block;margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:3px;background:rgba(242,194,48,.1);color:var(--gold)">Coming Soon</span>
-    </div><div style="background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:24px">
-      <div style="font-size:1.8rem;margin-bottom:12px">📊</div>
-      <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:800;text-transform:uppercase;margin-bottom:6px">Pitching Analytics</h3>
-      <p style="font-size:.83rem;color:var(--muted);line-height:1.6">ERA, spin rate and advanced softball metrics.</p>
-      <span style="display:inline-block;margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:3px;background:rgba(242,194,48,.1);color:var(--gold)">Coming Soon</span>
-    </div></div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px">
 </div></div>
 </div>
 
@@ -1333,18 +1297,7 @@
   <div class="sec-title">Stats</div>
   <div class="sub-tabs"><button class="sub-tab active" onclick="showSub('soft-bat')">Batting</button><button class="sub-tab" onclick="showSub('soft-pitch')">Pitching</button></div><div id="sub-soft-bat" class="sub-panel active"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Player</th><th>School</th><th>G</th><th>AVG</th><th>HR</th><th>RBI</th><th>OPS</th></tr></thead><tbody><tr><td class="pl">Jocelyn Alo</td><td><img src="/assets/ncaa/Oklahoma.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Oklahoma</td><td class="">59</td><td class="">0.508</td><td class="">34</td><td class="">96</td><td class="">1.682</td></tr><tr><td class="pl">Tiare Jennings</td><td><img src="/assets/ncaa/Oklahoma.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Oklahoma</td><td class="">59</td><td class="">0.472</td><td class="">28</td><td class="">88</td><td class="">1.524</td></tr><tr><td class="pl">Kendra Falby</td><td><img src="/assets/ncaa/Florida.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Florida</td><td class="">58</td><td class="">0.448</td><td class="">22</td><td class="">74</td><td class="">1.412</td></tr><tr><td class="pl">Montana Fouts</td><td><img src="/assets/ncaa/Alabama.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Alabama</td><td class="">57</td><td class="">0.421</td><td class="">19</td><td class="">68</td><td class="">1.348</td></tr></tbody></table></div></div><div id="sub-soft-pitch" class="sub-panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Player</th><th>School</th><th>W</th><th>L</th><th>ERA</th><th>K</th><th>WHIP</th></tr></thead><tbody><tr><td class="pl">Jordy Bahl</td><td><img src="/assets/ncaa/Oklahoma.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Oklahoma</td><td class="">24</td><td class="">1</td><td class="">0.98</td><td class="">312</td><td class="">0.72</td></tr><tr><td class="pl">Lexi Kilfoyl</td><td><img src="/assets/ncaa/Alabama.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Alabama</td><td class="">26</td><td class="">2</td><td class="">1.12</td><td class="">288</td><td class="">0.84</td></tr><tr><td class="pl">Elizabeth Hightower</td><td><img src="/assets/ncaa/Florida.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Florida</td><td class="">22</td><td class="">3</td><td class="">1.28</td><td class="">264</td><td class="">0.91</td></tr><tr><td class="pl">NiJoni Taylor</td><td><img src="/assets/ncaa/Tennessee.png" style="width:16px;height:16px;object-fit:contain;margin-right:4px;vertical-align:middle" onerror="this.style.display='none'" />Tennessee</td><td class="">21</td><td class="">4</td><td class="">1.44</td><td class="">241</td><td class="">0.98</td></tr></tbody></table></div></div>
 </div></div>
-  <div class="sec-title">Fantasy & Games</div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px"><div style="background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:24px">
-      <div style="font-size:1.8rem;margin-bottom:12px">🥎</div>
-      <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:800;text-transform:uppercase;margin-bottom:6px">Softball Fantasy</h3>
-      <p style="font-size:.83rem;color:var(--muted);line-height:1.6">Draft players from top softball programs.</p>
-      <span style="display:inline-block;margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:3px;background:rgba(242,194,48,.1);color:var(--gold)">Coming Soon</span>
-    </div><div style="background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:24px">
-      <div style="font-size:1.8rem;margin-bottom:12px">📊</div>
-      <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:800;text-transform:uppercase;margin-bottom:6px">Pitching Analytics</h3>
-      <p style="font-size:.83rem;color:var(--muted);line-height:1.6">ERA, spin rate and advanced softball metrics.</p>
-      <span style="display:inline-block;margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:3px;background:rgba(242,194,48,.1);color:var(--gold)">Coming Soon</span>
-    </div></div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px">
 </div></div>
 </div>
 <footer>
@@ -1514,7 +1467,6 @@ function applyTranslations(lang) {
   const tabMap = {
     'Scores':t.scores, 'Standings':t.standings, 'Stats':t.stats,
     'Gameday':t.gameday, 'Box Score':t.box_score, 'Play-by-Play':t.play_by_play,
-    'Fantasy & Games': lang==='es' ? 'Fantasy' : 'Fantasy & Games',
   };
   document.querySelectorAll('.tab-btn, .game-tab, .tab-btn').forEach(btn => {
     const txt = btn.textContent.trim();

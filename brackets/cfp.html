@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>CFP Bracket — The Sports Companion</title>
+  <link rel="icon" type="image/png" href="/assets/logo.png"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--ink:#0B0D0F;--ink-2:#181B1F;--ink-3:#262A30;--muted:#8A8F98;--line:#2A2E35;--gold:#F2C230;--crimson:#C83A2B;--white:#FFFFFF}
+    body{font-family:'Inter',sans-serif;background:var(--ink);color:var(--white);min-height:100vh}
+    nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;background:rgba(11,13,15,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+    .nav-brand{display:flex;align-items:center;gap:8px;padding:0 20px;text-decoration:none;border-right:1px solid var(--line);height:56px;flex-shrink:0}
+    .nav-brand img{height:28px}
+    .nav-brand span{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;color:var(--white)}
+    .nav-brand span em{font-style:normal;color:var(--gold)}
+    .nav-leagues{display:flex;align-items:center;list-style:none;overflow-x:auto;flex:1;scrollbar-width:none}
+    .nav-leagues::-webkit-scrollbar{display:none}
+    .nav-leagues a{display:flex;align-items:center;height:56px;padding:0 15px;font-size:.8rem;font-weight:600;color:var(--muted);text-decoration:none;border-right:1px solid var(--line);transition:color .2s;white-space:nowrap}
+    .nav-leagues a:hover{color:var(--white);background:var(--ink-2)}
+    .nav-leagues a.active{color:var(--gold);background:var(--ink-2);border-bottom:2px solid var(--gold)}
+    .nav-cta{margin-left:auto;padding:0 16px;height:56px;display:flex;align-items:center;gap:8px;flex-shrink:0}
+    .nav-cta a{color:var(--muted);font-size:.8rem;font-weight:600;text-decoration:none;padding:8px 12px}
+    .nav-cta a.primary{background:var(--gold);color:var(--ink);border-radius:5px}
+    .banner{background:var(--ink-2);border-bottom:1px solid var(--line);padding:24px 32px}
+    .banner-top{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+    .banner-top h1{font-family:'Barlow Condensed',sans-serif;font-size:2.2rem;font-weight:900;text-transform:uppercase;letter-spacing:.04em}
+    .badge{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:4px;background:rgba(242,194,48,.12);color:var(--gold);border:1px solid rgba(242,194,48,.3)}
+    .banner-note{font-size:.82rem;color:var(--muted);margin-top:8px;font-family:'JetBrains Mono',monospace}
+    .main{padding:28px 20px 64px;max-width:1300px;margin:0 auto}
+    .legend{display:flex;gap:20px;flex-wrap:wrap;padding:10px 14px;background:var(--ink-2);border:1px solid var(--line);border-radius:8px;margin-bottom:24px}
+    .legend-item{display:flex;align-items:center;gap:7px;font-size:.73rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
+    .ldot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+    /* BRACKET */
+    .bracket-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:16px}
+    .bracket-scroll::-webkit-scrollbar{height:6px}
+    .bracket-scroll::-webkit-scrollbar-track{background:var(--ink-3);border-radius:3px}
+    .bracket-scroll::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px}
+    .bracket{display:flex;align-items:center;gap:0;min-width:1050px;padding:12px 0}
+    .r-col{flex-shrink:0;min-width:178px}
+    .r-col-hdr{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);text-align:center;padding:0 6px 14px}
+    .r-col-sub{font-family:'Barlow Condensed',sans-serif;font-size:.72rem;color:var(--muted);text-align:center;margin-top:-10px;padding-bottom:10px;letter-spacing:.03em}
+    .r-matches{display:flex;flex-direction:column;gap:10px}
+    .match{background:var(--ink-2);border:1px solid var(--line);border-radius:8px;overflow:hidden;width:166px;cursor:pointer;transition:border-color .18s}
+    .match:hover{border-color:rgba(242,194,48,.5)}
+    .match.decided .team.winner{background:rgba(242,194,48,.08)}
+    .match.decided .team.loser{opacity:.35}
+    .match.bye{background:var(--ink-3);border-color:var(--line);opacity:.7}
+    .match.bye .team{cursor:default}
+    .team{display:flex;align-items:center;gap:6px;padding:8px 10px;border-bottom:1px solid rgba(255,255,255,.05);min-height:36px}
+    .team:last-child{border-bottom:none}
+    .seed{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--muted);width:16px;text-align:center;flex-shrink:0}
+    .tname{flex:1;font-size:.77rem;font-weight:600;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .sc{font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:800;color:var(--muted);min-width:22px;text-align:right;flex-shrink:0}
+    .sc.w{color:var(--gold)}
+    .team.winner .tname{color:var(--gold)}
+    .team.winner .seed{color:rgba(242,194,48,.7)}
+    /* BYE label */
+    .bye-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.08em;padding:2px 6px;border-radius:3px;background:rgba(242,194,48,.1);color:var(--gold);margin-left:auto}
+    /* Connectors */
+    .conn-col{width:18px;flex-shrink:0;display:flex;flex-direction:column;padding-top:28px}
+    .conn-pair{display:flex;flex-direction:column;position:relative}
+    .conn-top{flex:1;border-right:1px solid var(--line);border-bottom:1px solid var(--line);border-radius:0 0 3px 0}
+    .conn-bot{flex:1;border-right:1px solid var(--line);border-top:1px solid var(--line);border-radius:0 3px 0 0}
+    /* Champion */
+    .champ-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 20px;flex-shrink:0}
+    .champ-label{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--gold);letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px;text-align:center}
+    .champ-card{background:linear-gradient(135deg,rgba(242,194,48,.16),rgba(27,42,74,.5));border:2px solid var(--gold);border-radius:14px;padding:24px 18px;text-align:center;width:172px;box-shadow:0 0 40px rgba(242,194,48,.15)}
+    .champ-trophy{font-size:2.6rem;margin-bottom:10px}
+    .champ-name{font-family:'Barlow Condensed',sans-serif;font-size:1.15rem;font-weight:900;text-transform:uppercase;color:var(--gold);line-height:1.2}
+    .champ-sub{font-size:.66rem;color:var(--muted);margin-top:6px;font-family:'JetBrains Mono',monospace;line-height:1.5}
+    /* Bowl game labels */
+    .bowl-label{font-family:'Barlow Condensed',sans-serif;font-size:.72rem;font-weight:700;text-transform:uppercase;color:var(--muted);letter-spacing:.03em;text-align:center;padding:0 6px 6px}
+    footer{background:var(--ink);border-top:1px solid var(--line);padding:24px 32px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-top:48px}
+    .ft-brand{display:flex;align-items:center;gap:8px}
+    .ft-brand img{height:20px}
+    .ft-brand span{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.95rem}
+    .ft-brand span em{font-style:normal;color:var(--gold)}
+    .ft-copy{font-size:.73rem;color:var(--muted)}
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/index.html" class="nav-brand">
+    <img src="/assets/logo.png" alt="SSC"/>
+    <span>The Sports <em>Companion</em></span>
+  </a>
+  <ul class="nav-leagues">
+    <li><a href="/nfl/index.html">🏈 NFL</a></li>
+    <li><a href="/mlb/index.html">⚾ MLB</a></li>
+    <li><a href="/nba/index.html">🏀 NBA</a></li>
+    <li><a href="/ncaa/index.html">🎓 NCAA</a></li>
+    <li><a href="/futbol/index.html">⚽ Fútbol</a></li>
+    <li><a href="/fantasy/index.html">🏆 Fantasy</a></li>
+    <li><a href="/brackets/index.html" class="active">🗂 Brackets</a></li>
+  </ul>
+  <div class="nav-cta">
+    <a href="/login/index.html">Log In</a>
+    <a href="/signup/index.html" class="primary">Sign Up</a>
+  </div>
+</nav>
+
+<div class="banner">
+  <div class="banner-top">
+    <h1>🏈 CFP Bracket</h1>
+    <span class="badge">2024–25 Season · 12 Teams</span>
+  </div>
+  <p class="banner-note">// Seeds 1–4 receive First Round byes · Seeds 5–12 play First Round on campus sites</p>
+</div>
+
+<div class="main">
+
+  <div class="legend">
+    <div class="legend-item"><div class="ldot" style="background:var(--gold)"></div>Winner / Advancing</div>
+    <div class="legend-item"><div class="ldot" style="background:rgba(255,255,255,.15)"></div>Eliminated</div>
+    <div class="legend-item"><div class="ldot" style="background:rgba(242,194,48,.3)"></div>First Round Bye</div>
+  </div>
+
+  <div class="bracket-scroll">
+  <div class="bracket">
+
+    <!-- ── FIRST ROUND (5v12, 6v11, 7v10, 8v9) ── -->
+    <div class="r-col">
+      <div class="r-col-hdr">First Round</div>
+      <div class="r-col-sub">Campus Sites</div>
+      <div class="r-matches">
+        <div class="match decided">
+          <div class="team winner"><span class="seed">5</span><span class="tname">Boise State</span><span class="sc w">34</span></div>
+          <div class="team loser"><span class="seed">12</span><span class="tname">Clemson</span><span class="sc">13</span></div>
+        </div>
+        <div class="match decided">
+          <div class="team winner"><span class="seed">6</span><span class="tname">Arizona State</span><span class="sc w">28</span></div>
+          <div class="team loser"><span class="seed">11</span><span class="tname">Baylor</span><span class="sc">14</span></div>
+        </div>
+        <div class="match decided">
+          <div class="team winner"><span class="seed">7</span><span class="tname">Ohio State</span><span class="sc w">42</span></div>
+          <div class="team loser"><span class="seed">10</span><span class="tname">Tennessee</span><span class="sc">17</span></div>
+        </div>
+        <div class="match decided">
+          <div class="team winner"><span class="seed">9</span><span class="tname">Notre Dame</span><span class="sc w">27</span></div>
+          <div class="team loser"><span class="seed">8</span><span class="tname">Indiana</span><span class="sc">17</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONNECTOR 1→QF -->
+    <div class="conn-col" style="padding-top:28px">
+      <div class="conn-pair" style="height:58px"><div class="conn-top"></div><div class="conn-bot"></div></div>
+      <div style="height:10px"></div>
+      <div class="conn-pair" style="height:58px"><div class="conn-top"></div><div class="conn-bot"></div></div>
+      <div style="height:10px"></div>
+      <div class="conn-pair" style="height:58px"><div class="conn-top"></div><div class="conn-bot"></div></div>
+      <div style="height:10px"></div>
+      <div class="conn-pair" style="height:58px"><div class="conn-top"></div><div class="conn-bot"></div></div>
+    </div>
+
+    <!-- ── QUARTERFINALS ── -->
+    <div class="r-col" style="padding-top:0">
+      <div class="r-col-hdr">Quarterfinals</div>
+      <div class="r-col-sub">Fiesta · Peach · Rose · Sugar Bowls</div>
+      <div class="r-matches" style="gap:10px;padding-top:0">
+        <!-- 1 Oregon vs 5 Boise St (Fiesta) -->
+        <div>
+          <div class="bowl-label">Fiesta Bowl</div>
+          <div class="match decided">
+            <div class="team winner"><span class="seed">1</span><span class="tname">Oregon <span style="font-family:'JetBrains Mono',monospace;font-size:.55rem;color:rgba(242,194,48,.6)">BYE</span></span><span class="sc w">31</span></div>
+            <div class="team loser"><span class="seed">5</span><span class="tname">Boise State</span><span class="sc">28</span></div>
+          </div>
+        </div>
+        <!-- 4 Penn St vs 9 Notre Dame (Sugar) -->
+        <div>
+          <div class="bowl-label">Peach Bowl</div>
+          <div class="match decided">
+            <div class="team winner"><span class="seed">2</span><span class="tname">Georgia <span style="font-family:'JetBrains Mono',monospace;font-size:.55rem;color:rgba(242,194,48,.6)">BYE</span></span><span class="sc w">34</span></div>
+            <div class="team loser"><span class="seed">6</span><span class="tname">Arizona State</span><span class="sc">31</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="bowl-label">Rose Bowl</div>
+          <div class="match decided">
+            <div class="team winner"><span class="seed">3</span><span class="tname">Texas <span style="font-family:'JetBrains Mono',monospace;font-size:.55rem;color:rgba(242,194,48,.6)">BYE</span></span><span class="sc w">38</span></div>
+            <div class="team loser"><span class="seed">7</span><span class="tname">Ohio State</span><span class="sc">24</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="bowl-label">Sugar Bowl</div>
+          <div class="match decided">
+            <div class="team winner"><span class="seed">4</span><span class="tname">Penn State <span style="font-family:'JetBrains Mono',monospace;font-size:.55rem;color:rgba(242,194,48,.6)">BYE</span></span><span class="sc w">31</span></div>
+            <div class="team loser"><span class="seed">9</span><span class="tname">Notre Dame</span><span class="sc">24</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONNECTOR QF→SF -->
+    <div class="conn-col" style="padding-top:52px">
+      <div class="conn-pair" style="height:68px"><div class="conn-top"></div><div class="conn-bot"></div></div>
+      <div style="height:42px"></div>
+      <div class="conn-pair" style="height:68px"><div class="conn-top"></div><div class="conn-bot"></div></div>
+    </div>
+
+    <!-- ── SEMIFINALS ── -->
+    <div class="r-col" style="padding-top:0">
+      <div class="r-col-hdr">Semifinals</div>
+      <div class="r-col-sub">Cotton &amp; Orange Bowls</div>
+      <div class="r-matches" style="padding-top:56px;gap:60px">
+        <div>
+          <div class="bowl-label">Cotton Bowl · Jan 10</div>
+          <div class="match decided">
+            <div class="team winner"><span class="seed">1</span><span class="tname">Oregon</span><span class="sc w">31</span></div>
+            <div class="team loser"><span class="seed">2</span><span class="tname">Georgia</span><span class="sc">28</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="bowl-label">Orange Bowl · Jan 10</div>
+          <div class="match decided">
+            <div class="team winner"><span class="seed">3</span><span class="tname">Texas</span><span class="sc w">28</span></div>
+            <div class="team loser"><span class="seed">4</span><span class="tname">Penn State</span><span class="sc">14</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONNECTOR SF→FINAL -->
+    <div class="conn-col" style="padding-top:94px">
+      <div class="conn-pair" style="height:108px"><div class="conn-top"></div><div class="conn-bot"></div></div>
+    </div>
+
+    <!-- ── NATIONAL CHAMPIONSHIP ── -->
+    <div class="r-col" style="padding-top:0">
+      <div class="r-col-hdr">National Championship</div>
+      <div class="r-col-sub">Atlanta · Jan 20, 2025</div>
+      <div class="r-matches" style="padding-top:138px">
+        <div class="match decided">
+          <div class="team winner"><span class="seed">3</span><span class="tname">Texas Longhorns</span><span class="sc w">30</span></div>
+          <div class="team loser"><span class="seed">1</span><span class="tname">Oregon Ducks</span><span class="sc">25</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHAMPION -->
+    <div class="champ-wrap">
+      <div class="champ-label">🏆 National Champions</div>
+      <div class="champ-card">
+        <div class="champ-trophy">🏈</div>
+        <div class="champ-name">Texas Longhorns</div>
+        <div class="champ-sub">2025 CFP National<br>Champions<br><span style="color:var(--gold);font-size:.7rem">Atlanta · Jan 20, 2025</span></div>
+      </div>
+    </div>
+
+  </div><!-- /bracket -->
+  </div><!-- /bracket-scroll -->
+
+  <!-- SEED GUIDE -->
+  <div style="margin-top:28px;background:var(--ink-2);border:1px solid var(--line);border-radius:10px;padding:18px 20px">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:12px">// 2024–25 CFP Seeds</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:6px">
+      <div style="font-size:.78rem;color:var(--muted)"><span style="color:var(--gold);font-weight:700">1</span> Oregon Ducks — Big Ten</div>
+      <div style="font-size:.78rem;color:var(--muted)"><span style="color:var(--gold);font-weight:700">2</span> Georgia Bulldogs — SEC</div>
+      <div style="font-size:.78rem;color:var(--muted)"><span style="color:var(--gold);font-weight:700">3</span> Texas Longhorns — SEC</div>
+      <div style="font-size:.78rem;color:var(--muted)"><span style="color:var(--gold);font-weight:700">4</span> Penn State Nittany Lions — Big Ten</div>
+      <div style="font-size:.78rem;color:var(--muted)"><span style="color:var(--gold);font-weight:700">5</span> Boise State Broncos — Mountain West</div>
+      <div style="font-size:.78rem;color:var(--muted)"><span style="color:var(--gold);font-weight:700">6</span> Arizona State Sun Devils — Big 12</div>
+      <div style="font-size:.78rem;color:var(--muted)"><span style="color:var(--gold);font-weight:700">7</span> Ohio State Buckeyes — Big Ten</div>
+      <div style="font-size:.78rem;color:var(--muted)"><span style="color:var(--gold);font-weight:700">8</span> Indiana Hoosiers — Big Ten</div>
+      <div style="font-size:.78rem;color:var(--muted)"><span style="color:var(--gold);font-weight:700">9</span> Notre Dame Fighting Irish — Ind.</div>
+      <div style="font-size:.78rem;color:var(--muted)"><span style="color:var(--gold);font-weight:700">10</span> Tennessee Volunteers — SEC</div>
+      <div style="font-size:.78rem;color:var(--muted)"><span style="color:var(--gold);font-weight:700">11</span> Baylor Bears — Big 12</div>
+      <div style="font-size:.78rem;color:var(--muted)"><span style="color:var(--gold);font-weight:700">12</span> Clemson Tigers — ACC</div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<footer>
+  <div class="ft-brand"><img src="/assets/logo.png" alt="SSC"/><span>The Sports <em>Companion</em></span></div>
+  <div class="ft-copy">© 2026 The Sports Companion · Chris Cain</div>
+</footer>
+</body>
+</html>

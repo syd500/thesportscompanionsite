@@ -110,51 +110,18 @@
     .lang-btn:hover{color:var(--white);border-color:var(--line)}
     .lang-btn.active{color:var(--gold);border-color:rgba(242,194,48,.4);background:rgba(242,194,48,.08)}
   
-    /* ── PITCH ZONE (Guess the Pitch + Gameday) ────────────── */
+    
+  
+    /* ── PITCH ZONE ── */
     .pitch-zone-wrap{background:#0a0c0e;border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:14px}
-    .pitch-zone-header{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--ink-2);border-bottom:1px solid var(--line)}
+    .pitch-zone-header{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:#0d1117;border-bottom:1px solid var(--line)}
     .pitch-zone-label{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--white)}
     .pitch-zone-status{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--gold)}
-    .pitch-zone-canvas{position:relative}
-    .pz-stadium{position:relative;width:100%;padding-bottom:56%;overflow:hidden;background:#0a1628}
-    .pz-sky{position:absolute;inset:0;background:linear-gradient(180deg,#081220 0%,#0f2244 25%,#1a4060 50%,#1e5a2a 68%,#163d1a 85%,#0f2a12 100%)}
-    .pz-sky::before{content:'';position:absolute;top:0;left:5%;width:22%;height:38%;background:radial-gradient(ellipse,rgba(255,240,160,.4) 0%,transparent 65%)}
-    .pz-sky::after{content:'';position:absolute;top:0;right:5%;width:22%;height:38%;background:radial-gradient(ellipse,rgba(255,240,160,.4) 0%,transparent 65%)}
-    .pz-stands{position:absolute;top:15%;left:0;right:0;height:28%;background:rgba(20,35,65,.85)}
-    .pz-stands::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent,transparent 4px,rgba(255,255,255,.025) 4px,rgba(255,255,255,.025) 8px)}
-    .pz-outfield{position:absolute;top:40%;left:0;right:0;height:24%;background:linear-gradient(180deg,#1e6012 0%,#164a0e 60%,#1e6a14 100%)}
-    .pz-outfield::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(0,0,0,.1) 0,rgba(0,0,0,.1) 28px,transparent 28px,transparent 56px)}
-    .pz-infield{position:absolute;top:60%;left:12%;right:12%;bottom:0;background:radial-gradient(ellipse 75% 65% at 50% 25%,#9a6432 0%,#7a4e22 55%,#5a3a14 100%)}
-    .pz-plate-area{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:42%;height:44%}
-    .pz-batter{position:absolute;bottom:6%;left:4%;width:21%;height:90%}
-    .pz-batter-helmet{position:absolute;top:0;left:26%;width:46%;height:20%;background:#111;border-radius:50% 50% 28% 28%}
-    .pz-batter-helmet::after{content:'';position:absolute;left:-28%;bottom:-10%;width:58%;height:42%;background:#0a0a0a;border-radius:0 0 50% 50%}
-    .pz-batter-head{position:absolute;top:13%;left:30%;width:38%;height:17%;background:#c8845a;border-radius:50%}
-    .pz-batter-torso{position:absolute;top:28%;left:18%;width:62%;height:34%;background:#ddd;border-radius:6px 6px 3px 3px}
-    .pz-batter-torso::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.2) 0%,transparent 45%);border-radius:inherit}
-    .pz-batter-arm-back{position:absolute;top:30%;left:48%;width:52%;height:13%;background:#c8845a;border-radius:4px;transform:rotate(-18deg);transform-origin:left center}
-    .pz-batter-arm-front{position:absolute;top:34%;left:20%;width:46%;height:11%;background:#c8845a;border-radius:4px;transform:rotate(18deg);transform-origin:right center}
-    .pz-batter-bat{position:absolute;top:18%;left:62%;width:7%;height:58%;background:linear-gradient(180deg,#8B4513,#A0522D 55%,#5C3317);border-radius:3px 3px 6px 6px;transform:rotate(-6deg);transform-origin:bottom center}
-    .pz-batter-leg-front{position:absolute;top:60%;left:26%;width:22%;height:40%;background:#1e1e3a;border-radius:3px 3px 0 0}
-    .pz-batter-leg-front::after{content:'';position:absolute;bottom:0;left:0;right:0;height:16%;background:#111;border-radius:0 0 2px 2px}
-    .pz-batter-leg-back{position:absolute;top:58%;left:50%;width:22%;height:42%;background:#181830;border-radius:3px 3px 0 0}
-    .pz-batter-leg-back::after{content:'';position:absolute;bottom:0;left:0;right:0;height:16%;background:#0a0a0a;border-radius:0 0 2px 2px}
-    .pz-home-plate{position:absolute;bottom:2%;left:50%;transform:translateX(-50%);width:30%;height:9%;background:white;clip-path:polygon(10% 0%,90% 0%,100% 50%,50% 100%,0% 50%);opacity:.92}
-    .pz-zone{position:absolute;top:10%;right:22%;width:28%;height:62%;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);border:2.5px solid rgba(255,255,255,.95);border-radius:2px;box-shadow:0 0 24px rgba(255,255,255,.18),0 0 60px rgba(255,255,255,.06),inset 0 0 24px rgba(255,255,255,.04)}
-    .pz-zone-glow{position:absolute;inset:-6px;background:rgba(255,255,255,.03);border-radius:5px;pointer-events:none}
-    .pz-cell{border:1px solid rgba(255,255,255,.4);transition:background .15s}
-    .pz-ball{position:absolute;width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 32% 30%,#fff8d0,#F2C230 42%,#b8900a);border:2px solid rgba(255,255,255,.9);box-shadow:0 0 0 3px rgba(242,194,48,.3),0 0 18px rgba(242,194,48,.9);opacity:0;transform:translate(-50%,-50%);pointer-events:none;z-index:10;transition:left .0s,top .0s}
-    .pz-ball::before{content:'';position:absolute;top:20%;left:15%;width:25%;height:40%;border:1.5px solid rgba(180,60,60,.6);border-radius:50%;transform:rotate(20deg)}
-    .pz-ball::after{content:'';position:absolute;top:15%;right:12%;width:25%;height:45%;border:1.5px solid rgba(180,60,60,.6);border-radius:50%;transform:rotate(-20deg)}
-    .pz-ball.wrong{background:radial-gradient(circle at 32% 30%,#ffcccc,#FF4444 42%,#cc1111);box-shadow:0 0 0 3px rgba(255,68,68,.3),0 0 18px rgba(255,68,68,.9)}
-    .pz-ball.wrong::before,.pz-ball.wrong::after{border-color:rgba(255,255,255,.4)}
-    .pz-pitch-label{position:absolute;bottom:4%;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.7);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:4px 14px;font-family:'Barlow Condensed',sans-serif;font-size:.85rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:white;opacity:0;transition:opacity .3s;white-space:nowrap;pointer-events:none}
-    .pz-pitch-label.show{opacity:1}
-    .pitch-result-badge{position:absolute;bottom:4%;left:50%;transform:translateX(-50%);font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;padding:5px 16px;border-radius:20px;border:2px solid transparent;opacity:0;transition:opacity .3s;white-space:nowrap;pointer-events:none;z-index:10}
+    .pitch-zone-canvas{position:relative;background:#0a0c0e}
+    .pz-svg{width:100%;display:block;max-height:320px}
+    .pitch-result-badge{position:absolute;bottom:6%;left:50%;transform:translateX(-50%);font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;padding:5px 18px;border-radius:20px;border:2px solid transparent;opacity:0;transition:opacity .35s;white-space:nowrap;pointer-events:none;z-index:10}
     .pitch-result-badge.show-hit{opacity:1;background:rgba(242,194,48,.18);border-color:var(--gold);color:var(--gold)}
     .pitch-result-badge.show-miss{opacity:1;background:rgba(200,58,43,.14);border-color:#FF6B6B;color:#FF6B6B}
-    @keyframes pitchFly{0%{opacity:0;transform:translate(-50%,-50%) scale(.4) translateY(-30px)}60%{opacity:1}100%{opacity:1;transform:translate(-50%,-50%) scale(1)}}
-    .pz-ball.fly{animation:pitchFly .4s cubic-bezier(.22,.68,0,1.15) forwards}
   </style>
 </head>
 <body>
@@ -167,6 +134,7 @@
     <li><a href="/ncaa/index.html">🎓 NCAA</a></li>
     <li><a href="/futbol/index.html">⚽ Fútbol</a></li>
     <li><a href="/fantasy/index.html">🏆 Fantasy</a></li>
+    <li><a href="/brackets/index.html">🗂 Brackets</a></li>
     <li><a href="/more/index.html">• • •</a></li>
   </ul>
   <div class="lang-switch" id="lang-switch">
@@ -404,34 +372,152 @@
         <span class="pitch-zone-label">Pitch Zone</span>
         <span class="pitch-zone-status" id="zone-status"></span>
       </div>
-      <div class="pitch-zone-canvas">
-        <div class="pz-stadium">
-          <div class="pz-sky"></div>
-          <div class="pz-stands"></div>
-          <div class="pz-outfield"></div>
-          <div class="pz-infield"></div>
-          <div class="pz-plate-area">
-            <div class="pz-batter">
-              <div class="pz-batter-helmet"></div>
-              <div class="pz-batter-head"></div>
-              <div class="pz-batter-torso"></div>
-              <div class="pz-batter-arm-back"></div>
-              <div class="pz-batter-arm-front"></div>
-              <div class="pz-batter-bat"></div>
-              <div class="pz-batter-leg-front"></div>
-              <div class="pz-batter-leg-back"></div>
-            </div>
-            <div class="pz-home-plate"></div>
-          </div>
-          <div class="pz-zone">
-            <div class="pz-zone-glow"></div>
-            <div class="pz-cell"></div><div class="pz-cell"></div><div class="pz-cell"></div>
-            <div class="pz-cell"></div><div class="pz-cell"></div><div class="pz-cell"></div>
-            <div class="pz-cell"></div><div class="pz-cell"></div><div class="pz-cell"></div>
-          </div>
-          <div class="pz-ball" id="pz-ball"></div>
-          <div class="pitch-result-badge" id="pitch-result"></div>
-        </div>
+      <div class="pitch-zone-canvas" id="pitch-canvas">
+        <svg class="pz-svg" viewBox="0 0 360 210" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="pz-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#081018"/><stop offset="30%" stop-color="#0c1e38"/><stop offset="55%" stop-color="#183858"/><stop offset="70%" stop-color="#1a4e22"/><stop offset="100%" stop-color="#0e2810"/></linearGradient>
+            <radialGradient id="pz-grass" cx="50%" cy="30%" r="80%"><stop offset="0%" stop-color="#2a7a1a"/><stop offset="100%" stop-color="#0d3008"/></radialGradient>
+            <radialGradient id="pz-dirt" cx="50%" cy="10%" r="70%"><stop offset="0%" stop-color="#9e6428"/><stop offset="100%" stop-color="#5e3a10"/></radialGradient>
+            <radialGradient id="pz-lgt" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fff8d0" stop-opacity="0.5"/><stop offset="100%" stop-color="#fff8d0" stop-opacity="0"/></radialGradient>
+          </defs>
+
+          <!-- Sky -->
+          <rect width="360" height="210" fill="url(#pz-sky)"/>
+
+          <!-- Stadium lights glow -->
+          <ellipse cx="45" cy="14" rx="42" ry="26" fill="url(#pz-lgt)"/>
+          <ellipse cx="315" cy="14" rx="42" ry="26" fill="url(#pz-lgt)"/>
+
+          <!-- Light structure left -->
+          <rect x="28" y="0" width="4" height="44" fill="#3a3a3a" rx="1"/>
+          <rect x="20" y="10" width="20" height="8" fill="#4a4a4a" rx="1"/>
+          <rect x="20" y="20" width="20" height="5" fill="#555" rx="1"/>
+          <rect x="22" y="10" width="3" height="3" fill="#ffe080" opacity="0.9" rx="1"/>
+          <rect x="28" y="10" width="3" height="3" fill="#ffe080" opacity="0.9" rx="1"/>
+          <rect x="34" y="10" width="3" height="3" fill="#ffe080" opacity="0.9" rx="1"/>
+
+          <!-- Light structure right -->
+          <rect x="328" y="0" width="4" height="44" fill="#3a3a3a" rx="1"/>
+          <rect x="320" y="10" width="20" height="8" fill="#4a4a4a" rx="1"/>
+          <rect x="320" y="20" width="20" height="5" fill="#555" rx="1"/>
+          <rect x="322" y="10" width="3" height="3" fill="#ffe080" opacity="0.9" rx="1"/>
+          <rect x="328" y="10" width="3" height="3" fill="#ffe080" opacity="0.9" rx="1"/>
+          <rect x="334" y="10" width="3" height="3" fill="#ffe080" opacity="0.9" rx="1"/>
+
+          <!-- Outfield wall arc -->
+          <path d="M -5 98 Q 180 40 365 98" fill="#183a20" stroke="#225530" stroke-width="3"/>
+
+          <!-- Stands / crowd -->
+          <rect x="0" y="0" width="360" height="96" fill="rgba(8,16,30,0.5)"/>
+          <!-- Seat rows -->
+          <rect x="0" y="52" width="360" height="9" fill="rgba(42,80,140,0.4)" rx="0"/>
+          <rect x="0" y="63" width="360" height="9" fill="rgba(32,65,120,0.4)" rx="0"/>
+          <rect x="0" y="74" width="360" height="9" fill="rgba(22,50,100,0.4)" rx="0"/>
+          <rect x="0" y="85" width="360" height="9" fill="rgba(15,35,80,0.4)" rx="0"/>
+          <!-- Crowd dots -->
+          <g fill="#6688aa" opacity="0.35">
+            <circle cx="25" cy="58" r="2.5"/><circle cx="50" cy="56" r="2"/><circle cx="75" cy="59" r="2.5"/>
+            <circle cx="100" cy="57" r="2"/><circle cx="125" cy="60" r="2.5"/><circle cx="150" cy="56" r="2"/>
+            <circle cx="175" cy="59" r="2.5"/><circle cx="200" cy="57" r="2"/><circle cx="225" cy="60" r="2.5"/>
+            <circle cx="250" cy="56" r="2"/><circle cx="275" cy="59" r="2.5"/><circle cx="300" cy="57" r="2"/>
+            <circle cx="325" cy="60" r="2.5"/><circle cx="345" cy="56" r="2"/>
+          </g>
+
+          <!-- Outfield grass -->
+          <ellipse cx="180" cy="168" rx="200" ry="100" fill="url(#pz-grass)"/>
+          <!-- Mow stripes -->
+          <g opacity="0.1">
+            <ellipse cx="180" cy="168" rx="188" ry="92" fill="none" stroke="#60cc30" stroke-width="10"/>
+            <ellipse cx="180" cy="168" rx="165" ry="80" fill="none" stroke="#40aa18" stroke-width="10"/>
+            <ellipse cx="180" cy="168" rx="142" ry="68" fill="none" stroke="#60cc30" stroke-width="9"/>
+            <ellipse cx="180" cy="168" rx="119" ry="56" fill="none" stroke="#40aa18" stroke-width="9"/>
+          </g>
+
+          <!-- Infield dirt -->
+          <ellipse cx="180" cy="196" rx="88" ry="40" fill="url(#pz-dirt)" opacity="0.88"/>
+
+          <!-- Pitcher mound -->
+          <ellipse cx="180" cy="178" rx="13" ry="5" fill="#7a4818" opacity="0.75"/>
+          <rect x="176" y="176" width="8" height="3" rx="1" fill="white" opacity="0.45"/>
+
+          <!-- Foul lines -->
+          <line x1="180" y1="208" x2="2" y2="92" stroke="white" stroke-width="1.5" opacity="0.2"/>
+          <line x1="180" y1="208" x2="358" y2="92" stroke="white" stroke-width="1.5" opacity="0.2"/>
+
+          <!-- Home plate -->
+          <polygon points="180,209 189,203 189,197 171,197 171,203" fill="white" opacity="0.9"/>
+
+          <!-- ── BATTER SILHOUETTE ── -->
+          <!-- Shadow on ground -->
+          <ellipse cx="128" cy="208" rx="20" ry="4" fill="black" opacity="0.35"/>
+          <!-- Rear leg -->
+          <line x1="134" y1="209" x2="138" y2="186" stroke="#12122a" stroke-width="11" stroke-linecap="round"/>
+          <line x1="138" y1="186" x2="142" y2="170" stroke="#12122a" stroke-width="10" stroke-linecap="round"/>
+          <!-- Front leg -->
+          <line x1="118" y1="209" x2="116" y2="187" stroke="#0c0c1e" stroke-width="10" stroke-linecap="round"/>
+          <line x1="116" y1="187" x2="114" y2="170" stroke="#0c0c1e" stroke-width="9" stroke-linecap="round"/>
+          <!-- Cleats -->
+          <rect x="108" y="207" width="14" height="5" rx="2" fill="#0a0a0a"/>
+          <rect x="130" y="207" width="14" height="5" rx="2" fill="#0a0a0a"/>
+          <!-- Torso (white jersey) -->
+          <path d="M 112 170 L 116 144 L 142 144 L 146 170 Z" fill="#dde8f8" opacity="0.95"/>
+          <!-- Jersey shading -->
+          <path d="M 112 170 L 116 144 L 124 144 L 120 170 Z" fill="#b0bdd0" opacity="0.7"/>
+          <!-- Jersey stripes -->
+          <line x1="118" y1="154" x2="140" y2="154" stroke="#cc2020" stroke-width="2" opacity="0.55"/>
+          <line x1="118" y1="160" x2="140" y2="160" stroke="#cc2020" stroke-width="2" opacity="0.55"/>
+          <!-- Belt -->
+          <rect x="112" y="168" width="34" height="4" rx="2" fill="#222" opacity="0.7"/>
+          <!-- Rear arm raised -->
+          <line x1="140" y1="154" x2="152" y2="144" stroke="#c07848" stroke-width="8" stroke-linecap="round"/>
+          <line x1="152" y1="144" x2="162" y2="136" stroke="#b86838" stroke-width="7" stroke-linecap="round"/>
+          <!-- Front arm extended to bat -->
+          <line x1="118" y1="158" x2="135" y2="151" stroke="#c07848" stroke-width="7" stroke-linecap="round"/>
+          <line x1="135" y1="151" x2="150" y2="146" stroke="#b86838" stroke-width="6" stroke-linecap="round"/>
+          <!-- Hands on bat -->
+          <circle cx="152" cy="145" r="6" fill="#905030"/>
+          <!-- BAT — angled up to the right -->
+          <line x1="152" y1="143" x2="205" y2="120" stroke="#6B3310" stroke-width="6" stroke-linecap="round"/>
+          <line x1="152" y1="143" x2="205" y2="120" stroke="#9B5030" stroke-width="3.5" stroke-linecap="round" opacity="0.6"/>
+          <circle cx="205" cy="120" r="4" fill="#4a2008"/>
+          <!-- Helmet (dark, rounded) -->
+          <ellipse cx="126" cy="141" rx="13" ry="12" fill="#111" opacity="0.95"/>
+          <!-- Helmet brim -->
+          <path d="M 113 142 Q 108 146 109 152 L 115 150 Q 113 146 114 142 Z" fill="#0a0a0a"/>
+          <!-- Helmet earflap -->
+          <path d="M 114 143 Q 111 148 112 155 L 118 153 Q 116 148 116 143 Z" fill="#080808"/>
+          <!-- Face -->
+          <circle cx="128" cy="146" r="8" fill="#c07848" opacity="0.88"/>
+          <!-- Eye black -->
+          <rect x="124" y="144" width="5" height="2" rx="1" fill="#333" opacity="0.6"/>
+
+          <!-- ── STRIKE ZONE ── -->
+          <!-- Outer glow / shadow -->
+          <rect x="207" y="98" width="104" height="100" rx="3" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="7"/>
+          <!-- Zone background tint -->
+          <rect x="210" y="101" width="98" height="94" rx="2" fill="rgba(255,255,255,0.07)"/>
+          <!-- 3x3 grid vertical dividers -->
+          <line x1="243" y1="101" x2="243" y2="195" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+          <line x1="276" y1="101" x2="276" y2="195" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+          <!-- 3x3 grid horizontal dividers -->
+          <line x1="210" y1="132" x2="308" y2="132" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+          <line x1="210" y1="164" x2="308" y2="164" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+          <!-- Zone outer border (bright) -->
+          <rect x="210" y="101" width="98" height="94" rx="2" fill="none" stroke="rgba(255,255,255,0.93)" stroke-width="2.5"/>
+
+          <!-- ── PITCH BALL (positioned by JS) ── -->
+          <circle id="pz-ball" cx="-50" cy="-50" r="9" fill="#F2C230" opacity="0" stroke="white" stroke-width="1.5" filter="url(#ballglow)"/>
+          <defs>
+            <filter id="ballglow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="2" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+          <path id="pz-seam1" d="" stroke="#C83A2B" stroke-width="1.2" fill="none" opacity="0"/>
+          <path id="pz-seam2" d="" stroke="#C83A2B" stroke-width="1.2" fill="none" opacity="0"/>
+        </svg>
+
+        <div class="pitch-result-badge" id="pitch-result"></div>
       </div>
     </div>
       
@@ -495,47 +581,59 @@ function timeUp(){total++;streak=0;document.querySelectorAll('.opt').forEach(b=>
 
 // Zone cell positions (cx, cy) for each of 9 pitch locations
 const PZ_POS = {
-  "Up & In":       {l:29,t:11},"Up & Middle":   {l:37,t:11},"Up & Away":     {l:45,t:11},
-  "Middle-In":     {l:29,t:27},"Middle":         {l:37,t:27},"Middle-Away":   {l:45,t:27},
-  "Down & In":     {l:29,t:43},"Down & Middle":  {l:37,t:43},"Down & Away":   {l:45,t:43},
-  "Low & Away":    {l:52,t:60,out:true},"Bounce":{l:37,t:70,out:true},
-  "Way Outside":   {l:56,t:27,out:true},"High":  {l:37,t:5, out:true},
-  "Inside":        {l:22,t:27,out:true},"Down the Middle":{l:37,t:27},
-  "Backdoor":      {l:47,t:38},"12-6":           {l:37,t:43},
-  "Arm Side":      {l:29,t:27},"Glove Side":     {l:45,t:27},
+  "Up & In":       {cx:226,cy:116},"Up & Middle":  {cx:259,cy:116},"Up & Away":    {cx:292,cy:116},
+  "Middle-In":     {cx:226,cy:148},"Middle":        {cx:259,cy:148},"Middle-Away":  {cx:292,cy:148},
+  "Down & In":     {cx:226,cy:180},"Down & Middle": {cx:259,cy:180},"Down & Away":  {cx:292,cy:180},
+  "Low & Away":    {cx:310,cy:198,out:true},"Bounce":{cx:259,cy:205,out:true},
+  "Way Outside":   {cx:328,cy:148,out:true},"High":  {cx:259,cy:88,out:true},
+  "Inside":        {cx:192,cy:148,out:true},"Down the Middle":{cx:259,cy:148},
+  "Backdoor":      {cx:298,cy:172},"12-6":           {cx:259,cy:180},
+  "Arm Side":      {cx:226,cy:148},"Glove Side":     {cx:292,cy:148},
 };
 function getPitchPos(label){
   const loc=label.includes("—")?label.split("—")[1].trim():label.trim();
   for(const[k,v]of Object.entries(PZ_POS)){
     if(loc.toLowerCase().includes(k.toLowerCase())||k.toLowerCase().includes(loc.toLowerCase()))return v;
   }
-  return{l:37,t:27};
+  return{cx:259,cy:148};
 }
 function showPitchZone(pitchLabel,isCorrect){
   const ball=document.getElementById("pz-ball");
+  const s1=document.getElementById("pz-seam1");
+  const s2=document.getElementById("pz-seam2");
   const status=document.getElementById("zone-status");
   const badge=document.getElementById("pitch-result");
   if(!ball)return;
   const pos=getPitchPos(pitchLabel);
-  // Reset animation
-  ball.style.opacity="0";
-  ball.classList.remove("fly","wrong");
-  void ball.offsetWidth;
-  ball.style.left=pos.l+"%";
-  ball.style.top=pos.t+"%";
-  if(!isCorrect||pos.out)ball.classList.add("wrong");
-  ball.classList.add("fly");
-  status.textContent=pos.out?"Out of Zone":"In Zone";
-  status.style.color=pos.out?"#8A8F98":"var(--gold)";
+  const inZone=!pos.out;
+
+  // Animate ball flying in (start from pitcher mound ~cx:180,cy:178 in SVG coords)
+  ball.setAttribute("cx", pos.cx);
+  ball.setAttribute("cy", pos.cy);
+  ball.setAttribute("fill", isCorrect&&inZone?"#F2C230":pos.out?"#FF4444":"#FF6B1A");
+  ball.setAttribute("opacity","1");
+  // Seam lines
+  if(s1){s1.setAttribute("d","M"+(pos.cx-3)+","+(pos.cy-5)+" Q"+pos.cx+","+pos.cy+" "+(pos.cx-3)+","+(pos.cy+5));s1.setAttribute("opacity","1");}
+  if(s2){s2.setAttribute("d","M"+(pos.cx+3)+","+(pos.cy-5)+" Q"+pos.cx+","+pos.cy+" "+(pos.cx+3)+","+(pos.cy+5));s2.setAttribute("opacity","1");}
+
+  // Zone status
+  status.textContent=inZone?"In Zone":"Out of Zone";
+  status.style.color=inZone?"var(--gold)":"#8A8F98";
+
+  // Result badge
   badge.className="pitch-result-badge";
-  badge.textContent=isCorrect?"Correct Spot":(pos.out?"Out of Zone":"Missed Spot");
+  badge.textContent=isCorrect?(inZone?"✓ Correct Spot":"✓ Right Call"):(inZone?"✗ Missed Spot":"✗ Out of Zone");
   badge.classList.add(isCorrect?"show-hit":"show-miss");
 }
 function resetPitchZone(){
   const ball=document.getElementById("pz-ball");
+  const s1=document.getElementById("pz-seam1");
+  const s2=document.getElementById("pz-seam2");
   const status=document.getElementById("zone-status");
   const badge=document.getElementById("pitch-result");
-  if(ball){ball.style.opacity="0";ball.classList.remove("fly","wrong");}
+  if(ball){ball.setAttribute("cx","-50");ball.setAttribute("cy","-50");ball.setAttribute("opacity","0");}
+  if(s1)s1.setAttribute("opacity","0");
+  if(s2)s2.setAttribute("opacity","0");
   if(status)status.textContent="";
   if(badge){badge.className="pitch-result-badge";badge.textContent="";}
 }
