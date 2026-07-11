@@ -1,0 +1,97 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Liverpool FC — The Sports Companion</title>
+<link rel="icon" type="image/png" href="/assets/logo.png"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<style>*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--ink:#0B0D0F;--ink-2:#181B1F;--ink-3:#262A30;--muted:#C8CDD6;--line:#2A2E35;--gold:#F2C230;--crimson:#C83A2B;--white:#FFFFFF}
+body{font-family:'Inter',sans-serif;background:var(--ink);color:var(--white);min-height:100vh}
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;background:rgba(11,13,15,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav-brand{display:flex;align-items:center;gap:8px;padding:0 20px;text-decoration:none;border-right:1px solid var(--line);height:56px;flex-shrink:0}
+.nav-brand img{height:28px}.nav-brand span{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;color:var(--white)}
+.nav-brand span em{font-style:normal;color:var(--gold)}
+.nav-leagues{display:flex;align-items:center;list-style:none;overflow-x:auto;flex:1;scrollbar-width:none}
+.nav-leagues::-webkit-scrollbar{display:none}
+.nav-leagues a{display:flex;align-items:center;height:56px;padding:0 14px;font-size:.8rem;font-weight:600;color:var(--muted);text-decoration:none;border-right:1px solid var(--line);white-space:nowrap;transition:color .2s}
+.nav-leagues a:hover{color:var(--white);background:var(--ink-2)}
+.nav-cta{margin-left:auto;padding:0 14px;height:56px;display:flex;align-items:center;gap:8px;flex-shrink:0}
+.nav-cta a{color:var(--muted);font-size:.8rem;font-weight:600;text-decoration:none;padding:7px 11px}
+.nav-cta a.p{background:var(--gold);color:var(--ink);border-radius:5px}
+/* BANNER */
+.banner{background:var(--ink-2);border-bottom:1px solid var(--line);padding:24px 28px}
+.banner-row{display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap}
+.b-logo{width:72px;height:72px;object-fit:contain;flex-shrink:0}
+.b-info h1{font-family:'Barlow Condensed',sans-serif;font-size:2rem;font-weight:900;text-transform:uppercase;letter-spacing:.04em;line-height:1.1;margin-bottom:8px}
+.b-meta{display:flex;flex-wrap:wrap;gap:6px}
+.badge{font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:600;letter-spacing:.08em;padding:3px 8px;border-radius:4px;background:var(--ink-3);color:var(--muted);border:1px solid var(--line)}
+.badge.sport{background:rgba(242,194,48,.08);color:var(--gold);border-color:rgba(242,194,48,.3)}
+.ovr-wrap{margin-left:auto;flex-shrink:0}
+.ovr{font-family:'Barlow Condensed',sans-serif;font-size:2rem;font-weight:900;padding:8px 16px;border-radius:8px;line-height:1;display:inline-block}
+.ovr-hi{background:rgba(242,194,48,.14);color:var(--gold);border:2px solid rgba(242,194,48,.4)}
+.ovr-mid{background:rgba(56,189,248,.1);color:#38BDF8;border:2px solid rgba(56,189,248,.28)}
+.ovr-lo{background:rgba(255,107,107,.1);color:#FF6B6B;border:2px solid rgba(255,107,107,.28)}
+/* TABS */
+.tabs{display:flex;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none;margin-bottom:22px}
+.tabs::-webkit-scrollbar{display:none}
+.tb{padding:11px 16px;font-family:'Barlow Condensed',sans-serif;font-size:.88rem;font-weight:800;text-transform:uppercase;color:var(--muted);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;transition:all .2s;white-space:nowrap}
+.tb.active{color:var(--gold);border-bottom-color:var(--gold)}
+.tp{display:none}.tp.active{display:block}
+/* MAIN */
+.main{max-width:960px;margin:0 auto;padding:26px 18px 60px}
+/* STAT GRID */
+.sg{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin:10px 0}
+.sb{background:var(--ink-3);border:1px solid var(--line);border-radius:7px;padding:11px;text-align:center}
+.sb .v{font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;font-weight:900;line-height:1}
+.sb .v.hi{color:var(--gold)}
+.sb .l{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-top:3px}
+/* CARD */
+.card{background:var(--ink-2);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin-bottom:12px}
+.sec-label{font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:600;letter-spacing:.14em;color:var(--gold);text-transform:uppercase;margin-bottom:8px}
+/* PLAYER/TEAM GRID */
+.pg{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+.pc{background:var(--ink-2);border:1px solid var(--line);border-radius:9px;padding:14px;text-decoration:none;display:block;transition:border-color .18s,transform .18s}
+.pc:hover{border-color:var(--gold);transform:translateY(-2px)}
+.pc img{width:30px;height:30px;object-fit:contain;margin-bottom:8px}
+.pc .n{font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:800;text-transform:uppercase;color:var(--white);margin-bottom:2px;line-height:1.2}
+.pc .s{font-size:.7rem;color:var(--muted);margin-bottom:6px}
+.pc .o{font-family:'Barlow Condensed',sans-serif;font-size:.82rem;font-weight:800;color:var(--gold)}
+/* TABLE */
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+.tbl{width:100%;border-collapse:collapse;font-size:.8rem}
+.tbl thead tr{background:var(--ink-3)}
+.tbl th{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);padding:8px 10px;text-align:center;white-space:nowrap}
+.tbl th:first-child{text-align:left;padding-left:12px}
+.tbl td{padding:8px 10px;color:var(--muted);text-align:center;border-bottom:1px solid rgba(255,255,255,.04);white-space:nowrap}
+.tbl td:first-child{color:var(--white);font-weight:600;text-align:left;padding-left:12px}
+.tbl td.hi{color:var(--gold);font-weight:700}
+.tbl tbody tr:hover{background:rgba(255,255,255,.025)}
+footer{border-top:1px solid var(--line);padding:18px 28px;text-align:center;font-size:.72rem;color:var(--muted);margin-top:40px}
+@media(max-width:600px){.banner-row{gap:12px}.b-logo{width:50px;height:50px}.b-info h1{font-size:1.5rem}.main{padding:18px 12px 48px}.sg{grid-template-columns:repeat(3,1fr)}}</style></head><body>
+<nav><a href="/index.html" class="nav-brand"><img src="/assets/logo.png" alt="SSC"/><span>The Sports <em>Companion</em></span></a>
+<ul class="nav-leagues">
+    <li><a href="/nfl/index.html">🏈 NFL</a></li>
+    <li><a href="/mlb/index.html">⚾ MLB</a></li>
+    <li><a href="/nba/index.html">🏀 NBA</a></li>
+    <li><a href="/ncaa/index.html">🎓 NCAA</a></li>
+    <li><a href="/futbol/index.html">⚽ Fútbol</a></li>
+    <li><a href="/fantasy/index.html">🏆 Fantasy</a></li>
+    <li><a href="/brackets/index.html">🗂 Brackets</a></li>
+    <li><a href="/players/index.html">👤 Players</a></li>
+    <li><a href="/teams/index.html">🏟 Teams</a></li>
+  </ul><div class="nav-cta"><a href="/login/index.html">Log In</a><a href="/signup/index.html" class="p">Sign Up</a></div></nav>
+<div class="banner"><div class="banner-row">
+<img class="b-logo" src="/assets/mlb/dodgers.png" onerror="this.style.display='none'"/>
+<div class="b-info"><h1>Liverpool FC</h1><div class="b-meta"><span class="badge sport">⚽ Fútbol</span><span class="badge">⚽ Fútbol</span><span class="badge">Premier League</span><span class="badge"></span><span class="badge">Liverpool, England</span></div></div>
+<div class="ovr-wrap"><span class="ovr ovr-hi">OVR 93</span></div>
+</div></div><div class="main"><div class="tabs"><button class="tb active" onclick="st('t0',this)">Overview</button><button class="tb" onclick="st('t1',this)">Roster</button><button class="tb" onclick="st('t2',this)">Stats</button><button class="tb" onclick="st('t3',this)">More Teams</button></div><div id="t0" class="tp active">
+<div class="card"><div class="sec-label">// 2025 Season</div><div class="sg"><div class="sb"><div class="v">17-4-3</div><div class="l">Record</div></div><div class="sb"><div class="v">2.8</div><div class="l">Goals/G</div></div><div class="sb"><div class="v">1.1</div><div class="l">GA/G</div></div><div class="sb"><div class="v">2.4</div><div class="l">xG</div></div><div class="sb"><div class="v hi">93</div><div class="l">OVR</div></div></div></div>
+<div class="card"><div class="sec-label">// About</div><p style="font-size:.86rem;color:var(--muted);line-height:1.8;margin-top:6px">Liverpool is one of the most successful clubs in English football history with 19 league titles and 6 European Cups. Under new manager Arne Slot following Jürgen Klopp's legendary tenure, Liverpool continues to challenge for the Premier League title. Anfield's atmosphere — particularly 'You'll Never Walk Alone' — is the most electric in world football.</p><p style="font-size:.78rem;color:var(--muted);margin-top:10px;border-top:1px solid var(--line);padding-top:10px">Advanced metrics (PPD, RPI, PPM, PPG+, xG, OVR) are from <em>The Sports Statistics Manual</em> by Chris Cain — available on Amazon.</p></div>
+<div class="card"><div class="sec-label">// Franchise</div>
+<div class="sg">
+<div class="sb"><div class="v">Arne Slot</div><div class="l">Head Coach / Manager</div></div><div class="sb"><div class="v">Anfield</div><div class="l">Stadium / Arena</div></div><div class="sb"><div class="v">Premier League</div><div class="l">Conference</div></div><div class="sb"><div class="v">—</div><div class="l">Division</div></div>
+</div></div>
+</div><div id="t1" class="tp"><div class="sec-label" style="margin-bottom:10px">// Featured Players</div><div class="pg"><p style="color:var(--muted);font-size:.84rem">Full roster coming soon.</p></div></div><div id="t2" class="tp"><div class="card"><div class="sec-label">// 2025 Stats</div><div class="sg"><div class="sb"><div class="v">17-4-3</div><div class="l">Record</div></div><div class="sb"><div class="v">2.8</div><div class="l">Goals/G</div></div><div class="sb"><div class="v">1.1</div><div class="l">GA/G</div></div><div class="sb"><div class="v">2.4</div><div class="l">xG</div></div><div class="sb"><div class="v hi">93</div><div class="l">OVR</div></div></div></div></div><div id="t3" class="tp"><div class="sec-label" style="margin-bottom:10px">// Other ⚽ Fútbol Teams</div><div class="pg"><a href="/teams/futbol-inter-miami.html" class="pc"><img src="/assets/nfl/eagles.png" onerror="this.style.display='none'"/><div class="n">CF</div><div class="s">14-4-6</div><div class="o">OVR 88</div></a><a href="/teams/futbol-man-city.html" class="pc"><img src="/assets/nfl/chiefs.png" onerror="this.style.display='none'"/><div class="n">City</div><div class="s">18-3-3</div><div class="o">OVR 97</div></a><a href="/teams/futbol-real-madrid.html" class="pc"><img src="/assets/nfl/ravens.png" onerror="this.style.display='none'"/><div class="n">Madrid</div><div class="s">20-2-2</div><div class="o">OVR 98</div></a></div></div></div>
+<footer>© 2026 The Sports Companion · Chris Cain · Based on <em>The Sports Statistics Manual</em></footer>
+<script>function st(id,b){document.querySelectorAll('.tp').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.tb').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');b.classList.add('active');}</script>
+</body></html>

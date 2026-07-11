@@ -8,7 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--ink:#0B0D0F;--ink-2:#181B1F;--ink-3:#262A30;--muted:#8A8F98;--line:#2A2E35;--gold:#F2C230;--crimson:#C83A2B;--white:#FFFFFF;--green:#22c55e}
+    :root{--ink:#0B0D0F;--ink-2:#181B1F;--ink-3:#262A30;--muted:#C8CDD6;--line:#2A2E35;--gold:#F2C230;--crimson:#C83A2B;--white:#FFFFFF;--green:#22c55e}
     body{font-family:'Inter',sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
 
     nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;background:rgba(11,13,15,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
@@ -155,14 +155,14 @@
     .lang-btn.active{color:var(--gold);border-color:rgba(242,194,48,.4);background:rgba(242,194,48,.08)}
   
     /* ── BOX SCORE IMPROVEMENTS ───────────────────────────── */
-    .bs-score-header{display:flex;align-items:center;justify-content:center;background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:20px 16px;margin-bottom:12px;gap:8px}
-    .bs-team-side{display:flex;flex-direction:column;align-items:center;gap:5px;flex:1;max-width:180px}
+    
+    
     .bs-team-logo{width:42px;height:42px;object-fit:contain}
-    .bs-team-name-blue{font-family:'Barlow Condensed',sans-serif;font-size:.82rem;font-weight:800;text-transform:uppercase;color:#5b9bd5;text-align:center;line-height:1.2}
-    .bs-final-score{font-family:'Barlow Condensed',sans-serif;font-size:2.8rem;font-weight:900;line-height:1;color:var(--white)}
-    .bs-center-info{display:flex;flex-direction:column;align-items:center;gap:3px;flex-shrink:0;padding:0 12px}
-    .bs-final-label{font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:700;color:var(--muted);text-transform:uppercase}
-    .bs-game-date{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--muted);text-align:center;line-height:1.4}
+    
+    
+    
+    
+    
     /* Stat tables - redesigned */
     .bs-section{margin-bottom:18px}
     .bs-section-title{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--gold);margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid var(--line)}
@@ -202,14 +202,75 @@
     .bs-card{background:var(--ink-2);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:10px}
     .bs-linescore-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
   
-    .pitch-zone-wrap{background:#0a0c0e;border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:0}
+    
     .pitch-zone-header{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:#0d1117;border-bottom:1px solid var(--line)}
     .pitch-zone-label{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--white)}
     .pitch-zone-status{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--gold)}
     .pitch-zone-canvas{position:relative;background:#0a0c0e}
-    .pz-svg{width:100%;display:block;max-height:300px}
-    .pz-pitch-label{position:absolute;bottom:6%;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.75);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:3px 14px;font-family:'Barlow Condensed',sans-serif;font-size:.82rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:white;opacity:0;transition:opacity .3s;white-space:nowrap;pointer-events:none}
+    
+    
     .pz-pitch-label.show{opacity:1}
+  
+    /* ── MOBILE NAV OVERHAUL ─────────────────────────────── */
+    .hamburger{display:none;align-items:center;justify-content:center;width:44px;height:56px;background:none;border:none;cursor:pointer;color:var(--white);font-size:1.4rem;flex-shrink:0;padding:0 12px}
+    .mobile-menu{display:none;position:absolute;top:56px;left:0;right:0;background:rgba(11,13,15,.98);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);z-index:999;max-height:calc(100vh - 56px);overflow-y:auto}
+    .mobile-menu.open{display:block}
+    .mobile-menu a{display:flex;align-items:center;gap:12px;padding:14px 20px;font-size:1rem;font-weight:600;color:var(--muted);text-decoration:none;border-bottom:1px solid rgba(255,255,255,.05);transition:background .15s,color .15s}
+    .mobile-menu a:hover,.mobile-menu a.active{background:var(--ink-2);color:var(--white)}
+    .mobile-menu a.active{color:var(--gold);border-left:3px solid var(--gold)}
+    .mobile-menu a:last-child{border-bottom:none}
+    .mobile-menu-footer{padding:14px 20px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .mobile-lang{display:flex;gap:6px}
+    .mobile-lang-btn{background:var(--ink-3);border:1px solid var(--line);border-radius:5px;padding:7px 12px;font-size:.82rem;font-weight:700;color:var(--muted);cursor:pointer;transition:all .2s}
+    .mobile-lang-btn.active{background:rgba(242,194,48,.1);border-color:var(--gold);color:var(--gold)}
+    .mobile-auth{display:flex;gap:8px}
+    .mobile-auth a{font-size:.82rem;font-weight:600;text-decoration:none;padding:8px 14px;border-radius:5px}
+    .mobile-auth a.login{color:var(--muted);border:1px solid var(--line)}
+    .mobile-auth a.signup{background:var(--gold);color:var(--ink)}
+
+    @media(max-width:768px){
+      .nav-leagues{display:none}
+      .lang-switch{display:none}
+      .hamburger{display:flex}
+      .nav-cta{display:none !important}
+      .nav-avatar-btn{margin-right:8px !important;padding:5px 10px !important}
+      .nav-brand span{display:none}
+      nav{position:relative}
+    }
+    @media(min-width:769px){
+      .hamburger{display:none}
+      .mobile-menu{display:none !important}
+    }
+      .bs-score-header{display:flex;align-items:center;justify-content:center;background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:20px 12px;margin-bottom:12px;gap:8px}
+    .bs-team-side{display:flex;flex-direction:column;align-items:center;gap:5px;width:120px;flex-shrink:0}
+    .bs-team-logo{width:42px;height:42px;object-fit:contain}
+    .bs-team-name-blue{font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:800;text-transform:uppercase;color:#5b9bd5;text-align:center;white-space:nowrap;letter-spacing:.02em}
+    .bs-final-score{font-family:'Barlow Condensed',sans-serif;font-size:2.8rem;font-weight:900;line-height:1;color:var(--white);text-align:center}
+    .bs-center-info{display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;min-width:0;padding:0 8px}
+    .bs-final-label{font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:700;color:var(--muted);text-transform:uppercase}
+    .bs-game-date{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--muted);text-align:center;line-height:1.5}
+    @media(max-width:480px){.bs-score-header{padding:12px 6px}.bs-team-side{width:90px}.bs-team-name-blue{font-size:.78rem}.bs-final-score{font-size:2.2rem}}
+  
+    /* ── ESPN K-ZONE (GAMEDAY) ── */
+    .pitch-zone-wrap{background:#0a0a0f;border:1px solid #1a2035;border-radius:12px;overflow:hidden;margin-bottom:0}
+    .pitch-zone-header{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:#0d1020;border-bottom:1px solid #1a2035}
+    .pitch-zone-label{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#9aa8c4}
+    .pitch-zone-status{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700}
+    .pz-status-strike{color:#4fc3f7}
+    .pz-status-ball{color:#81c784}
+    .pz-svg-wrap{position:relative;background:#0a0a0f;line-height:0}
+    .pz-svg{width:100%;display:block;max-height:280px}
+    .pz-info-bar{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:#0d1020;border-top:1px solid #1a2035;flex-wrap:wrap;gap:6px}
+    .pz-pitch-type{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#fff}
+    .pz-pitch-speed{font-family:'JetBrains Mono',monospace;font-size:.75rem;color:#9aa8c4;margin-top:2px}
+    .pz-result-badge{font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;padding:4px 14px;border-radius:20px;border:2px solid transparent;transition:all .3s}
+    .pz-result-strike{background:rgba(79,195,247,.12);border-color:#4fc3f7;color:#4fc3f7}
+    .pz-result-ball{background:rgba(129,199,132,.1);border-color:#81c784;color:#81c784}
+    .pz-result-hit{background:rgba(242,194,48,.12);border-color:var(--gold);color:var(--gold)}
+    .pz-result-miss{background:rgba(239,83,80,.1);border-color:#ef5350;color:#ef5350}
+    .pz-count{display:flex;gap:12px}
+    .pz-count-item{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#9aa8c4;letter-spacing:.06em}
+    .pz-count-item span{color:#fff;font-weight:700;margin-left:3px}
   </style>
 </head>
 <body>
@@ -222,6 +283,27 @@
     <span style="font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--muted)" id="nav-inning">Top 3rd</span>
   </div>
 </nav>
+  <!-- MOBILE MENU (hamburger dropdown) -->
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="/nfl/index.html" class="" onclick="closeMobileMenu()">🏈 NFL</a>
+    <a href="/mlb/index.html" class="active" onclick="closeMobileMenu()">⚾ MLB</a>
+    <a href="/nba/index.html" class="" onclick="closeMobileMenu()">🏀 NBA</a>
+    <a href="/ncaa/index.html" class="" onclick="closeMobileMenu()">🎓 NCAA</a>
+    <a href="/futbol/index.html" class="" onclick="closeMobileMenu()">⚽ Fútbol</a>
+    <a href="/fantasy/index.html" class="" onclick="closeMobileMenu()">🏆 Fantasy</a>
+    <a href="/brackets/index.html" class="" onclick="closeMobileMenu()">🗂 Brackets</a>
+    <a href="/more/index.html" class="" onclick="closeMobileMenu()">• • • More</a>
+    <div class="mobile-menu-footer">
+      <div class="mobile-lang">
+        <button class="mobile-lang-btn active" data-lang="en" onclick="setLang('en',this);closeMobileMenu()">🇺🇸 EN</button>
+        <button class="mobile-lang-btn" data-lang="es" onclick="setLang('es',this);closeMobileMenu()">🇪🇸 ES</button>
+      </div>
+      <div class="mobile-auth" id="mobile-auth">
+        <a href="/login/index.html" class="login">Log In</a>
+        <a href="/signup/index.html" class="signup">Sign Up</a>
+      </div>
+    </div>
+  </div>
 
 <!-- SCOREBOARD -->
 <div class="scoreboard">
@@ -437,87 +519,113 @@
       </div>
     
       <!-- LIVE PITCH ZONE -->
-      <div class="pitch-zone-wrap" style="margin-top:14px">
+      <div class="pitch-zone-wrap">
         <div class="pitch-zone-header">
-          <span class="pitch-zone-label">Pitch Zone</span>
+          <span class="pitch-zone-label">⚾ K-Zone</span>
           <span class="pitch-zone-status" id="gd-zone-status"></span>
         </div>
-        <div class="pitch-zone-canvas" id="gd-pitch-canvas">
-          <svg class="pz-svg" viewBox="0 0 360 210" xmlns="http://www.w3.org/2000/svg">
+        <div class="pz-svg-wrap">
+          <svg class="pz-svg" viewBox="0 0 320 280" xmlns="http://www.w3.org/2000/svg">
             <defs>
-              <linearGradient id="gd-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#081018"/><stop offset="30%" stop-color="#0c1e38"/><stop offset="55%" stop-color="#183858"/><stop offset="70%" stop-color="#1a4e22"/><stop offset="100%" stop-color="#0e2810"/></linearGradient>
-              <radialGradient id="gd-grass" cx="50%" cy="30%" r="80%"><stop offset="0%" stop-color="#2a7a1a"/><stop offset="100%" stop-color="#0d3008"/></radialGradient>
-              <radialGradient id="gd-dirt" cx="50%" cy="10%" r="70%"><stop offset="0%" stop-color="#9e6428"/><stop offset="100%" stop-color="#5e3a10"/></radialGradient>
-              <radialGradient id="gd-lgt" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fff8d0" stop-opacity="0.5"/><stop offset="100%" stop-color="#fff8d0" stop-opacity="0"/></radialGradient>
-              <filter id="gd-ballglow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+              <radialGradient id="gd-kz-bg" cx="50%" cy="55%" r="55%">
+                <stop offset="0%" stop-color="#1e2438"/>
+                <stop offset="50%" stop-color="#0f1220"/>
+                <stop offset="100%" stop-color="#050608"/>
+              </radialGradient>
+              <filter id="gd-zone-glow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="3" result="blur"/>
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+              <filter id="gd-ball-glow" x="-100%" y="-100%" width="300%" height="300%">
+                <feGaussianBlur stdDeviation="5" result="blur"/>
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+              <filter id="gd-trail-glow" x="-60%" y="-60%" width="220%" height="220%">
+                <feGaussianBlur stdDeviation="2.5"/>
+              </filter>
             </defs>
-            <rect width="360" height="210" fill="url(#gd-sky)"/>
-            <ellipse cx="45" cy="14" rx="42" ry="26" fill="url(#gd-lgt)"/>
-            <ellipse cx="315" cy="14" rx="42" ry="26" fill="url(#gd-lgt)"/>
-            <rect x="28" y="0" width="4" height="44" fill="#3a3a3a" rx="1"/>
-            <rect x="20" y="10" width="20" height="8" fill="#4a4a4a" rx="1"/>
-            <rect x="22" y="10" width="3" height="3" fill="#ffe080" opacity="0.9" rx="1"/>
-            <rect x="28" y="10" width="3" height="3" fill="#ffe080" opacity="0.9" rx="1"/>
-            <rect x="34" y="10" width="3" height="3" fill="#ffe080" opacity="0.9" rx="1"/>
-            <rect x="328" y="0" width="4" height="44" fill="#3a3a3a" rx="1"/>
-            <rect x="320" y="10" width="20" height="8" fill="#4a4a4a" rx="1"/>
-            <rect x="322" y="10" width="3" height="3" fill="#ffe080" opacity="0.9" rx="1"/>
-            <rect x="328" y="10" width="3" height="3" fill="#ffe080" opacity="0.9" rx="1"/>
-            <rect x="334" y="10" width="3" height="3" fill="#ffe080" opacity="0.9" rx="1"/>
-            <path d="M -5 98 Q 180 40 365 98" fill="#183a20" stroke="#225530" stroke-width="3"/>
-            <rect x="0" y="0" width="360" height="96" fill="rgba(8,16,30,0.5)"/>
-            <rect x="0" y="52" width="360" height="9" fill="rgba(42,80,140,0.4)"/>
-            <rect x="0" y="63" width="360" height="9" fill="rgba(32,65,120,0.4)"/>
-            <rect x="0" y="74" width="360" height="9" fill="rgba(22,50,100,0.4)"/>
-            <rect x="0" y="85" width="360" height="9" fill="rgba(15,35,80,0.4)"/>
-            <ellipse cx="180" cy="168" rx="200" ry="100" fill="url(#gd-grass)"/>
-            <ellipse cx="180" cy="196" rx="88" ry="40" fill="url(#gd-dirt)" opacity="0.88"/>
-            <ellipse cx="180" cy="178" rx="13" ry="5" fill="#7a4818" opacity="0.75"/>
-            <rect x="176" y="176" width="8" height="3" rx="1" fill="white" opacity="0.45"/>
-            <line x1="180" y1="208" x2="2" y2="92" stroke="white" stroke-width="1.5" opacity="0.2"/>
-            <line x1="180" y1="208" x2="358" y2="92" stroke="white" stroke-width="1.5" opacity="0.2"/>
-            <polygon points="180,209 189,203 189,197 171,197 171,203" fill="white" opacity="0.9"/>
+            <rect width="320" height="280" fill="url(#gd-kz-bg)"/>
+            <ellipse cx="160" cy="275" rx="130" ry="18" fill="#1a0e04" opacity="0.6"/>
+            <polygon points="143,270 177,270 186,261 160,254 134,261" fill="#e8e8e8" opacity="0.88"/>
+            <polygon points="143,270 177,270 186,261 160,254 134,261" fill="none" stroke="#ccc" stroke-width="0.8"/>
+            <rect x="58" y="215" width="72" height="58" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.2" rx="1"/>
+            <rect x="190" y="215" width="72" height="58" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="1" rx="1" stroke-dasharray="3,3"/>
             <!-- Batter -->
-            <ellipse cx="128" cy="208" rx="20" ry="4" fill="black" opacity="0.35"/>
-            <line x1="134" y1="209" x2="138" y2="186" stroke="#12122a" stroke-width="11" stroke-linecap="round"/>
-            <line x1="138" y1="186" x2="142" y2="170" stroke="#12122a" stroke-width="10" stroke-linecap="round"/>
-            <line x1="118" y1="209" x2="116" y2="187" stroke="#0c0c1e" stroke-width="10" stroke-linecap="round"/>
-            <line x1="116" y1="187" x2="114" y2="170" stroke="#0c0c1e" stroke-width="9" stroke-linecap="round"/>
-            <rect x="108" y="207" width="14" height="5" rx="2" fill="#0a0a0a"/>
-            <rect x="130" y="207" width="14" height="5" rx="2" fill="#0a0a0a"/>
-            <path d="M 112 170 L 116 144 L 142 144 L 146 170 Z" fill="#dde8f8" opacity="0.95"/>
-            <path d="M 112 170 L 116 144 L 124 144 L 120 170 Z" fill="#b0bdd0" opacity="0.7"/>
-            <line x1="118" y1="154" x2="140" y2="154" stroke="#cc2020" stroke-width="2" opacity="0.55"/>
-            <line x1="118" y1="160" x2="140" y2="160" stroke="#cc2020" stroke-width="2" opacity="0.55"/>
-            <rect x="112" y="168" width="34" height="4" rx="2" fill="#222" opacity="0.7"/>
-            <line x1="140" y1="154" x2="152" y2="144" stroke="#c07848" stroke-width="8" stroke-linecap="round"/>
-            <line x1="152" y1="144" x2="162" y2="136" stroke="#b86838" stroke-width="7" stroke-linecap="round"/>
-            <line x1="118" y1="158" x2="135" y2="151" stroke="#c07848" stroke-width="7" stroke-linecap="round"/>
-            <line x1="135" y1="151" x2="150" y2="146" stroke="#b86838" stroke-width="6" stroke-linecap="round"/>
-            <circle cx="152" cy="145" r="6" fill="#905030"/>
-            <line x1="152" y1="143" x2="205" y2="120" stroke="#6B3310" stroke-width="6" stroke-linecap="round"/>
-            <line x1="152" y1="143" x2="205" y2="120" stroke="#9B5030" stroke-width="3.5" stroke-linecap="round" opacity="0.6"/>
-            <circle cx="205" cy="120" r="4" fill="#4a2008"/>
-            <ellipse cx="126" cy="141" rx="13" ry="12" fill="#111" opacity="0.95"/>
-            <path d="M 113 142 Q 108 146 109 152 L 115 150 Q 113 146 114 142 Z" fill="#0a0a0a"/>
-            <path d="M 114 143 Q 111 148 112 155 L 118 153 Q 116 148 116 143 Z" fill="#080808"/>
-            <circle cx="128" cy="146" r="8" fill="#c07848" opacity="0.88"/>
+            <ellipse cx="86" cy="272" rx="22" ry="5" fill="#000" opacity="0.5"/>
+            <line x1="94" y1="273" x2="98" y2="247" stroke="#111" stroke-width="10" stroke-linecap="round"/>
+            <line x1="98" y1="247" x2="102" y2="230" stroke="#111" stroke-width="9" stroke-linecap="round"/>
+            <line x1="76" y1="273" x2="74" y2="248" stroke="#0a0a0a" stroke-width="9" stroke-linecap="round"/>
+            <line x1="74" y1="248" x2="72" y2="232" stroke="#0a0a0a" stroke-width="8" stroke-linecap="round"/>
+            <rect x="64" y="270" width="17" height="5" rx="2" fill="#0a0a0a"/>
+            <rect x="88" y="270" width="17" height="5" rx="2" fill="#0a0a0a"/>
+            <path d="M 66 232 L 70 204 L 100 204 L 104 232 Z" fill="#dce4f0" opacity="0.95"/>
+            <path d="M 66 232 L 70 204 L 78 204 L 74 232 Z" fill="#b4bdd0" opacity="0.75"/>
+            <line x1="71" y1="214" x2="99" y2="214" stroke="#cc1122" stroke-width="2.2" opacity="0.55"/>
+            <line x1="71" y1="221" x2="99" y2="221" stroke="#cc1122" stroke-width="2.2" opacity="0.55"/>
+            <rect x="66" y="230" width="38" height="4" rx="1.5" fill="#1a1a1a" opacity="0.9"/>
+            <line x1="98" y1="216" x2="112" y2="206" stroke="#c07848" stroke-width="8" stroke-linecap="round"/>
+            <line x1="112" y1="206" x2="122" y2="197" stroke="#b06838" stroke-width="7" stroke-linecap="round"/>
+            <line x1="72" y1="220" x2="90" y2="211" stroke="#c07848" stroke-width="7" stroke-linecap="round"/>
+            <line x1="90" y1="211" x2="108" y2="204" stroke="#b06838" stroke-width="6" stroke-linecap="round"/>
+            <circle cx="115" cy="200" r="6" fill="#8a4020"/>
+            <line x1="117" y1="197" x2="188" y2="162" stroke="#5a2a0a" stroke-width="6" stroke-linecap="round"/>
+            <circle cx="188" cy="162" r="4" fill="#3a1808"/>
+            <ellipse cx="78" cy="200" rx="14" ry="13" fill="#0a0a0a" opacity="0.97"/>
+            <path d="M 64 200 Q 59 207 61 215 L 68 212 Q 65 207 65 200 Z" fill="#060606"/>
+            <circle cx="80" cy="205" r="8" fill="#c07848" opacity="0.9"/>
             <!-- Strike zone -->
-            <rect x="207" y="98" width="104" height="100" rx="3" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="7"/>
-            <rect x="210" y="101" width="98" height="94" rx="2" fill="rgba(255,255,255,0.07)"/>
-            <line x1="243" y1="101" x2="243" y2="195" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
-            <line x1="276" y1="101" x2="276" y2="195" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
-            <line x1="210" y1="132" x2="308" y2="132" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
-            <line x1="210" y1="164" x2="308" y2="164" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
-            <rect x="210" y="101" width="98" height="94" rx="2" fill="none" stroke="rgba(255,255,255,0.93)" stroke-width="2.5"/>
-            <!-- Ball -->
-            <circle id="gd-pz-ball" cx="-50" cy="-50" r="9" fill="#F2C230" opacity="0" stroke="white" stroke-width="1.5" filter="url(#gd-ballglow)"/>
-            <path id="gd-pz-seam1" d="" stroke="#C83A2B" stroke-width="1.2" fill="none" opacity="0"/>
-            <path id="gd-pz-seam2" d="" stroke="#C83A2B" stroke-width="1.2" fill="none" opacity="0"/>
+            <rect x="121" y="96" width="120" height="130" rx="3"
+              fill="none" stroke="rgba(79,195,247,0.1)" stroke-width="10"
+              filter="url(#gd-zone-glow)" id="gd-outer-glow"/>
+            <rect x="124" y="99" width="114" height="124" rx="2"
+              fill="rgba(100,180,255,0.035)" id="gd-zone-fill"/>
+            <line x1="162" y1="99" x2="162" y2="223" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/>
+            <line x1="200" y1="99" x2="200" y2="223" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/>
+            <line x1="124" y1="140" x2="238" y2="140" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/>
+            <line x1="124" y1="182" x2="238" y2="182" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/>
+            <rect x="124" y="99" width="114" height="124" rx="2"
+              fill="none" stroke="rgba(255,255,255,0.88)" stroke-width="2.5" id="gd-zone-border"/>
+            <!-- K-Zone label -->
+            <text x="12" y="18" fill="#4fc3f7" font-size="9" font-family="monospace" font-weight="bold" letter-spacing="1">K-ZONE</text>
+            <line x1="12" y1="21" x2="68" y2="21" stroke="#4fc3f7" stroke-width="0.8" opacity="0.4"/>
+            <!-- Count dots -->
+            <text x="308" y="20" fill="#9aa8c4" font-size="7.5" text-anchor="end" font-family="monospace">BALLS</text>
+            <circle id="gd-b1" cx="260" cy="16" r="5.5" fill="#0a1a0a" stroke="#2a4a2a" stroke-width="1.2"/>
+            <circle id="gd-b2" cx="274" cy="16" r="5.5" fill="#0a1a0a" stroke="#2a4a2a" stroke-width="1.2"/>
+            <circle id="gd-b3" cx="288" cy="16" r="5.5" fill="#0a1a0a" stroke="#2a4a2a" stroke-width="1.2"/>
+            <text x="308" y="36" fill="#9aa8c4" font-size="7.5" text-anchor="end" font-family="monospace">STRIKES</text>
+            <circle id="gd-s1" cx="260" cy="32" r="5.5" fill="#1a1a0a" stroke="#4a4a1a" stroke-width="1.2"/>
+            <circle id="gd-s2" cx="274" cy="32" r="5.5" fill="#1a1a0a" stroke="#4a4a1a" stroke-width="1.2"/>
+            <text x="308" y="52" fill="#9aa8c4" font-size="7.5" text-anchor="end" font-family="monospace">OUTS</text>
+            <circle id="gd-o1" cx="260" cy="48" r="5.5" fill="#1a0a0a" stroke="#4a1a1a" stroke-width="1.2"/>
+            <circle id="gd-o2" cx="274" cy="48" r="5.5" fill="#1a0a0a" stroke="#4a1a1a" stroke-width="1.2"/>
+            <circle id="gd-o3" cx="288" cy="48" r="5.5" fill="#1a0a0a" stroke="#4a1a1a" stroke-width="1.2"/>
+            <!-- History + trail + ball -->
+            <g id="gd-pz-history"></g>
+            <circle id="gd-pz-trail4" cx="-50" cy="-50" r="3.5" opacity="0" filter="url(#gd-trail-glow)"/>
+            <circle id="gd-pz-trail3" cx="-50" cy="-50" r="4.5" opacity="0" filter="url(#gd-trail-glow)"/>
+            <circle id="gd-pz-trail2" cx="-50" cy="-50" r="5.5" opacity="0" filter="url(#gd-trail-glow)"/>
+            <circle id="gd-pz-trail1" cx="-50" cy="-50" r="7"   opacity="0" filter="url(#gd-trail-glow)"/>
+            <circle id="gd-pz-ball" cx="-50" cy="-50" r="10"
+              fill="#F2C230" opacity="0"
+              stroke="rgba(255,255,255,0.95)" stroke-width="1.8"
+              filter="url(#gd-ball-glow)"/>
+            <path id="gd-pz-seam1" d="" stroke="#C83A2B" stroke-width="1.4" fill="none" opacity="0"/>
+            <path id="gd-pz-seam2" d="" stroke="#C83A2B" stroke-width="1.4" fill="none" opacity="0"/>
           </svg>
-          <div class="pz-pitch-label" id="gd-pitch-label"></div>
         </div>
-      </div>
+        <div class="pz-info-bar" id="gd-info-bar" style="opacity:0;transition:opacity .35s">
+          <div>
+            <div class="pz-pitch-type" id="gd-pitch-type-lbl">—</div>
+            <div class="pz-pitch-speed" id="gd-pitch-speed-lbl"></div>
+          </div>
+          <div class="pz-count">
+            <span class="pz-count-item">B<span id="gd-pz-balls">0</span></span>
+            <span class="pz-count-item">S<span id="gd-pz-strikes">0</span></span>
+            <span class="pz-count-item">O<span id="gd-pz-outs">0</span></span>
+          </div>
+          <span class="pz-result-badge" id="gd-pitch-result"></span>
+        </div>
       </div>
       </div>
     </div>
@@ -552,7 +660,7 @@
     <div class="bs-score-header">
       <div class="bs-team-side">
         <img src="/assets/mlb/yankees.png" class="bs-team-logo" onerror="this.style.display='none'" />
-        <div class="bs-team-name-blue">New York Yankees</div>
+        <div class="bs-team-name-blue">Yankees</div>
         <div class="bs-final-score">2</div>
       </div>
       <div class="bs-center-info">
@@ -561,7 +669,7 @@
       </div>
       <div class="bs-team-side">
         <img src="/assets/mlb/red_sox.png" class="bs-team-logo" onerror="this.style.display='none'" />
-        <div class="bs-team-name-blue">Boston Red Sox</div>
+        <div class="bs-team-name-blue">Red Sox</div>
         <div class="bs-final-score">3</div>
       </div>
     </div>
@@ -588,8 +696,8 @@
     <div class="bs-card">
       <div class="bs-card-title">Team Stats <span class="bs-sample-tag">sample</span></div>
       <div class="bs-teamstats-header">
-        <span class="bs-team-name-blue">New York Yankees</span>
-        <span class="bs-team-name-blue">Boston Red Sox</span>
+        <span class="bs-team-name-blue">Yankees</span>
+        <span class="bs-team-name-blue">Red Sox</span>
       </div>
       
       <div class="bs-stat-row"><div class="bs-stat-val">2</div><div class="bs-stat-label">Runs</div><div class="bs-stat-val hi">3</div></div>
@@ -859,41 +967,123 @@ renderPlay(currentIdx);
 startLive();
 
 // ── Pitch zone for gameday ──────────────────────────────────────
-const GD_PZ_POS = {
-  "Up & In":{cx:226,cy:116},"Up & Middle":{cx:259,cy:116},"Up & Away":{cx:292,cy:116},
-  "Middle-In":{cx:226,cy:148},"Middle":{cx:259,cy:148},"Middle-Away":{cx:292,cy:148},
-  "Down & In":{cx:226,cy:180},"Down & Middle":{cx:259,cy:180},"Down & Away":{cx:292,cy:180},
-  "Low & Away":{cx:310,cy:198,out:true},"Bounce":{cx:259,cy:205,out:true},
-  "Way Outside":{cx:328,cy:148,out:true},"High":{cx:259,cy:88,out:true},
-  "Inside":{cx:192,cy:148,out:true},"Down the Middle":{cx:259,cy:148},
+const GD_PITCH_COLORS = {
+  'Fastball':   {fill:'#ef5350',glow:'rgba(239,83,80,0.8)'},
+  'Sinker':     {fill:'#ff7043',glow:'rgba(255,112,67,0.8)'},
+  'Cutter':     {fill:'#ffa726',glow:'rgba(255,167,38,0.8)'},
+  'Curveball':  {fill:'#42a5f5',glow:'rgba(66,165,245,0.8)'},
+  'Slider':     {fill:'#ab47bc',glow:'rgba(171,71,188,0.8)'},
+  'Changeup':   {fill:'#66bb6a',glow:'rgba(102,187,106,0.8)'},
+  'Splitter':   {fill:'#26c6da',glow:'rgba(38,198,218,0.8)'},
+  'default':    {fill:'#F2C230',glow:'rgba(242,194,48,0.8)'},
 };
-function gdShowPitch(label,type,speed){
-  const ball=document.getElementById("gd-pz-ball");
-  const s1=document.getElementById("gd-pz-seam1");
-  const s2=document.getElementById("gd-pz-seam2");
-  const status=document.getElementById("gd-zone-status");
-  const lbl=document.getElementById("gd-pitch-label");
+const GD_PZ_POS = {
+  "Up & In":{cx:143,cy:119},"Up & Middle":{cx:181,cy:119},"Up & Away":{cx:219,cy:119},
+  "Middle-In":{cx:143,cy:161},"Middle":{cx:181,cy:161},"Middle-Away":{cx:219,cy:161},
+  "Down & In":{cx:143,cy:203},"Down & Middle":{cx:181,cy:203},"Down & Away":{cx:219,cy:203},
+  "High":{cx:181,cy:75,out:true},"Low":{cx:181,cy:248,out:true},
+  "Inside":{cx:96,cy:161,out:true},"Way Outside":{cx:260,cy:161,out:true},
+  "Low & Away":{cx:248,cy:240,out:true},"Bounce":{cx:181,cy:268,out:true},
+};
+let gd_pitch_history = [];
+function gdGetPos(label){
+  if(!label)return{cx:181,cy:161,out:false};
+  for(const[k,v]of Object.entries(GD_PZ_POS)){
+    if(label.toLowerCase().includes(k.toLowerCase()))return v;
+  }
+  return{cx:181,cy:161,out:false};
+}
+function gdGetColor(type){
+  if(!type)return GD_PITCH_COLORS.default;
+  for(const[k,v]of Object.entries(GD_PITCH_COLORS)){
+    if(type.toLowerCase().includes(k.toLowerCase()))return v;
+  }
+  return GD_PITCH_COLORS.default;
+}
+function gdUpdateCount(b,s,o){
+  const dots=[
+    {ids:['gd-b1','gd-b2','gd-b3'],count:b||0,color:'#4caf50'},
+    {ids:['gd-s1','gd-s2'],count:s||0,color:'#ffb300'},
+    {ids:['gd-o1','gd-o2','gd-o3'],count:o||0,color:'#ef5350'},
+  ];
+  dots.forEach(({ids,count,color})=>{
+    ids.forEach((id,i)=>{
+      const el=document.getElementById(id);
+      if(!el)return;
+      el.setAttribute('fill',i<count?color:(id.includes('b1')||id.includes('b2')||id.includes('b3')?'#0a1a0a':id.includes('s')?'#1a1a0a':'#1a0a0a'));
+      el.setAttribute('stroke',i<count?color:'#2a2a2a');
+    });
+  });
+  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  set('gd-pz-balls',b||0);set('gd-pz-strikes',s||0);set('gd-pz-outs',o||0);
+}
+function gdAnimateTrail(cx,cy,color){
+  const startX=181,startY=30;
+  [{id:'gd-pz-trail4',frac:.25,r:3.5,op:.15},{id:'gd-pz-trail3',frac:.45,r:4.5,op:.25},
+   {id:'gd-pz-trail2',frac:.65,r:5.5,op:.35},{id:'gd-pz-trail1',frac:.82,r:7,op:.5}]
+  .forEach(({id,frac,r,op})=>{
+    const el=document.getElementById(id);
+    if(!el)return;
+    el.setAttribute('cx',startX+(cx-startX)*frac);
+    el.setAttribute('cy',startY+(cy-startY)*frac);
+    el.setAttribute('r',r);el.setAttribute('fill',color);el.setAttribute('opacity','0');
+    setTimeout(()=>el.setAttribute('opacity',String(op)),frac*220);
+    setTimeout(()=>el.setAttribute('opacity','0'),frac*220+600);
+  });
+}
+function gdShowPitch(label,type,speed,balls,strikes,outs){
+  const ball=document.getElementById('gd-pz-ball');
+  const s1=document.getElementById('gd-pz-seam1');
+  const s2=document.getElementById('gd-pz-seam2');
+  const status=document.getElementById('gd-zone-status');
+  const badge=document.getElementById('gd-pitch-result');
+  const infoBar=document.getElementById('gd-info-bar');
+  const border=document.getElementById('gd-zone-border');
+  const glow=document.getElementById('gd-outer-glow');
   if(!ball)return;
-  let pos=GD_PZ_POS["Middle"];
-  if(label){for(const[k,v]of Object.entries(GD_PZ_POS)){if(label.toLowerCase().includes(k.toLowerCase())){pos=v;break;}}}
-  ball.setAttribute("cx",pos.cx);ball.setAttribute("cy",pos.cy);ball.setAttribute("opacity","1");
-  ball.setAttribute("fill",pos.out?"#FF4444":"#F2C230");
-  if(s1){s1.setAttribute("d","M"+(pos.cx-3)+","+(pos.cy-5)+" Q"+pos.cx+","+pos.cy+" "+(pos.cx-3)+","+(pos.cy+5));s1.setAttribute("opacity","1");}
-  if(s2){s2.setAttribute("d","M"+(pos.cx+3)+","+(pos.cy-5)+" Q"+pos.cx+","+pos.cy+" "+(pos.cx+3)+","+(pos.cy+5));s2.setAttribute("opacity","1");}
-  if(status){status.textContent=pos.out?"Out of Zone":"In Zone";status.style.color=pos.out?"#8A8F98":"var(--gold)";}
-  if(lbl&&type){lbl.textContent=type+(speed?" · "+speed+" mph":"");lbl.classList.add("show");}
+  const pos=gdGetPos(label);
+  const inZone=!pos.out;
+  const pColor=gdGetColor(type);
+  if(balls!==undefined)gdUpdateCount(balls,strikes,outs);
+  ball.setAttribute('opacity','0');
+  gdAnimateTrail(pos.cx,pos.cy,pColor.fill);
+  setTimeout(()=>{
+    ball.setAttribute('cx',pos.cx);ball.setAttribute('cy',pos.cy);
+    ball.setAttribute('fill',pColor.fill);ball.setAttribute('opacity','1');
+    if(s1){s1.setAttribute('d',`M${pos.cx-4},${pos.cy-6} Q${pos.cx},${pos.cy} ${pos.cx-4},${pos.cy+6}`);s1.setAttribute('opacity','0.8');}
+    if(s2){s2.setAttribute('d',`M${pos.cx+4},${pos.cy-6} Q${pos.cx},${pos.cy} ${pos.cx+4},${pos.cy+6}`);s2.setAttribute('opacity','0.8');}
+    if(border)border.setAttribute('stroke',inZone?'rgba(255,255,255,0.88)':'rgba(239,83,80,0.6)');
+    if(glow)glow.setAttribute('stroke',inZone?'rgba(79,195,247,0.2)':'rgba(239,83,80,0.15)');
+  },280);
+  if(status){status.textContent=inZone?'Strike Zone':'Ball — Out of Zone';status.className='pitch-zone-status '+(inZone?'pz-status-strike':'pz-status-ball');}
+  const tl=document.getElementById('gd-pitch-type-lbl');
+  const sl=document.getElementById('gd-pitch-speed-lbl');
+  if(tl)tl.textContent=type||'Pitch';
+  if(sl)sl.textContent=speed?speed+' mph':'';
+  if(infoBar)infoBar.style.opacity='1';
+  if(badge){badge.className='pz-result-badge';badge.textContent=inZone?'Strike':'Ball';badge.classList.add(inZone?'pz-result-strike':'pz-result-ball');}
+  gd_pitch_history.push({cx:pos.cx,cy:pos.cy,color:pColor.fill});
+  const g=document.getElementById('gd-pz-history');
+  if(g)g.innerHTML=gd_pitch_history.slice(-8,-1).map((p,i)=>`<circle cx="${p.cx}" cy="${p.cy}" r="5" fill="${p.color}" opacity="${.2+i*.04}" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>`).join('');
 }
 function gdResetPitch(){
-  const ball=document.getElementById("gd-pz-ball");
-  const s1=document.getElementById("gd-pz-seam1");
-  const s2=document.getElementById("gd-pz-seam2");
-  const lbl=document.getElementById("gd-pitch-label");
-  const status=document.getElementById("gd-zone-status");
-  if(ball){ball.setAttribute("cx","-50");ball.setAttribute("cy","-50");ball.setAttribute("opacity","0");}
-  if(s1)s1.setAttribute("opacity","0");
-  if(s2)s2.setAttribute("opacity","0");
-  if(lbl)lbl.classList.remove("show");
-  if(status)status.textContent="";
+  ['gd-pz-ball','gd-pz-seam1','gd-pz-seam2','gd-pz-trail1','gd-pz-trail2','gd-pz-trail3','gd-pz-trail4'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(!el)return;
+    el.setAttribute('opacity','0');
+    if(id==='gd-pz-ball'){el.setAttribute('cx','-50');el.setAttribute('cy','-50');}
+    if(id.includes('trail')){el.setAttribute('cx','-50');el.setAttribute('cy','-50');}
+    if(id.includes('seam'))el.setAttribute('d','');
+  });
+  const st=document.getElementById('gd-zone-status');
+  const ba=document.getElementById('gd-pitch-result');
+  const ib=document.getElementById('gd-info-bar');
+  if(st){st.textContent='';st.className='pitch-zone-status';}
+  if(ba){ba.className='pz-result-badge';ba.textContent='';}
+  if(ib)ib.style.opacity='0';
+  gd_pitch_history=[];
+  const gh=document.getElementById('gd-pz-history');
+  if(gh)gh.innerHTML='';
 }
 </script>
 
@@ -1036,6 +1226,37 @@ function applyTranslations(lang) {
   else document.querySelectorAll('.lang-btn[data-lang="en"]').forEach(b => b.classList.add('active'));
 })();
 
+</script>
+<script>
+
+function toggleMobileMenu() {
+  const menu = document.getElementById('mobile-menu');
+  const btn  = document.getElementById('hamburger-btn');
+  const open = menu.classList.toggle('open');
+  btn.textContent = open ? '✕' : '☰';
+}
+function closeMobileMenu() {
+  const menu = document.getElementById('mobile-menu');
+  const btn  = document.getElementById('hamburger-btn');
+  if (menu) { menu.classList.remove('open'); }
+  if (btn)  { btn.textContent = '☰'; }
+}
+// Close menu when clicking outside
+document.addEventListener('click', function(e) {
+  const menu = document.getElementById('mobile-menu');
+  const btn  = document.getElementById('hamburger-btn');
+  if (menu && menu.classList.contains('open') && !menu.contains(e.target) && e.target !== btn) {
+    menu.classList.remove('open');
+    if (btn) btn.textContent = '☰';
+  }
+});
+// Sync mobile lang buttons with desktop state
+const _origSetLang = typeof setLang !== 'undefined' ? setLang : null;
+function syncMobileLang(lang) {
+  document.querySelectorAll('.mobile-lang-btn').forEach(b => {
+    b.classList.toggle('active', b.getAttribute('data-lang') === lang);
+  });
+}
 </script>
 </body>
 </html>

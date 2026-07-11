@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Baltimore Ravens — The Sports Companion</title>
+  <link rel="icon" type="image/png" href="/assets/logo.png"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--ink:#0B0D0F;--ink-2:#181B1F;--ink-3:#262A30;--muted:#C8CDD6;--line:#2A2E35;--gold:#F2C230;--crimson:#C83A2B;--white:#FFFFFF}
+    body{font-family:'Inter',sans-serif;background:var(--ink);color:var(--white);min-height:100vh}
+    nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;background:rgba(11,13,15,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+    .nav-brand{display:flex;align-items:center;gap:8px;padding:0 20px;text-decoration:none;border-right:1px solid var(--line);height:56px;flex-shrink:0}
+    .nav-brand img{height:28px}
+    .nav-brand span{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;color:var(--white)}
+    .nav-brand span em{font-style:normal;color:var(--gold)}
+    .nav-leagues{display:flex;align-items:center;list-style:none;overflow-x:auto;flex:1;scrollbar-width:none}
+    .nav-leagues::-webkit-scrollbar{display:none}
+    .nav-leagues a{display:flex;align-items:center;height:56px;padding:0 15px;font-size:.8rem;font-weight:600;color:var(--muted);text-decoration:none;border-right:1px solid var(--line);white-space:nowrap;transition:color .2s}
+    .nav-leagues a:hover{color:var(--white);background:var(--ink-2)}
+    .nav-leagues a.active{color:var(--gold);background:var(--ink-2);border-bottom:2px solid var(--gold)}
+    .nav-cta{margin-left:auto;padding:0 16px;height:56px;display:flex;align-items:center;gap:8px;flex-shrink:0}
+    .nav-cta a{color:var(--muted);font-size:.8rem;font-weight:600;text-decoration:none;padding:8px 12px}
+    .nav-cta a.primary{background:var(--gold);color:var(--ink);border-radius:5px}
+    /* LABELS */
+    .sec-label{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;letter-spacing:.15em;color:var(--gold);text-transform:uppercase;margin-bottom:6px}
+    /* CARD */
+    .card{background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin-bottom:14px}
+    /* STAT GRID */
+    .stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-bottom:0}
+    .stat-box{background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:12px;text-align:center}
+    .stat-box .val{font-family:'Barlow Condensed',sans-serif;font-size:1.6rem;font-weight:900;color:var(--white);line-height:1}
+    .stat-box .val.hi{color:var(--gold)}
+    .stat-box .lbl{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+    /* OVR badge */
+    .ovr-badge{font-family:'Barlow Condensed',sans-serif;font-size:2rem;font-weight:900;padding:6px 16px;border-radius:8px;display:inline-block;line-height:1}
+    .ovr-hi{background:rgba(242,194,48,.15);color:var(--gold);border:2px solid rgba(242,194,48,.4)}
+    .ovr-mid{background:rgba(56,189,248,.12);color:#38BDF8;border:2px solid rgba(56,189,248,.3)}
+    .ovr-lo{background:rgba(255,107,107,.1);color:#FF6B6B;border:2px solid rgba(255,107,107,.3)}
+    /* TABLE */
+    .tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+    .tbl{width:100%;border-collapse:collapse;font-size:.82rem}
+    .tbl thead tr{background:var(--ink-3);border-bottom:1px solid var(--line)}
+    .tbl th{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:9px 12px;text-align:center;white-space:nowrap}
+    .tbl th:first-child{text-align:left}
+    .tbl tbody tr{border-bottom:1px solid rgba(255,255,255,.04);transition:background .15s}
+    .tbl tbody tr:hover{background:var(--ink-2)}
+    .tbl tbody tr:last-child{border-bottom:none}
+    .tbl td{padding:9px 12px;color:var(--muted);text-align:center;white-space:nowrap}
+    .tbl td.pl{color:var(--white);font-weight:600;text-align:left}
+    .tbl td.hi{color:var(--gold);font-weight:700}
+    /* TEAM LOGO ROW */
+    .team-logo-row{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+    .team-logo-row img{width:36px;height:36px;object-fit:contain}
+    /* TABS */
+    .tab-bar{display:flex;border-bottom:1px solid var(--line);margin-bottom:20px;overflow-x:auto;scrollbar-width:none}
+    .tab-bar::-webkit-scrollbar{display:none}
+    .tab-btn{padding:11px 18px;font-family:'Barlow Condensed',sans-serif;font-size:.88rem;font-weight:800;text-transform:uppercase;color:var(--muted);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;transition:all .2s;white-space:nowrap}
+    .tab-btn:hover{color:var(--white)}
+    .tab-btn.active{color:var(--gold);border-bottom-color:var(--gold)}
+    .tab-panel{display:none}
+    .tab-panel.active{display:block}
+    /* RELATED CARDS */
+    .player-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+    .player-card{background:var(--ink-2);border:1px solid var(--line);border-radius:10px;padding:14px;text-decoration:none;display:block;transition:border-color .2s,transform .2s}
+    .player-card:hover{border-color:var(--gold);transform:translateY(-2px)}
+    .player-card .pname{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;color:var(--white);margin-bottom:3px}
+    .player-card .ppos{font-size:.72rem;color:var(--muted)}
+    .player-card .povr{font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:800;color:var(--gold);margin-top:6px}
+    /* HEADER BANNER */
+    .player-banner{background:var(--ink-2);border-bottom:1px solid var(--line);padding:28px 32px}
+    .player-banner-inner{display:flex;align-items:flex-start;gap:24px;max-width:1000px}
+    .player-avatar{width:80px;height:80px;border-radius:50%;background:var(--ink-3);border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:1.8rem;flex-shrink:0}
+    .player-info h1{font-family:'Barlow Condensed',sans-serif;font-size:2rem;font-weight:900;text-transform:uppercase;letter-spacing:.04em;line-height:1.1}
+    .player-info .meta{display:flex;align-items:center;gap:10px;margin-top:6px;flex-wrap:wrap}
+    .meta-badge{font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:600;letter-spacing:.08em;padding:3px 8px;border-radius:4px;background:var(--ink-3);color:var(--muted);border:1px solid var(--line)}
+    .meta-badge.sport{background:rgba(242,194,48,.08);color:var(--gold);border-color:rgba(242,194,48,.3)}
+    .main{max-width:1000px;margin:0 auto;padding:28px 20px 64px}
+    footer{background:var(--ink);border-top:1px solid var(--line);padding:20px 32px;text-align:center;font-size:.74rem;color:var(--muted);margin-top:48px}
+    @media(max-width:600px){.player-banner{padding:18px 16px}.main{padding:18px 12px 48px}.player-banner-inner{flex-direction:column;gap:14px}.stat-grid{grid-template-columns:repeat(2,1fr)}}</style>
+</head>
+<body>
+<nav>
+  <a href="/index.html" class="nav-brand">
+    <img src="/assets/logo.png" alt="SSC"/>
+    <span>The Sports <em>Companion</em></span>
+  </a>
+    <ul class="nav-leagues">
+    <li><a href="/nfl/index.html">🏈 NFL</a></li>
+    <li><a href="/mlb/index.html">⚾ MLB</a></li>
+    <li><a href="/nba/index.html">🏀 NBA</a></li>
+    <li><a href="/ncaa/index.html">🎓 NCAA</a></li>
+    <li><a href="/futbol/index.html">⚽ Fútbol</a></li>
+    <li><a href="/fantasy/index.html">🏆 Fantasy</a></li>
+    <li><a href="/brackets/index.html">🗂 Brackets</a></li>
+    <li><a href="/more/index.html">• • •</a></li>
+  </ul>
+  <div class="nav-cta">
+    <a href="/login/index.html">Log In</a>
+    <a href="/signup/index.html" class="primary">Sign Up</a>
+  </div>
+</nav>
+<div class="player-banner">
+  <div class="player-banner-inner">
+    <div class="player-avatar"><img src="/assets/nfl/ravens.png" style="width:58px;height:58px;object-fit:contain" onerror="this.style.display='none'"/></div>
+    <div class="player-info">
+      <h1>Baltimore Ravens</h1>
+      <div class="meta">
+        <span class="meta-badge sport">NFL</span>
+        <span class="meta-badge">AFC</span>
+        <span class="meta-badge">North Division</span>
+        <span class="meta-badge">Baltimore, MD</span>
+      </div>
+    </div>
+    <div style="margin-left:auto;flex-shrink:0"><span class="ovr-badge ovr-hi">OVR 93</span></div>
+  </div>
+</div>
+<div class="main">
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="showTab('tt-overview',this)">Overview</button>
+      <button class="tab-btn" onclick="showTab('tt-roster',this)">Roster</button>
+      <button class="tab-btn" onclick="showTab('tt-stats',this)">Team Stats</button>
+      <button class="tab-btn" onclick="showTab('tt-more',this)">More Teams</button>
+    </div>
+
+    <!-- OVERVIEW -->
+    <div id="tt-overview" class="tab-panel active">
+      <div class="card">
+        <div class="sec-label">// 2025 Season</div>
+        <div class="stat-grid" style="margin-top:10px"><div class="stat-box"><div class="val">11-2</div><div class="lbl">Record</div></div><div class="stat-box"><div class="val">30.2</div><div class="lbl">PPG</div></div><div class="stat-box"><div class="val">17.8</div><div class="lbl">PAPG</div></div><div class="stat-box"><div class="val">7.1</div><div class="lbl">YPPG Diff</div></div><div class="stat-box"><div class="val hi">93</div><div class="lbl">OVR</div></div></div>
+      </div>
+      <div class="card">
+        <div class="sec-label">// About</div>
+        <p style="font-size:.88rem;color:var(--muted);line-height:1.8;margin-top:8px">The Baltimore Ravens are built around Lamar Jackson's historic dual-threat ability. Under John Harbaugh, they have consistently fielded one of the most creative offensive schemes in the league.</p>
+      </div>
+      <div class="card">
+        <div class="sec-label">// Franchise Info</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
+          <div class="stat-box"><div class="val" style="font-size:1rem">John Harbaugh</div><div class="lbl">Head Coach / Manager</div></div>
+          <div class="stat-box"><div class="val" style="font-size:.85rem;white-space:normal;line-height:1.3">M&T Bank Stadium</div><div class="lbl">Stadium / Arena</div></div>
+          <div class="stat-box"><div class="val" style="font-size:1rem">AFC</div><div class="lbl">Conference / League</div></div>
+          <div class="stat-box"><div class="val" style="font-size:1rem">North</div><div class="lbl">Division</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROSTER -->
+    <div id="tt-roster" class="tab-panel">
+      <div class="sec-label" style="margin-bottom:12px">// Featured Players</div>
+      <div class="player-grid"><a href="/players/nfl-jackson.html" class="player-card">
+      <div class="team-logo-row"><img src="/assets/nfl/ravens.png" onerror="this.style.display='none'"/></div>
+      <div class="pname">Lamar Jackson</div>
+      <div class="ppos">QB</div>
+      <div class="povr">OVR 96</div>
+    </a><a href="/players/nfl-tucker.html" class="player-card">
+      <div class="team-logo-row"><img src="/assets/nfl/ravens.png" onerror="this.style.display='none'"/></div>
+      <div class="pname">Justin Tucker</div>
+      <div class="ppos">K</div>
+      <div class="povr">OVR 97</div>
+    </a></div>
+      <div class="card" style="margin-top:16px">
+        <p style="font-size:.82rem;color:var(--muted);line-height:1.7">Full roster data coming in a future update. Featured players shown are those with individual stat profiles in The Sports Companion database.</p>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div id="tt-stats" class="tab-panel">
+      <div class="card">
+        <div class="sec-label">// 2025 Team Stats</div>
+        <div class="stat-grid" style="margin-top:10px"><div class="stat-box"><div class="val">11-2</div><div class="lbl">Record</div></div><div class="stat-box"><div class="val">30.2</div><div class="lbl">PPG</div></div><div class="stat-box"><div class="val">17.8</div><div class="lbl">PAPG</div></div><div class="stat-box"><div class="val">7.1</div><div class="lbl">YPPG Diff</div></div><div class="stat-box"><div class="val hi">93</div><div class="lbl">OVR</div></div></div>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <div class="sec-label">// OVR Rating</div>
+        <div style="display:flex;align-items:center;gap:16px;margin-top:10px">
+          <span class="ovr-badge ovr-hi" style="font-size:2.4rem">93</span>
+          <div style="font-size:.84rem;color:var(--muted);line-height:1.7">
+            Team OVR is calculated using the average OVR of all rostered players weighted by position importance,
+            combined with team-level YPPG Diff (NFL), ERA (MLB), or Net Rating (NBA) per 
+            <em>The Sports Statistics Manual</em> by Chris Cain.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MORE TEAMS -->
+    <div id="tt-more" class="tab-panel">
+      <div class="sec-label" style="margin-bottom:12px">// Other NFL Teams</div>
+      <div class="player-grid"><a href="/teams/nfl-chiefs.html" class="player-card">
+      <img src="/assets/nfl/chiefs.png" style="width:32px;height:32px;object-fit:contain;margin-bottom:6px" onerror="this.style.display='none'"/>
+      <div class="pname">Chiefs</div>
+      <div class="ppos">11-2</div>
+      <div class="povr">OVR 94</div>
+    </a><a href="/teams/nfl-eagles.html" class="player-card">
+      <img src="/assets/nfl/eagles.png" style="width:32px;height:32px;object-fit:contain;margin-bottom:6px" onerror="this.style.display='none'"/>
+      <div class="pname">Eagles</div>
+      <div class="ppos">10-3</div>
+      <div class="povr">OVR 91</div>
+    </a><a href="/teams/nfl-49ers.html" class="player-card">
+      <img src="/assets/nfl/49ers.png" style="width:32px;height:32px;object-fit:contain;margin-bottom:6px" onerror="this.style.display='none'"/>
+      <div class="pname">49ers</div>
+      <div class="ppos">9-4</div>
+      <div class="povr">OVR 90</div>
+    </a></div>
+    </div></div>
+<footer>© 2026 The Sports Companion · Chris Cain</footer>
+<script>
+function showTab(id,btn){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>

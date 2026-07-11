@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root { --ink:#0B0D0F; --ink-2:#181B1F; --ink-3:#262A30; --muted:#8A8F98; --line:#2A2E35; --gold:#F2C230; --crimson:#C83A2B; --white:#FFFFFF; }
+    :root { --ink:#0B0D0F; --ink-2:#181B1F; --ink-3:#262A30; --muted:#C8CDD6; --line:#2A2E35; --gold:#F2C230; --crimson:#C83A2B; --white:#FFFFFF; }
     body { font-family: 'Inter', sans-serif; background: var(--ink); color: var(--white); }
 
     nav { position: sticky; top: 0; z-index: 100; display: flex; align-items: center; background: rgba(11,13,15,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
@@ -111,6 +111,37 @@
     .lang-btn{background:none;border:1px solid transparent;border-radius:5px;padding:5px 9px;font-size:.75rem;font-weight:700;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;font-family:'Barlow Condensed',sans-serif;letter-spacing:.03em}
     .lang-btn:hover{color:var(--white);border-color:var(--line)}
     .lang-btn.active{color:var(--gold);border-color:rgba(242,194,48,.4);background:rgba(242,194,48,.08)}
+  
+    /* ── MOBILE NAV OVERHAUL ─────────────────────────────── */
+    .hamburger{display:none;align-items:center;justify-content:center;width:44px;height:56px;background:none;border:none;cursor:pointer;color:var(--white);font-size:1.4rem;flex-shrink:0;padding:0 12px}
+    .mobile-menu{display:none;position:absolute;top:56px;left:0;right:0;background:rgba(11,13,15,.98);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);z-index:999;max-height:calc(100vh - 56px);overflow-y:auto}
+    .mobile-menu.open{display:block}
+    .mobile-menu a{display:flex;align-items:center;gap:12px;padding:14px 20px;font-size:1rem;font-weight:600;color:var(--muted);text-decoration:none;border-bottom:1px solid rgba(255,255,255,.05);transition:background .15s,color .15s}
+    .mobile-menu a:hover,.mobile-menu a.active{background:var(--ink-2);color:var(--white)}
+    .mobile-menu a.active{color:var(--gold);border-left:3px solid var(--gold)}
+    .mobile-menu a:last-child{border-bottom:none}
+    .mobile-menu-footer{padding:14px 20px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .mobile-lang{display:flex;gap:6px}
+    .mobile-lang-btn{background:var(--ink-3);border:1px solid var(--line);border-radius:5px;padding:7px 12px;font-size:.82rem;font-weight:700;color:var(--muted);cursor:pointer;transition:all .2s}
+    .mobile-lang-btn.active{background:rgba(242,194,48,.1);border-color:var(--gold);color:var(--gold)}
+    .mobile-auth{display:flex;gap:8px}
+    .mobile-auth a{font-size:.82rem;font-weight:600;text-decoration:none;padding:8px 14px;border-radius:5px}
+    .mobile-auth a.login{color:var(--muted);border:1px solid var(--line)}
+    .mobile-auth a.signup{background:var(--gold);color:var(--ink)}
+
+    @media(max-width:768px){
+      .nav-leagues{display:none}
+      .lang-switch{display:none}
+      .hamburger{display:flex}
+      .nav-cta{display:none !important}
+      .nav-avatar-btn{margin-right:8px !important;padding:5px 10px !important}
+      .nav-brand span{display:none}
+      nav{position:relative}
+    }
+    @media(min-width:769px){
+      .hamburger{display:none}
+      .mobile-menu{display:none !important}
+    }
   </style>
 </head>
 <body>
@@ -128,8 +159,11 @@
     <li><a href="/futbol/index.html">⚽ Fútbol</a></li>
     <li><a href="/fantasy/index.html" class="active">🏆 Fantasy</a></li>
     <li><a href="/brackets/index.html">🗂 Brackets</a></li>
+    <li><a href="/players/index.html">👤 Players</a></li>
+    <li><a href="/teams/index.html">🏟 Teams</a></li>
     <li><a href="/more/index.html">• • •</a></li>
   </ul>
+  <button class="hamburger" id="hamburger-btn" onclick="toggleMobileMenu()" aria-label="Menu">☰</button>
   <div class="lang-switch" id="lang-switch">
     <button class="lang-btn active" data-lang="en" onclick="setLang('en',this)" aria-label="English">🇺🇸 EN</button>
     <button class="lang-btn" data-lang="es" onclick="setLang('es',this)" aria-label="Español">🇪🇸 ES</button>
@@ -142,6 +176,7 @@
     <div class="nav-avatar-initials" id="nav-initials" style="width:24px;height:24px;border-radius:50%;background:var(--gold);color:var(--ink);font-family:'Barlow Condensed',sans-serif;font-size:.8rem;font-weight:800;display:flex;align-items:center;justify-content:center">?</div>
     <span class="nav-avatar-name" id="nav-username" style="font-size:.8rem;font-weight:600;color:var(--white);max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Account</span>
     <div style="display:none;position:absolute;top:calc(100% + 8px);right:0;background:var(--ink-2);border:1px solid var(--line);border-radius:8px;min-width:180px;z-index:200;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.4)" class="nav-dropdown">
+      <a href="/dashboard/index.html" style="display:block;padding:11px 16px;font-size:.82rem;color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line)">📊 Dashboard</a>
       <a href="/profile/index.html" style="display:block;padding:11px 16px;font-size:.82rem;color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line)">⚙️ My Profile</a>
       <a href="/profile/index.html#favorites" style="display:block;padding:11px 16px;font-size:.82rem;color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line)">⭐ Favorites</a>
       <a href="/profile/index.html#notifications" style="display:block;padding:11px 16px;font-size:.82rem;color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line)">🔔 Notifications</a>
@@ -149,6 +184,27 @@
     </div>
   </div>
 </nav>
+  <!-- MOBILE MENU (hamburger dropdown) -->
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="/nfl/index.html" class="" onclick="closeMobileMenu()">🏈 NFL</a>
+    <a href="/mlb/index.html" class="" onclick="closeMobileMenu()">⚾ MLB</a>
+    <a href="/nba/index.html" class="" onclick="closeMobileMenu()">🏀 NBA</a>
+    <a href="/ncaa/index.html" class="" onclick="closeMobileMenu()">🎓 NCAA</a>
+    <a href="/futbol/index.html" class="" onclick="closeMobileMenu()">⚽ Fútbol</a>
+    <a href="/fantasy/index.html" class="active" onclick="closeMobileMenu()">🏆 Fantasy</a>
+    <a href="/brackets/index.html" class="" onclick="closeMobileMenu()">🗂 Brackets</a>
+    <a href="/more/index.html" class="" onclick="closeMobileMenu()">• • • More</a>
+    <div class="mobile-menu-footer">
+      <div class="mobile-lang">
+        <button class="mobile-lang-btn active" data-lang="en" onclick="setLang('en',this);closeMobileMenu()">🇺🇸 EN</button>
+        <button class="mobile-lang-btn" data-lang="es" onclick="setLang('es',this);closeMobileMenu()">🇪🇸 ES</button>
+      </div>
+      <div class="mobile-auth" id="mobile-auth">
+        <a href="/login/index.html" class="login">Log In</a>
+        <a href="/signup/index.html" class="signup">Sign Up</a>
+      </div>
+    </div>
+  </div>
 
 <div class="banner">
   <div class="banner-top">

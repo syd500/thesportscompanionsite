@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Dashboard — The Sports Companion</title>
+  <link rel="icon" type="image/png" href="/assets/logo.png"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--ink:#0B0D0F;--ink-2:#181B1F;--ink-3:#262A30;--muted:#C8CDD6;--line:#2A2E35;--gold:#F2C230;--crimson:#C83A2B;--white:#FFFFFF;--green:#22c55e;--blue:#38BDF8}
+    body{font-family:'Inter',sans-serif;background:var(--ink);color:var(--white);min-height:100vh}
+
+    /* ── NAV ── */
+    nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;background:rgba(11,13,15,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+    .nav-brand{display:flex;align-items:center;gap:8px;padding:0 20px;text-decoration:none;border-right:1px solid var(--line);height:56px;flex-shrink:0}
+    .nav-brand img{height:28px}
+    .nav-brand span{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;color:var(--white)}
+    .nav-brand span em{font-style:normal;color:var(--gold)}
+    .nav-leagues{display:flex;align-items:center;list-style:none;overflow-x:auto;flex:1;scrollbar-width:none}
+    .nav-leagues::-webkit-scrollbar{display:none}
+    .nav-leagues a{display:flex;align-items:center;height:56px;padding:0 14px;font-size:.8rem;font-weight:600;color:var(--muted);text-decoration:none;border-right:1px solid var(--line);white-space:nowrap;transition:color .2s}
+    .nav-leagues a:hover{color:var(--white);background:var(--ink-2)}
+    .nav-cta{margin-left:auto;padding:0 16px;height:56px;display:flex;align-items:center;gap:8px;flex-shrink:0}
+    .nav-cta button{background:var(--ink-3);border:1px solid var(--line);color:var(--muted);font-size:.8rem;font-weight:600;padding:7px 14px;border-radius:5px;cursor:pointer;transition:all .2s}
+    .nav-cta button:hover{border-color:var(--crimson);color:#FF6B6B}
+
+    /* ── DASHBOARD TABS ── */
+    .dash-banner{background:var(--ink-2);border-bottom:1px solid var(--line);padding:22px 28px 0}
+    .dash-banner-top{display:flex;align-items:center;gap:16px;margin-bottom:18px;flex-wrap:wrap}
+    .dash-avatar{width:52px;height:52px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:900;color:var(--ink);flex-shrink:0;overflow:hidden}
+    .dash-avatar img{width:100%;height:100%;object-fit:cover}
+    .dash-info h1{font-family:'Barlow Condensed',sans-serif;font-size:1.6rem;font-weight:900;text-transform:uppercase;letter-spacing:.04em}
+    .dash-info p{font-size:.8rem;color:var(--muted);margin-top:2px}
+    .dash-tabs{display:flex;overflow-x:auto;scrollbar-width:none;gap:0}
+    .dash-tabs::-webkit-scrollbar{display:none}
+    .dtab{padding:12px 20px;font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);background:none;border:none;border-bottom:3px solid transparent;cursor:pointer;transition:all .2s;white-space:nowrap}
+    .dtab:hover{color:var(--white)}
+    .dtab.active{color:var(--gold);border-bottom-color:var(--gold);background:rgba(242,194,48,.04)}
+
+    /* ── MAIN ── */
+    .main{max-width:1100px;margin:0 auto;padding:28px 20px 64px}
+    .dpanel{display:none}.dpanel.active{display:block}
+
+    /* ── GRID LAYOUTS ── */
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+
+    /* ── CARDS ── */
+    .card{background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin-bottom:14px}
+    .card-title{font-family:'Barlow Condensed',sans-serif;font-size:1.05rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--white);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+    .sec-label{font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:600;letter-spacing:.14em;color:var(--gold);text-transform:uppercase;margin-bottom:6px}
+
+    /* ── STAT BOXES ── */
+    .stat-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px;margin-bottom:0}
+    .sbox{background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:12px;text-align:center}
+    .sbox .val{font-family:'Barlow Condensed',sans-serif;font-size:1.8rem;font-weight:900;line-height:1;color:var(--white)}
+    .sbox .val.gold{color:var(--gold)}
+    .sbox .val.green{color:var(--green)}
+    .sbox .val.blue{color:var(--blue)}
+    .sbox .lbl{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+
+    /* ── GAME HISTORY TABLE ── */
+    .hist-table{width:100%;border-collapse:collapse;font-size:.82rem}
+    .hist-table th{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:8px 12px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+    .hist-table td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--muted);vertical-align:middle}
+    .hist-table tr:last-child td{border-bottom:none}
+    .hist-table tr:hover td{background:var(--ink-3)}
+    .result-badge{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:600;letter-spacing:.06em;padding:3px 8px;border-radius:4px}
+    .rb-win{background:rgba(34,197,94,.12);color:var(--green);border:1px solid rgba(34,197,94,.3)}
+    .rb-loss{background:rgba(200,58,43,.1);color:#FF6B6B;border:1px solid rgba(200,58,43,.25)}
+    .rb-streak{background:rgba(242,194,48,.1);color:var(--gold);border:1px solid rgba(242,194,48,.3)}
+
+    /* ── LEADERBOARD ── */
+    .lb-row{display:grid;grid-template-columns:36px 1fr 80px 80px 60px;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04);gap:8px}
+    .lb-row:last-child{border-bottom:none}
+    .lb-row.me{background:rgba(242,194,48,.04);border-radius:6px;padding:10px 8px;margin:0 -8px}
+    .lb-rank{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:900;color:var(--muted);text-align:center}
+    .lb-rank.top{color:var(--gold)}
+    .lb-name{font-weight:600;font-size:.86rem}
+    .lb-score{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;color:var(--gold);text-align:right}
+    .lb-streak{font-size:.8rem;color:var(--muted);text-align:right}
+    .lb-acc{font-size:.78rem;color:var(--muted);text-align:right}
+
+    /* ── PROGRESS BAR ── */
+    .prog-wrap{margin:10px 0}
+    .prog-label{display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted);margin-bottom:5px}
+    .prog-label span:last-child{color:var(--gold);font-weight:600}
+    .prog-bar{height:6px;background:var(--ink-3);border-radius:3px;overflow:hidden}
+    .prog-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--gold),#E8A820);transition:width .6s ease}
+
+    /* ── FAVORITE TEAM CARDS ── */
+    .fav-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+    .fav-card{background:var(--ink-3);border:1px solid var(--line);border-radius:9px;padding:14px;text-align:center;text-decoration:none;display:block;transition:border-color .18s,transform .18s}
+    .fav-card:hover{border-color:var(--gold);transform:translateY(-2px)}
+    .fav-card img{width:40px;height:40px;object-fit:contain;margin-bottom:8px}
+    .fav-card .fname{font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:800;text-transform:uppercase;color:var(--white);line-height:1.2}
+    .fav-card .fmeta{font-size:.7rem;color:var(--muted);margin-top:3px}
+    .fav-card .fstat{font-size:.76rem;color:var(--green);margin-top:6px;font-weight:600}
+
+    /* ── FANTASY LEAGUES ── */
+    .fl-card{background:var(--ink-2);border:1px solid var(--line);border-radius:10px;padding:16px 18px;display:flex;align-items:center;gap:14px;margin-bottom:10px;cursor:pointer;transition:border-color .18s}
+    .fl-card:hover{border-color:var(--gold)}
+    .fl-icon{font-size:2rem;flex-shrink:0;width:44px;text-align:center}
+    .fl-info{flex:1}
+    .fl-name{font-family:'Barlow Condensed',sans-serif;font-size:1.05rem;font-weight:800;text-transform:uppercase;color:var(--white);margin-bottom:2px}
+    .fl-meta{font-size:.76rem;color:var(--muted)}
+    .fl-rank{font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:900;color:var(--gold);flex-shrink:0}
+    .fl-rank-sub{font-size:.62rem;color:var(--muted);text-align:right;font-family:'JetBrains Mono',monospace}
+    .add-league-btn{width:100%;padding:12px;background:none;border:1.5px dashed var(--line);border-radius:10px;color:var(--muted);font-size:.84rem;font-weight:600;cursor:pointer;transition:all .2s;margin-top:4px}
+    .add-league-btn:hover{border-color:var(--gold);color:var(--gold)}
+
+    /* ── NOTIFICATION FEED ── */
+    .notif-item{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+    .notif-item:last-child{border-bottom:none}
+    .notif-icon{font-size:1.2rem;flex-shrink:0;margin-top:2px}
+    .notif-text{flex:1}
+    .notif-text strong{font-size:.86rem;font-weight:600;color:var(--white);display:block;margin-bottom:2px}
+    .notif-text span{font-size:.76rem;color:var(--muted)}
+    .notif-time{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--muted);flex-shrink:0;margin-top:3px}
+    .notif-dot{width:7px;height:7px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:6px}
+
+    /* ── ACHIEVEMENT BADGES ── */
+    .ach-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+    .ach{background:var(--ink-3);border:1px solid var(--line);border-radius:9px;padding:14px;text-align:center}
+    .ach.earned{border-color:rgba(242,194,48,.4);background:rgba(242,194,48,.06)}
+    .ach.locked{opacity:.45}
+    .ach .icon{font-size:1.8rem;margin-bottom:6px}
+    .ach .aname{font-family:'Barlow Condensed',sans-serif;font-size:.82rem;font-weight:800;text-transform:uppercase;color:var(--white);line-height:1.2;margin-bottom:3px}
+    .ach .adesc{font-size:.66rem;color:var(--muted);line-height:1.4}
+    .ach.earned .aname{color:var(--gold)}
+
+    /* ── QUICK ACTIONS ── */
+    .qa-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-bottom:14px}
+    .qa-btn{background:var(--ink-2);border:1px solid var(--line);border-radius:9px;padding:16px;text-align:center;text-decoration:none;display:block;transition:border-color .18s,transform .18s}
+    .qa-btn:hover{border-color:var(--gold);transform:translateY(-2px)}
+    .qa-btn .qi{font-size:1.6rem;margin-bottom:8px}
+    .qa-btn .qt{font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:800;text-transform:uppercase;color:var(--white)}
+    .qa-btn .qs{font-size:.72rem;color:var(--muted);margin-top:3px}
+
+    /* ── LOADING ── */
+    .loading-overlay{display:flex;align-items:center;justify-content:center;min-height:50vh}
+    .spinner{width:32px;height:32px;border:3px solid var(--line);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* ── TOAST ── */
+    .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ink-2);border:1px solid var(--gold);border-radius:8px;padding:10px 20px;font-size:.84rem;font-weight:600;color:var(--gold);z-index:1000;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+    /* ── MOBILE ── */
+    @media(max-width:768px){
+      .grid-2,.grid-3,.grid-4{grid-template-columns:1fr}
+      .stat-row{grid-template-columns:repeat(2,1fr)}
+      .lb-row{grid-template-columns:28px 1fr 70px 60px}
+      .lb-acc{display:none}
+      .dash-banner{padding:16px 14px 0}
+      .main{padding:18px 12px 48px}
+      .nav-brand span{display:none}
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/index.html" class="nav-brand">
+    <img src="/assets/logo.png" alt="SSC"/>
+    <span>The Sports <em>Companion</em></span>
+  </a>
+  <ul class="nav-leagues">
+    <li><a href="/nfl/index.html">🏈 NFL</a></li>
+    <li><a href="/mlb/index.html">⚾ MLB</a></li>
+    <li><a href="/nba/index.html">🏀 NBA</a></li>
+    <li><a href="/ncaa/index.html">🎓 NCAA</a></li>
+    <li><a href="/futbol/index.html">⚽ Fútbol</a></li>
+    <li><a href="/fantasy/index.html">🏆 Fantasy</a></li>
+    <li><a href="/players/index.html">👤 Players</a></li>
+    <li><a href="/teams/index.html">🏟 Teams</a></li>
+  </ul>
+  <div class="nav-cta">
+    <button onclick="doSignOut()">Sign Out</button>
+  </div>
+</nav>
+
+<!-- LOADING -->
+<div id="dash-loading" class="loading-overlay"><div class="spinner"></div></div>
+
+<!-- DASHBOARD (hidden until auth confirmed) -->
+<div id="dash-content" style="display:none">
+
+  <!-- BANNER + TABS -->
+  <div class="dash-banner">
+    <div class="dash-banner-top">
+      <div class="dash-avatar" id="d-avatar">?</div>
+      <div class="dash-info">
+        <h1 id="d-name">Loading…</h1>
+        <p id="d-since"></p>
+      </div>
+      <a href="/profile/index.html" style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--gold);text-decoration:none;border:1px solid rgba(242,194,48,.3);padding:6px 12px;border-radius:5px;flex-shrink:0">⚙ Edit Profile</a>
+    </div>
+    <div class="dash-tabs">
+      <button class="dtab active" onclick="showDash('overview',this)">📊 Overview</button>
+      <button class="dtab" onclick="showDash('games',this)">🎮 My Games</button>
+      <button class="dtab" onclick="showDash('favorites',this)">⭐ Favorites</button>
+      <button class="dtab" onclick="showDash('fantasy',this)">🏆 Fantasy</button>
+      <button class="dtab" onclick="showDash('notifications',this)">🔔 Alerts</button>
+    </div>
+  </div>
+
+  <div class="main">
+
+    <!-- ══════════════ OVERVIEW ══════════════ -->
+    <div id="dp-overview" class="dpanel active">
+
+      <!-- Quick actions -->
+      <div class="sec-label" style="margin-bottom:10px">// Quick Play</div>
+      <div class="qa-grid">
+        <a href="/nfl/index.html#guess" class="qa-btn">
+          <div class="qi">🏈</div>
+          <div class="qt">Guess the Play</div>
+          <div class="qs">NFL · 15-second timer</div>
+        </a>
+        <a href="/mlb/index.html#guess" class="qa-btn">
+          <div class="qi">⚾</div>
+          <div class="qt">Guess the Pitch</div>
+          <div class="qs">MLB · Pitch zone tracker</div>
+        </a>
+        <a href="/brackets/ncaa-basketball.html" class="qa-btn">
+          <div class="qi">🏀</div>
+          <div class="qt">March Madness</div>
+          <div class="qs">NCAA Bracket · Men's &amp; Women's</div>
+        </a>
+        <a href="/brackets/cfp.html" class="qa-btn">
+          <div class="qi">🏆</div>
+          <div class="qt">CFP Bracket</div>
+          <div class="qs">12-team College Football Playoff</div>
+        </a>
+      </div>
+
+      <!-- Summary stats -->
+      <div class="sec-label" style="margin:16px 0 8px">// Season Summary</div>
+      <div class="grid-2">
+        <!-- Guess the Play -->
+        <div class="card">
+          <div class="card-title">🏈 Guess the Play</div>
+          <div class="stat-row">
+            <div class="sbox"><div class="val gold" id="gtp-score">0.0</div><div class="lbl">Total Score</div></div>
+            <div class="sbox"><div class="val" id="gtp-correct">0/0</div><div class="lbl">Correct</div></div>
+            <div class="sbox"><div class="val green" id="gtp-streak">0</div><div class="lbl">Best Streak</div></div>
+            <div class="sbox"><div class="val blue" id="gtp-acc">—</div><div class="lbl">Accuracy</div></div>
+          </div>
+          <div class="prog-wrap" style="margin-top:14px">
+            <div class="prog-label"><span>Progress to next rank</span><span id="gtp-rank">Rookie</span></div>
+            <div class="prog-bar"><div class="prog-fill" id="gtp-prog" style="width:0%"></div></div>
+          </div>
+        </div>
+        <!-- Guess the Pitch -->
+        <div class="card">
+          <div class="card-title">⚾ Guess the Pitch</div>
+          <div class="stat-row">
+            <div class="sbox"><div class="val gold" id="gpp-score">0.0</div><div class="lbl">Total Score</div></div>
+            <div class="sbox"><div class="val" id="gpp-correct">0/0</div><div class="lbl">Correct</div></div>
+            <div class="sbox"><div class="val green" id="gpp-streak">0</div><div class="lbl">Best Streak</div></div>
+            <div class="sbox"><div class="val blue" id="gpp-acc">—</div><div class="lbl">Accuracy</div></div>
+          </div>
+          <div class="prog-wrap" style="margin-top:14px">
+            <div class="prog-label"><span>Progress to next rank</span><span id="gpp-rank">Rookie</span></div>
+            <div class="prog-bar"><div class="prog-fill" id="gpp-prog" style="width:0%"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Global leaderboard snippet -->
+      <div class="card">
+        <div class="card-title">🏅 Global Leaderboard — Guess the Play</div>
+        <div style="display:grid;grid-template-columns:36px 1fr 80px 80px 60px;padding:0 0 8px;border-bottom:1px solid var(--line);gap:8px">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--muted);letter-spacing:.07em"></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--muted);letter-spacing:.07em">PLAYER</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--muted);letter-spacing:.07em;text-align:right">SCORE</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--muted);letter-spacing:.07em;text-align:right">STREAK</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--muted);letter-spacing:.07em;text-align:right">ACC</div>
+        </div>
+        <div class="lb-row"><div class="lb-rank top">🥇</div><div class="lb-name">GridironGuru_88</div><div class="lb-score">142.6</div><div class="lb-streak">🔥 12</div><div class="lb-acc">84%</div></div>
+        <div class="lb-row"><div class="lb-rank top">🥈</div><div class="lb-name">BlitzQueen</div><div class="lb-score">138.2</div><div class="lb-streak">🔥 9</div><div class="lb-acc">81%</div></div>
+        <div class="lb-row"><div class="lb-rank top">🥉</div><div class="lb-name">ChrisC_Sports</div><div class="lb-score">134.8</div><div class="lb-streak">🔥 7</div><div class="lb-acc">79%</div></div>
+        <div class="lb-row"><div class="lb-rank">4</div><div class="lb-name">TDThrower</div><div class="lb-score">128.4</div><div class="lb-streak">5</div><div class="lb-acc">76%</div></div>
+        <div class="lb-row me" id="my-lb-row">
+          <div class="lb-rank" id="my-lb-rank" style="color:var(--gold)">—</div>
+          <div class="lb-name" id="my-lb-name" style="color:var(--gold)">You</div>
+          <div class="lb-score" id="my-lb-score">0.0</div>
+          <div class="lb-streak" id="my-lb-streak">0</div>
+          <div class="lb-acc" id="my-lb-acc">—</div>
+        </div>
+      </div>
+
+      <!-- Achievements -->
+      <div class="card">
+        <div class="card-title">🏅 Achievements</div>
+        <div class="ach-grid" id="ach-grid">
+          <div class="ach earned"><div class="icon">🎮</div><div class="aname">First Play</div><div class="adesc">Completed your first Guess the Play round</div></div>
+          <div class="ach locked"><div class="icon">🔥</div><div class="aname">On Fire</div><div class="adesc">Reach a streak of 5 in Guess the Play</div></div>
+          <div class="ach locked"><div class="icon">⚡</div><div class="aname">Speed Demon</div><div class="adesc">Answer correctly in under 3 seconds</div></div>
+          <div class="ach locked"><div class="icon">🎯</div><div class="aname">Sharpshooter</div><div class="adesc">80%+ accuracy over 20 pitches</div></div>
+          <div class="ach locked"><div class="icon">💯</div><div class="aname">Century</div><div class="adesc">Score over 100 points in Guess the Play</div></div>
+          <div class="ach locked"><div class="icon">🏆</div><div class="aname">Champion</div><div class="adesc">Top 10 on the global leaderboard</div></div>
+        </div>
+      </div>
+
+    </div><!-- /overview -->
+
+    <!-- ══════════════ MY GAMES ══════════════ -->
+    <div id="dp-games" class="dpanel">
+
+      <div class="grid-2" style="margin-bottom:14px">
+        <!-- GTP detailed stats -->
+        <div class="card">
+          <div class="card-title">🏈 Guess the Play — Stats</div>
+          <div class="stat-row" style="grid-template-columns:repeat(2,1fr);margin-bottom:14px">
+            <div class="sbox"><div class="val gold" id="g-gtp-score">0.0</div><div class="lbl">Total Score</div></div>
+            <div class="sbox"><div class="val" id="g-gtp-games">0</div><div class="lbl">Games Played</div></div>
+            <div class="sbox"><div class="val green" id="g-gtp-streak">0</div><div class="lbl">Best Streak</div></div>
+            <div class="sbox"><div class="val blue" id="g-gtp-avg">0.0</div><div class="lbl">Avg Score/Game</div></div>
+          </div>
+          <!-- Accuracy by play type -->
+          <div class="sec-label">// Accuracy by Play Type</div>
+          <div class="prog-wrap"><div class="prog-label"><span>🏈 Pass</span><span id="acc-pass">—</span></div><div class="prog-bar"><div class="prog-fill" id="pb-pass" style="width:65%"></div></div></div>
+          <div class="prog-wrap"><div class="prog-label"><span>🏃 Run</span><span id="acc-run">—</span></div><div class="prog-bar"><div class="prog-fill" id="pb-run" style="width:72%"></div></div></div>
+          <div class="prog-wrap"><div class="prog-label"><span>🎯 Field Goal</span><span id="acc-fg">—</span></div><div class="prog-bar"><div class="prog-fill" id="pb-fg" style="width:58%"></div></div></div>
+          <div class="prog-wrap"><div class="prog-label"><span>⭐ Trick Play</span><span id="acc-trick">—</span></div><div class="prog-bar"><div class="prog-fill" id="pb-trick" style="width:40%"></div></div></div>
+        </div>
+        <!-- GTP Pitch detailed stats -->
+        <div class="card">
+          <div class="card-title">⚾ Guess the Pitch — Stats</div>
+          <div class="stat-row" style="grid-template-columns:repeat(2,1fr);margin-bottom:14px">
+            <div class="sbox"><div class="val gold" id="g-gpp-score">0.0</div><div class="lbl">Total Score</div></div>
+            <div class="sbox"><div class="val" id="g-gpp-games">0</div><div class="lbl">Games Played</div></div>
+            <div class="sbox"><div class="val green" id="g-gpp-streak">0</div><div class="lbl">Best Streak</div></div>
+            <div class="sbox"><div class="val blue" id="g-gpp-avg">0.0</div><div class="lbl">Avg Score/Game</div></div>
+          </div>
+          <!-- Accuracy by pitch type -->
+          <div class="sec-label">// Accuracy by Pitch Type</div>
+          <div class="prog-wrap"><div class="prog-label"><span>🔴 Fastball</span><span id="acc-fb">—</span></div><div class="prog-bar"><div class="prog-fill" id="pb-fb" style="width:70%"></div></div></div>
+          <div class="prog-wrap"><div class="prog-label"><span>🔵 Curveball</span><span id="acc-cb">—</span></div><div class="prog-bar"><div class="prog-fill" id="pb-cb" style="width:55%"></div></div></div>
+          <div class="prog-wrap"><div class="prog-label"><span>🟡 Slider</span><span id="acc-sl">—</span></div><div class="prog-bar"><div class="prog-fill" id="pb-sl" style="width:48%"></div></div></div>
+          <div class="prog-wrap"><div class="prog-label"><span>⚪ Changeup</span><span id="acc-ch">—</span></div><div class="prog-bar"><div class="prog-fill" id="pb-ch" style="width:38%"></div></div></div>
+        </div>
+      </div>
+
+      <!-- Recent game history -->
+      <div class="card">
+        <div class="card-title">📋 Recent Game History</div>
+        <div style="overflow-x:auto">
+          <table class="hist-table">
+            <thead><tr>
+              <th>Game</th><th>Date</th><th>Score</th><th>Correct</th><th>Streak</th><th>Accuracy</th><th>Result</th>
+            </tr></thead>
+            <tbody id="game-history">
+              <tr><td colspan="7" style="text-align:center;padding:24px;color:var(--muted)">Play Guess the Play or Guess the Pitch to see your history here.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Rank progression -->
+      <div class="card">
+        <div class="card-title">📈 Rank Progression</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px">
+          <div class="sbox" id="rank-rookie" style="border-color:var(--gold);background:rgba(242,194,48,.06)">
+            <div class="val" style="font-size:1.4rem">🎮</div>
+            <div class="lbl" style="color:var(--gold);margin-top:6px">Rookie</div>
+            <div style="font-size:.68rem;color:var(--muted);margin-top:3px">0+ pts</div>
+          </div>
+          <div class="sbox" id="rank-allstar">
+            <div class="val" style="font-size:1.4rem">⭐</div>
+            <div class="lbl" style="margin-top:6px">All-Star</div>
+            <div style="font-size:.68rem;color:var(--muted);margin-top:3px">25+ pts</div>
+          </div>
+          <div class="sbox" id="rank-pro">
+            <div class="val" style="font-size:1.4rem">🏅</div>
+            <div class="lbl" style="margin-top:6px">Pro</div>
+            <div style="font-size:.68rem;color:var(--muted);margin-top:3px">50+ pts</div>
+          </div>
+          <div class="sbox" id="rank-elite">
+            <div class="val" style="font-size:1.4rem">🔥</div>
+            <div class="lbl" style="margin-top:6px">Elite</div>
+            <div style="font-size:.68rem;color:var(--muted);margin-top:3px">100+ pts</div>
+          </div>
+          <div class="sbox" id="rank-mvp">
+            <div class="val" style="font-size:1.4rem">🏆</div>
+            <div class="lbl" style="margin-top:6px">MVP</div>
+            <div style="font-size:.68rem;color:var(--muted);margin-top:3px">200+ pts</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /games -->
+
+    <!-- ══════════════ FAVORITES ══════════════ -->
+    <div id="dp-favorites" class="dpanel">
+
+      <div class="card">
+        <div class="card-title">⭐ Favorite Sports</div>
+        <div id="fav-sports-display" style="display:flex;flex-wrap:wrap;gap:8px">
+          <p style="color:var(--muted);font-size:.84rem">Loading your favorite sports…</p>
+        </div>
+        <a href="/profile/index.html#favorites" style="display:inline-block;margin-top:12px;font-size:.78rem;color:var(--gold);text-decoration:none">Edit favorites in Profile →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🏟 Favorite Teams</div>
+        <div id="fav-teams-display" class="fav-grid">
+          <p style="color:var(--muted);font-size:.84rem">No favorite teams saved yet. <a href="/profile/index.html#favorites" style="color:var(--gold)">Add some →</a></p>
+        </div>
+      </div>
+
+      <!-- Recent scores for favorite teams -->
+      <div class="card">
+        <div class="card-title">📡 Recent Scores — Your Teams</div>
+        <div id="fav-scores">
+          <p style="color:var(--muted);font-size:.84rem">Save favorite teams to see their recent results here.</p>
+        </div>
+      </div>
+
+      <!-- Favorite leagues quick nav -->
+      <div class="card">
+        <div class="card-title">🏈 Your Leagues</div>
+        <div id="fav-leagues" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px">
+          <p style="color:var(--muted);font-size:.84rem">Loading…</p>
+        </div>
+      </div>
+
+    </div><!-- /favorites -->
+
+    <!-- ══════════════ FANTASY ══════════════ -->
+    <div id="dp-fantasy" class="dpanel">
+
+      <div class="card">
+        <div class="card-title">🏆 My Fantasy Leagues</div>
+        <div id="fantasy-leagues">
+          <div class="fl-card" onclick="showToast('Fantasy league integration coming with Firebase setup!')">
+            <div class="fl-icon">🏈</div>
+            <div class="fl-info">
+              <div class="fl-name">NFL Survivor Pool 2025</div>
+              <div class="fl-meta">12 players · Week 13 · Picks due Sunday</div>
+            </div>
+            <div>
+              <div class="fl-rank">4th</div>
+              <div class="fl-rank-sub">of 12</div>
+            </div>
+          </div>
+          <div class="fl-card" onclick="showToast('Fantasy league integration coming with Firebase setup!')">
+            <div class="fl-icon">⚾</div>
+            <div class="fl-info">
+              <div class="fl-name">MLB Prediction League</div>
+              <div class="fl-meta">8 players · Season standings</div>
+            </div>
+            <div>
+              <div class="fl-rank">2nd</div>
+              <div class="fl-rank-sub">of 8</div>
+            </div>
+          </div>
+          <div class="fl-card" onclick="showToast('Fantasy league integration coming with Firebase setup!')">
+            <div class="fl-icon">🏀</div>
+            <div class="fl-info">
+              <div class="fl-name">NBA Bracket Challenge</div>
+              <div class="fl-meta">24 players · Playoffs · Round 2</div>
+            </div>
+            <div>
+              <div class="fl-rank">7th</div>
+              <div class="fl-rank-sub">of 24</div>
+            </div>
+          </div>
+        </div>
+        <button class="add-league-btn" onclick="showToast('Fantasy league creation coming soon!')">+ Join or Create a League</button>
+      </div>
+
+      <!-- Game scores for fantasy -->
+      <div class="card">
+        <div class="card-title">📊 Fantasy Game Scores</div>
+        <div class="grid-2">
+          <div>
+            <div class="sec-label">// Guess the Play</div>
+            <div class="stat-row" style="grid-template-columns:1fr 1fr;margin-top:8px">
+              <div class="sbox"><div class="val gold" id="f-gtp-score">0.0</div><div class="lbl">Score</div></div>
+              <div class="sbox"><div class="val" id="f-gtp-rank">#—</div><div class="lbl">Rank</div></div>
+            </div>
+          </div>
+          <div>
+            <div class="sec-label">// Guess the Pitch</div>
+            <div class="stat-row" style="grid-template-columns:1fr 1fr;margin-top:8px">
+              <div class="sbox"><div class="val gold" id="f-gpp-score">0.0</div><div class="lbl">Score</div></div>
+              <div class="sbox"><div class="val" id="f-gpp-rank">#—</div><div class="lbl">Rank</div></div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:14px">
+          <div class="sec-label">// Combined Leaderboard Position</div>
+          <div style="display:flex;align-items:center;gap:14px;margin-top:10px">
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:3rem;font-weight:900;color:var(--gold);line-height:1" id="combined-rank">—</div>
+            <div style="font-size:.84rem;color:var(--muted);line-height:1.6">Your combined rank across all SSC prediction games. Play more rounds of Guess the Play and Guess the Pitch to climb the leaderboard.</div>
+          </div>
+        </div>
+        <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
+          <a href="/nfl/index.html#guess" style="background:var(--gold);color:var(--ink);font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:800;text-transform:uppercase;padding:9px 18px;border-radius:6px;text-decoration:none">Play Now 🏈</a>
+          <a href="/mlb/index.html#guess" style="background:var(--ink-3);color:var(--white);border:1px solid var(--line);font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:800;text-transform:uppercase;padding:9px 18px;border-radius:6px;text-decoration:none">Guess the Pitch ⚾</a>
+        </div>
+      </div>
+
+    </div><!-- /fantasy -->
+
+    <!-- ══════════════ NOTIFICATIONS ══════════════ -->
+    <div id="dp-notifications" class="dpanel">
+
+      <!-- Alert feed -->
+      <div class="card">
+        <div class="card-title">🔔 Recent Alerts</div>
+        <div id="notif-feed">
+          <div class="notif-item">
+            <div class="notif-dot"></div>
+            <div class="notif-icon">🏈</div>
+            <div class="notif-text"><strong>Chiefs vs Ravens — Tonight 8:20 PM ET</strong><span>Patrick Mahomes starts · Arrowhead Stadium · SNF</span></div>
+            <div class="notif-time">2h ago</div>
+          </div>
+          <div class="notif-item">
+            <div class="notif-dot"></div>
+            <div class="notif-icon">⭐</div>
+            <div class="notif-text"><strong>New Achievement Unlocked: First Play</strong><span>You completed your first Guess the Play round</span></div>
+            <div class="notif-time">1d ago</div>
+          </div>
+          <div class="notif-item">
+            <div class="notif-icon">⚾</div>
+            <div class="notif-text"><strong>Yankees WIN 6–3 vs Red Sox</strong><span>Aaron Judge: 2-for-4, 1 HR, 3 RBI</span></div>
+            <div class="notif-time">2d ago</div>
+          </div>
+          <div class="notif-item">
+            <div class="notif-icon">📊</div>
+            <div class="notif-text"><strong>Weekly Digest — 7 games, 3 wins for your teams</strong><span>NFL Week 13 recap for your favorite teams</span></div>
+            <div class="notif-time">5d ago</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notification preferences quick edit -->
+      <div class="card">
+        <div class="card-title">⚙️ Notification Settings</div>
+        <div id="notif-settings">
+          <div style="display:grid;grid-template-columns:1fr auto;align-items:center;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05);gap:12px">
+            <div><div style="font-size:.86rem;font-weight:600;margin-bottom:2px">Game Score Alerts</div><div style="font-size:.74rem;color:var(--muted)">Score updates for your favorite teams</div></div>
+            <label class="toggle"><input type="checkbox" id="dn-scores" checked/><span class="ts"></span></label>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr auto;align-items:center;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05);gap:12px">
+            <div><div style="font-size:.86rem;font-weight:600;margin-bottom:2px">Game Start Reminders</div><div style="font-size:.74rem;color:var(--muted)">30 min before games for your teams</div></div>
+            <label class="toggle"><input type="checkbox" id="dn-reminders" checked/><span class="ts"></span></label>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr auto;align-items:center;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05);gap:12px">
+            <div><div style="font-size:.86rem;font-weight:600;margin-bottom:2px">Breaking News</div><div style="font-size:.74rem;color:var(--muted)">Trades, injuries, major news</div></div>
+            <label class="toggle"><input type="checkbox" id="dn-news" checked/><span class="ts"></span></label>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr auto;align-items:center;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05);gap:12px">
+            <div><div style="font-size:.86rem;font-weight:600;margin-bottom:2px">Fantasy &amp; Games Alerts</div><div style="font-size:.74rem;color:var(--muted)">Leaderboard updates, new challenges</div></div>
+            <label class="toggle"><input type="checkbox" id="dn-fantasy"/><span class="ts"></span></label>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr auto;align-items:center;padding:12px 0;gap:12px">
+            <div><div style="font-size:.86rem;font-weight:600;margin-bottom:2px">Email Digest</div><div style="font-size:.74rem;color:var(--muted)">Weekly scores for your leagues</div></div>
+            <select id="dn-digest" style="background:var(--ink-3);border:1px solid var(--line);border-radius:6px;color:var(--white);font-size:.82rem;padding:6px 10px;outline:none">
+              <option value="daily">Daily</option>
+              <option value="weekly" selected>Weekly</option>
+              <option value="never">Never</option>
+            </select>
+          </div>
+        </div>
+        <button onclick="saveNotifPrefs()" style="margin-top:14px;background:var(--gold);color:var(--ink);font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;border:none;border-radius:7px;padding:10px 22px;cursor:pointer;transition:opacity .2s">Save Preferences</button>
+      </div>
+
+    </div><!-- /notifications -->
+
+  </div><!-- /main -->
+</div><!-- /dash-content -->
+
+<!-- Toggle switch CSS (inline to avoid conflict) -->
+<style>
+.toggle{position:relative;width:44px;height:24px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0}
+.ts{position:absolute;inset:0;background:var(--line);border-radius:24px;cursor:pointer;transition:.25s}
+.ts:before{content:'';position:absolute;width:18px;height:18px;left:3px;top:3px;background:white;border-radius:50%;transition:.25s}
+.toggle input:checked + .ts{background:var(--gold)}
+.toggle input:checked + .ts:before{transform:translateX(20px)}
+</style>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, onAuthStateChanged, signOut }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, doc, getDoc, updateDoc, setDoc, serverTimestamp }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+// ── REPLACE WITH YOUR FIREBASE CONFIG ─────────────────────────
+const firebaseConfig = {
+  apiKey:            "YOUR_API_KEY",
+  authDomain:        "YOUR_PROJECT.firebaseapp.com",
+  projectId:         "YOUR_PROJECT_ID",
+  storageBucket:     "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId:             "YOUR_APP_ID"
+};
+// ──────────────────────────────────────────────────────────────
+
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+
+let currentUser = null;
+let userProfile = {};
+
+// ── SPORT LABELS + LINKS ───────────────────────────────────────
+const SPORT_LABELS = {
+  nfl:'🏈 NFL', mlb:'⚾ MLB', nba:'🏀 NBA', ncaaf:'🏈 NCAAF',
+  ncaab:'🏀 NCAAB', mls:'⚽ MLS', epl:'🏴󠁧󠁢󠁥󠁮󠁧󠁿 EPL', laliga:'🇪🇸 La Liga',
+  ucl:'🏆 UCL', ncaabaseball:'⚾ NCAA Baseball', ncaasoftball:'🥎 NCAA Softball'
+};
+const SPORT_LINKS = {
+  nfl:'/nfl/index.html', mlb:'/mlb/index.html', nba:'/nba/index.html',
+  ncaaf:'/ncaaf/index.html', ncaab:'/ncaab/mens/index.html',
+  mls:'/futbol/index.html', epl:'/futbol/index.html',
+  laliga:'/futbol/index.html', ucl:'/futbol/index.html',
+  ncaabaseball:'/ncaabaseball/index.html', ncaasoftball:'/ncaasoftball/index.html'
+};
+const TEAM_LOGOS = {
+  chiefs:'/assets/nfl/chiefs.png', eagles:'/assets/nfl/eagles.png',
+  ravens:'/assets/nfl/ravens.png', '49ers':'/assets/nfl/49ers.png',
+  dodgers:'/assets/mlb/dodgers.png', yankees:'/assets/mlb/yankees.png',
+  astros:'/assets/mlb/astros.png', warriors:'/assets/nba/warriors.png',
+  celtics:'/assets/nba/celtics.png', nuggets:'/assets/nba/nuggets.png',
+  bucks:'/assets/nba/bucks.png',
+};
+const TEAM_PAGES = {
+  chiefs:'/teams/nfl-chiefs.html', eagles:'/teams/nfl-eagles.html',
+  ravens:'/teams/nfl-ravens.html', '49ers':'/teams/nfl-49ers.html',
+  dodgers:'/teams/mlb-dodgers.html', yankees:'/teams/mlb-yankees.html',
+  astros:'/teams/mlb-astros.html', warriors:'/teams/nba-warriors.html',
+  celtics:'/teams/nba-celtics.html', nuggets:'/teams/nba-nuggets.html',
+  bucks:'/teams/nba-bucks.html',
+};
+
+// ── RANK SYSTEM ────────────────────────────────────────────────
+function getRank(score) {
+  if (score >= 200) return { name:'MVP',     icon:'🏆', next:null,    prog:100 };
+  if (score >= 100) return { name:'Elite',   icon:'🔥', next:200, prog:((score-100)/100)*100 };
+  if (score >= 50)  return { name:'Pro',     icon:'🏅', next:100, prog:((score-50)/50)*100 };
+  if (score >= 25)  return { name:'All-Star',icon:'⭐', next:50,  prog:((score-25)/25)*100 };
+  return               { name:'Rookie',   icon:'🎮', next:25,  prog:(score/25)*100 };
+}
+
+// ── AUTH ───────────────────────────────────────────────────────
+onAuthStateChanged(auth, async user => {
+  if (!user) { window.location.href = '/login/index.html'; return; }
+  currentUser = user;
+
+  document.getElementById('dash-loading').style.display = 'none';
+  document.getElementById('dash-content').style.display = 'block';
+
+  // Fill header
+  const name = user.displayName || user.email.split('@')[0];
+  const initials = name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+  document.getElementById('d-name').textContent = name;
+  document.getElementById('d-since').textContent = '// Member since ' +
+    new Date(user.metadata.creationTime).toLocaleDateString('en-US',{month:'long',year:'numeric'});
+  const av = document.getElementById('d-avatar');
+  if (user.photoURL) av.innerHTML = `<img src="${user.photoURL}"/>`;
+  else av.textContent = initials;
+
+  // Load Firestore profile
+  try {
+    const snap = await getDoc(doc(db,'users',user.uid));
+    if (snap.exists()) {
+      userProfile = snap.data();
+      loadFavorites();
+      loadNotifPrefs();
+    }
+  } catch(e) { console.log('No profile yet'); }
+
+  // Load game stats from localStorage (bridge until Firebase game storage)
+  loadGameStats();
+});
+
+// ── GAME STATS (localStorage bridge) ──────────────────────────
+function loadGameStats() {
+  const gtp = JSON.parse(localStorage.getItem('ssc_gtp') || '{"score":0,"correct":0,"total":0,"bestStreak":0}');
+  const gpp = JSON.parse(localStorage.getItem('ssc_gpp') || '{"score":0,"correct":0,"total":0,"bestStreak":0}');
+
+  const gtpAcc = gtp.total > 0 ? Math.round((gtp.correct/gtp.total)*100)+'%' : '—';
+  const gppAcc = gpp.total > 0 ? Math.round((gpp.correct/gpp.total)*100)+'%' : '—';
+
+  const gtpRank = getRank(gtp.score);
+  const gppRank = getRank(gpp.score);
+
+  // Overview panel
+  setText('gtp-score', gtp.score.toFixed(1));
+  setText('gtp-correct', `${gtp.correct}/${gtp.total}`);
+  setText('gtp-streak', gtp.bestStreak);
+  setText('gtp-acc', gtpAcc);
+  setText('gtp-rank', `${gtpRank.icon} ${gtpRank.name}`);
+  setStyle('gtp-prog', `width:${gtpRank.prog}%`);
+
+  setText('gpp-score', gpp.score.toFixed(1));
+  setText('gpp-correct', `${gpp.correct}/${gpp.total}`);
+  setText('gpp-streak', gpp.bestStreak);
+  setText('gpp-acc', gppAcc);
+  setText('gpp-rank', `${gppRank.icon} ${gppRank.name}`);
+  setStyle('gpp-prog', `width:${gppRank.prog}%`);
+
+  // Games panel
+  setText('g-gtp-score', gtp.score.toFixed(1));
+  setText('g-gtp-games', gtp.total);
+  setText('g-gtp-streak', gtp.bestStreak);
+  setText('g-gtp-avg', gtp.total>0?(gtp.score/Math.max(1,Math.ceil(gtp.total/5))).toFixed(1):'0.0');
+
+  setText('g-gpp-score', gpp.score.toFixed(1));
+  setText('g-gpp-games', gpp.total);
+  setText('g-gpp-streak', gpp.bestStreak);
+  setText('g-gpp-avg', gpp.total>0?(gpp.score/Math.max(1,Math.ceil(gpp.total/5))).toFixed(1):'0.0');
+
+  // Fantasy panel
+  setText('f-gtp-score', gtp.score.toFixed(1));
+  setText('f-gpp-score', gpp.score.toFixed(1));
+  const combined = gtp.score + gpp.score;
+  setText('combined-rank', combined > 0 ? '#' + Math.max(1, Math.ceil(200 - combined)) : '—');
+
+  // My leaderboard row
+  setText('my-lb-score', gtp.score.toFixed(1));
+  setText('my-lb-streak', gtp.bestStreak);
+  setText('my-lb-acc', gtpAcc);
+  const myRankNum = gtp.score > 134.8 ? 3 : gtp.score > 0 ? '5+' : '—';
+  setText('my-lb-rank', myRankNum);
+
+  // Rank progression highlight
+  highlightRank(gtpRank.name);
+
+  // History from localStorage
+  const history = JSON.parse(localStorage.getItem('ssc_history') || '[]');
+  renderHistory(history);
+
+  // Achievements
+  updateAchievements(gtp, gpp);
+}
+
+function highlightRank(rankName) {
+  const map = {Rookie:'rank-rookie','All-Star':'rank-allstar',Pro:'rank-pro',Elite:'rank-elite',MVP:'rank-mvp'};
+  Object.values(map).forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.style.borderColor='var(--line)'; el.style.background='var(--ink-3)'; }
+  });
+  const active = document.getElementById(map[rankName]);
+  if (active) {
+    active.style.borderColor='var(--gold)';
+    active.style.background='rgba(242,194,48,.1)';
+  }
+}
+
+function updateAchievements(gtp, gpp) {
+  const grid = document.getElementById('ach-grid');
+  const achs = [
+    { icon:'🎮', name:'First Play',    desc:'Completed your first Guess the Play round', earned: gtp.total > 0 },
+    { icon:'🔥', name:'On Fire',       desc:'Reach a streak of 5 in Guess the Play',     earned: gtp.bestStreak >= 5 },
+    { icon:'⚡', name:'Speed Demon',   desc:'Answer correctly in under 3 seconds',        earned: localStorage.getItem('ssc_speedDemon')==='1' },
+    { icon:'🎯', name:'Sharpshooter',  desc:'80%+ accuracy over 20 pitches',             earned: gpp.total >= 20 && (gpp.correct/gpp.total) >= 0.8 },
+    { icon:'💯', name:'Century',       desc:'Score over 100 pts in Guess the Play',      earned: gtp.score >= 100 },
+    { icon:'🏆', name:'Champion',      desc:'Top 10 on the global leaderboard',          earned: false },
+  ];
+  grid.innerHTML = achs.map(a =>
+    `<div class="ach ${a.earned?'earned':'locked'}">
+      <div class="icon">${a.icon}</div>
+      <div class="aname">${a.name}</div>
+      <div class="adesc">${a.desc}</div>
+    </div>`
+  ).join('');
+}
+
+function renderHistory(history) {
+  const tbody = document.getElementById('game-history');
+  if (!history.length) return;
+  tbody.innerHTML = history.slice(-10).reverse().map(h => `
+    <tr>
+      <td style="color:var(--white);font-weight:600">${h.game==='gtp'?'🏈 Guess the Play':'⚾ Guess the Pitch'}</td>
+      <td>${h.date||'—'}</td>
+      <td style="color:var(--gold);font-weight:700">${(h.score||0).toFixed(1)}</td>
+      <td>${h.correct||0}/${h.total||0}</td>
+      <td>${h.streak||0}</td>
+      <td>${h.total>0?Math.round((h.correct/h.total)*100)+'%':'—'}</td>
+      <td><span class="result-badge ${(h.correct||0)>=(h.total||1)/2?'rb-win':'rb-loss'}">${(h.correct||0)>=(h.total||1)/2?'WIN':'LOSS'}</span></td>
+    </tr>`).join('');
+}
+
+// ── FAVORITES ─────────────────────────────────────────────────
+function loadFavorites() {
+  const sports = userProfile.favoriteSports || [];
+  const teams  = userProfile.favoriteTeams  || {};
+
+  // Sport pills
+  const sEl = document.getElementById('fav-sports-display');
+  if (sports.length) {
+    sEl.innerHTML = sports.map(s =>
+      `<a href="${SPORT_LINKS[s]||'#'}" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--ink-3);border:1px solid rgba(242,194,48,.3);border-radius:20px;color:var(--gold);font-size:.84rem;font-weight:600;text-decoration:none;transition:all .18s" onmouseover="this.style.background='rgba(242,194,48,.1)'" onmouseout="this.style.background='var(--ink-3)'">${SPORT_LABELS[s]||s}</a>`
+    ).join('');
+  } else {
+    sEl.innerHTML = '<p style="color:var(--muted);font-size:.84rem">No sports saved. <a href="/profile/index.html#favorites" style="color:var(--gold)">Add favorites →</a></p>';
+  }
+
+  // Team cards
+  const tEl = document.getElementById('fav-teams-display');
+  const allTeams = Object.values(teams).flat();
+  if (allTeams.length) {
+    tEl.innerHTML = allTeams.map(tid =>
+      `<a href="${TEAM_PAGES[tid]||'/teams/index.html'}" class="fav-card">
+        <img src="${TEAM_LOGOS[tid]||'/assets/logo.png'}" onerror="this.style.display='none'"/>
+        <div class="fname">${tid.replace(/_/g,' ')}</div>
+        <div class="fmeta">${Object.entries(teams).find(([,v])=>v.includes(tid))?.[0]?.toUpperCase()||''}</div>
+        <div class="fstat">View Team →</div>
+      </a>`
+    ).join('');
+  } else {
+    tEl.innerHTML = '<p style="color:var(--muted);font-size:.84rem;grid-column:1/-1">No teams saved. <a href="/profile/index.html#favorites" style="color:var(--gold)">Pick favorites →</a></p>';
+  }
+
+  // League quick nav
+  const lEl = document.getElementById('fav-leagues');
+  if (sports.length) {
+    lEl.innerHTML = sports.map(s =>
+      `<a href="${SPORT_LINKS[s]||'#'}" style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:12px;text-align:center;text-decoration:none;display:block;transition:border-color .18s" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--line)'">
+        <div style="font-size:1.4rem;margin-bottom:6px">${(SPORT_LABELS[s]||s).split(' ')[0]}</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:.82rem;font-weight:800;text-transform:uppercase;color:var(--white)">${(SPORT_LABELS[s]||s).replace(/^[^ ]+ /,'')}</div>
+      </a>`
+    ).join('');
+  } else {
+    lEl.innerHTML = '<p style="color:var(--muted);font-size:.84rem">Save favorite sports on your profile to see them here.</p>';
+  }
+
+  // Favorite team recent scores placeholder
+  const scEl = document.getElementById('fav-scores');
+  if (allTeams.length) {
+    scEl.innerHTML = `<div style="display:grid;gap:8px">
+      ${allTeams.slice(0,3).map(tid => `
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--ink-3);border-radius:7px;border:1px solid var(--line)">
+          <div style="display:flex;align-items:center;gap:8px">
+            <img src="${TEAM_LOGOS[tid]||'/assets/logo.png'}" style="width:24px;height:24px;object-fit:contain" onerror="this.style.display='none'"/>
+            <span style="font-weight:600;font-size:.86rem">${tid.replace(/_/g,' ').toUpperCase()}</span>
+          </div>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--muted)">Live scores require Firebase</span>
+        </div>`).join('')}
+    </div>`;
+  }
+}
+
+// ── NOTIF PREFS ────────────────────────────────────────────────
+function loadNotifPrefs() {
+  const n = userProfile.notifications || {};
+  setCheck('dn-scores',    n.gameAlerts    !== false);
+  setCheck('dn-reminders', n.scoreUpdates  !== false);
+  setCheck('dn-news',      n.newsAlerts    !== false);
+  setCheck('dn-fantasy',   n.fantasyAlerts === true);
+  const dig = document.getElementById('dn-digest');
+  if (dig) dig.value = n.emailDigest || 'weekly';
+}
+
+window.saveNotifPrefs = async () => {
+  if (!currentUser) return;
+  try {
+    await updateDoc(doc(db,'users',currentUser.uid), { notifications: {
+      gameAlerts:    document.getElementById('dn-scores').checked,
+      scoreUpdates:  document.getElementById('dn-reminders').checked,
+      newsAlerts:    document.getElementById('dn-news').checked,
+      fantasyAlerts: document.getElementById('dn-fantasy').checked,
+      emailDigest:   document.getElementById('dn-digest').value,
+    }});
+    showToast('✓ Preferences saved');
+  } catch(e) { showToast('Save failed — check Firebase config'); }
+};
+
+// ── HELPERS ────────────────────────────────────────────────────
+function setText(id, val) { const el=document.getElementById(id); if(el) el.textContent=val; }
+function setStyle(id, style) { const el=document.getElementById(id); if(el) el.setAttribute('style',style); }
+function setCheck(id, val) { const el=document.getElementById(id); if(el) el.checked=val; }
+
+window.doSignOut = async () => {
+  await signOut(auth);
+  window.location.href = '/index.html';
+};
+
+window.showToast = (msg) => {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+};
+</script>
+
+<script>
+// Tab switching
+function showDash(id, btn) {
+  document.querySelectorAll('.dpanel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.dtab').forEach(b => b.classList.remove('active'));
+  document.getElementById('dp-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+// Open tab from URL hash
+window.addEventListener('load', () => {
+  const h = location.hash.replace('#','');
+  const btn = document.querySelector(`.dtab[onclick*="${h}"]`);
+  if (btn) btn.click();
+});
+</script>
+</body>
+</html>

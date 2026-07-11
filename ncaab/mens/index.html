@@ -8,7 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--ink:#0B0D0F;--ink-2:#181B1F;--ink-3:#262A30;--muted:#8A8F98;--line:#2A2E35;--gold:#F2C230;--crimson:#C83A2B;--white:#FFFFFF;--accent:#F2C230}
+    :root{--ink:#0B0D0F;--ink-2:#181B1F;--ink-3:#262A30;--muted:#C8CDD6;--line:#2A2E35;--gold:#F2C230;--crimson:#C83A2B;--white:#FFFFFF;--accent:#F2C230}
     html{scroll-behavior:smooth}body{font-family:'Inter',sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
     nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;background:rgba(11,13,15,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
     .nav-brand{display:flex;align-items:center;gap:8px;padding:0 20px;text-decoration:none;border-right:1px solid var(--line);height:56px;flex-shrink:0}
@@ -106,6 +106,37 @@
     .lang-btn{background:none;border:1px solid transparent;border-radius:5px;padding:5px 9px;font-size:.75rem;font-weight:700;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;font-family:'Barlow Condensed',sans-serif;letter-spacing:.03em}
     .lang-btn:hover{color:var(--white);border-color:var(--line)}
     .lang-btn.active{color:var(--gold);border-color:rgba(242,194,48,.4);background:rgba(242,194,48,.08)}
+  
+    /* ── MOBILE NAV OVERHAUL ─────────────────────────────── */
+    .hamburger{display:none;align-items:center;justify-content:center;width:44px;height:56px;background:none;border:none;cursor:pointer;color:var(--white);font-size:1.4rem;flex-shrink:0;padding:0 12px}
+    .mobile-menu{display:none;position:absolute;top:56px;left:0;right:0;background:rgba(11,13,15,.98);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);z-index:999;max-height:calc(100vh - 56px);overflow-y:auto}
+    .mobile-menu.open{display:block}
+    .mobile-menu a{display:flex;align-items:center;gap:12px;padding:14px 20px;font-size:1rem;font-weight:600;color:var(--muted);text-decoration:none;border-bottom:1px solid rgba(255,255,255,.05);transition:background .15s,color .15s}
+    .mobile-menu a:hover,.mobile-menu a.active{background:var(--ink-2);color:var(--white)}
+    .mobile-menu a.active{color:var(--gold);border-left:3px solid var(--gold)}
+    .mobile-menu a:last-child{border-bottom:none}
+    .mobile-menu-footer{padding:14px 20px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .mobile-lang{display:flex;gap:6px}
+    .mobile-lang-btn{background:var(--ink-3);border:1px solid var(--line);border-radius:5px;padding:7px 12px;font-size:.82rem;font-weight:700;color:var(--muted);cursor:pointer;transition:all .2s}
+    .mobile-lang-btn.active{background:rgba(242,194,48,.1);border-color:var(--gold);color:var(--gold)}
+    .mobile-auth{display:flex;gap:8px}
+    .mobile-auth a{font-size:.82rem;font-weight:600;text-decoration:none;padding:8px 14px;border-radius:5px}
+    .mobile-auth a.login{color:var(--muted);border:1px solid var(--line)}
+    .mobile-auth a.signup{background:var(--gold);color:var(--ink)}
+
+    @media(max-width:768px){
+      .nav-leagues{display:none}
+      .lang-switch{display:none}
+      .hamburger{display:flex}
+      .nav-cta{display:none !important}
+      .nav-avatar-btn{margin-right:8px !important;padding:5px 10px !important}
+      .nav-brand span{display:none}
+      nav{position:relative}
+    }
+    @media(min-width:769px){
+      .hamburger{display:none}
+      .mobile-menu{display:none !important}
+    }
   </style>
 </head>
 <body>
@@ -119,8 +150,11 @@
     <li><a href="/futbol/index.html">⚽ Fútbol</a></li>
     <li><a href="/fantasy/index.html">🏆 Fantasy</a></li>
     <li><a href="/brackets/index.html">🗂 Brackets</a></li>
+    <li><a href="/players/index.html">👤 Players</a></li>
+    <li><a href="/teams/index.html">🏟 Teams</a></li>
     <li><a href="/more/index.html">• • •</a></li>
   </ul>
+  <button class="hamburger" id="hamburger-btn" onclick="toggleMobileMenu()" aria-label="Menu">☰</button>
   <div class="lang-switch" id="lang-switch">
     <button class="lang-btn active" data-lang="en" onclick="setLang('en',this)" aria-label="English">🇺🇸 EN</button>
     <button class="lang-btn" data-lang="es" onclick="setLang('es',this)" aria-label="Español">🇪🇸 ES</button>
@@ -133,6 +167,7 @@
     <div class="nav-avatar-initials" id="nav-initials" style="width:24px;height:24px;border-radius:50%;background:var(--gold);color:var(--ink);font-family:'Barlow Condensed',sans-serif;font-size:.8rem;font-weight:800;display:flex;align-items:center;justify-content:center">?</div>
     <span class="nav-avatar-name" id="nav-username" style="font-size:.8rem;font-weight:600;color:var(--white);max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Account</span>
     <div style="display:none;position:absolute;top:calc(100% + 8px);right:0;background:var(--ink-2);border:1px solid var(--line);border-radius:8px;min-width:180px;z-index:200;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.4)" class="nav-dropdown">
+      <a href="/dashboard/index.html" style="display:block;padding:11px 16px;font-size:.82rem;color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line)">📊 Dashboard</a>
       <a href="/profile/index.html" style="display:block;padding:11px 16px;font-size:.82rem;color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line)">⚙️ My Profile</a>
       <a href="/profile/index.html#favorites" style="display:block;padding:11px 16px;font-size:.82rem;color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line)">⭐ Favorites</a>
       <a href="/profile/index.html#notifications" style="display:block;padding:11px 16px;font-size:.82rem;color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line)">🔔 Notifications</a>
@@ -140,6 +175,27 @@
     </div>
   </div>
 </nav>
+  <!-- MOBILE MENU (hamburger dropdown) -->
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="/nfl/index.html" class="" onclick="closeMobileMenu()">🏈 NFL</a>
+    <a href="/mlb/index.html" class="" onclick="closeMobileMenu()">⚾ MLB</a>
+    <a href="/nba/index.html" class="" onclick="closeMobileMenu()">🏀 NBA</a>
+    <a href="/ncaa/index.html" class="active" onclick="closeMobileMenu()">🎓 NCAA</a>
+    <a href="/futbol/index.html" class="" onclick="closeMobileMenu()">⚽ Fútbol</a>
+    <a href="/fantasy/index.html" class="" onclick="closeMobileMenu()">🏆 Fantasy</a>
+    <a href="/brackets/index.html" class="" onclick="closeMobileMenu()">🗂 Brackets</a>
+    <a href="/more/index.html" class="" onclick="closeMobileMenu()">• • • More</a>
+    <div class="mobile-menu-footer">
+      <div class="mobile-lang">
+        <button class="mobile-lang-btn active" data-lang="en" onclick="setLang('en',this);closeMobileMenu()">🇺🇸 EN</button>
+        <button class="mobile-lang-btn" data-lang="es" onclick="setLang('es',this);closeMobileMenu()">🇪🇸 ES</button>
+      </div>
+      <div class="mobile-auth" id="mobile-auth">
+        <a href="/login/index.html" class="login">Log In</a>
+        <a href="/signup/index.html" class="signup">Sign Up</a>
+      </div>
+    </div>
+  </div>
 
 <div class="league-banner">
   <div class="league-banner-top">
@@ -212,7 +268,7 @@
   <div class="sec-title">NCAA Men's Basketball Stats</div>
   <div style="display:flex;gap:10px;margin-bottom:22px;align-items:center">
     <button class="type-btn active" onclick="showType('player',this)" style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:9px 22px;border-radius:6px;border:2px solid var(--gold);background:var(--gold);color:var(--ink);cursor:pointer;transition:all .2s">👤 Player Stats</button>
-    <button class="type-btn" onclick="showType('team',this)" style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:9px 22px;border-radius:6px;border:2px solid var(--line);background:var(--ink-2);color:var(--muted);cursor:pointer;transition:all .2s">🏟️ Team Stats</button>
+    <button class="type-btn" onclick="showType('team',this)" style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:9px 22px;border-radius:6px;border:2px solid var(--line);background:var(--ink-2);color:var(--muted);cursor:pointer;transition:all .2s">🏟️ Team Stats</button> <a href="/teams/index.html#ncaab" style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--gold);text-decoration:none;padding:4px 8px;border:1px solid rgba(242,194,48,.3);border-radius:4px;margin-left:6px;vertical-align:middle">All Teams →</a>
   </div>
 
   <!-- PLAYER STATS -->
@@ -222,9 +278,9 @@
       <button class="sub-tab" onclick="showSub('ncaabm-reb')">Rebounding</button>
       <button class="sub-tab" onclick="showSub('ncaabm-ast')">Assists</button>
     </div>
-    <div id="sub-ncaabm-pts" class="sub-panel active"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Player</th><th>School</th><th>G</th><th>PPG</th><th>FG%</th><th>3P%</th><th>FT%</th></tr></thead><tbody><tr><td class="pl">Zach Edey</td><td class="">Purdue</td><td class="">20</td><td class="hi">24.2</td><td class="">62.1%</td><td class="">0.0%</td><td class="">78.4%</td></tr><tr><td class="pl">R.J. Davis</td><td class="">North Carolina</td><td class="">20</td><td class="hi">20.8</td><td class="">46.2%</td><td class="">38.1%</td><td class="">84.2%</td></tr><tr><td class="pl">Johni Broome</td><td class="">Auburn</td><td class="">19</td><td class="hi">19.4</td><td class="">54.8%</td><td class="">22.1%</td><td class="">74.1%</td></tr><tr><td class="pl">Hunter Dickinson</td><td class="">Kansas</td><td class="">20</td><td class="hi">18.8</td><td class="">58.4%</td><td class="">14.2%</td><td class="">72.8%</td></tr><tr><td class="pl">Dalton Knecht</td><td class="">Tennessee</td><td class="">20</td><td class="hi">18.4</td><td class="">44.1%</td><td class="">40.8%</td><td class="">88.1%</td></tr></tbody></table></div></div>
-    <div id="sub-ncaabm-reb" class="sub-panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Player</th><th>School</th><th>G</th><th>RPG</th><th>OREB</th><th>DREB</th></tr></thead><tbody><tr><td class="pl">Zach Edey</td><td class="">Purdue</td><td class="">20</td><td class="hi">12.2</td><td class="">4.1</td><td class="">8.1</td></tr><tr><td class="pl">Johni Broome</td><td class="">Auburn</td><td class="">19</td><td class="hi">10.8</td><td class="">3.8</td><td class="">7.0</td></tr><tr><td class="pl">Hunter Dickinson</td><td class="">Kansas</td><td class="">20</td><td class="hi">10.4</td><td class="">3.4</td><td class="">7.0</td></tr><tr><td class="pl">Armando Bacot</td><td class="">North Carolina</td><td class="">20</td><td class="hi">9.8</td><td class="">3.2</td><td class="">6.6</td></tr><tr><td class="pl">Kel Ware</td><td class="">Indiana</td><td class="">20</td><td class="hi">9.4</td><td class="">3.0</td><td class="">6.4</td></tr></tbody></table></div></div>
-    <div id="sub-ncaabm-ast" class="sub-panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Player</th><th>School</th><th>G</th><th>APG</th><th>TO</th><th>AST/TO</th></tr></thead><tbody><tr><td class="pl">Markquis Nowell</td><td class="">Kansas State</td><td class="">19</td><td class="">8.1</td><td class="">1.8</td><td class="hi">4.5</td></tr><tr><td class="pl">Marcus Sasser</td><td class="">Houston</td><td class="">20</td><td class="">6.4</td><td class="">1.4</td><td class="hi">4.6</td></tr><tr><td class="pl">R.J. Davis</td><td class="">North Carolina</td><td class="">20</td><td class="">5.8</td><td class="">1.6</td><td class="hi">3.6</td></tr><tr><td class="pl">Tyrese Hunter</td><td class="">Texas</td><td class="">20</td><td class="">5.4</td><td class="">1.8</td><td class="hi">3.0</td></tr><tr><td class="pl">Dajuan Harris Jr</td><td class="">Kansas</td><td class="">20</td><td class="">5.2</td><td class="">1.2</td><td class="hi">4.3</td></tr></tbody></table></div></div>
+    <div id="sub-ncaabm-pts" class="sub-panel active"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Player</th><th>School</th><th>G</th><th>PPG</th><th>FG%</th><th>3P%</th><th>FT%</th></tr></thead><tbody><tr><td class="pl"><a href="/players/ncaab-edey.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">Zach Edey</a></td><td class="">Purdue</td><td class="">20</td><td class="hi">24.2</td><td class="">62.1%</td><td class="">0.0%</td><td class="">78.4%</td></tr><tr><td class="pl"><a href="/players/ncaab-davis.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">R.J. Davis</a></td><td class="">North Carolina</td><td class="">20</td><td class="hi">20.8</td><td class="">46.2%</td><td class="">38.1%</td><td class="">84.2%</td></tr><tr><td class="pl"><a href="/players/ncaab-broome.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">Johni Broome</a></td><td class="">Auburn</td><td class="">19</td><td class="hi">19.4</td><td class="">54.8%</td><td class="">22.1%</td><td class="">74.1%</td></tr><tr><td class="pl">Hunter Dickinson</td><td class="">Kansas</td><td class="">20</td><td class="hi">18.8</td><td class="">58.4%</td><td class="">14.2%</td><td class="">72.8%</td></tr><tr><td class="pl"><a href="/players/ncaab-knecht.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">Dalton Knecht</a></td><td class="">Tennessee</td><td class="">20</td><td class="hi">18.4</td><td class="">44.1%</td><td class="">40.8%</td><td class="">88.1%</td></tr></tbody></table></div></div>
+    <div id="sub-ncaabm-reb" class="sub-panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Player</th><th>School</th><th>G</th><th>RPG</th><th>OREB</th><th>DREB</th></tr></thead><tbody><tr><td class="pl"><a href="/players/ncaab-edey.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">Zach Edey</a></td><td class="">Purdue</td><td class="">20</td><td class="hi">12.2</td><td class="">4.1</td><td class="">8.1</td></tr><tr><td class="pl"><a href="/players/ncaab-broome.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">Johni Broome</a></td><td class="">Auburn</td><td class="">19</td><td class="hi">10.8</td><td class="">3.8</td><td class="">7.0</td></tr><tr><td class="pl">Hunter Dickinson</td><td class="">Kansas</td><td class="">20</td><td class="hi">10.4</td><td class="">3.4</td><td class="">7.0</td></tr><tr><td class="pl">Armando Bacot</td><td class="">North Carolina</td><td class="">20</td><td class="hi">9.8</td><td class="">3.2</td><td class="">6.6</td></tr><tr><td class="pl">Kel Ware</td><td class="">Indiana</td><td class="">20</td><td class="hi">9.4</td><td class="">3.0</td><td class="">6.4</td></tr></tbody></table></div></div>
+    <div id="sub-ncaabm-ast" class="sub-panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Player</th><th>School</th><th>G</th><th>APG</th><th>TO</th><th>AST/TO</th></tr></thead><tbody><tr><td class="pl">Markquis Nowell</td><td class="">Kansas State</td><td class="">19</td><td class="">8.1</td><td class="">1.8</td><td class="hi">4.5</td></tr><tr><td class="pl">Marcus Sasser</td><td class="">Houston</td><td class="">20</td><td class="">6.4</td><td class="">1.4</td><td class="hi">4.6</td></tr><tr><td class="pl"><a href="/players/ncaab-davis.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">R.J. Davis</a></td><td class="">North Carolina</td><td class="">20</td><td class="">5.8</td><td class="">1.6</td><td class="hi">3.6</td></tr><tr><td class="pl">Tyrese Hunter</td><td class="">Texas</td><td class="">20</td><td class="">5.4</td><td class="">1.8</td><td class="hi">3.0</td></tr><tr><td class="pl">Dajuan Harris Jr</td><td class="">Kansas</td><td class="">20</td><td class="">5.2</td><td class="">1.2</td><td class="hi">4.3</td></tr></tbody></table></div></div>
   </div>
 
   <!-- TEAM STATS -->
@@ -233,8 +289,8 @@
       <button class="sub-tab active" onclick="showSub('ncaabm-team-off')">Offense</button>
       <button class="sub-tab" onclick="showSub('ncaabm-team-def')">Defense</button>
     </div>
-    <div id="sub-ncaabm-team-off" class="sub-panel active"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Team</th><th>PPG</th><th>FG%</th><th>3P%</th><th>AST/TO</th><th>PACE</th></tr></thead><tbody><tr><td class="pl">Gonzaga</td><td class="hi">88.1</td><td class="">52.4%</td><td class="">38.2%</td><td class="">1.84</td><td class="">72.4</td></tr><tr><td class="pl">Kansas</td><td class="hi">84.2</td><td class="">50.8%</td><td class="">36.4%</td><td class="">1.72</td><td class="">70.8</td></tr><tr><td class="pl">UConn</td><td class="hi">82.4</td><td class="">49.4%</td><td class="">36.8%</td><td class="">1.68</td><td class="">69.2</td></tr><tr><td class="pl">Duke</td><td class="hi">81.4</td><td class="">48.8%</td><td class="">37.2%</td><td class="">1.64</td><td class="">70.4</td></tr><tr><td class="pl">Purdue</td><td class="hi">79.1</td><td class="">52.2%</td><td class="">34.4%</td><td class="">1.58</td><td class="">68.8</td></tr><tr><td class="pl">Houston</td><td class="hi">76.4</td><td class="">47.8%</td><td class="">34.8%</td><td class="">1.54</td><td class="">67.2</td></tr></tbody></table></div></div>
-    <div id="sub-ncaabm-team-def" class="sub-panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Team</th><th>PPG Allowed</th><th>OPP FG%</th><th>OPP 3P%</th><th>BLK/G</th><th>STL/G</th></tr></thead><tbody><tr><td class="pl">Houston</td><td class="hi">58.4</td><td class="">38.2%</td><td class="">28.4%</td><td class="">4.8</td><td class="">8.2</td></tr><tr><td class="pl">Tennessee</td><td class="hi">60.2</td><td class="">39.4%</td><td class="">29.2%</td><td class="">4.4</td><td class="">7.8</td></tr><tr><td class="pl">UConn</td><td class="hi">62.4</td><td class="">40.8%</td><td class="">30.4%</td><td class="">4.2</td><td class="">7.4</td></tr><tr><td class="pl">Virginia</td><td class="hi">63.8</td><td class="">41.2%</td><td class="">31.2%</td><td class="">3.8</td><td class="">6.8</td></tr><tr><td class="pl">Kansas</td><td class="hi">64.4</td><td class="">41.8%</td><td class="">31.8%</td><td class="">3.6</td><td class="">7.2</td></tr><tr><td class="pl">Purdue</td><td class="hi">65.2</td><td class="">42.4%</td><td class="">32.4%</td><td class="">4.8</td><td class="">6.4</td></tr></tbody></table></div></div>
+    <div id="sub-ncaabm-team-off" class="sub-panel active"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Team</th><th>PPG</th><th>FG%</th><th>3P%</th><th>AST/TO</th><th>PACE</th></tr></thead><tbody><tr><td class="pl">Gonzaga</td><td class="hi">88.1</td><td class="">52.4%</td><td class="">38.2%</td><td class="">1.84</td><td class="">72.4</td></tr><tr><td class="pl"><a href="/teams/ncaab-kansas.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">Kansas</a></td><td class="hi">84.2</td><td class="">50.8%</td><td class="">36.4%</td><td class="">1.72</td><td class="">70.8</td></tr><tr><td class="pl"><a href="/teams/ncaab-uconn.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">UConn</a></td><td class="hi">82.4</td><td class="">49.4%</td><td class="">36.8%</td><td class="">1.68</td><td class="">69.2</td></tr><tr><td class="pl"><a href="/teams/ncaab-duke.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">Duke</a></td><td class="hi">81.4</td><td class="">48.8%</td><td class="">37.2%</td><td class="">1.64</td><td class="">70.4</td></tr><tr><td class="pl"><a href="/teams/ncaab-uconn.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">Purdue</a></td><td class="hi">79.1</td><td class="">52.2%</td><td class="">34.4%</td><td class="">1.58</td><td class="">68.8</td></tr><tr><td class="pl">Houston</td><td class="hi">76.4</td><td class="">47.8%</td><td class="">34.8%</td><td class="">1.54</td><td class="">67.2</td></tr></tbody></table></div></div>
+    <div id="sub-ncaabm-team-def" class="sub-panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Team</th><th>PPG Allowed</th><th>OPP FG%</th><th>OPP 3P%</th><th>BLK/G</th><th>STL/G</th></tr></thead><tbody><tr><td class="pl">Houston</td><td class="hi">58.4</td><td class="">38.2%</td><td class="">28.4%</td><td class="">4.8</td><td class="">8.2</td></tr><tr><td class="pl"><a href="/teams/ncaab-uconn.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">Tennessee</a></td><td class="hi">60.2</td><td class="">39.4%</td><td class="">29.2%</td><td class="">4.4</td><td class="">7.8</td></tr><tr><td class="pl"><a href="/teams/ncaab-uconn.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">UConn</a></td><td class="hi">62.4</td><td class="">40.8%</td><td class="">30.4%</td><td class="">4.2</td><td class="">7.4</td></tr><tr><td class="pl">Virginia</td><td class="hi">63.8</td><td class="">41.2%</td><td class="">31.2%</td><td class="">3.8</td><td class="">6.8</td></tr><tr><td class="pl"><a href="/teams/ncaab-kansas.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">Kansas</a></td><td class="hi">64.4</td><td class="">41.8%</td><td class="">31.8%</td><td class="">3.6</td><td class="">7.2</td></tr><tr><td class="pl"><a href="/teams/ncaab-uconn.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">Purdue</a></td><td class="hi">65.2</td><td class="">42.4%</td><td class="">32.4%</td><td class="">4.8</td><td class="">6.4</td></tr></tbody></table></div></div>
   </div>
 
 <div style="margin-top:24px;border-top:1px solid var(--line);padding-top:20px">
@@ -264,7 +320,7 @@
   </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
       <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">KenPom</span>
-      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#8A8F98">All</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#C8CDD6">All</span>
     </div>
     <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Ken Pomeroy Rating</div>
     <div style="font-size:.78rem;color:var(--muted);line-height:1.6">Adjusted efficiency margin — offensive efficiency minus defensive efficiency per 100 possessions, adjusted for opponent strength. The gold standard in college basketball analytics.</div>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Christian McCaffrey — The Sports Companion</title>
+  <link rel="icon" type="image/png" href="/assets/logo.png"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--ink:#0B0D0F;--ink-2:#181B1F;--ink-3:#262A30;--muted:#C8CDD6;--line:#2A2E35;--gold:#F2C230;--crimson:#C83A2B;--white:#FFFFFF}
+    body{font-family:'Inter',sans-serif;background:var(--ink);color:var(--white);min-height:100vh}
+    nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;background:rgba(11,13,15,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+    .nav-brand{display:flex;align-items:center;gap:8px;padding:0 20px;text-decoration:none;border-right:1px solid var(--line);height:56px;flex-shrink:0}
+    .nav-brand img{height:28px}
+    .nav-brand span{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;color:var(--white)}
+    .nav-brand span em{font-style:normal;color:var(--gold)}
+    .nav-leagues{display:flex;align-items:center;list-style:none;overflow-x:auto;flex:1;scrollbar-width:none}
+    .nav-leagues::-webkit-scrollbar{display:none}
+    .nav-leagues a{display:flex;align-items:center;height:56px;padding:0 15px;font-size:.8rem;font-weight:600;color:var(--muted);text-decoration:none;border-right:1px solid var(--line);white-space:nowrap;transition:color .2s}
+    .nav-leagues a:hover{color:var(--white);background:var(--ink-2)}
+    .nav-leagues a.active{color:var(--gold);background:var(--ink-2);border-bottom:2px solid var(--gold)}
+    .nav-cta{margin-left:auto;padding:0 16px;height:56px;display:flex;align-items:center;gap:8px;flex-shrink:0}
+    .nav-cta a{color:var(--muted);font-size:.8rem;font-weight:600;text-decoration:none;padding:8px 12px}
+    .nav-cta a.primary{background:var(--gold);color:var(--ink);border-radius:5px}
+    /* LABELS */
+    .sec-label{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;letter-spacing:.15em;color:var(--gold);text-transform:uppercase;margin-bottom:6px}
+    /* CARD */
+    .card{background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin-bottom:14px}
+    /* STAT GRID */
+    .stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-bottom:0}
+    .stat-box{background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:12px;text-align:center}
+    .stat-box .val{font-family:'Barlow Condensed',sans-serif;font-size:1.6rem;font-weight:900;color:var(--white);line-height:1}
+    .stat-box .val.hi{color:var(--gold)}
+    .stat-box .lbl{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+    /* OVR badge */
+    .ovr-badge{font-family:'Barlow Condensed',sans-serif;font-size:2rem;font-weight:900;padding:6px 16px;border-radius:8px;display:inline-block;line-height:1}
+    .ovr-hi{background:rgba(242,194,48,.15);color:var(--gold);border:2px solid rgba(242,194,48,.4)}
+    .ovr-mid{background:rgba(56,189,248,.12);color:#38BDF8;border:2px solid rgba(56,189,248,.3)}
+    .ovr-lo{background:rgba(255,107,107,.1);color:#FF6B6B;border:2px solid rgba(255,107,107,.3)}
+    /* TABLE */
+    .tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+    .tbl{width:100%;border-collapse:collapse;font-size:.82rem}
+    .tbl thead tr{background:var(--ink-3);border-bottom:1px solid var(--line)}
+    .tbl th{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:9px 12px;text-align:center;white-space:nowrap}
+    .tbl th:first-child{text-align:left}
+    .tbl tbody tr{border-bottom:1px solid rgba(255,255,255,.04);transition:background .15s}
+    .tbl tbody tr:hover{background:var(--ink-2)}
+    .tbl tbody tr:last-child{border-bottom:none}
+    .tbl td{padding:9px 12px;color:var(--muted);text-align:center;white-space:nowrap}
+    .tbl td.pl{color:var(--white);font-weight:600;text-align:left}
+    .tbl td.hi{color:var(--gold);font-weight:700}
+    /* TEAM LOGO ROW */
+    .team-logo-row{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+    .team-logo-row img{width:36px;height:36px;object-fit:contain}
+    /* TABS */
+    .tab-bar{display:flex;border-bottom:1px solid var(--line);margin-bottom:20px;overflow-x:auto;scrollbar-width:none}
+    .tab-bar::-webkit-scrollbar{display:none}
+    .tab-btn{padding:11px 18px;font-family:'Barlow Condensed',sans-serif;font-size:.88rem;font-weight:800;text-transform:uppercase;color:var(--muted);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;transition:all .2s;white-space:nowrap}
+    .tab-btn:hover{color:var(--white)}
+    .tab-btn.active{color:var(--gold);border-bottom-color:var(--gold)}
+    .tab-panel{display:none}
+    .tab-panel.active{display:block}
+    /* RELATED CARDS */
+    .player-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+    .player-card{background:var(--ink-2);border:1px solid var(--line);border-radius:10px;padding:14px;text-decoration:none;display:block;transition:border-color .2s,transform .2s}
+    .player-card:hover{border-color:var(--gold);transform:translateY(-2px)}
+    .player-card .pname{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;color:var(--white);margin-bottom:3px}
+    .player-card .ppos{font-size:.72rem;color:var(--muted)}
+    .player-card .povr{font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:800;color:var(--gold);margin-top:6px}
+    /* HEADER BANNER */
+    .player-banner{background:var(--ink-2);border-bottom:1px solid var(--line);padding:28px 32px}
+    .player-banner-inner{display:flex;align-items:flex-start;gap:24px;max-width:1000px}
+    .player-avatar{width:80px;height:80px;border-radius:50%;background:var(--ink-3);border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:1.8rem;flex-shrink:0}
+    .player-info h1{font-family:'Barlow Condensed',sans-serif;font-size:2rem;font-weight:900;text-transform:uppercase;letter-spacing:.04em;line-height:1.1}
+    .player-info .meta{display:flex;align-items:center;gap:10px;margin-top:6px;flex-wrap:wrap}
+    .meta-badge{font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:600;letter-spacing:.08em;padding:3px 8px;border-radius:4px;background:var(--ink-3);color:var(--muted);border:1px solid var(--line)}
+    .meta-badge.sport{background:rgba(242,194,48,.08);color:var(--gold);border-color:rgba(242,194,48,.3)}
+    .main{max-width:1000px;margin:0 auto;padding:28px 20px 64px}
+    footer{background:var(--ink);border-top:1px solid var(--line);padding:20px 32px;text-align:center;font-size:.74rem;color:var(--muted);margin-top:48px}
+    @media(max-width:600px){.player-banner{padding:18px 16px}.main{padding:18px 12px 48px}.player-banner-inner{flex-direction:column;gap:14px}.stat-grid{grid-template-columns:repeat(2,1fr)}}</style>
+</head>
+<body>
+<nav>
+  <a href="/index.html" class="nav-brand">
+    <img src="/assets/logo.png" alt="SSC"/>
+    <span>The Sports <em>Companion</em></span>
+  </a>
+    <ul class="nav-leagues">
+    <li><a href="/nfl/index.html">🏈 NFL</a></li>
+    <li><a href="/mlb/index.html">⚾ MLB</a></li>
+    <li><a href="/nba/index.html">🏀 NBA</a></li>
+    <li><a href="/ncaa/index.html">🎓 NCAA</a></li>
+    <li><a href="/futbol/index.html">⚽ Fútbol</a></li>
+    <li><a href="/fantasy/index.html">🏆 Fantasy</a></li>
+    <li><a href="/brackets/index.html">🗂 Brackets</a></li>
+    <li><a href="/more/index.html">• • •</a></li>
+  </ul>
+  <div class="nav-cta">
+    <a href="/login/index.html">Log In</a>
+    <a href="/signup/index.html" class="primary">Sign Up</a>
+  </div>
+</nav>
+<div class="player-banner">
+  <div class="player-banner-inner">
+    <div class="player-avatar"><img src="/assets/nfl/49ers.png" style="width:56px;height:56px;object-fit:contain" onerror="this.style.display='none'"/></div>
+    <div class="player-info">
+      <h1>Christian McCaffrey</h1>
+      <div class="meta">
+        <span class="meta-badge sport">NFL</span>
+        <span class="meta-badge">RB</span>
+        <span class="meta-badge">#23</span>
+        <span class="meta-badge">49ers</span>
+        <span class="meta-badge">Age 28</span>
+        <span class="meta-badge">8 yrs exp</span>
+        <span class="meta-badge">Stanford</span>
+      </div>
+    </div>
+    <div style="margin-left:auto;flex-shrink:0"><span class="ovr-badge ovr-hi">OVR 98</span></div>
+  </div>
+</div>
+<div class="main">
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="showTab('tp-overview',this)">Overview</button>
+      <button class="tab-btn" onclick="showTab('tp-stats',this)">Season Stats</button>
+      <button class="tab-btn" onclick="showTab('tp-career',this)">Career</button>
+      <button class="tab-btn" onclick="showTab('tp-similar',this)">Similar Players</button>
+    </div>
+
+    <!-- OVERVIEW -->
+    <div id="tp-overview" class="tab-panel active">
+      <div class="card">
+        <div class="sec-label">// 2025 Season — Key Stats</div>
+        <div class="stat-grid" style="margin-top:10px"><div class="stat-box"><div class="val">13</div><div class="lbl">Games</div></div><div class="stat-box"><div class="val">224</div><div class="lbl">Carries</div></div><div class="stat-box"><div class="val">1,288</div><div class="lbl">Rush Yds</div></div><div class="stat-box"><div class="val">62</div><div class="lbl">Rec</div></div><div class="stat-box"><div class="val">544</div><div class="lbl">Rec Yds</div></div><div class="stat-box"><div class="val">21</div><div class="lbl">TDs</div></div><div class="stat-box"><div class="val hi">3.44</div><div class="lbl">PPR</div></div></div>
+      </div>
+      
+      <div class="card">
+        <div class="sec-label">// About</div>
+        <p style="font-size:.88rem;color:var(--muted);line-height:1.8;margin-top:8px">Christian McCaffrey is arguably the most complete back in NFL history, combining elite rushing with top-tier receiving out of the backfield. His PPR rating of 3.44 leads all running backs by a significant margin.</p>
+      </div>
+      <div class="card">
+        <div class="sec-label">// Team</div>
+        <div class="team-logo-row" style="margin-top:8px">
+          <img src="/assets/nfl/49ers.png" style="width:40px;height:40px;object-fit:contain" onerror="this.style.display='none'"/>
+          <div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:800;text-transform:uppercase">49ers</div>
+            <a href="/teams/nfl-sf.html" style="font-size:.78rem;color:var(--gold);text-decoration:none">View Team Page →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEASON STATS -->
+    <div id="tp-stats" class="tab-panel">
+      <div class="card">
+        <div class="sec-label">// 2025 Season Stats</div>
+        <div class="stat-grid" style="margin-top:10px"><div class="stat-box"><div class="val">13</div><div class="lbl">Games</div></div><div class="stat-box"><div class="val">224</div><div class="lbl">Carries</div></div><div class="stat-box"><div class="val">1,288</div><div class="lbl">Rush Yds</div></div><div class="stat-box"><div class="val">62</div><div class="lbl">Rec</div></div><div class="stat-box"><div class="val">544</div><div class="lbl">Rec Yds</div></div><div class="stat-box"><div class="val">21</div><div class="lbl">TDs</div></div><div class="stat-box"><div class="val hi">3.44</div><div class="lbl">PPR</div></div></div>
+      </div>
+      
+      <div class="card" style="margin-top:14px">
+        <div class="sec-label">// Stat Definitions</div>
+        <p style="font-size:.82rem;color:var(--muted);line-height:1.8;margin-top:8px">
+          Stats shown are based on the 2025 season. Advanced metrics (PPD, RPG, RPI, PPM, PPG+, PPK, PPR, PPT) are calculated using 
+          formulas from <em>The Sports Statistics Manual</em> by Chris Cain — available on Amazon.
+          OVR ratings are averaged across a 10-year period using the SSC model.
+        </p>
+      </div>
+    </div>
+
+    <!-- CAREER -->
+    <div id="tp-career" class="tab-panel">
+      <div class="card">
+        <div class="sec-label">// Career Totals</div>
+        <div class="stat-grid" style="margin-top:10px"><div class="stat-box"><div class="val">8,442</div><div class="lbl">Rush Yds</div></div><div class="stat-box"><div class="val">5,224</div><div class="lbl">Rec Yds</div></div><div class="stat-box"><div class="val">79</div><div class="lbl">TDs</div></div></div>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <div class="sec-label">// OVR Rating</div>
+        <div style="display:flex;align-items:center;gap:16px;margin-top:10px">
+          <span class="ovr-badge ovr-hi" style="font-size:2.4rem">98</span>
+          <div>
+            <div style="font-size:.84rem;color:var(--muted);line-height:1.7">OVR is calculated using a 10-year average of the player's primary SSC metric, 
+            normalized on a 60–99 scale. A rating of 90+ indicates an elite player. 
+            Ratings are based on data from 2012–2022 per <em>The Sports Statistics Manual</em>.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SIMILAR -->
+    <div id="tp-similar" class="tab-panel">
+      <div class="sec-label" style="margin-bottom:12px">// Other NFL Players</div>
+      <div class="player-grid"><a href="/players/nfl-mahomes.html" class="player-card">
+      <div class="team-logo-row"><img src="/assets/nfl/chiefs.png" onerror="this.style.display='none'"/></div>
+      <div class="pname">Patrick Mahomes</div>
+      <div class="ppos">QB · Chiefs</div>
+      <div class="povr">OVR 94</div>
+    </a><a href="/players/nfl-hurts.html" class="player-card">
+      <div class="team-logo-row"><img src="/assets/nfl/eagles.png" onerror="this.style.display='none'"/></div>
+      <div class="pname">Jalen Hurts</div>
+      <div class="ppos">QB · Eagles</div>
+      <div class="povr">OVR 91</div>
+    </a><a href="/players/nfl-jackson.html" class="player-card">
+      <div class="team-logo-row"><img src="/assets/nfl/ravens.png" onerror="this.style.display='none'"/></div>
+      <div class="pname">Lamar Jackson</div>
+      <div class="ppos">QB · Ravens</div>
+      <div class="povr">OVR 96</div>
+    </a><a href="/players/nfl-henry.html" class="player-card">
+      <div class="team-logo-row"><img src="/assets/nfl/titans.png" onerror="this.style.display='none'"/></div>
+      <div class="pname">Derrick Henry</div>
+      <div class="ppos">RB · Titans</div>
+      <div class="povr">OVR 88</div>
+    </a></div>
+    </div></div>
+<footer>© 2026 The Sports Companion · Chris Cain</footer>
+<script>
+function showTab(id,btn){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
