@@ -236,6 +236,7 @@
     .bs-game-date{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--muted);text-align:center;line-height:1.5}
     @media(max-width:480px){.bs-score-header{padding:12px 6px}.bs-team-side{width:90px}.bs-team-name-blue{font-size:.78rem}.bs-final-score{font-size:2.2rem}}
   </style>
+  <script src="/assets/ssc-live.js"></script>
 </head>
 <body>
 
@@ -503,16 +504,16 @@
       <div class="bs-team-side">
         <img src="/assets/ncaa/Ohio_State.png" class="bs-team-logo" onerror="this.style.display='none'" />
         <div class="bs-team-name-blue">Ohio State</div>
-        <div class="bs-final-score">24</div>
+        <div class="bs-final-score" id="live-away-score">24</div>
       </div>
-      <div class="bs-center-info">
-        <div class="bs-final-label">Final</div>
-        <div class="bs-game-date">Nov 25, 2025 · Michigan Stadium · Ann Arbor, MI</div>
+      <div class="bs-center-info"><span id="live-badge" style="display:none;background:rgba(34,197,94,.15);border:1px solid #22c55e;color:#22c55e;font-family:JetBrains Mono,monospace;font-size:.62rem;font-weight:700;letter-spacing:.1em;padding:3px 10px;border-radius:20px;margin-bottom:6px">● LIVE</span>
+        <div id="live-game-status" class="bs-final-label">Final</div>
+        <div class="bs-game-date"><span id="live-period"></span><span id="live-clock"></span>Nov 25, 2025 · Michigan Stadium · Ann Arbor, MI</div>
       </div>
       <div class="bs-team-side">
         <img src="/assets/ncaa/Michigan.png" class="bs-team-logo" onerror="this.style.display='none'" />
         <div class="bs-team-name-blue">Michigan</div>
-        <div class="bs-final-score">17</div>
+        <div class="bs-final-score" id="live-home-score">17</div>
       </div>
     </div>
 
@@ -574,7 +575,7 @@
     <div class="pbp-header">
       <div class="sec-label">// Play-by-Play</div>
     </div>
-    <div class="pbp-feed-full">
+    <div class="pbp-feed" id="pbp-feed">
 <div class="pbp-item td">
       <div class="pbp-item-meta">Q1 · 11:22 <span class="pbp-score-badge">OSU 7–0</span></div>
       <div class="pbp-item-play"><span class="pbp-icon">🏈</span><span class="pbp-item-text">Henderson takes the zone read left and sprints 34 yards untouched. TOUCHDOWN Buckeyes!</span></div>
@@ -947,6 +948,33 @@ function syncMobileLang(lang) {
     b.classList.toggle('active', b.getAttribute('data-lang') === lang);
   });
 }
+</script>
+
+<script>
+// ── SSC LIVE GAMEDAY ───────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function() {
+  // ── FILE:// DETECTION ──────────────────────────────────────
+  const isFileProtocol = window.location.protocol === 'file:';
+  if (isFileProtocol) {
+    // Show friendly "needs hosting" notice instead of silent failure
+    const notice = document.getElementById('live-notice');
+    if (notice) notice.style.display = 'flex';
+    // Still render static demo data
+    return;
+  }
+  if (typeof SSCLive === 'undefined') return;
+  const params  = new URLSearchParams(window.location.search);
+  const eventId = params.get('event') || '401520150';
+  SSCLive.initGameday('ncaaf', eventId, {
+    pbpContainerId: 'pbp-feed',
+    interval: 15000,
+    onPlays: function(plays) {
+      if (!plays.length) return;
+      // Update PBP feed
+      
+    },
+  });
+});
 </script>
 </body>
 </html>

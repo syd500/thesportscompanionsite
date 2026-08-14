@@ -218,6 +218,7 @@
     .bs-game-date{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--muted);text-align:center;line-height:1.5}
     @media(max-width:480px){.bs-score-header{padding:12px 6px}.bs-team-side{width:90px}.bs-team-name-blue{font-size:.78rem}.bs-final-score{font-size:2.2rem}}
   </style>
+  <script src="/assets/ssc-live.js"></script>
 </head>
 <body>
 
@@ -438,16 +439,16 @@
       <div class="bs-team-side">
         <img src="/assets/ncaa/Kansas.png" class="bs-team-logo" onerror="this.style.display='none'" />
         <div class="bs-team-name-blue">Kansas</div>
-        <div class="bs-final-score">82</div>
+        <div class="bs-final-score" id="live-away-score">82</div>
       </div>
-      <div class="bs-center-info">
-        <div class="bs-final-label">Final</div>
-        <div class="bs-game-date">Jan 18, 2026 · Allen Fieldhouse · Lawrence, KS</div>
+      <div class="bs-center-info"><span id="live-badge" style="display:none;background:rgba(34,197,94,.15);border:1px solid #22c55e;color:#22c55e;font-family:JetBrains Mono,monospace;font-size:.62rem;font-weight:700;letter-spacing:.1em;padding:3px 10px;border-radius:20px;margin-bottom:6px">● LIVE</span>
+        <div id="live-game-status" class="bs-final-label">Final</div>
+        <div class="bs-game-date"><span id="live-period"></span><span id="live-clock"></span>Jan 18, 2026 · Allen Fieldhouse · Lawrence, KS</div>
       </div>
       <div class="bs-team-side">
         <img src="/assets/ncaa/Duke.png" class="bs-team-logo" onerror="this.style.display='none'" />
         <div class="bs-team-name-blue">Duke</div>
-        <div class="bs-final-score">78</div>
+        <div class="bs-final-score" id="live-home-score">78</div>
       </div>
     </div>
 
@@ -511,7 +512,7 @@
     <div class="pbp-header">
       <div class="sec-label">// Play-by-Play</div>
     </div>
-    <div class="pbp-feed-full">
+    <div class="pbp-feed" id="pbp-feed">
 <div class="pbp-item td">
       <div class="pbp-item-meta">1H · 18:44 <span class="pbp-score-badge">KAN 5–2</span></div>
       <div class="pbp-item-play"><span class="pbp-icon">🎯</span><span class="pbp-item-text">Adams-Woods drills a three from the wing off the Dickinson screen. Crowd erupts at Allen Fieldhouse.</span></div>
@@ -890,6 +891,33 @@ function syncMobileLang(lang) {
     b.classList.toggle('active', b.getAttribute('data-lang') === lang);
   });
 }
+</script>
+
+<script>
+// ── SSC LIVE GAMEDAY ───────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function() {
+  // ── FILE:// DETECTION ──────────────────────────────────────
+  const isFileProtocol = window.location.protocol === 'file:';
+  if (isFileProtocol) {
+    // Show friendly "needs hosting" notice instead of silent failure
+    const notice = document.getElementById('live-notice');
+    if (notice) notice.style.display = 'flex';
+    // Still render static demo data
+    return;
+  }
+  if (typeof SSCLive === 'undefined') return;
+  const params  = new URLSearchParams(window.location.search);
+  const eventId = params.get('event') || '401522951';
+  SSCLive.initGameday('ncaab', eventId, {
+    pbpContainerId: 'pbp-feed',
+    interval: 15000,
+    onPlays: function(plays) {
+      if (!plays.length) return;
+      // Update PBP feed
+      
+    },
+  });
+});
 </script>
 </body>
 </html>

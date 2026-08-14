@@ -272,6 +272,7 @@
     .pz-count-item{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#9aa8c4;letter-spacing:.06em}
     .pz-count-item span{color:#fff;font-weight:700;margin-left:3px}
   </style>
+  <script src="/assets/ssc-live.js"></script>
 </head>
 <body>
 
@@ -521,98 +522,16 @@
       <!-- LIVE PITCH ZONE -->
       <div class="pitch-zone-wrap">
         <div class="pitch-zone-header">
-          <span class="pitch-zone-label">⚾ K-Zone</span>
+          <span class="pitch-zone-label">⚾ K-Zone 3D</span>
           <span class="pitch-zone-status" id="gd-zone-status"></span>
         </div>
-        <div class="pz-svg-wrap">
-          <svg class="pz-svg" viewBox="0 0 320 280" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <radialGradient id="gd-kz-bg" cx="50%" cy="55%" r="55%">
-                <stop offset="0%" stop-color="#1e2438"/>
-                <stop offset="50%" stop-color="#0f1220"/>
-                <stop offset="100%" stop-color="#050608"/>
-              </radialGradient>
-              <filter id="gd-zone-glow" x="-20%" y="-20%" width="140%" height="140%">
-                <feGaussianBlur stdDeviation="3" result="blur"/>
-                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-              </filter>
-              <filter id="gd-ball-glow" x="-100%" y="-100%" width="300%" height="300%">
-                <feGaussianBlur stdDeviation="5" result="blur"/>
-                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-              </filter>
-              <filter id="gd-trail-glow" x="-60%" y="-60%" width="220%" height="220%">
-                <feGaussianBlur stdDeviation="2.5"/>
-              </filter>
-            </defs>
-            <rect width="320" height="280" fill="url(#gd-kz-bg)"/>
-            <ellipse cx="160" cy="275" rx="130" ry="18" fill="#1a0e04" opacity="0.6"/>
-            <polygon points="143,270 177,270 186,261 160,254 134,261" fill="#e8e8e8" opacity="0.88"/>
-            <polygon points="143,270 177,270 186,261 160,254 134,261" fill="none" stroke="#ccc" stroke-width="0.8"/>
-            <rect x="58" y="215" width="72" height="58" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.2" rx="1"/>
-            <rect x="190" y="215" width="72" height="58" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="1" rx="1" stroke-dasharray="3,3"/>
-            <!-- Batter -->
-            <ellipse cx="86" cy="272" rx="22" ry="5" fill="#000" opacity="0.5"/>
-            <line x1="94" y1="273" x2="98" y2="247" stroke="#111" stroke-width="10" stroke-linecap="round"/>
-            <line x1="98" y1="247" x2="102" y2="230" stroke="#111" stroke-width="9" stroke-linecap="round"/>
-            <line x1="76" y1="273" x2="74" y2="248" stroke="#0a0a0a" stroke-width="9" stroke-linecap="round"/>
-            <line x1="74" y1="248" x2="72" y2="232" stroke="#0a0a0a" stroke-width="8" stroke-linecap="round"/>
-            <rect x="64" y="270" width="17" height="5" rx="2" fill="#0a0a0a"/>
-            <rect x="88" y="270" width="17" height="5" rx="2" fill="#0a0a0a"/>
-            <path d="M 66 232 L 70 204 L 100 204 L 104 232 Z" fill="#dce4f0" opacity="0.95"/>
-            <path d="M 66 232 L 70 204 L 78 204 L 74 232 Z" fill="#b4bdd0" opacity="0.75"/>
-            <line x1="71" y1="214" x2="99" y2="214" stroke="#cc1122" stroke-width="2.2" opacity="0.55"/>
-            <line x1="71" y1="221" x2="99" y2="221" stroke="#cc1122" stroke-width="2.2" opacity="0.55"/>
-            <rect x="66" y="230" width="38" height="4" rx="1.5" fill="#1a1a1a" opacity="0.9"/>
-            <line x1="98" y1="216" x2="112" y2="206" stroke="#c07848" stroke-width="8" stroke-linecap="round"/>
-            <line x1="112" y1="206" x2="122" y2="197" stroke="#b06838" stroke-width="7" stroke-linecap="round"/>
-            <line x1="72" y1="220" x2="90" y2="211" stroke="#c07848" stroke-width="7" stroke-linecap="round"/>
-            <line x1="90" y1="211" x2="108" y2="204" stroke="#b06838" stroke-width="6" stroke-linecap="round"/>
-            <circle cx="115" cy="200" r="6" fill="#8a4020"/>
-            <line x1="117" y1="197" x2="188" y2="162" stroke="#5a2a0a" stroke-width="6" stroke-linecap="round"/>
-            <circle cx="188" cy="162" r="4" fill="#3a1808"/>
-            <ellipse cx="78" cy="200" rx="14" ry="13" fill="#0a0a0a" opacity="0.97"/>
-            <path d="M 64 200 Q 59 207 61 215 L 68 212 Q 65 207 65 200 Z" fill="#060606"/>
-            <circle cx="80" cy="205" r="8" fill="#c07848" opacity="0.9"/>
-            <!-- Strike zone -->
-            <rect x="121" y="96" width="120" height="130" rx="3"
-              fill="none" stroke="rgba(79,195,247,0.1)" stroke-width="10"
-              filter="url(#gd-zone-glow)" id="gd-outer-glow"/>
-            <rect x="124" y="99" width="114" height="124" rx="2"
-              fill="rgba(100,180,255,0.035)" id="gd-zone-fill"/>
-            <line x1="162" y1="99" x2="162" y2="223" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/>
-            <line x1="200" y1="99" x2="200" y2="223" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/>
-            <line x1="124" y1="140" x2="238" y2="140" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/>
-            <line x1="124" y1="182" x2="238" y2="182" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/>
-            <rect x="124" y="99" width="114" height="124" rx="2"
-              fill="none" stroke="rgba(255,255,255,0.88)" stroke-width="2.5" id="gd-zone-border"/>
-            <!-- K-Zone label -->
-            <text x="12" y="18" fill="#4fc3f7" font-size="9" font-family="monospace" font-weight="bold" letter-spacing="1">K-ZONE</text>
-            <line x1="12" y1="21" x2="68" y2="21" stroke="#4fc3f7" stroke-width="0.8" opacity="0.4"/>
-            <!-- Count dots -->
-            <text x="308" y="20" fill="#9aa8c4" font-size="7.5" text-anchor="end" font-family="monospace">BALLS</text>
-            <circle id="gd-b1" cx="260" cy="16" r="5.5" fill="#0a1a0a" stroke="#2a4a2a" stroke-width="1.2"/>
-            <circle id="gd-b2" cx="274" cy="16" r="5.5" fill="#0a1a0a" stroke="#2a4a2a" stroke-width="1.2"/>
-            <circle id="gd-b3" cx="288" cy="16" r="5.5" fill="#0a1a0a" stroke="#2a4a2a" stroke-width="1.2"/>
-            <text x="308" y="36" fill="#9aa8c4" font-size="7.5" text-anchor="end" font-family="monospace">STRIKES</text>
-            <circle id="gd-s1" cx="260" cy="32" r="5.5" fill="#1a1a0a" stroke="#4a4a1a" stroke-width="1.2"/>
-            <circle id="gd-s2" cx="274" cy="32" r="5.5" fill="#1a1a0a" stroke="#4a4a1a" stroke-width="1.2"/>
-            <text x="308" y="52" fill="#9aa8c4" font-size="7.5" text-anchor="end" font-family="monospace">OUTS</text>
-            <circle id="gd-o1" cx="260" cy="48" r="5.5" fill="#1a0a0a" stroke="#4a1a1a" stroke-width="1.2"/>
-            <circle id="gd-o2" cx="274" cy="48" r="5.5" fill="#1a0a0a" stroke="#4a1a1a" stroke-width="1.2"/>
-            <circle id="gd-o3" cx="288" cy="48" r="5.5" fill="#1a0a0a" stroke="#4a1a1a" stroke-width="1.2"/>
-            <!-- History + trail + ball -->
-            <g id="gd-pz-history"></g>
-            <circle id="gd-pz-trail4" cx="-50" cy="-50" r="3.5" opacity="0" filter="url(#gd-trail-glow)"/>
-            <circle id="gd-pz-trail3" cx="-50" cy="-50" r="4.5" opacity="0" filter="url(#gd-trail-glow)"/>
-            <circle id="gd-pz-trail2" cx="-50" cy="-50" r="5.5" opacity="0" filter="url(#gd-trail-glow)"/>
-            <circle id="gd-pz-trail1" cx="-50" cy="-50" r="7"   opacity="0" filter="url(#gd-trail-glow)"/>
-            <circle id="gd-pz-ball" cx="-50" cy="-50" r="10"
-              fill="#F2C230" opacity="0"
-              stroke="rgba(255,255,255,0.95)" stroke-width="1.8"
-              filter="url(#gd-ball-glow)"/>
-            <path id="gd-pz-seam1" d="" stroke="#C83A2B" stroke-width="1.4" fill="none" opacity="0"/>
-            <path id="gd-pz-seam2" d="" stroke="#C83A2B" stroke-width="1.4" fill="none" opacity="0"/>
-          </svg>
+        <div class="pz-svg-wrap" style="position:relative">
+          <canvas id="gd-kzone-canvas" style="width:100%;height:280px;display:block"></canvas>
+          
+            <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;color:#4fc3f7;letter-spacing:.08em">Loading K-Zone 3D…</div>
+          </div>
+          <div style="position:absolute;top:8px;left:10px;font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#4fc3f7;letter-spacing:.1em;pointer-events:none">K-ZONE 3D</div>
+          <style>@keyframes kzspin{to{transform:rotate(360deg)}}</style>
         </div>
         <div class="pz-info-bar" id="gd-info-bar" style="opacity:0;transition:opacity .35s">
           <div>
@@ -661,16 +580,16 @@
       <div class="bs-team-side">
         <img src="/assets/mlb/yankees.png" class="bs-team-logo" onerror="this.style.display='none'" />
         <div class="bs-team-name-blue">Yankees</div>
-        <div class="bs-final-score">2</div>
+        <div class="bs-final-score" id="live-away-score">2</div>
       </div>
-      <div class="bs-center-info">
-        <div class="bs-final-label">Final</div>
-        <div class="bs-game-date">Sep 14, 2025 · Fenway Park · Boston, MA</div>
+      <div class="bs-center-info"><span id="live-badge" style="display:none;background:rgba(34,197,94,.15);border:1px solid #22c55e;color:#22c55e;font-family:JetBrains Mono,monospace;font-size:.62rem;font-weight:700;letter-spacing:.1em;padding:3px 10px;border-radius:20px;margin-bottom:6px">● LIVE</span>
+        <div id="live-game-status" class="bs-final-label">Final</div>
+        <div class="bs-game-date"><span id="live-period"></span><span id="live-clock"></span>Sep 14, 2025 · Fenway Park · Boston, MA</div>
       </div>
       <div class="bs-team-side">
         <img src="/assets/mlb/red_sox.png" class="bs-team-logo" onerror="this.style.display='none'" />
         <div class="bs-team-name-blue">Red Sox</div>
-        <div class="bs-final-score">3</div>
+        <div class="bs-final-score" id="live-home-score">3</div>
       </div>
     </div>
 
@@ -746,7 +665,7 @@
     <div class="pbp-header">
       <div class="sec-label">// Play-by-Play</div>
     </div>
-    <div class="pbp-feed-full">
+    <div class="pbp-feed" id="pbp-feed">
 <div class="pbp-item">
       <div class="pbp-item-meta">Top 1 ·  <span class="pbp-score-badge">NYY 0–BOS 0</span></div>
       <div class="pbp-item-play"><span class="pbp-icon">⚾</span><span class="pbp-item-text">Jeter hits a sharp single to left field. Runner at 1B.</span></div>
@@ -967,124 +886,8 @@ renderPlay(currentIdx);
 startLive();
 
 // ── Pitch zone for gameday ──────────────────────────────────────
-const GD_PITCH_COLORS = {
-  'Fastball':   {fill:'#ef5350',glow:'rgba(239,83,80,0.8)'},
-  'Sinker':     {fill:'#ff7043',glow:'rgba(255,112,67,0.8)'},
-  'Cutter':     {fill:'#ffa726',glow:'rgba(255,167,38,0.8)'},
-  'Curveball':  {fill:'#42a5f5',glow:'rgba(66,165,245,0.8)'},
-  'Slider':     {fill:'#ab47bc',glow:'rgba(171,71,188,0.8)'},
-  'Changeup':   {fill:'#66bb6a',glow:'rgba(102,187,106,0.8)'},
-  'Splitter':   {fill:'#26c6da',glow:'rgba(38,198,218,0.8)'},
-  'default':    {fill:'#F2C230',glow:'rgba(242,194,48,0.8)'},
-};
-const GD_PZ_POS = {
-  "Up & In":{cx:143,cy:119},"Up & Middle":{cx:181,cy:119},"Up & Away":{cx:219,cy:119},
-  "Middle-In":{cx:143,cy:161},"Middle":{cx:181,cy:161},"Middle-Away":{cx:219,cy:161},
-  "Down & In":{cx:143,cy:203},"Down & Middle":{cx:181,cy:203},"Down & Away":{cx:219,cy:203},
-  "High":{cx:181,cy:75,out:true},"Low":{cx:181,cy:248,out:true},
-  "Inside":{cx:96,cy:161,out:true},"Way Outside":{cx:260,cy:161,out:true},
-  "Low & Away":{cx:248,cy:240,out:true},"Bounce":{cx:181,cy:268,out:true},
-};
-let gd_pitch_history = [];
-function gdGetPos(label){
-  if(!label)return{cx:181,cy:161,out:false};
-  for(const[k,v]of Object.entries(GD_PZ_POS)){
-    if(label.toLowerCase().includes(k.toLowerCase()))return v;
-  }
-  return{cx:181,cy:161,out:false};
-}
-function gdGetColor(type){
-  if(!type)return GD_PITCH_COLORS.default;
-  for(const[k,v]of Object.entries(GD_PITCH_COLORS)){
-    if(type.toLowerCase().includes(k.toLowerCase()))return v;
-  }
-  return GD_PITCH_COLORS.default;
-}
-function gdUpdateCount(b,s,o){
-  const dots=[
-    {ids:['gd-b1','gd-b2','gd-b3'],count:b||0,color:'#4caf50'},
-    {ids:['gd-s1','gd-s2'],count:s||0,color:'#ffb300'},
-    {ids:['gd-o1','gd-o2','gd-o3'],count:o||0,color:'#ef5350'},
-  ];
-  dots.forEach(({ids,count,color})=>{
-    ids.forEach((id,i)=>{
-      const el=document.getElementById(id);
-      if(!el)return;
-      el.setAttribute('fill',i<count?color:(id.includes('b1')||id.includes('b2')||id.includes('b3')?'#0a1a0a':id.includes('s')?'#1a1a0a':'#1a0a0a'));
-      el.setAttribute('stroke',i<count?color:'#2a2a2a');
-    });
-  });
-  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
-  set('gd-pz-balls',b||0);set('gd-pz-strikes',s||0);set('gd-pz-outs',o||0);
-}
-function gdAnimateTrail(cx,cy,color){
-  const startX=181,startY=30;
-  [{id:'gd-pz-trail4',frac:.25,r:3.5,op:.15},{id:'gd-pz-trail3',frac:.45,r:4.5,op:.25},
-   {id:'gd-pz-trail2',frac:.65,r:5.5,op:.35},{id:'gd-pz-trail1',frac:.82,r:7,op:.5}]
-  .forEach(({id,frac,r,op})=>{
-    const el=document.getElementById(id);
-    if(!el)return;
-    el.setAttribute('cx',startX+(cx-startX)*frac);
-    el.setAttribute('cy',startY+(cy-startY)*frac);
-    el.setAttribute('r',r);el.setAttribute('fill',color);el.setAttribute('opacity','0');
-    setTimeout(()=>el.setAttribute('opacity',String(op)),frac*220);
-    setTimeout(()=>el.setAttribute('opacity','0'),frac*220+600);
-  });
-}
-function gdShowPitch(label,type,speed,balls,strikes,outs){
-  const ball=document.getElementById('gd-pz-ball');
-  const s1=document.getElementById('gd-pz-seam1');
-  const s2=document.getElementById('gd-pz-seam2');
-  const status=document.getElementById('gd-zone-status');
-  const badge=document.getElementById('gd-pitch-result');
-  const infoBar=document.getElementById('gd-info-bar');
-  const border=document.getElementById('gd-zone-border');
-  const glow=document.getElementById('gd-outer-glow');
-  if(!ball)return;
-  const pos=gdGetPos(label);
-  const inZone=!pos.out;
-  const pColor=gdGetColor(type);
-  if(balls!==undefined)gdUpdateCount(balls,strikes,outs);
-  ball.setAttribute('opacity','0');
-  gdAnimateTrail(pos.cx,pos.cy,pColor.fill);
-  setTimeout(()=>{
-    ball.setAttribute('cx',pos.cx);ball.setAttribute('cy',pos.cy);
-    ball.setAttribute('fill',pColor.fill);ball.setAttribute('opacity','1');
-    if(s1){s1.setAttribute('d',`M${pos.cx-4},${pos.cy-6} Q${pos.cx},${pos.cy} ${pos.cx-4},${pos.cy+6}`);s1.setAttribute('opacity','0.8');}
-    if(s2){s2.setAttribute('d',`M${pos.cx+4},${pos.cy-6} Q${pos.cx},${pos.cy} ${pos.cx+4},${pos.cy+6}`);s2.setAttribute('opacity','0.8');}
-    if(border)border.setAttribute('stroke',inZone?'rgba(255,255,255,0.88)':'rgba(239,83,80,0.6)');
-    if(glow)glow.setAttribute('stroke',inZone?'rgba(79,195,247,0.2)':'rgba(239,83,80,0.15)');
-  },280);
-  if(status){status.textContent=inZone?'Strike Zone':'Ball — Out of Zone';status.className='pitch-zone-status '+(inZone?'pz-status-strike':'pz-status-ball');}
-  const tl=document.getElementById('gd-pitch-type-lbl');
-  const sl=document.getElementById('gd-pitch-speed-lbl');
-  if(tl)tl.textContent=type||'Pitch';
-  if(sl)sl.textContent=speed?speed+' mph':'';
-  if(infoBar)infoBar.style.opacity='1';
-  if(badge){badge.className='pz-result-badge';badge.textContent=inZone?'Strike':'Ball';badge.classList.add(inZone?'pz-result-strike':'pz-result-ball');}
-  gd_pitch_history.push({cx:pos.cx,cy:pos.cy,color:pColor.fill});
-  const g=document.getElementById('gd-pz-history');
-  if(g)g.innerHTML=gd_pitch_history.slice(-8,-1).map((p,i)=>`<circle cx="${p.cx}" cy="${p.cy}" r="5" fill="${p.color}" opacity="${.2+i*.04}" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>`).join('');
-}
-function gdResetPitch(){
-  ['gd-pz-ball','gd-pz-seam1','gd-pz-seam2','gd-pz-trail1','gd-pz-trail2','gd-pz-trail3','gd-pz-trail4'].forEach(id=>{
-    const el=document.getElementById(id);
-    if(!el)return;
-    el.setAttribute('opacity','0');
-    if(id==='gd-pz-ball'){el.setAttribute('cx','-50');el.setAttribute('cy','-50');}
-    if(id.includes('trail')){el.setAttribute('cx','-50');el.setAttribute('cy','-50');}
-    if(id.includes('seam'))el.setAttribute('d','');
-  });
-  const st=document.getElementById('gd-zone-status');
-  const ba=document.getElementById('gd-pitch-result');
-  const ib=document.getElementById('gd-info-bar');
-  if(st){st.textContent='';st.className='pitch-zone-status';}
-  if(ba){ba.className='pz-result-badge';ba.textContent='';}
-  if(ib)ib.style.opacity='0';
-  gd_pitch_history=[];
-  const gh=document.getElementById('gd-pz-history');
-  if(gh)gh.innerHTML='';
-}
+// GD K-Zone 3D loaded from Three.js module
+
 </script>
 
   <script type="module">
@@ -1257,6 +1060,51 @@ function syncMobileLang(lang) {
     b.classList.toggle('active', b.getAttribute('data-lang') === lang);
   });
 }
+</script>
+
+<!-- K-Zone 2D (no dependencies, works locally) -->
+<script src="/assets/kzone2d.js"></script>
+<script>
+// Gameday alias — gdShowPitch maps to showPitchZone
+window.gdShowPitch = function(label, type, speed, balls, strikes, outs) {
+  if (typeof showPitchZone === 'function') {
+    showPitchZone(label, false, type, speed, balls, strikes, outs);
+  }
+};
+window.gdResetPitch = function() {
+  if (typeof resetPitchZone === 'function') resetPitchZone();
+};
+</script>
+
+<script>
+// ── SSC LIVE GAMEDAY (MLB) ─────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function() {
+  // ── FILE:// DETECTION ──────────────────────────────────────
+  const isFileProtocol = window.location.protocol === 'file:';
+  if (isFileProtocol) {
+    // Show friendly "needs hosting" notice instead of silent failure
+    const notice = document.getElementById('live-notice');
+    if (notice) notice.style.display = 'flex';
+    // Still render static demo data
+    return;
+  }
+  if (typeof SSCLive === 'undefined') return;
+  const params  = new URLSearchParams(window.location.search);
+  const eventId = params.get('event') || '401569744';
+  SSCLive.initGameday('mlb', eventId, {
+    pbpContainerId: 'pbp-feed',
+    interval: 15000,
+    onPlays: function(plays) {
+      if (!plays.length) return;
+      // MLB: feed live pitch into K-Zone
+      const p = plays[0];
+      if (p.pitchType && typeof showPitchZone === 'function') {
+        const inZone = p.result && !p.result.toLowerCase().includes('ball');
+        showPitchZone(p.result||'Middle', inZone, p.pitchType, p.pitchSpeed, p.balls, p.strikes, p.outs);
+      }
+    },
+  });
+});
 </script>
 </body>
 </html>
