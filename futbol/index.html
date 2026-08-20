@@ -236,6 +236,12 @@
     }
     .csv-btn:hover{background:rgba(242,194,48,.18);border-color:rgba(242,194,48,.5)}
     .csv-btn svg{width:9px;height:9px;flex-shrink:0}
+  
+    .tbl th{cursor:pointer;user-select:none;position:relative;white-space:nowrap}
+    .tbl th:hover{background:rgba(242,194,48,.08)}
+    .tbl th.sort-asc::after{content:' ▲';font-size:.55rem;color:var(--gold);opacity:.9}
+    .tbl th.sort-desc::after{content:' ▼';font-size:.55rem;color:var(--gold);opacity:.9}
+    .tbl th:not(.sort-asc):not(.sort-desc)::after{content:' ⇅';font-size:.5rem;color:var(--muted);opacity:.5}
   </style>
 </head>
 <body>
@@ -406,7 +412,7 @@
   <div class="sec-title">MLS Stats</div>
   <div style="display:flex;gap:10px;margin-bottom:22px;align-items:center">
     <button class="type-btn active" onclick="showType('player',this)" style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:9px 22px;border-radius:6px;border:2px solid var(--gold);background:var(--gold);color:var(--ink);cursor:pointer;transition:all .2s">👤 Player Stats</button>
-    <button class="type-btn" onclick="showType('team',this)" style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:9px 22px;border-radius:6px;border:2px solid var(--line);background:var(--ink-2);color:var(--muted);cursor:pointer;transition:all .2s">🏟️ Team Stats</button> <a href="/teams/index.html#soccer" style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:9px 22px;border-radius:6px;border:2px solid var(--line);background:var(--ink-2);color:var(--muted);cursor:pointer;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;gap:6px">🏟 All Teams →</a>
+    <button class="type-btn" onclick="showType('team',this)" style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:9px 22px;border-radius:6px;border:2px solid var(--line);background:var(--ink-2);color:var(--muted);cursor:pointer;transition:all .2s">🏟️ Team Stats</button> <a href="/teams/index.html#soccer" style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:9px 22px;border-radius:6px;border:2px solid var(--line);background:var(--ink-2);color:var(--white);cursor:pointer;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;gap:6px">🏟 All Teams →</a>
   </div>
 
   <!-- PLAYER STATS -->
@@ -573,7 +579,7 @@
   <div class="sec-title">Premier League Stats</div>
   <div style="display:flex;gap:10px;margin-bottom:22px;align-items:center">
     <button class="type-btn active" onclick="showType('player',this)" style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:9px 22px;border-radius:6px;border:2px solid var(--gold);background:var(--gold);color:var(--ink);cursor:pointer;transition:all .2s">👤 Player Stats</button>
-    <button class="type-btn" onclick="showType('team',this)" style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:9px 22px;border-radius:6px;border:2px solid var(--line);background:var(--ink-2);color:var(--muted);cursor:pointer;transition:all .2s">🏟️ Team Stats</button> <a href="/teams/index.html#soccer" style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:9px 22px;border-radius:6px;border:2px solid var(--line);background:var(--ink-2);color:var(--muted);cursor:pointer;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;gap:6px">🏟 All Teams →</a>
+    <button class="type-btn" onclick="showType('team',this)" style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:9px 22px;border-radius:6px;border:2px solid var(--line);background:var(--ink-2);color:var(--muted);cursor:pointer;transition:all .2s">🏟️ Team Stats</button> <a href="/teams/index.html#soccer" style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:9px 22px;border-radius:6px;border:2px solid var(--line);background:var(--ink-2);color:var(--white);cursor:pointer;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;gap:6px">🏟 All Teams →</a>
   </div>
 
   <!-- PLAYER STATS -->
@@ -1416,6 +1422,52 @@ function applyTranslations(lang) {
   else document.querySelectorAll('.lang-btn[data-lang="en"]').forEach(b => b.classList.add('active'));
 })();
 
+</script>
+<script>
+// ── Sortable Tables ─────────────────────────────────────────────
+function sortTable(th, tableId) {
+  const tbl  = document.getElementById(tableId);
+  if (!tbl) return;
+  const tbody = tbl.querySelector('tbody');
+  const thead = tbl.querySelector('thead');
+  const ths   = Array.from(thead.querySelectorAll('th'));
+  const colIdx= ths.indexOf(th);
+  const rows  = Array.from(tbody.querySelectorAll('tr'));
+
+  // Determine sort direction
+  const wasAsc = th.classList.contains('sort-asc');
+  // Clear all sort indicators
+  ths.forEach(t => t.classList.remove('sort-asc','sort-desc'));
+  const asc = !wasAsc;
+  th.classList.add(asc ? 'sort-asc' : 'sort-desc');
+
+  // Sort rows
+  rows.sort((a, b) => {
+    const av = a.cells[colIdx]?.textContent.trim() || '';
+    const bv = b.cells[colIdx]?.textContent.trim() || '';
+    // Try numeric (strip commas, +, %)
+    const an = parseFloat(av.replace(/[,%+]/g,''));
+    const bn = parseFloat(bv.replace(/[,%+]/g,''));
+    if (!isNaN(an) && !isNaN(bn)) return asc ? an-bn : bn-an;
+    // String compare
+    return asc ? av.localeCompare(bv) : bv.localeCompare(av);
+  });
+  rows.forEach(r => tbody.appendChild(r));
+}
+
+// Auto-attach sort handlers to all .tbl tables
+function initSortableTables() {
+  document.querySelectorAll('table.tbl').forEach(tbl => {
+    const id = tbl.id;
+    if (!id) return;
+    tbl.querySelectorAll('thead th').forEach((th, i) => {
+      th.style.cursor = 'pointer';
+      th.title = 'Click to sort';
+      th.addEventListener('click', () => sortTable(th, id));
+    });
+  });
+}
+document.addEventListener('DOMContentLoaded', initSortableTables);
 </script>
 </body>
 </html>
