@@ -1,763 +1,741 @@
-// ── SSC K-Zone 2D — pure Canvas, zero dependencies ─────────────
-// Works on file://, http://, https:// — no CDN required
-// API identical to old Three.js version:
-//   showPitchZone(label, isCorrect, pitchType, speed, balls, strikes, outs)
-//   resetPitchZone()
-//   newAtBat()
+// ── SSC K-Zone ESPN-Style — Canvas 2D ──────────────────────────
+// Phase 1: Batter view with live K-Zone heatmap, pitch dot, count
+// Phase 2: Overhead field view with animated ball trajectory
+// API: showPitchZone(label, isCorrect, pitchType, speed, balls, strikes, outs)
+//      resetPitchZone()  newAtBat()
 
 (function(){
 'use strict';
 
-// ── CONFIG ─────────────────────────────────────────────────────
-const CFG = {
-  bg:        '#06080f',
-  skyTop:    '#0a0e1a',
-  skyBot:    '#0d1520',
-  grassDark: '#091a06',
-  grassLight:'#0d2209',
-  dirtDark:  '#1a0a03',
-  dirtLight: '#2a1205',
-  zoneStroke:'rgba(255,255,255,0.88)',
-  zoneGrid:  'rgba(255,255,255,0.2)',
-  zoneFill:  'rgba(79,195,247,0.045)',
-  zoneGlow:  'rgba(79,195,247,0.12)',
-  plateCol:  'rgba(230,230,230,0.85)',
-  kzoneBlue: '#4fc3f7',
-  gold:      '#F2C230',
-  // Count dot colors
-  ballCol:   '#4caf50',
-  strikeCol: '#ffb300',
-  outCol:    '#ef5350',
+// ── PALETTE ────────────────────────────────────────────────────
+const C = {
+  bg:'#06080f', skyTop:'#0a0e1a', skyBot:'#0d1520',
+  grass:'#1a4a18', grassLight:'#1e5c1c', grassDark:'#142f12',
+  dirt:'#8B5E3C', dirtLight:'#A0714F', dirtDark:'#6B4530',
+  sand:'#C4956A', mound:'#B8845A',
+  white:'rgba(255,255,255,0.92)', muted:'rgba(200,210,220,0.7)',
+  gold:'#F2C230', blue:'#4fc3f7', red:'#ef5350',
+  green:'#4caf50', amber:'#ffb300',
+  zoneStroke:'rgba(255,255,255,0.85)', zoneGrid:'rgba(255,255,255,0.18)',
+  zoneFill:'rgba(79,195,247,0.04)', hotFill:'rgba(239,83,80,0.22)',
+  warmFill:'rgba(255,152,0,0.16)', coolFill:'rgba(33,150,243,0.12)',
 };
 
-// Pitch colors by type
-const PITCH_COLORS = {
-  fastball:   '#ef5350', '4-seam':'#ef5350', '2-seam':'#ff7043',
-  sinker:     '#ff7043', cutter: '#ffa726', curveball:'#42a5f5',
-  slider:     '#ab47bc', changeup:'#66bb6a', splitter:'#26c6da',
+// Pitch type → colour map
+const PCLR = {
+  fastball:'#ef5350','4-seam':'#ef5350','2-seam':'#ff7043',
+  sinker:'#ff7043', cutter:'#ffa726', curveball:'#42a5f5',
+  slider:'#ab47bc', changeup:'#66bb6a', splitter:'#26c6da',
   knuckleball:'#d4e157', default:'#F2C230',
 };
-
-function pitchColor(type){
-  if(!type) return PITCH_COLORS.default;
-  const t = type.toLowerCase();
-  for(const[k,v] of Object.entries(PITCH_COLORS)){
-    if(t.includes(k)) return v;
-  }
-  return PITCH_COLORS.default;
+function pitchClr(t){
+  if(!t) return PCLR.default;
+  const l=t.toLowerCase();
+  for(const[k,v] of Object.entries(PCLR)) if(l.includes(k)) return v;
+  return PCLR.default;
 }
 
 // Zone locations — normalised x(-1..1), y(-1..1)
-const ZONE_LOCS = {
-  'up & in':       {x:-.67,y:.67, iz:true},
-  'up & middle':   {x:0,   y:.67, iz:true},
-  'up & away':     {x:.67, y:.67, iz:true},
-  'middle-in':     {x:-.67,y:0,   iz:true},
-  'middle':        {x:0,   y:0,   iz:true},
-  'down the middle':{x:0,  y:0,   iz:true},
-  'middle-away':   {x:.67, y:0,   iz:true},
-  'down & in':     {x:-.67,y:-.67,iz:true},
-  'down & middle': {x:0,   y:-.67,iz:true},
-  'down & away':   {x:.67, y:-.67,iz:true},
-  'arm side':      {x:-.67,y:0,   iz:true},
-  'glove side':    {x:.67, y:0,   iz:true},
-  'backdoor':      {x:.9,  y:-.5, iz:true},
-  '12-6':          {x:0,   y:-.67,iz:true},
-  'inside':        {x:-1.55,y:0,  iz:false},
-  'outside':       {x:1.55, y:0,  iz:false},
-  'way outside':   {x:1.7,  y:0,  iz:false},
-  'high':          {x:0,   y:1.65,iz:false},
-  'low':           {x:0,   y:-1.65,iz:false},
-  'bounce':        {x:0,   y:-2.2, iz:false},
-  'low & away':    {x:1.4, y:-1.4, iz:false},
-  'low & in':      {x:-1.4,y:-1.4, iz:false},
-  'high & away':   {x:1.4, y:1.4,  iz:false},
+const ZLOCS = {
+  'up & in':{x:-.67,y:.67,iz:true},'up & middle':{x:0,y:.67,iz:true},
+  'up & away':{x:.67,y:.67,iz:true},'middle-in':{x:-.67,y:0,iz:true},
+  'middle':{x:0,y:0,iz:true},'down the middle':{x:0,y:0,iz:true},
+  'middle-away':{x:.67,y:0,iz:true},'down & in':{x:-.67,y:-.67,iz:true},
+  'down & middle':{x:0,y:-.67,iz:true},'down & away':{x:.67,y:-.67,iz:true},
+  'arm side':{x:-.67,y:0,iz:true},'glove side':{x:.67,y:0,iz:true},
+  'up':{x:0,y:.67,iz:true},'backdoor':{x:.9,y:-.5,iz:true},
+  '12-6':{x:0,y:-.67,iz:true},'inside':{x:-1.55,y:0,iz:false},
+  'outside':{x:1.55,y:0,iz:false},'high':{x:0,y:1.65,iz:false},
+  'low':{x:0,y:-1.65,iz:false},'bounce':{x:0,y:-2.2,iz:false},
+  'low & away':{x:1.4,y:-1.4,iz:false},'low & in':{x:-1.4,y:-1.4,iz:false},
 };
-
-function getLoc(label){
-  if(!label) return{x:0,y:0,iz:true};
-  const s=(label.includes('—')?label.split('—')[1].trim():label).toLowerCase();
-  for(const[k,v] of Object.entries(ZONE_LOCS)){
-    if(s.includes(k)||k.includes(s)) return v;
-  }
+function getLoc(s){
+  if(!s) return{x:0,y:0,iz:true};
+  const q=(s.includes('—')?s.split('—')[1].trim():s).toLowerCase();
+  for(const[k,v] of Object.entries(ZLOCS)) if(q.includes(k)||k.includes(q)) return v;
   return{x:0,y:0,iz:true};
 }
-
-// Pitch break mid-point offset
-function getBreak(type){
-  const t=(type||'').toLowerCase();
-  if(t.includes('curve'))   return{bx:.14,by:-.18};
-  if(t.includes('slider'))  return{bx:.11,by:-.08};
-  if(t.includes('cutter'))  return{bx:.06,by:-.03};
-  if(t.includes('sinker')||t.includes('2-seam')) return{bx:.05,by:-.14};
-  if(t.includes('changeup'))return{bx:.06,by:-.12};
-  if(t.includes('splitter'))return{bx:.03,by:-.18};
-  if(t.includes('knuckle')) return{bx:(Math.random()-.5)*.25,by:(Math.random()-.5)*.15};
+function getBreak(t){
+  const l=(t||'').toLowerCase();
+  if(l.includes('curve'))    return{bx:.14,by:-.18};
+  if(l.includes('slider'))   return{bx:.11,by:-.08};
+  if(l.includes('cutter'))   return{bx:.06,by:-.03};
+  if(l.includes('sinker')||l.includes('2-seam')) return{bx:.05,by:-.14};
+  if(l.includes('change'))   return{bx:.06,by:-.12};
+  if(l.includes('split'))    return{bx:.03,by:-.18};
   return{bx:0,by:.03};
 }
 
+// ── HEATMAP DATA ── Simulated pitch density per zone cell (3×3)
+// Updated each pitch to show where pitches have been thrown
+let heatmap = [
+  [0,0,0],[0,0,0],[0,0,0],   // top row (L→R, high→low)
+  [0,0,0],[0,0,0],[0,0,0],
+  [0,0,0],[0,0,0],[0,0,0],
+];
+// Which heat cell does a location fall into? Returns [row,col]
+function heatCell(nx,ny){
+  const col = nx < -0.33 ? 0 : nx < 0.33 ? 1 : 2;
+  const row = ny >  0.33 ? 0 : ny > -0.33 ? 1 : 2;
+  return[row,col];
+}
+function bumpHeat(nx,ny){
+  if(Math.abs(nx)<=1 && Math.abs(ny)<=1){
+    const[r,c]=heatCell(nx,ny);
+    heatmap[r*3+c]=(heatmap[r*3+c]||0)+1;
+  }
+}
+function maxHeat(){ return Math.max(1,...heatmap.flat()); }
+
 // ── STATE ──────────────────────────────────────────────────────
-let canvas, ctx;
-let W=0, H=0;
-// Zone rect in canvas pixels (set in layout())
-let ZX=0,ZY=0,ZW=0,ZH=0;
-// Count state
+let canvas, ctx, W=0, H=0;
+let ZX=0,ZY=0,ZW=0,ZH=0;   // K-Zone rect in pixels
 let COUNT={b:0,s:0,o:0};
-// Ball animation
-let animId=null, animT=0, animDur=700, animActive=false;
-let animStartX=0,animStartY=0, animMidX=0,animMidY=0, animEndX=0,animEndY=0;
-let animColor='#F2C230';
-// Current result
-let resultState=null; // {inZone, isCorrect, pitchType, speed}
-// History dots [{x,y,color,inZone}]
-let history=[];
-// Trail [{x,y,a}]
-let trail=[];
-// Ripple [{x,y,r,a}]
-let ripples=[];
-// Info visible
+let history=[];              // [{nx,ny,clr,iz}]
+let animId=null;
+let phase='pitch';           // 'pitch' | 'flight' | 'result'
+let pitchAnim={t:0,dur:520,sx:0,sy:0,mx:0,my:0,ex:0,ey:0,clr:'#fff'};
+let flightAnim={t:0,dur:900,done:false};
+let resultState=null;        // {loc, isCorrect, pitchType, speed, inZone}
+let currentPitchType='', currentSpeed=0;
+let pitchDot=null;           // {x,y,clr,r} — final dot on zone
 let infoVisible=false;
-let currentPitchType='';
-let currentPitchSpeed='';
-let currentResult='';
-let currentResultClass='';
+let ripples=[];
+let fieldResult=null;        // 'single'|'fly'|'grounder'|'strike'|'ball' etc.
 
-// ── LAYOUT CALCULATOR ──────────────────────────────────────────
+// ── LAYOUT ─────────────────────────────────────────────────────
 function layout(){
-  W = canvas.width  = canvas.offsetWidth  || 360;
-  H = canvas.height = canvas.offsetHeight || 320;
-  // Zone occupies right ~38% of canvas, vertically centered
-  ZW = Math.round(W * 0.34);
-  ZH = Math.round(ZW * 1.12);
-  ZX = Math.round(W * 0.56);
-  ZY = Math.round((H - ZH) * 0.46);
+  W=canvas.width=canvas.offsetWidth||380;
+  H=canvas.height=canvas.offsetHeight||340;
+  ZW=Math.round(W*0.30); ZH=Math.round(ZW*1.14);
+  ZX=Math.round(W*0.60); ZY=Math.round((H-ZH)*0.42);
 }
 
-// ── DRAW SCENE ──────────────────────────────────────────────────
-function drawScene(){
+// ── MAIN RENDER LOOP ───────────────────────────────────────────
+function loop(){
+  animId=requestAnimationFrame(loop);
+  draw();
+}
+
+function draw(){
   ctx.clearRect(0,0,W,H);
+  if(phase==='flight'||phase==='result_field'){
+    drawField();
+    if(phase==='flight') animFlight();
+    else drawFieldResult();
+  } else {
+    drawPitchView();
+    if(phase==='anim') animPitch();
+  }
+}
 
-  // ── Background sky gradient ──
-  const sky = ctx.createLinearGradient(0,0,0,H);
-  sky.addColorStop(0, '#06080f');
-  sky.addColorStop(.45,'#0c1222');
-  sky.addColorStop(.68,'#0d1a10');
-  sky.addColorStop(1,  '#050e04');
-  ctx.fillStyle = sky;
-  ctx.fillRect(0,0,W,H);
+// ══════════════════════════════════════════════════════════════
+// ── PHASE 1: BATTER / K-ZONE VIEW ─────────────────────────────
+// ══════════════════════════════════════════════════════════════
+function drawPitchView(){
+  // Sky gradient background
+  const sky=ctx.createLinearGradient(0,0,0,H);
+  sky.addColorStop(0,'#06080f'); sky.addColorStop(.4,'#0c1222');
+  sky.addColorStop(.65,'#0d1a10'); sky.addColorStop(1,'#050e04');
+  ctx.fillStyle=sky; ctx.fillRect(0,0,W,H);
 
-  // ── Stadium light glows (upper corners) ──
-  drawLightGlow(W*.12, H*.08, W*.22);
-  drawLightGlow(W*.88, H*.08, W*.22);
-
-  // ── Light poles ──
-  drawLightPole(W*.09, H*.04, W*.06);
-  drawLightPole(W*.91, H*.04, W*.06);
-
-  // ── Outfield wall arc ──
-  ctx.beginPath();
-  ctx.arc(W*.5, H*-.2, W*.72, 0, Math.PI);
-  ctx.fillStyle='#0f2812';
-  ctx.fill();
-  // wall top edge
-  ctx.beginPath();
-  ctx.arc(W*.5, H*-.2, W*.72, 0, Math.PI);
-  ctx.strokeStyle='rgba(40,100,50,0.6)';
-  ctx.lineWidth=2;
-  ctx.stroke();
-
-  // ── Crowd / stands ──
-  drawCrowd();
-
-  // ── Outfield grass (bottom ellipse) ──
-  const grassGrad = ctx.createRadialGradient(W*.5,H*.82,0, W*.5,H*.82,W*.7);
-  grassGrad.addColorStop(0,'#152e10');
-  grassGrad.addColorStop(1,'#071205');
-  ctx.beginPath();
-  ctx.ellipse(W*.5, H*.85, W*.62, H*.42, 0, 0, Math.PI*2);
-  ctx.fillStyle = grassGrad;
-  ctx.fill();
-  // Mow stripes
-  drawMowStripes();
-
-  // ── Infield dirt ──
-  const dirtGrad = ctx.createRadialGradient(W*.5,H*.95,0, W*.5,H*.95,W*.32);
-  dirtGrad.addColorStop(0,'#2a1508');
-  dirtGrad.addColorStop(1,'#120800');
-  ctx.beginPath();
-  ctx.ellipse(W*.5, H*.94, W*.3, H*.14, 0, 0, Math.PI*2);
-  ctx.fillStyle = dirtGrad;
-  ctx.fill();
-
-  // ── Foul lines ──
-  ctx.strokeStyle='rgba(255,255,255,0.15)';
-  ctx.lineWidth=1;
-  ctx.beginPath(); ctx.moveTo(W*.5,H*.9); ctx.lineTo(W*.02, H*.38); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(W*.5,H*.9); ctx.lineTo(W*.98, H*.38); ctx.stroke();
-
-  // ── Pitcher mound ──
-  ctx.beginPath();
-  ctx.ellipse(W*.5, H*.74, W*.046, H*.024, 0, 0, Math.PI*2);
-  ctx.fillStyle='#1e0d04';
-  ctx.fill();
-  // rubber
-  ctx.fillStyle='rgba(220,220,220,0.5)';
-  ctx.fillRect(W*.486, H*.736, W*.028, H*.008);
-
-  // ── Home plate ──
-  drawHomePlate();
-
-  // ── Batter's boxes ──
-  drawBatterBoxes();
-
-  // ── Batter silhouette ──
+  drawStadiumLights();
+  drawMoundAndPlate();
   drawBatter();
-
-  // ── Ground zone projection ──
-  drawGroundZone();
-
-  // ── Strike zone ──
-  drawStrikeZone();
-
-  // ── History dots ──
-  history.forEach(h=>drawHistoryDot(h));
-
-  // ── Ripples ──
-  ripples.forEach(r=>drawRipple(r));
-
-  // ── Ball + trail ──
-  if(animActive || resultState){
-    trail.forEach((t,i)=>drawTrailDot(t,i));
-    if(animActive || resultState){
-      drawBall(animEndX||0, animEndY||0, animColor);
-    }
-  }
-
-  // ── K-Zone label ──
-  ctx.font = `bold ${Math.round(W*.028)}px 'JetBrains Mono',monospace`;
-  ctx.fillStyle = CFG.kzoneBlue;
-  ctx.fillText('K-ZONE', W*.025, H*.068);
-  ctx.strokeStyle='rgba(79,195,247,0.3)';
-  ctx.lineWidth=0.8;
-  ctx.beginPath(); ctx.moveTo(W*.025, H*.076); ctx.lineTo(W*.18, H*.076); ctx.stroke();
-
-  // ── Count dots ──
-  drawCountDots();
+  drawKZone();
+  drawHeatmap();
+  drawHistoryDots();
+  drawCountBar();
+  drawPitchTypeLabel();
+  if(pitchDot) drawPitchDot();
 }
 
-function drawLightGlow(cx,cy,r){
-  const g=ctx.createRadialGradient(cx,cy,0,cx,cy,r);
-  g.addColorStop(0,'rgba(255,245,180,0.28)');
-  g.addColorStop(1,'rgba(255,245,180,0)');
-  ctx.fillStyle=g;
-  ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fill();
-}
-
-function drawLightPole(cx,top,pw){
-  // Pole
-  ctx.fillStyle='#2a2a2a';
-  ctx.fillRect(cx-pw*.06, top, pw*.12, H*.18);
-  // Light bank
-  ctx.fillStyle='#3a3a3a';
-  ctx.fillRect(cx-pw*.5, top+H*.02, pw, H*.03);
-  ctx.fillRect(cx-pw*.5, top+H*.06, pw, H*.02);
-  // Bulbs
-  const bulbW = pw/3.5;
-  for(let i=0;i<3;i++){
-    ctx.fillStyle='rgba(255,230,100,0.85)';
-    ctx.beginPath();
-    ctx.arc(cx-pw*.5+bulbW*(i+.5), top+H*.03, bulbW*.28, 0, Math.PI*2);
-    ctx.fill();
-  }
-}
-
-function drawCrowd(){
-  // Row tints
-  const rows=[
-    {y:.3,h:.04,c:'rgba(40,65,120,0.35)'},
-    {y:.34,h:.035,c:'rgba(30,55,110,0.35)'},
-    {y:.375,h:.03,c:'rgba(20,45,90,0.35)'},
-    {y:.405,h:.025,c:'rgba(15,35,70,0.35)'},
-  ];
-  rows.forEach(r=>{
-    ctx.fillStyle=r.c;
-    ctx.fillRect(0,H*r.y,W,H*r.h);
+function drawStadiumLights(){
+  [[W*.1,H*.06],[W*.9,H*.06]].forEach(([lx,ly])=>{
+    const g=ctx.createRadialGradient(lx,ly,0,lx,ly,W*.18);
+    g.addColorStop(0,'rgba(255,255,220,0.12)');
+    g.addColorStop(1,'rgba(255,255,220,0)');
+    ctx.fillStyle=g; ctx.fillRect(0,0,W,H*.35);
+    // pole
+    ctx.strokeStyle='rgba(180,180,180,0.4)'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(lx,ly); ctx.lineTo(lx,H*.28); ctx.stroke();
   });
-  // Crowd dots
-  ctx.fillStyle='rgba(100,140,200,0.25)';
-  for(let x=30;x<W;x+=22){
-    ctx.beginPath();
-    ctx.arc(x, H*.32+Math.sin(x*.18)*H*.015, W*.006, 0, Math.PI*2);
-    ctx.fill();
-  }
 }
 
-function drawMowStripes(){
-  for(let r=0;r<5;r++){
-    ctx.beginPath();
-    ctx.ellipse(W*.5, H*.85, W*(.22+r*.07), H*(.16+r*.05), 0, 0, Math.PI*2);
-    ctx.strokeStyle=r%2?'rgba(30,80,20,0.25)':'rgba(15,50,10,0.25)';
-    ctx.lineWidth=W*.04;
-    ctx.stroke();
-  }
-}
+function drawMoundAndPlate(){
+  // Ground
+  const grd=ctx.createLinearGradient(0,H*.55,0,H);
+  grd.addColorStop(0,C.grassDark); grd.addColorStop(1,'#030804');
+  ctx.fillStyle=grd; ctx.fillRect(0,H*.55,W,H*.45);
 
-function drawHomePlate(){
-  const px=W*.5, py=H*.905, pw=W*.065, ph=H*.038;
+  // Pitcher's mound
+  const mx=W*.22, my=H*.72, mr=W*.055;
+  const mg=ctx.createRadialGradient(mx,my,0,mx,my,mr);
+  mg.addColorStop(0,C.dirtLight); mg.addColorStop(1,C.dirtDark);
+  ctx.fillStyle=mg;
+  ctx.beginPath(); ctx.ellipse(mx,my,mr,mr*.45,0,0,Math.PI*2); ctx.fill();
+
+  // Home plate
+  const px=W*.2, py=H*.84, pw=W*.045, ph=pw*.6;
+  ctx.fillStyle='rgba(230,230,230,0.88)';
   ctx.beginPath();
-  ctx.moveTo(px-pw, py-ph*.3);
-  ctx.lineTo(px+pw, py-ph*.3);
-  ctx.lineTo(px+pw, py+ph*.1);
-  ctx.lineTo(px,    py+ph);
-  ctx.lineTo(px-pw, py+ph*.1);
-  ctx.closePath();
-  ctx.fillStyle='rgba(225,225,225,0.85)';
+  ctx.moveTo(px,py-ph); ctx.lineTo(px+pw/2,py); ctx.lineTo(px+pw/2,py+ph*.4);
+  ctx.lineTo(px-pw/2,py+ph*.4); ctx.lineTo(px-pw/2,py); ctx.closePath();
   ctx.fill();
-  ctx.strokeStyle='rgba(180,180,180,0.4)';
-  ctx.lineWidth=1; ctx.stroke();
-}
-
-function drawBatterBoxes(){
-  ctx.strokeStyle='rgba(255,255,255,0.12)';
-  ctx.lineWidth=1;
-  // Left box
-  ctx.strokeRect(W*.27, H*.77, W*.15, H*.15);
-  // Right box (dashed)
-  ctx.setLineDash([3,4]);
-  ctx.strokeRect(W*.58, H*.77, W*.15, H*.15);
-  ctx.setLineDash([]);
+  ctx.strokeStyle='rgba(180,180,180,0.5)'; ctx.lineWidth=1; ctx.stroke();
 }
 
 function drawBatter(){
-  const bx=W*.28, by=H*.92;
-  ctx.save();
+  // Simplified batter silhouette — right-handed
+  const bx=W*.32, by=H*.62;
+  ctx.fillStyle='rgba(160,180,200,0.35)';
 
-  // Shadow
+  // Body
   ctx.beginPath();
-  ctx.ellipse(bx+W*.04, H*.924, W*.07, H*.015, 0, 0, Math.PI*2);
-  ctx.fillStyle='rgba(0,0,0,0.4)'; ctx.fill();
+  ctx.ellipse(bx,by+H*.08,W*.028,H*.11,-.1,0,Math.PI*2); ctx.fill();
 
-  // Back leg
-  ctx.strokeStyle='#111'; ctx.lineWidth=W*.032; ctx.lineCap='round';
-  ctx.beginPath(); ctx.moveTo(bx+W*.04,by); ctx.lineTo(bx+W*.05,by-H*.1); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(bx+W*.05,by-H*.1); ctx.lineTo(bx+W*.06,by-H*.18); ctx.stroke();
-  // Front leg
-  ctx.lineWidth=W*.028;
-  ctx.beginPath(); ctx.moveTo(bx,by); ctx.lineTo(bx-W*.01,by-H*.1); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(bx-W*.01,by-H*.1); ctx.lineTo(bx-W*.015,by-H*.18); ctx.stroke();
-
-  // Cleats
-  ctx.fillStyle='#0a0a0a';
-  ctx.fillRect(bx-W*.04,by-H*.005,W*.055,H*.012);
-  ctx.fillRect(bx+W*.01,by-H*.005,W*.05,H*.012);
-
-  // Torso (white jersey)
+  // Head + helmet
+  ctx.fillStyle='rgba(140,160,180,0.45)';
   ctx.beginPath();
-  ctx.moveTo(bx-W*.04, by-H*.18);
-  ctx.lineTo(bx-W*.032,by-H*.30);
-  ctx.lineTo(bx+W*.06, by-H*.30);
-  ctx.lineTo(bx+W*.07, by-H*.18);
-  ctx.closePath();
-  ctx.fillStyle='rgba(220,228,240,0.92)'; ctx.fill();
-  // Jersey shadow
+  ctx.arc(bx+W*.008,by-H*.01,W*.024,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='rgba(60,80,100,0.6)';
   ctx.beginPath();
-  ctx.moveTo(bx-W*.04, by-H*.18);
-  ctx.lineTo(bx-W*.032,by-H*.30);
-  ctx.lineTo(bx-W*.005,by-H*.30);
-  ctx.lineTo(bx+W*.003, by-H*.18);
-  ctx.closePath();
-  ctx.fillStyle='rgba(160,168,185,0.7)'; ctx.fill();
-  // Stripes
-  ctx.strokeStyle='rgba(200,20,20,0.5)'; ctx.lineWidth=H*.006;
-  ctx.beginPath(); ctx.moveTo(bx-W*.03,by-H*.24); ctx.lineTo(bx+W*.06,by-H*.24); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(bx-W*.03,by-H*.27); ctx.lineTo(bx+W*.06,by-H*.27); ctx.stroke();
-  // Belt
-  ctx.fillStyle='rgba(20,20,20,0.8)';
-  ctx.fillRect(bx-W*.04,by-H*.2,W*.11,H*.014);
+  ctx.arc(bx+W*.008,by-H*.02,W*.022,Math.PI,Math.PI*2); ctx.fill();
 
-  // Arms & bat
-  ctx.strokeStyle='rgba(180,110,60,0.9)'; ctx.lineWidth=W*.024;
-  // Back arm up
-  ctx.beginPath(); ctx.moveTo(bx+W*.055,by-H*.27); ctx.lineTo(bx+W*.08,by-H*.33); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(bx+W*.08,by-H*.33); ctx.lineTo(bx+W*.1,by-H*.38); ctx.stroke();
-  // Front arm
-  ctx.lineWidth=W*.02;
-  ctx.beginPath(); ctx.moveTo(bx-W*.02,by-H*.26); ctx.lineTo(bx+W*.04,by-H*.32); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(bx+W*.04,by-H*.32); ctx.lineTo(bx+W*.09,by-H*.36); ctx.stroke();
-  // Grip
-  ctx.beginPath(); ctx.arc(bx+W*.1,by-H*.378,W*.018,0,Math.PI*2);
-  ctx.fillStyle='rgba(120,60,20,0.9)'; ctx.fill();
   // Bat
-  ctx.strokeStyle='#4a2008'; ctx.lineWidth=W*.018;
-  ctx.beginPath(); ctx.moveTo(bx+W*.11,by-H*.39); ctx.lineTo(bx+W*.27,by-H*.47); ctx.stroke();
-  ctx.strokeStyle='rgba(140,72,28,0.5)'; ctx.lineWidth=W*.01;
-  ctx.beginPath(); ctx.moveTo(bx+W*.11,by-H*.39); ctx.lineTo(bx+W*.27,by-H*.47); ctx.stroke();
-  // Knob
-  ctx.beginPath(); ctx.arc(bx+W*.272,by-H*.472,W*.012,0,Math.PI*2);
-  ctx.fillStyle='#2a1008'; ctx.fill();
-
-  // Helmet
-  ctx.beginPath(); ctx.ellipse(bx-W*.02,by-H*.34,W*.048,H*.05,-.15,0,Math.PI*2);
-  ctx.fillStyle='rgba(8,8,8,0.95)'; ctx.fill();
-  // Brim
+  ctx.strokeStyle='rgba(180,140,80,0.7)'; ctx.lineWidth=3;
+  ctx.lineCap='round';
   ctx.beginPath();
-  ctx.moveTo(bx-W*.065,by-H*.33);
-  ctx.quadraticCurveTo(bx-W*.09,by-H*.32,bx-W*.085,by-H*.3);
-  ctx.lineTo(bx-W*.06,by-H*.3);
-  ctx.lineTo(bx-W*.06,by-H*.32);
-  ctx.closePath();
-  ctx.fillStyle='#060606'; ctx.fill();
-  // Ear flap
-  ctx.beginPath();
-  ctx.moveTo(bx-W*.065,by-H*.33);
-  ctx.quadraticCurveTo(bx-W*.08,by-H*.29,bx-W*.07,by-H*.26);
-  ctx.lineTo(bx-W*.05,by-H*.265); ctx.lineTo(bx-W*.055,by-H*.32); ctx.closePath();
-  ctx.fillStyle='#050505'; ctx.fill();
-  // Face
-  ctx.beginPath(); ctx.arc(bx-W*.01,by-H*.305,W*.025,0,Math.PI*2);
-  ctx.fillStyle='rgba(185,115,65,0.88)'; ctx.fill();
-  // Eye
-  ctx.beginPath(); ctx.arc(bx+W*.005,by-H*.31,W*.005,0,Math.PI*2);
-  ctx.fillStyle='rgba(40,30,20,0.7)'; ctx.fill();
+  ctx.moveTo(bx+W*.04,by+H*.04);
+  ctx.lineTo(bx-W*.04,by-H*.12);
+  ctx.stroke();
+  ctx.lineCap='butt';
 
-  ctx.restore();
+  // Legs
+  ctx.strokeStyle='rgba(140,160,180,0.35)'; ctx.lineWidth=W*.018;
+  ctx.beginPath();
+  ctx.moveTo(bx,by+H*.17); ctx.lineTo(bx+W*.02,by+H*.26);
+  ctx.moveTo(bx,by+H*.17); ctx.lineTo(bx-W*.02,by+H*.26);
+  ctx.stroke();
 }
 
-function drawGroundZone(){
-  // Flat projection on dirt — shows where pitches land
-  const gx = ZX + ZW*.5;  // same horizontal center as zone
-  const gy = H*.885;       // on the dirt
-  const gw = ZW*.95;
-  const gh = H*.055;
-
-  // Zone fill
-  ctx.fillStyle='rgba(8,22,48,0.55)';
-  ctx.beginPath();
-  ctx.ellipse(gx,gy,gw*.5,gh*.5,0,0,Math.PI*2);
-  ctx.fill();
-
-  // Zone outline
-  ctx.strokeStyle='rgba(79,195,247,0.45)';
-  ctx.lineWidth=1.2;
-  ctx.beginPath();
-  ctx.ellipse(gx,gy,gw*.5,gh*.5,0,0,Math.PI*2);
-  ctx.stroke();
-
-  // Column dividers on ground
-  ctx.strokeStyle='rgba(79,195,247,0.2)';
-  ctx.lineWidth=0.8;
-  for(let col=-1;col<=1;col+=1){
-    const lx = gx + col*(gw*.5/3*1.4);
-    ctx.beginPath();
-    ctx.moveTo(lx, gy-gh*.5);
-    ctx.lineTo(lx, gy+gh*.5);
-    ctx.stroke();
+function drawKZone(){
+  // Heatmap cells background BEHIND the zone border
+  const cw=ZW/3, ch=ZH/3;
+  for(let r=0;r<3;r++) for(let c=0;c<3;c++){
+    const v=heatmap[r*3+c], mx=maxHeat();
+    const heat=v/mx;
+    let fc;
+    if(heat>.7)       fc=C.hotFill;
+    else if(heat>.35) fc=C.warmFill;
+    else if(heat>.0)  fc=C.coolFill;
+    else              fc=C.zoneFill;
+    ctx.fillStyle=fc;
+    ctx.fillRect(ZX+c*cw, ZY+r*ch, cw, ch);
   }
 
-  // Glow
-  const gg=ctx.createRadialGradient(gx,gy,0,gx,gy,gw*.55);
-  gg.addColorStop(0,'rgba(79,195,247,0.06)');
-  gg.addColorStop(1,'rgba(79,195,247,0)');
-  ctx.fillStyle=gg;
-  ctx.beginPath(); ctx.ellipse(gx,gy,gw*.55,gh*.7,0,0,Math.PI*2); ctx.fill();
-}
+  // Zone border grid
+  ctx.strokeStyle=C.zoneGrid; ctx.lineWidth=.8;
+  for(let i=1;i<3;i++){
+    ctx.beginPath(); ctx.moveTo(ZX+i*cw,ZY); ctx.lineTo(ZX+i*cw,ZY+ZH); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(ZX,ZY+i*ch); ctx.lineTo(ZX+ZW,ZY+i*ch); ctx.stroke();
+  }
 
-function drawStrikeZone(){
-  // Outer glow
-  ctx.shadowColor='rgba(79,195,247,0.25)';
-  ctx.shadowBlur=12;
-  ctx.strokeStyle='rgba(79,195,247,0.1)';
-  ctx.lineWidth=10;
-  ctx.strokeRect(ZX, ZY, ZW, ZH);
+  // Outer border with glow
+  ctx.shadowColor=C.blue; ctx.shadowBlur=8;
+  ctx.strokeStyle=C.zoneStroke; ctx.lineWidth=1.8;
+  ctx.strokeRect(ZX,ZY,ZW,ZH);
   ctx.shadowBlur=0;
 
-  // Zone fill
-  ctx.fillStyle=CFG.zoneFill;
-  ctx.fillRect(ZX,ZY,ZW,ZH);
+  // Zone label
+  ctx.fillStyle=C.blue;
+  ctx.font=`bold ${Math.round(W*.022)}px 'JetBrains Mono',monospace`;
+  ctx.textAlign='center';
+  ctx.fillText('STRIKE ZONE', ZX+ZW/2, ZY-8);
 
-  // Grid lines (3x3)
-  ctx.strokeStyle=CFG.zoneGrid;
-  ctx.lineWidth=0.9;
-  // Vertical thirds
-  ctx.beginPath(); ctx.moveTo(ZX+ZW/3,ZY); ctx.lineTo(ZX+ZW/3,ZY+ZH); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(ZX+ZW*2/3,ZY); ctx.lineTo(ZX+ZW*2/3,ZY+ZH); ctx.stroke();
-  // Horizontal thirds
-  ctx.beginPath(); ctx.moveTo(ZX,ZY+ZH/3); ctx.lineTo(ZX+ZW,ZY+ZH/3); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(ZX,ZY+ZH*2/3); ctx.lineTo(ZX+ZW,ZY+ZH*2/3); ctx.stroke();
-
-  // Zone border
-  ctx.strokeStyle = resultState
-    ? (resultState.inZone ? 'rgba(255,255,255,0.88)' : 'rgba(239,83,80,0.7)')
-    : 'rgba(255,255,255,0.88)';
-  ctx.lineWidth=2.5;
-  ctx.strokeRect(ZX,ZY,ZW,ZH);
+  // Plate representation below zone
+  ctx.fillStyle='rgba(220,220,220,0.6)';
+  const pw=ZW*.7, ph=8;
+  ctx.fillRect(ZX+(ZW-pw)/2, ZY+ZH+4, pw, ph);
 }
 
-// Convert zone-normalised loc to canvas pixels
-function zoneToCanvas(xn, yn){
-  const cx = ZX + ZW*.5 + xn*(ZW*.5);
-  const cy = ZY + ZH*.5 - yn*(ZH*.5);
-  return{x:cx,y:cy};
-}
-
-function drawHistoryDot(h){
-  ctx.beginPath();
-  ctx.arc(h.x, h.y, W*.014, 0, Math.PI*2);
-  ctx.fillStyle = h.color.replace(')',`,${h.a||0.28})`).replace('rgb','rgba');
-  // simpler:
-  ctx.globalAlpha = h.a || 0.3;
-  ctx.fillStyle = h.color;
-  ctx.fill();
-  ctx.globalAlpha = 1;
-  ctx.strokeStyle='rgba(255,255,255,0.25)';
-  ctx.lineWidth=0.8;
-  ctx.stroke();
-}
-
-function drawTrailDot(t, i){
-  ctx.globalAlpha = t.a;
-  ctx.beginPath();
-  ctx.arc(t.x, t.y, W*(.016-i*.003), 0, Math.PI*2);
-  ctx.fillStyle = animColor;
-  ctx.fill();
-  ctx.globalAlpha=1;
-}
-
-function drawBall(x,y,color){
-  if(x<=0&&y<=0) return;
-  // Glow
-  const gl=ctx.createRadialGradient(x,y,0,x,y,W*.06);
-  gl.addColorStop(0,color+'80');
-  gl.addColorStop(1,'transparent');
-  ctx.fillStyle=gl;
-  ctx.beginPath(); ctx.arc(x,y,W*.06,0,Math.PI*2); ctx.fill();
-  // Ball
-  const g=ctx.createRadialGradient(x-W*.008,y-W*.008,W*.002,x,y,W*.022);
-  g.addColorStop(0,'white');
-  g.addColorStop(.3,color);
-  g.addColorStop(1,color+'aa');
-  ctx.beginPath(); ctx.arc(x,y,W*.022,0,Math.PI*2);
-  ctx.fillStyle=g; ctx.fill();
-  ctx.strokeStyle='rgba(255,255,255,0.85)';
-  ctx.lineWidth=1.5; ctx.stroke();
-  // Seam lines
-  ctx.strokeStyle='rgba(200,60,40,0.7)';
-  ctx.lineWidth=1;
-  ctx.beginPath();
-  ctx.arc(x,y,W*.012,-0.8,0.8);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.arc(x,y,W*.012,Math.PI-.8,Math.PI+.8);
-  ctx.stroke();
-}
-
-function drawRipple(r){
-  ctx.globalAlpha=r.a;
-  ctx.strokeStyle=r.color;
-  ctx.lineWidth=1.5;
-  ctx.beginPath(); ctx.arc(r.x,r.y,r.r,0,Math.PI*2); ctx.stroke();
-  ctx.globalAlpha=1;
-}
-
-function drawCountDots(){
-  const dotR = W*.018;
-  const dotGroups = [
-    {label:'B', count:COUNT.b, max:3, color:CFG.ballCol,   startX:W*.68, y:H*.07},
-    {label:'S', count:COUNT.s, max:2, color:CFG.strikeCol, startX:W*.68, y:H*.115},
-    {label:'O', count:COUNT.o, max:3, color:CFG.outCol,    startX:W*.68, y:H*.16},
-  ];
-  ctx.font=`${Math.round(W*.022)}px 'JetBrains Mono',monospace`;
-  dotGroups.forEach(g=>{
-    ctx.fillStyle='rgba(154,168,196,0.7)';
-    ctx.fillText(g.label, W*.63, g.y+dotR*.5);
-    for(let i=0;i<g.max;i++){
-      const cx=g.startX+i*(dotR*2.5);
-      ctx.beginPath(); ctx.arc(cx,g.y,dotR,0,Math.PI*2);
-      if(i<g.count){
-        ctx.fillStyle=g.color;
-        ctx.shadowColor=g.color; ctx.shadowBlur=6;
-        ctx.fill(); ctx.shadowBlur=0;
-      } else {
-        ctx.fillStyle='rgba(20,20,30,0.8)';
-        ctx.fill();
-        ctx.strokeStyle='rgba(60,60,80,0.6)'; ctx.lineWidth=1; ctx.stroke();
-      }
-    }
-  });
-}
-
-// ── ANIMATION LOOP ──────────────────────────────────────────────
-function quadBezier(t,p0,p1,p2){
-  return (1-t)*(1-t)*p0 + 2*(1-t)*t*p1 + t*t*p2;
-}
-
-let lastFrame=null;
-function frame(ts){
-  if(!lastFrame) lastFrame=ts;
-  const dt = ts-lastFrame; lastFrame=ts;
-
-  if(animActive){
-    animT = Math.min(animT+dt/animDur, 1);
-    const ease = animT<.5 ? 2*animT*animT : -1+(4-2*animT)*animT;
-    animEndX = quadBezier(ease, animStartX, animMidX, resultState?.px||animMidX);
-    animEndY = quadBezier(ease, animStartY, animMidY, resultState?.py||animMidY);
-
-    // Build trail
-    const trailCount=5;
-    trail=[];
-    for(let i=1;i<=trailCount;i++){
-      const tBack=Math.max(0,ease-i*.06);
-      trail.push({
-        x:quadBezier(tBack,animStartX,animMidX,resultState?.px||animMidX),
-        y:quadBezier(tBack,animStartY,animMidY,resultState?.py||animMidY),
-        a:Math.max(0,(0.5-i*.09)*ease*1.6)
-      });
-    }
-
-    if(animT>=1){
-      animActive=false;
-      // Land: add to history, trigger ripple
-      if(resultState){
-        history.push({x:resultState.px,y:resultState.py,color:animColor,a:.3});
-        if(history.length>8) history.shift();
-        addRipple(resultState.px, resultState.py, animColor);
-        // Ground ripple too
-        const gx=ZX+ZW*.5, gy=H*.885;
-        addRipple(gx+(resultState.xn||0)*(ZW*.45), gy, animColor);
-      }
+function drawHeatmap(){
+  // Count label in top-right corner of zone
+  const cw=ZW/3;
+  for(let r=0;r<3;r++) for(let c=0;c<3;c++){
+    const v=heatmap[r*3+c];
+    if(v>0){
+      ctx.fillStyle='rgba(255,255,255,0.55)';
+      ctx.font=`${Math.round(W*.016)}px 'JetBrains Mono',monospace`;
+      ctx.textAlign='center';
+      ctx.fillText(v, ZX+c*cw+cw/2, ZY+r*(ZH/3)+(ZH/3)*.55);
     }
   }
+}
 
-  // Animate ripples
-  ripples.forEach(r=>{
-    r.r += 1.4;
-    r.a = Math.max(0, r.a-0.022);
+function drawHistoryDots(){
+  history.forEach(({nx,ny,clr})=>{
+    const{px,py}=normToCanvas(nx,ny);
+    ctx.fillStyle=clr+'99';
+    ctx.beginPath(); ctx.arc(px,py,4,0,Math.PI*2); ctx.fill();
   });
-  ripples=ripples.filter(r=>r.a>0);
-
-  drawScene();
-
-  if(animActive || ripples.length) animId=requestAnimationFrame(frame);
-  else animId=null;
 }
 
-function addRipple(x,y,color){
-  ripples.push({x,y,r:W*.015,a:.65,color});
-  if(!animId) animId=requestAnimationFrame(frame);
+function drawPitchDot(){
+  const{r,clr,x,y}=pitchDot;
+  // Glow
+  ctx.shadowColor=clr; ctx.shadowBlur=14;
+  ctx.fillStyle=clr;
+  ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+  ctx.shadowBlur=0;
+  // White core
+  ctx.fillStyle='rgba(255,255,255,0.9)';
+  ctx.beginPath(); ctx.arc(x,y,r*.38,0,Math.PI*2); ctx.fill();
+  // Seams
+  ctx.strokeStyle='rgba(255,255,255,0.4)'; ctx.lineWidth=1;
+  ctx.beginPath();
+  ctx.arc(x-r*.2,y,r*.55,Math.PI*.1,Math.PI*.9); ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(x+r*.2,y,r*.55,Math.PI*1.1,Math.PI*1.9); ctx.stroke();
 }
 
-// ── PUBLIC API ──────────────────────────────────────────────────
-function showPitchZone(label, isCorrect, pitchType, speed, balls, strikes, outs){
-  if(!canvas) return;
+function drawCountBar(){
+  const barX=W*.03, barY=H*.06, dotR=7, gap=18;
+  ctx.textAlign='left';
 
-  // Update count
-  if(balls!==undefined){ COUNT={b:balls||0,s:strikes||0,o:outs||0}; }
+  // BALLS
+  ctx.fillStyle='rgba(200,210,220,0.7)';
+  ctx.font=`bold ${Math.round(W*.025)}px 'Barlow Condensed',sans-serif`;
+  ctx.fillText('BALLS', barX, barY);
+  for(let i=0;i<4;i++){
+    ctx.fillStyle=i<COUNT.b?C.green:'rgba(80,90,100,0.5)';
+    ctx.beginPath(); ctx.arc(barX+i*(dotR*2+4), barY+14, dotR, 0, Math.PI*2); ctx.fill();
+  }
 
-  // Get location
-  const loc = getLoc(label);
-  const cp  = zoneToCanvas(loc.x, loc.y);
-  const col = pitchColor(pitchType);
-  const brk = getBreak(pitchType);
+  // STRIKES
+  ctx.fillStyle='rgba(200,210,220,0.7)';
+  ctx.fillText('STRIKES', barX, barY+44);
+  for(let i=0;i<3;i++){
+    ctx.fillStyle=i<COUNT.s?C.amber:'rgba(80,90,100,0.5)';
+    ctx.beginPath(); ctx.arc(barX+i*(dotR*2+4), barY+58, dotR, 0, Math.PI*2); ctx.fill();
+  }
 
-  // Store result state
-  resultState={ inZone:loc.iz, isCorrect, px:cp.x, py:cp.y, xn:loc.x, yn:loc.y };
+  // OUTS
+  ctx.fillStyle='rgba(200,210,220,0.7)';
+  ctx.fillText('OUTS', barX, barY+88);
+  for(let i=0;i<3;i++){
+    ctx.fillStyle=i<COUNT.o?C.red:'rgba(80,90,100,0.5)';
+    ctx.beginPath(); ctx.arc(barX+i*(dotR*2+4), barY+102, dotR, 0, Math.PI*2); ctx.fill();
+  }
+}
 
-  // Animation start = pitcher's release point (upper center)
-  animStartX = W*.5 + (loc.x*W*.04);  // slight release-point offset
-  animStartY = H*.22;
-  // Mid control point with pitch break
-  const brkX = brk.bx * ZW;
-  const brkY = brk.by * ZH;
-  animMidX = cp.x*.5 + animStartX*.5 + brkX;
-  animMidY = cp.y*.5 + animStartY*.5 + brkY;
+function drawPitchTypeLabel(){
+  if(!infoVisible) return;
+  ctx.textAlign='center';
+  ctx.fillStyle=C.gold;
+  ctx.font=`bold ${Math.round(W*.036)}px 'Barlow Condensed',sans-serif`;
+  ctx.fillText(currentPitchType.toUpperCase(), W*.5, H*.9);
+  ctx.fillStyle='rgba(200,210,220,0.75)';
+  ctx.font=`${Math.round(W*.026)}px 'JetBrains Mono',monospace`;
+  ctx.fillText(currentSpeed+' MPH', W*.5, H*.93+14);
+}
 
-  animColor = col;
-  animT=0; animActive=true; trail=[]; lastFrame=null;
+// Normalised zone coords → canvas pixels
+function normToCanvas(nx,ny){
+  const px=ZX+ZW/2+nx*(ZW/2);
+  const py=ZY+ZH/2-ny*(ZH/2);
+  return{px,py};
+}
 
-  // Update current pitch info
-  currentPitchType  = pitchType || 'Pitch';
-  currentPitchSpeed = speed ? speed+' mph' : '';
-  currentResult     = isCorrect ? '✓ Correct' : (loc.iz ? '✗ Missed Spot' : '✗ Out of Zone');
-  currentResultClass = isCorrect ? 'pz-result-hit' : (loc.iz ? 'pz-result-miss' : 'pz-result-ball');
+// ── PITCH BALL ANIMATION ───────────────────────────────────────
+function animPitch(){
+  pitchAnim.t+=16;
+  const t=Math.min(1,pitchAnim.t/pitchAnim.dur);
+  const ease=t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+  const bx=(1-ease)*((1-t)*pitchAnim.sx+t*pitchAnim.mx)+ease*pitchAnim.ex;
+  const by=(1-ease)*((1-t)*pitchAnim.sy+t*pitchAnim.my)+ease*pitchAnim.ey;
+
+  // Trail
+  ctx.strokeStyle=pitchAnim.clr+'44'; ctx.lineWidth=4;
+  ctx.shadowColor=pitchAnim.clr; ctx.shadowBlur=6;
+  ctx.beginPath(); ctx.moveTo(pitchAnim.sx,pitchAnim.sy);
+  ctx.quadraticCurveTo(pitchAnim.mx,pitchAnim.my,bx,by); ctx.stroke();
+  ctx.shadowBlur=0;
+
+  // Ball
+  ctx.fillStyle=pitchAnim.clr;
+  ctx.beginPath(); ctx.arc(bx,by,9,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='rgba(255,255,255,0.8)';
+  ctx.beginPath(); ctx.arc(bx,by,3.5,0,Math.PI*2); ctx.fill();
+
+  if(t>=1) pitchLanded();
+}
+
+function pitchLanded(){
+  phase='pitch';
+  const rs=resultState;
+  if(!rs) return;
+  const{nx,ny}=rs;
+  const{px,py}=normToCanvas(nx,ny);
+  pitchDot={x:px,y:py,r:11,clr:rs.clr};
+  history.push({nx,ny,clr:rs.clr});
+  bumpHeat(nx,ny);
   infoVisible=true;
+  currentPitchType=rs.pitchType;
+  currentSpeed=rs.speed;
 
-  // Update DOM elements
-  updateDOM(loc, isCorrect, pitchType, speed);
+  // Ripple
+  ripples.push({x:px,y:py,r:0,a:1,clr:rs.clr});
 
-  if(!animId) animId=requestAnimationFrame(frame);
+  // After short delay show field view
+  setTimeout(()=>{ startFlightPhase(rs); },900);
 }
 
-function updateDOM(loc, isCorrect, pitchType, speed){
-  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
-  const cl=(id,cls,vis)=>{const e=document.getElementById(id);if(!e)return;e.className=cls;e.style.opacity=vis?'1':'0';};
+// ══════════════════════════════════════════════════════════════
+// ── PHASE 2: OVERHEAD FIELD VIEW + BALL TRAJECTORY ────────────
+// ══════════════════════════════════════════════════════════════
+let flightPath=[];   // [{x,y}] bezier control points
+let ballPos={x:0,y:0};
+let ballShadow={x:0,y:0,s:1};
+let FIELD={cx:0,cy:0,r:0,hx:0,hy:0};  // field geometry
 
-  set('zone-status', loc.iz ? 'Strike Zone' : 'Ball — Out of Zone');
-  const st=document.getElementById('zone-status');
-  if(st) st.className='pitch-zone-status '+(loc.iz?'pz-status-strike':'pz-status-ball');
+function drawField(){
+  // Dark bg
+  ctx.fillStyle='#05080d';
+  ctx.fillRect(0,0,W,H);
 
-  const ib=document.getElementById('pz-info-bar');
-  if(ib) ib.style.opacity='1';
-  set('pz-pitch-type-label', pitchType||'Pitch');
-  set('pz-pitch-speed-label', speed?speed+' mph':'');
+  const cx=FIELD.cx, cy=FIELD.cy, r=FIELD.r;
 
+  // ── Warning track (outer ring) ──
+  ctx.fillStyle=C.dirtDark;
+  ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fill();
+
+  // ── Grass field (foul lines angled) ──
+  const foulAngleL=Math.PI*.22, foulAngleR=Math.PI*.78;
+  ctx.fillStyle=C.grass;
+  ctx.beginPath();
+  ctx.moveTo(FIELD.hx,FIELD.hy);
+  ctx.arc(cx,cy,r,foulAngleL,foulAngleR);
+  ctx.closePath(); ctx.fill();
+
+  // ── Grass alternating mow strips ──
+  drawMowLines(cx,cy,r,foulAngleL,foulAngleR);
+
+  // ── Infield dirt circle ──
+  const ir=r*.34;
+  ctx.fillStyle=C.dirt;
+  ctx.beginPath(); ctx.arc(cx,cy,ir,0,Math.PI*2); ctx.fill();
+
+  // ── Infield grass ──
+  const igr=ir*.76;
+  ctx.fillStyle=C.grass;
+  ctx.beginPath(); ctx.arc(cx,cy,igr,0,Math.PI*2); ctx.fill();
+
+  // ── Base paths ──
+  const bd=ir*.78; // distance from center to base
+  const bases=[
+    {x:cx,    y:cy-bd}, // 2B (top)
+    {x:cx+bd, y:cy},    // 1B (right)
+    {x:cx,    y:cy+bd*.08,isHome:true}, // home (bottom-ish)
+    {x:cx-bd, y:cy},    // 3B (left)
+  ];
+  ctx.strokeStyle=C.dirtLight; ctx.lineWidth=3;
+  ctx.fillStyle=C.dirt;
+  ctx.beginPath();
+  ctx.moveTo(bases[0].x,bases[0].y);
+  ctx.lineTo(bases[1].x,bases[1].y);
+  ctx.lineTo(FIELD.hx, FIELD.hy+ir*.1);
+  ctx.lineTo(bases[3].x,bases[3].y);
+  ctx.closePath(); ctx.fill(); ctx.stroke();
+
+  // ── Pitcher's mound ──
+  ctx.fillStyle=C.mound;
+  ctx.beginPath(); ctx.ellipse(cx,cy,ir*.12,ir*.09,0,0,Math.PI*2); ctx.fill();
+
+  // ── Bases ──
+  bases.forEach(({x,y,isHome})=>{
+    if(isHome){
+      ctx.fillStyle='rgba(230,230,230,0.9)';
+      ctx.beginPath();
+      ctx.moveTo(x,y-7); ctx.lineTo(x+7,y);
+      ctx.lineTo(x+7,y+5); ctx.lineTo(x-7,y+5);
+      ctx.lineTo(x-7,y); ctx.closePath(); ctx.fill();
+    } else {
+      ctx.fillStyle='rgba(230,230,230,0.88)';
+      ctx.save(); ctx.translate(x,y); ctx.rotate(Math.PI/4);
+      ctx.fillRect(-5,-5,10,10); ctx.restore();
+    }
+  });
+
+  // ── Foul lines ──
+  ctx.strokeStyle='rgba(255,255,255,0.4)'; ctx.lineWidth=1.5;
+  ctx.beginPath();
+  ctx.moveTo(FIELD.hx,FIELD.hy);
+  ctx.lineTo(cx+Math.cos(foulAngleL)*r, cy+Math.sin(foulAngleL)*r);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(FIELD.hx,FIELD.hy);
+  ctx.lineTo(cx+Math.cos(foulAngleR)*r, cy+Math.sin(foulAngleR)*r);
+  ctx.stroke();
+
+  // Store home and 1B/2B/3B for trajectory
+  FIELD.bases=bases; FIELD.hx=FIELD.hx;
+}
+
+function drawMowLines(cx,cy,r,a1,a2){
+  const strips=6;
+  for(let i=0;i<strips;i++){
+    const r1=r*.36+i*((r*.94-r*.36)/strips);
+    const r2=r1+(r*.94-r*.36)/strips;
+    if(i%2===0) ctx.fillStyle='rgba(26,74,24,0.6)';
+    else         ctx.fillStyle='rgba(20,58,18,0.6)';
+    ctx.beginPath();
+    ctx.moveTo(FIELD.hx,FIELD.hy);
+    ctx.arc(cx,cy,r2,a1,a2);
+    ctx.arc(cx,cy,r1,a2,a1,true);
+    ctx.closePath(); ctx.fill();
+  }
+}
+
+// ── FLIGHT ANIMATION ───────────────────────────────────────────
+function startFlightPhase(rs){
+  phase='flight';
+  flightAnim.t=0; flightAnim.done=false;
+
+  const hx=FIELD.hx, hy=FIELD.hy;
+  const cx=FIELD.cx, cy=FIELD.cy;
+  const r=FIELD.r;
+  const bases=FIELD.bases||[];
+
+  // Determine where the ball goes based on result
+  const inZ=rs.inZone, isOK=rs.isCorrect;
+  const rtype=getResultType(rs.pitchType, rs.loc, inZ);
+  fieldResult=rtype;
+
+  // Update info bar
   const badge=document.getElementById('pitch-result');
   if(badge){
-    badge.textContent=currentResult;
-    badge.className='pz-result-badge '+currentResultClass;
+    badge.textContent=rtype.replace(/_/g,' ').toUpperCase();
+    badge.className='pz-result-badge '+(isOK?'correct':'wrong');
   }
 
-  // B-S-O text
-  set('pz-balls',   COUNT.b);
-  set('pz-strikes', COUNT.s);
-  set('pz-outs',    COUNT.o);
+  // Ball start = pitcher's mound
+  const sx=cx, sy=cy;
+  let ex,ey,mx_ctrl,my_ctrl,arcH;
+
+  if(rtype==='strikeout'||rtype==='ball'){
+    // Ball goes to catcher (home plate)
+    ex=hx; ey=hy+8;
+    mx_ctrl=cx; my_ctrl=cy+(hy-cy)*.5;
+    arcH=0;
+  } else if(rtype==='single'){
+    // Line drive into outfield center or right
+    const ang=-Math.PI*.5+((Math.random()-.5)*.4);
+    ex=cx+Math.cos(ang)*r*.72; ey=cy+Math.sin(ang)*r*.72;
+    mx_ctrl=cx+Math.cos(ang)*r*.35; my_ctrl=cy+Math.sin(ang)*r*.35-H*.06;
+    arcH=1;
+  } else if(rtype==='fly_out'){
+    const ang=-Math.PI*.5+((Math.random()-.5)*.6);
+    ex=cx+Math.cos(ang)*r*.78; ey=cy+Math.sin(ang)*r*.78;
+    mx_ctrl=cx+Math.cos(ang)*r*.4; my_ctrl=cy+Math.sin(ang)*r*.4-H*.12;
+    arcH=2;
+  } else if(rtype==='home_run'){
+    const ang=-Math.PI*.5+((Math.random()-.5)*.5);
+    ex=cx+Math.cos(ang)*(r+30); ey=cy+Math.sin(ang)*(r+30);
+    mx_ctrl=cx+Math.cos(ang)*r*.5; my_ctrl=cy+Math.sin(ang)*r*.5-H*.18;
+    arcH=3;
+  } else { // grounder
+    const ang=-Math.PI*.5+((Math.random()-.5)*.5);
+    ex=cx+Math.cos(ang)*r*.55; ey=cy+Math.sin(ang)*r*.55;
+    mx_ctrl=cx+Math.cos(ang)*r*.28; my_ctrl=cy+Math.sin(ang)*r*.28;
+    arcH=0;
+  }
+
+  flightPath={sx,sy,mx:mx_ctrl,my:my_ctrl,ex,ey,arcH,rtype};
+  flightAnim.clr=pitchClr(rs.pitchType);
+}
+
+function animFlight(){
+  flightAnim.t+=14;
+  const raw=flightAnim.t/flightAnim.dur;
+  if(raw>=1){ flightAnim.done=true; phase='result_field'; return; }
+  const t=raw<.5?4*raw*raw*raw:1-Math.pow(-2*raw+2,3)/2;
+  const{sx,sy,mx,my,ex,ey,arcH}=flightPath;
+
+  // Quadratic bezier
+  const bx=(1-t)*(1-t)*sx+2*(1-t)*t*mx+t*t*ex;
+  const by=(1-t)*(1-t)*sy+2*(1-t)*t*my+t*t*ey;
+
+  // Vertical arc for fly balls (up then down)
+  const arcOff=arcH>0?Math.sin(t*Math.PI)*H*(.04*arcH):0;
+  const ballY=by; // field is overhead, Y is field position not height
+
+  // Shadow (smaller ahead of ball for fly balls)
+  const shadowScale=arcH>0?(0.4+0.6*Math.abs(t-.5)*2):1;
+  ctx.fillStyle='rgba(0,0,0,0.3)';
+  ctx.beginPath(); ctx.ellipse(bx,ballY+6,8*shadowScale,4*shadowScale,0,0,Math.PI*2); ctx.fill();
+
+  // Trail
+  if(raw>.05){
+    const t0=Math.max(0,raw-.15);
+    const bx0=(1-t0)*(1-t0)*sx+2*(1-t0)*t0*mx+t0*t0*ex;
+    const by0=(1-t0)*(1-t0)*sy+2*(1-t0)*t0*my+t0*t0*ey;
+    const trl=ctx.createLinearGradient(bx0,by0,bx,ballY);
+    trl.addColorStop(0,'transparent');
+    trl.addColorStop(1,flightPath.rtype==='home_run'?C.gold+'cc':C.blue+'99');
+    ctx.strokeStyle=trl; ctx.lineWidth=3;
+    ctx.shadowColor=flightPath.rtype==='home_run'?C.gold:C.blue;
+    ctx.shadowBlur=8;
+    ctx.beginPath(); ctx.moveTo(bx0,by0); ctx.lineTo(bx,ballY); ctx.stroke();
+    ctx.shadowBlur=0;
+  }
+
+  // Ball size changes with arc (bigger when closer/lower)
+  const ballR=arcH>0?(7+arcH*3*Math.sin(t*Math.PI)):8;
+  ctx.fillStyle='rgba(245,245,245,0.95)';
+  ctx.shadowColor='rgba(255,255,255,0.6)'; ctx.shadowBlur=arcH>0?6:2;
+  ctx.beginPath(); ctx.arc(bx,ballY,ballR,0,Math.PI*2); ctx.fill();
+  ctx.shadowBlur=0;
+  // Seams
+  ctx.strokeStyle='rgba(200,60,60,0.7)'; ctx.lineWidth=1.2;
+  ctx.beginPath(); ctx.arc(bx-ballR*.2,ballY,ballR*.55,Math.PI*.1,Math.PI*.9); ctx.stroke();
+  ctx.beginPath(); ctx.arc(bx+ballR*.2,ballY,ballR*.55,Math.PI*1.1,Math.PI*1.9); ctx.stroke();
+}
+
+function drawFieldResult(){
+  const{ex,ey,rtype}=flightPath;
+  // Draw the landing spot
+  if(rtype==='home_run'){
+    // HR firework burst
+    const now=Date.now()%800/800;
+    for(let i=0;i<12;i++){
+      const a=i/12*Math.PI*2, d=20+now*35;
+      ctx.fillStyle=`hsl(${i*30},100%,65%,${1-now})`;
+      ctx.beginPath(); ctx.arc(ex+Math.cos(a)*d,ey+Math.sin(a)*d,3,0,Math.PI*2); ctx.fill();
+    }
+    ctx.fillStyle=C.gold;
+    ctx.font=`bold ${Math.round(W*.04)}px 'Barlow Condensed',sans-serif`;
+    ctx.textAlign='center';
+    ctx.fillText('HOME RUN!', W/2, H*.12);
+  } else {
+    // Ball at rest
+    ctx.fillStyle='rgba(245,245,245,0.9)';
+    ctx.beginPath(); ctx.arc(ex,ey,7,0,Math.PI*2); ctx.fill();
+    // Ripple ring
+    const rr=(Date.now()%600)/600*20;
+    ctx.strokeStyle=`rgba(255,255,255,${0.6*(1-rr/20)})`;
+    ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.arc(ex,ey,7+rr,0,Math.PI*2); ctx.stroke();
+  }
+
+  // Result label
+  ctx.fillStyle=rtype==='strikeout'?C.amber:rtype==='home_run'?C.gold:rtype==='ball'?C.green:C.white;
+  ctx.font=`bold ${Math.round(W*.038)}px 'Barlow Condensed',sans-serif`;
+  ctx.textAlign='center';
+  ctx.fillText(rtype.replace(/_/g,' ').toUpperCase(), W/2, H*.92);
+}
+
+function getResultType(pitchType, loc, inZone){
+  const l=(loc||'').toLowerCase();
+  if(!inZone) return Math.random()<.8?'ball':'foul_ball';
+  // Strike zone — result depends on pitch type tendency
+  const r=Math.random();
+  const t=(pitchType||'').toLowerCase();
+  if(t.includes('fastball')||t.includes('sinker')){
+    if(r<.12) return 'home_run';
+    if(r<.32) return 'single';
+    if(r<.52) return 'fly_out';
+    if(r<.68) return 'grounder';
+    return 'strikeout';
+  }
+  if(t.includes('curve')||t.includes('change')||t.includes('split')){
+    if(r<.08) return 'single';
+    if(r<.22) return 'grounder';
+    if(r<.38) return 'fly_out';
+    return 'strikeout';
+  }
+  // Slider/cutter
+  if(r<.10) return 'single';
+  if(r<.28) return 'fly_out';
+  if(r<.44) return 'grounder';
+  return 'strikeout';
+}
+
+// ══════════════════════════════════════════════════════════════
+// ── PUBLIC API ────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════
+function showPitchZone(locLabel, isCorrect, pitchType, speed, balls, strikes, outs){
+  if(!canvas||!ctx) _bootKZone();
+  COUNT={b:balls,s:strikes,o:outs};
+  infoVisible=false; pitchDot=null; phase='anim';
+
+  const loc=getLoc(locLabel);
+  const brk=getBreak(pitchType);
+  const clr=pitchClr(pitchType);
+  const{px:ex,py:ey}=normToCanvas(loc.x,loc.y);
+
+  resultState={nx:loc.x,ny:loc.y,clr,isCorrect,pitchType,speed,loc:locLabel,inZone:loc.iz};
+
+  // Start from mound position
+  const sx=W*.22, sy=H*.68;
+  const mx=sx+(ex-sx)*.5+brk.bx*ZW;
+  const my=sy+(ey-sy)*.5+brk.by*ZH;
+
+  pitchAnim={t:0,dur:480,sx,sy,mx,my,ex,ey,clr};
+  flightAnim.dur=rtype_dur(pitchType);
+}
+
+function rtype_dur(t){
+  const l=(t||'').toLowerCase();
+  if(l.includes('knuckle')) return 1200;
+  if(l.includes('curve'))   return 1000;
+  if(l.includes('change'))  return 950;
+  if(l.includes('fastball')) return 780;
+  return 880;
 }
 
 function resetPitchZone(){
-  animActive=false; trail=[]; resultState=null; infoVisible=false;
-  animEndX=0; animEndY=0;
-  const st=document.getElementById('zone-status');
-  const ba=document.getElementById('pitch-result');
-  const ib=document.getElementById('pz-info-bar');
-  if(st){st.textContent='';st.className='pitch-zone-status';}
-  if(ba){ba.className='pz-result-badge';ba.textContent='';}
-  if(ib) ib.style.opacity='0';
-  drawScene();
+  phase='pitch'; pitchDot=null; infoVisible=false; ripples=[];
+  flightAnim.done=false; fieldResult=null;
+  if(canvas&&ctx){ layout(); }
 }
 
 function newAtBat(){
-  history=[]; ripples=[];
+  heatmap=new Array(9).fill(0).map(()=>0);
+  history=[]; COUNT={b:0,s:0,o:0};
   resetPitchZone();
 }
 
-// ── INIT ────────────────────────────────────────────────────────
-function init(canvasId){
-  canvas=document.getElementById(canvasId||'kzone-canvas');
-  if(!canvas){ console.warn('[KZone2D] canvas not found:', canvasId); return; }
+// ── BOOT ──────────────────────────────────────────────────────
+function _bootKZone(){
+  canvas=document.getElementById('kzone-canvas');
+  if(!canvas){ window._kzoneBooted=false; return; }
   ctx=canvas.getContext('2d');
   layout();
-  drawScene();
-  // Resize
-  window.addEventListener('resize',()=>{
-    layout();
-    drawScene();
-  });
-  new ResizeObserver(()=>{
-    layout();
-    drawScene();
-  }).observe(canvas.parentElement||canvas);
+
+  // Compute field geometry based on canvas size
+  FIELD.r=Math.min(W,H)*.42;
+  FIELD.cx=W*.5;
+  FIELD.cy=H*.52;
+  FIELD.hx=W*.5;
+  FIELD.hy=H*.88;
+
+  window.addEventListener('resize',()=>{ layout(); FIELD.r=Math.min(W,H)*.42; FIELD.cx=W*.5; FIELD.cy=H*.52; FIELD.hx=W*.5; FIELD.hy=H*.88; });
+  window._kzoneBooted=true;
+  if(animId) cancelAnimationFrame(animId);
+  loop();
 }
 
-// Expose under both names so index and gameday both work
-window.showPitchZone  = showPitchZone;
-window.resetPitchZone = resetPitchZone;
-window.newAtBat       = newAtBat;
-window._initKZone2D   = ()=>init('kzone-canvas');
-window._initGDKZone2D = ()=>init('gd-kzone-canvas');
+// Expose API
+window.showPitchZone=showPitchZone;
+window.resetPitchZone=resetPitchZone;
+window.newAtBat=newAtBat;
+window._bootKZone=_bootKZone;
 
-// Auto-init on DOMContentLoaded if canvas is present
-document.addEventListener('DOMContentLoaded',()=>{
-  if(document.getElementById('kzone-canvas'))    init('kzone-canvas');
-  if(document.getElementById('gd-kzone-canvas')) init('gd-kzone-canvas');
+// Auto-boot if canvas already in DOM
+if(document.getElementById('kzone-canvas')) _bootKZone();
+else document.addEventListener('DOMContentLoaded',()=>{
+  if(document.getElementById('kzone-canvas')) _bootKZone();
 });
 
 })();

@@ -387,40 +387,16 @@
       <button class="sub-tab active" onclick="showSub('mlb-batting')">Batting</button>
       <button class="sub-tab" onclick="showSub('mlb-pitching')">Pitching</button>
       <button class="sub-tab" onclick="showSub('mlb-fielding')">Fielding</button>
-      <button class="sub-tab" onclick="showSub('mlb-ssm-bat')" style="background:rgba(242,194,48,.08);border-color:rgba(242,194,48,.3);color:var(--gold)">⭐ RPG</button>
-  <button class="sub-tab" onclick="showSub('mlb-ssm-pitch')" style="background:rgba(242,194,48,.08);border-color:rgba(242,194,48,.3);color:var(--gold)">⭐ RPI</button>
 </div>
-    <div id="sub-mlb-batting" class="sub-panel active"><div class="tbl-wrap"><div class="tbl-wrap">
-  <button class="csv-btn" onclick="exportTableCSV('tbl-mlb-0','mlb_batting_2025')" title="Export Batting to CSV"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 1v7M3.5 5.5L6 8l2.5-2.5"/><path d="M1 9v1.5a.5.5 0 00.5.5h9a.5.5 0 00.5-.5V9"/></svg> Export CSV</button>
-  <table class="tbl" id="tbl-mlb-0"><thead><tr><th>Player</th><th>Team</th><th>G</th><th>AVG</th><th>HR</th><th>RBI</th><th>OPS</th><th>WAR</th></tr></thead><tbody><tr><td class="pl">R. Acuña Jr</td><td class="">ATL</td><td class="">128</td><td class="">.340</td><td class="">38</td><td class="">102</td><td class="">1.012</td><td class="hi">8.4</td></tr><tr><td class="pl">F. Freeman</td><td class="">LAD</td><td class="">128</td><td class="">.332</td><td class="">26</td><td class="">94</td><td class="">0.988</td><td class="hi">7.2</td></tr><tr><td class="pl">M. Betts</td><td class="">LAD</td><td class="">126</td><td class="">.308</td><td class="">28</td><td class="">88</td><td class="">0.962</td><td class="hi">7.8</td></tr><tr><td class="pl">J. Soto</td><td class="">NYY</td><td class="">128</td><td class="">.298</td><td class="">32</td><td class="">98</td><td class="">0.974</td><td class="hi">7.4</td></tr><tr><td class="pl">P. Goldschmidt</td><td class="">STL</td><td class="">124</td><td class="">.288</td><td class="">22</td><td class="">84</td><td class="">0.912</td><td class="hi">5.8</td></tr><tr><td class="pl">C. Bellinger</td><td class="">CHC</td><td class="">126</td><td class="">.282</td><td class="">24</td><td class="">86</td><td class="">0.924</td><td class="hi">6.2</td></tr></tbody></table></div></div></div>
-    <div id="sub-mlb-pitching" class="sub-panel"><div class="tbl-wrap"><div class="tbl-wrap">
-  <button class="csv-btn" onclick="exportTableCSV('tbl-mlb-1','mlb_pitching_2025')" title="Export Pitching to CSV"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 1v7M3.5 5.5L6 8l2.5-2.5"/><path d="M1 9v1.5a.5.5 0 00.5.5h9a.5.5 0 00.5-.5V9"/></svg> Export CSV</button>
-  <table class="tbl" id="tbl-mlb-1"><thead><tr><th>Player</th><th>Team</th><th>G</th><th>W</th><th>L</th><th>ERA</th><th>K</th><th>WHIP</th><th>WAR</th></tr></thead><tbody><tr><td class="pl">S. Alcantara</td><td class="">MIA</td><td class="">28</td><td class="">12</td><td class="">4</td><td class="">2.12</td><td class="">224</td><td class="">0.98</td><td class="hi">7.4</td></tr><tr><td class="pl"><a href="/players/mlb-cole.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">G. Cole</a></td><td class="">NYY</td><td class="">28</td><td class="">14</td><td class="">4</td><td class="">2.48</td><td class="">238</td><td class="">1.04</td><td class="hi">6.8</td></tr><tr><td class="pl">S. Bieber</td><td class="">CLE</td><td class="">26</td><td class="">12</td><td class="">6</td><td class="">2.68</td><td class="">214</td><td class="">1.08</td><td class="hi">6.2</td></tr><tr><td class="pl">A. Nola</td><td class="">PHI</td><td class="">28</td><td class="">14</td><td class="">6</td><td class="">2.88</td><td class="">228</td><td class="">1.12</td><td class="hi">5.8</td></tr><tr><td class="pl">L. Webb</td><td class="">SF</td><td class="">28</td><td class="">12</td><td class="">8</td><td class="">2.94</td><td class="">198</td><td class="">1.14</td><td class="hi">5.4</td></tr><tr><td class="pl">Z. Wheeler</td><td class="">PHI</td><td class="">28</td><td class="">14</td><td class="">6</td><td class="">3.02</td><td class="">218</td><td class="">1.18</td><td class="hi">5.2</td></tr></tbody></table></div></div></div>
+    <div style="margin:0 0 14px;padding:8px 14px;background:rgba(242,194,48,.06);border:1px solid rgba(242,194,48,.2);border-radius:7px;font-family:'JetBrains Mono',monospace;font-size:.64rem;color:var(--gold);letter-spacing:.04em">★ Columns in <em style="color:var(--white);font-style:italic">italic gold</em> are original SSM metrics from <em style="color:var(--white)"><a href="https://www.amazon.com/Sports-Statistics-Manual-Baseball-Basketball/dp/B0DDHVR5MK/" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:none;border-bottom:1px solid rgba(242,194,48,.4);transition:border-color .2s" onmouseover="this.style.borderColor='rgba(242,194,48,.9)'" onmouseout="this.style.borderColor='rgba(242,194,48,.4)'">The Sports Statistics Manual</a></em> by Chris Cain.</div>
+<div id="sub-mlb-batting" class="sub-panel active"><div class="tbl-wrap"><div class="tbl-wrap"><button class="csv-btn" onclick="exportTableCSV('tbl-mlb-0','tbl-mlb-0')" title="Export CSV"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 1v7M3.5 5.5L6 8l2.5-2.5"/><path d="M1 9v1.5a.5.5 0 00.5.5h9a.5.5 0 00.5-.5V9"/></svg> Export CSV</button><table class="tbl" id="tbl-mlb-0"><thead><tr><th>Player</th><th>Team</th><th>G</th><th>AVG</th><th>HR</th><th>RBI</th><th>R</th><th>OPS</th><th style="color:var(--gold);font-style:italic" title="SSM Metric">RPG</th><th style="color:var(--gold);font-style:italic" title="SSM Metric">RpPA</th><th style="color:var(--gold);font-style:italic" title="SSM Metric">OVR</th></tr></thead><tbody><tr><td class="pl">F. Freeman</td><td>LAD</td><td>13</td><td>.318</td><td>22</td><td>78</td><td>74</td><td>.994</td><td class="hi">1.62</td><td class="hi">0.312</td><td class="hi">96</td></tr><tr><td class="pl">C. Bellinger</td><td>CHC</td><td>13</td><td>.288</td><td>18</td><td>68</td><td>72</td><td>.924</td><td class="hi">1.54</td><td class="hi">0.298</td><td class="hi">93</td></tr><tr><td class="pl">P. Alonso</td><td>NYM</td><td>13</td><td>.268</td><td>24</td><td>82</td><td>62</td><td>1.012</td><td class="hi">1.42</td><td class="hi">0.284</td><td class="hi">91</td></tr><tr><td class="pl">A. Judge</td><td>NYY</td><td>12</td><td>.278</td><td>26</td><td>74</td><td>68</td><td>1.048</td><td class="hi">1.38</td><td class="hi">0.276</td><td class="hi">90</td></tr><tr><td class="pl">M. Trout</td><td>LAA</td><td>11</td><td>.284</td><td>18</td><td>58</td><td>62</td><td>1.002</td><td class="hi">1.24</td><td class="hi">0.264</td><td class="hi">88</td></tr><tr><td class="pl">Y. Alvarez</td><td>HOU</td><td>13</td><td>.292</td><td>21</td><td>72</td><td>64</td><td>1.018</td><td class="hi">1.21</td><td class="hi">0.266</td><td class="hi">87</td></tr></tbody></table></div></div></div>
+    <div id="sub-mlb-pitching" class="sub-panel"><div class="tbl-wrap"><div class="tbl-wrap"><button class="csv-btn" onclick="exportTableCSV('tbl-mlb-1','tbl-mlb-1')" title="Export CSV"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 1v7M3.5 5.5L6 8l2.5-2.5"/><path d="M1 9v1.5a.5.5 0 00.5.5h9a.5.5 0 00.5-.5V9"/></svg> Export CSV</button><table class="tbl" id="tbl-mlb-1"><thead><tr><th>Player</th><th>Team</th><th>G</th><th>W</th><th>L</th><th>ERA</th><th>K</th><th>WHIP</th><th style="color:var(--gold);font-style:italic" title="SSM Metric">RPI</th><th style="color:var(--gold);font-style:italic" title="SSM Metric">IP-PPG</th><th style="color:var(--gold);font-style:italic" title="SSM Metric">OVR</th></tr></thead><tbody><tr><td class="pl">S. Alcantara</td><td>MIA</td><td>13</td><td>8</td><td>4</td><td>2.18</td><td>144</td><td>0.98</td><td class="hi">0.242</td><td class="hi">6.8</td><td class="hi">97</td></tr><tr><td class="pl">S. Ohtani</td><td>LAD</td><td>11</td><td>8</td><td>2</td><td>2.88</td><td>148</td><td>1.02</td><td class="hi">0.320</td><td class="hi">6.4</td><td class="hi">94</td></tr><tr><td class="pl">G. Cole</td><td>NYY</td><td>12</td><td>9</td><td>3</td><td>3.04</td><td>138</td><td>1.08</td><td class="hi">0.338</td><td class="hi">6.2</td><td class="hi">92</td></tr><tr><td class="pl">S. Strider</td><td>ATL</td><td>12</td><td>8</td><td>3</td><td>3.18</td><td>142</td><td>1.04</td><td class="hi">0.353</td><td class="hi">6.4</td><td class="hi">91</td></tr><tr><td class="pl">L. Gilbert</td><td>SEA</td><td>13</td><td>7</td><td>4</td><td>3.24</td><td>128</td><td>1.12</td><td class="hi">0.360</td><td class="hi">6.0</td><td class="hi">90</td></tr><tr><td class="pl">A. Nola</td><td>PHI</td><td>13</td><td>7</td><td>5</td><td>3.44</td><td>124</td><td>1.14</td><td class="hi">0.382</td><td class="hi">5.8</td><td class="hi">88</td></tr></tbody></table></div></div></div>
     <div id="sub-mlb-fielding" class="sub-panel"><div class="tbl-wrap"><div class="tbl-wrap">
   <button class="csv-btn" onclick="exportTableCSV('tbl-mlb-2','mlb_fielding_2025')" title="Export Fielding to CSV"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 1v7M3.5 5.5L6 8l2.5-2.5"/><path d="M1 9v1.5a.5.5 0 00.5.5h9a.5.5 0 00.5-.5V9"/></svg> Export CSV</button>
   <table class="tbl" id="tbl-mlb-2"><thead><tr><th>Player</th><th>Team</th><th>POS</th><th>G</th><th>FPCT</th><th>DRS</th><th>OAA</th></tr></thead><tbody><tr><td class="pl">N. Arenado</td><td class="">STL</td><td class="">3B</td><td class="">128</td><td class="">.972</td><td class="">18</td><td class="hi">16</td></tr><tr><td class="pl">A. Bregman</td><td class="">HOU</td><td class="">3B</td><td class="">124</td><td class="">.968</td><td class="">14</td><td class="hi">12</td></tr><tr><td class="pl">D. Swanson</td><td class="">CHC</td><td class="">SS</td><td class="">128</td><td class="">.988</td><td class="">16</td><td class="hi">14</td></tr><tr><td class="pl">T. Turner</td><td class="">PHI</td><td class="">SS</td><td class="">126</td><td class="">.984</td><td class="">14</td><td class="hi">12</td></tr><tr><td class="pl">T. Friedl</td><td class="">CIN</td><td class="">CF</td><td class="">124</td><td class="">.994</td><td class="">22</td><td class="hi">20</td></tr><tr><td class="pl">C. Bellinger</td><td class="">CHC</td><td class="">CF</td><td class="">126</td><td class="">.992</td><td class="">18</td><td class="hi">16</td></tr></tbody></table></div></div></div>
 
-  <div style="margin:0 0 18px;padding:10px 16px;background:rgba(242,194,48,.06);border:1px solid rgba(242,194,48,.2);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--gold);letter-spacing:.05em">
-    ★ SSM METRICS — calculated using methodology from <em style="color:var(--white)">The Sports Statistics Manual</em> by Chris Cain. Values shown are season averages from play-by-play data.
-  </div>
-<div id="sub-mlb-ssm-bat" class="sub-panel">
-  <div class="sec-label">// SSM Metric — Batter</div>
-  <div class="sec-title">RPG — Runs Per Game</div>
-  <p class="sec-body">RPG = (R + RBI) ÷ G. RpPA = (R + RBI − HR) ÷ PA — HR subtracted once to prevent double-counting solo home runs that appear in both R and RBI. OVR = 60–99 scale. Note: RPG is team-context dependent — elite hitters on weak lineups (Trout with the Angels) show suppressed RPG despite individual excellence.</p>
-  <div class="tbl-wrap">
-  <button class="csv-btn" onclick="exportTableCSV('tbl-mlb-bat-ssm','tbl-mlb-bat-ssm')" title="Export CSV"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 1v7M3.5 5.5L6 8l2.5-2.5"/><path d="M1 9v1.5a.5.5 0 00.5.5h9a.5.5 0 00.5-.5V9"/></svg> Export CSV</button>
-  <table class="tbl" id="tbl-mlb-bat-ssm"><thead><tr><th>Player</th><th>Team</th><th>G</th><th>AVG</th><th>HR</th><th>RBI</th><th>R</th><th>OPS</th><th>RPG</th><th>RpPA</th><th>OVR</th></tr></thead><tbody><tr><td class="pl">F. Freeman</td><td>LAD</td><td>13</td><td>.318</td><td>22</td><td>78</td><td>74</td><td>.994</td><td class="hi">1.62</td><td>0.312</td><td>96</td></tr><tr><td class="pl">C. Bellinger</td><td>CHC</td><td>13</td><td>.288</td><td>18</td><td>68</td><td>72</td><td>.924</td><td class="hi">1.54</td><td>0.298</td><td>93</td></tr><tr><td class="pl">P. Alonso</td><td>NYM</td><td>13</td><td>.268</td><td>24</td><td>82</td><td>62</td><td>1.012</td><td class="hi">1.42</td><td>0.284</td><td>91</td></tr><tr><td class="pl">A. Judge</td><td>NYY</td><td>12</td><td>.278</td><td>26</td><td>74</td><td>68</td><td>1.048</td><td class="hi">1.38</td><td>0.276</td><td>90</td></tr><tr><td class="pl">M. Trout</td><td>LAA</td><td>11</td><td>.284</td><td>18</td><td>58</td><td>62</td><td>1.002</td><td class="hi">1.24</td><td>0.264</td><td>88</td></tr><tr><td class="pl">Y. Alvarez</td><td>HOU</td><td>13</td><td>.292</td><td>21</td><td>72</td><td>64</td><td>1.018</td><td class="hi">1.21</td><td>0.266</td><td>87</td></tr></tbody></table>
-</div>
-</div>
-<div id="sub-mlb-ssm-pitch" class="sub-panel">
-  <div class="sec-label">// SSM Metric — Pitcher</div>
-  <div class="sec-title">RPI — Runs Per Inning</div>
-  <p class="sec-body">RPI = ER ÷ IP (decimal innings). Lower is better — RPI 0.333 = ERA 3.00. IP-PPG = actual innings pitched per game appearance (workload metric). OVR is inverted: lower RPI earns higher OVR. IP notation must be converted: 6.2 IP = 6⅔ innings, not 6.2.</p>
-  <div class="tbl-wrap">
-  <button class="csv-btn" onclick="exportTableCSV('tbl-mlb-pitch-ssm','tbl-mlb-pitch-ssm')" title="Export CSV"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 1v7M3.5 5.5L6 8l2.5-2.5"/><path d="M1 9v1.5a.5.5 0 00.5.5h9a.5.5 0 00.5-.5V9"/></svg> Export CSV</button>
-  <table class="tbl" id="tbl-mlb-pitch-ssm"><thead><tr><th>Player</th><th>Team</th><th>G</th><th>W</th><th>L</th><th>ERA</th><th>K</th><th>WHIP</th><th>RPI</th><th>IP-PPG</th><th>OVR</th></tr></thead><tbody><tr><td class="pl">S. Alcantara</td><td>MIA</td><td>13</td><td>8</td><td>4</td><td>2.18</td><td>144</td><td>0.98</td><td class="hi">0.242</td><td>6.8</td><td>97</td></tr><tr><td class="pl">S. Ohtani</td><td>LAD</td><td>11</td><td>8</td><td>2</td><td>2.88</td><td>148</td><td>1.02</td><td class="hi">0.320</td><td>6.4</td><td>94</td></tr><tr><td class="pl">G. Cole</td><td>NYY</td><td>12</td><td>9</td><td>3</td><td>3.04</td><td>138</td><td>1.08</td><td class="hi">0.338</td><td>6.2</td><td>92</td></tr><tr><td class="pl">S. Strider</td><td>ATL</td><td>12</td><td>8</td><td>3</td><td>3.18</td><td>142</td><td>1.04</td><td class="hi">0.353</td><td>6.4</td><td>91</td></tr><tr><td class="pl">L. Gilbert</td><td>SEA</td><td>13</td><td>7</td><td>4</td><td>3.24</td><td>128</td><td>1.12</td><td class="hi">0.360</td><td>6.0</td><td>90</td></tr><tr><td class="pl">A. Nola</td><td>PHI</td><td>13</td><td>7</td><td>5</td><td>3.44</td><td>124</td><td>1.14</td><td class="hi">0.382</td><td>5.8</td><td>88</td></tr></tbody></table>
-</div>
-</div>
+  
+
   </div>
 
   <!-- TEAM STATS -->
@@ -442,7 +418,7 @@
   </div>
 
 <div style="margin-top:24px;border-top:1px solid var(--line);padding-top:20px">
-  <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;letter-spacing:.12em;color:var(--gold);text-transform:uppercase;margin-bottom:14px">// Stat Definitions — from The Sports Statistics Manual by Chris Cain</div>
+  <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;letter-spacing:.12em;color:var(--gold);text-transform:uppercase;margin-bottom:14px">// Stat Definitions — from <a href="https://www.amazon.com/Sports-Statistics-Manual-Baseball-Basketball/dp/B0DDHVR5MK/" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:none;border-bottom:1px solid rgba(242,194,48,.4);transition:border-color .2s" onmouseover="this.style.borderColor='rgba(242,194,48,.9)'" onmouseout="this.style.borderColor='rgba(242,194,48,.4)'">The Sports Statistics Manual</a> by Chris Cain</div>
   
   <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px">
     <div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
@@ -539,7 +515,7 @@
     <div style="font-size:.72rem;font-family:'JetBrains Mono',monospace;color:#38BDF8;margin-top:8px;line-height:1.7;background:rgba(56,189,248,.06);border-left:2px solid #38BDF8;padding:6px 10px;border-radius:0 4px 4px 0">WAR = batting runs + baserunning runs + fielding runs + positional adjustment + league adjustment + replacement runs ÷ RPW</div>
   </div>
   </div>
-  <p style="font-size:.72rem;color:var(--muted);margin-top:16px;font-family:'JetBrains Mono',monospace">Methodology from <em style="color:var(--white)">The Sports Statistics Manual</em> by Chris Cain · <a href="https://www.amazon.com/Sports-Statistics-Manual-Baseball-Basketball/dp/B0DDHVR5MK/" target="_blank" style="color:var(--gold);text-decoration:none">Available on Amazon</a></p>
+  <p style="font-size:.72rem;color:var(--muted);margin-top:16px;font-family:'JetBrains Mono',monospace">Methodology from <em style="color:var(--white)"><a href="https://www.amazon.com/Sports-Statistics-Manual-Baseball-Basketball/dp/B0DDHVR5MK/" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:none;border-bottom:1px solid rgba(242,194,48,.4);transition:border-color .2s" onmouseover="this.style.borderColor='rgba(242,194,48,.9)'" onmouseout="this.style.borderColor='rgba(242,194,48,.4)'">The Sports Statistics Manual</a></em> by Chris Cain · <a href="https://www.amazon.com/Sports-Statistics-Manual-Baseball-Basketball/dp/B0DDHVR5MK/" target="_blank" style="color:var(--gold);text-decoration:none">Available on Amazon</a></p>
 </div>
 </div>
 
@@ -560,42 +536,79 @@
 
 <!-- GUESS THE PITCH -->
 <div id="tab-guess" class="tab-panel">
-  <div class="sec-label">// Interactive</div><div class="sec-title">⚾ Guess the Pitch</div>
-  <div class="sec-body">Real MLB at-bat scenarios. Predict pitch type and location before the delivery.</div>
-  <div class="guess-wrap">
-    <div class="score-bar" style="max-width:720px;margin:0 auto;width:100%">
+  <div class="sec-label">// Interactive</div>
+  <div class="sec-title">⚾ Guess the Pitch</div>
+  <div class="sec-body">Real MLB at-bat scenarios — predict pitch type and location before the delivery. Watch the ball animate into the K-Zone, then see the result play out on the field.</div>
+
+  <div class="guess-wrap" style="max-width:760px;margin:0 auto">
+
+    <!-- ── MATCHUP HEADER (ESPN-style) ── -->
+    <div id="matchup-header" style="background:var(--ink-2);border:1px solid var(--line);border-radius:10px;padding:12px 18px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase">PITCHER</div>
+        <div>
+          <div id="pitcher-name" style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1.05rem;color:var(--white)">N. Frasso RHP</div>
+          <div id="pitcher-line" style="font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--muted)">0.2 IP · 0 ER · 0 K · 6 pitches</div>
+        </div>
+      </div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:.85rem;color:var(--muted);font-weight:700">vs</div>
+      <div style="display:flex;align-items:center;gap:10px;text-align:right">
+        <div>
+          <div id="batter-name" style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1.05rem;color:var(--white)">B. Rortvedt C</div>
+          <div id="batter-line" style="font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--muted)">0-2 this AB</div>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase">BATTER</div>
+      </div>
+    </div>
+
+    <!-- ── PITCH COUNT + ON DECK ── -->
+    <div style="display:flex;align-items:center;gap:18px;margin-bottom:12px;padding:7px 14px;background:var(--ink-3);border-radius:7px;font-family:'JetBrains Mono',monospace;font-size:.64rem;color:var(--muted)">
+      <span>PITCH COUNT: <span id="pitch-count" style="color:var(--white);font-weight:700">0</span></span>
+      <span style="color:var(--line)">|</span>
+      <span>ON DECK: <span id="on-deck" style="color:var(--white)">S. Ohtani</span></span>
+      <span style="color:var(--line)">|</span>
+      <span id="ctx" style="color:var(--gold)">Loading...</span>
+    </div>
+
+    <!-- ── SCORE BAR ── -->
+    <div class="score-bar" style="margin-bottom:14px">
       <div><div class="score-bar-label">Score</div><div class="score-bar-val" id="score">0.0</div></div>
       <div><div class="score-bar-label">Correct</div><div class="score-bar-val" id="correct">0 / 0</div></div>
       <div><div class="score-bar-label">Streak</div><div class="score-bar-val" id="streak">0</div></div>
     </div>
+
+    <!-- ── MAIN GAME AREA ── -->
     <div class="guess-game">
-      <div class="guess-ctx" id="ctx">Loading scenario...</div>
-      <div class="pitch-zone-wrap">
-      <div class="pitch-zone-header">
-        <span class="pitch-zone-label">⚾ K-Zone 3D</span>
-        <span class="pitch-zone-status" id="zone-status"></span>
-      </div>
-      <div class="pz-svg-wrap" style="position:relative">
-        <canvas id="kzone-canvas" style="width:100%;height:320px;display:block"></canvas>
-        <!-- Count labels overlay -->
-        <div style="position:absolute;top:8px;left:10px;font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#4fc3f7;letter-spacing:.1em;pointer-events:none">K-ZONE 3D</div>
-      </div>
-      <div class="pz-info-bar" id="pz-info-bar" style="opacity:0;transition:opacity .35s">
-        <div>
-          <div class="pz-pitch-type" id="pz-pitch-type-label">—</div>
-          <div class="pz-pitch-speed" id="pz-pitch-speed-label"></div>
+
+      <!-- Canvas: switches between K-Zone view and Field view -->
+      <div style="position:relative;border-radius:10px;overflow:hidden;background:#050810;border:1px solid var(--line)">
+        <canvas id="kzone-canvas" style="width:100%;height:360px;display:block"></canvas>
+
+        <!-- Phase label overlay -->
+        <div id="phase-label" style="position:absolute;top:10px;right:12px;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:#4fc3f7;letter-spacing:.12em;pointer-events:none;background:rgba(5,8,16,0.7);padding:3px 8px;border-radius:4px">K-ZONE LIVE</div>
+
+        <!-- Pitch history strip (right side overlay) -->
+        <div id="pitch-history" style="position:absolute;top:10px;right:12px;display:flex;flex-direction:column;gap:5px;pointer-events:none"></div>
+
+        <!-- Result reveal overlay -->
+        <div id="result-overlay" style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(5,8,16,0.92));padding:14px 16px;display:none;align-items:flex-end;justify-content:space-between">
+          <div>
+            <div id="result-headline" style="font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;font-weight:800;color:var(--white)">Strike</div>
+            <div id="result-subline" style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--muted)">Swinging strikeout · 94 MPH slider</div>
+          </div>
+          <span id="pitch-result" class="pz-result-badge"></span>
         </div>
-        <div class="pz-count">
-          <span class="pz-count-item">B<span id="pz-balls">0</span></span>
-          <span class="pz-count-item">S<span id="pz-strikes">0</span></span>
-          <span class="pz-count-item">O<span id="pz-outs">0</span></span>
-        </div>
-        <span class="pz-result-badge" id="pitch-result"></span>
       </div>
-    </div>
-      
-      <div class="guess-q">Where will the pitch land?</div>
-      <div class="timer-row"><div class="timer-track"><div class="timer-fill" id="timer-fill" style="width:100%"></div></div><div class="timer-num" id="timer-num">15</div></div>
+
+      <!-- ── PITCH HISTORY LIST (ESPN right panel style) ── -->
+      <div id="pitch-log" style="background:var(--ink-2);border:1px solid var(--line);border-radius:8px;margin-top:10px;overflow:hidden"></div>
+
+      <!-- ── GUESS QUESTION + TIMER ── -->
+      <div class="guess-q" style="margin-top:16px">What pitch will be thrown?</div>
+      <div class="timer-row">
+        <div class="timer-track"><div class="timer-fill" id="timer-fill" style="width:100%"></div></div>
+        <div class="timer-num" id="timer-num">15</div>
+      </div>
       <div class="opts" id="opts"></div>
       <button class="next-btn" id="next-btn" onclick="nextPlay()">Next Pitch →</button>
     </div>
@@ -638,57 +651,189 @@ function showType(type, btn) {
   if (firstSub) firstSub.click();
 }
 function showSub(id){document.querySelectorAll('.sub-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.sub-tab').forEach(b=>b.classList.remove('active'));document.getElementById('sub-'+id).classList.add('active');event.target.classList.add('active')}
-const plays=[
-  {ctx:"0-2 Count · Runner on 1st · RH Batter · 7th Inning · Up by 1",correct:"Slider — Down & Away",opts:["4-Seam Fastball — Up & In","Slider — Down & Away","Changeup — Middle","Curveball — Bounce"]},
-  {ctx:"3-0 Count · Bases Empty · LH Batter · 3rd Inning · Tied",correct:"4-Seam Fastball — Down the Middle",opts:["4-Seam Fastball — Down the Middle","Curveball — Outside","Intentional Ball","Slider — Inside"]},
-  {ctx:"Full Count · Runner on 3rd · 1 Out · 9th Inning · Down by 1",correct:"Changeup — Low & Away",opts:["Fastball — Up & In","Changeup — Low & Away","Slider — Backdoor","Curveball — 12-6"]},
-  {ctx:"1-1 Count · Bases Loaded · RH Batter · 5th Inning · Down by 2",correct:"2-Seam Fastball — Inside",opts:["2-Seam Fastball — Inside","Cutter — Away","Curveball — Outside","Splitter — Down"]},
-  {ctx:"0-0 Count · Runner on 2nd · LH Batter · 6th Inning · Tied",correct:"4-Seam Fastball — Up",opts:["4-Seam Fastball — Up","Slider — Glove Side","Changeup — Arm Side","Curveball — Outside"]},
+// ── Guess the Pitch — ESPN-style game logic ────────────────────
+const PITCHERS=[
+  {name:'N. Frasso RHP',line:'0.2 IP · 0 ER · 0 K'},
+  {name:'G. Cole RHP', line:'6.0 IP · 1 ER · 8 K'},
+  {name:'S. Alcantara RHP',line:'7.1 IP · 0 ER · 9 K'},
+  {name:'C. Kershaw LHP',line:'5.2 IP · 2 ER · 7 K'},
+  {name:'S. Ohtani LHP',line:'6.0 IP · 1 ER · 10 K'},
 ];
+const BATTERS=[
+  {name:'B. Rortvedt C', line:'0-2 this AB'},
+  {name:'A. Judge RF',   line:'1-3 this AB'},
+  {name:'M. Trout CF',  line:'0-1 this AB'},
+  {name:'F. Freeman 1B',line:'2-3 this AB'},
+  {name:'C. Bellinger CF',line:'1-2 this AB'},
+];
+const ONCECK=['S. Ohtani','M. Betts','R. Acuña Jr.','J. Chisholm','F. Lindor'];
+
+const plays=[
+  {ctx:'0-2 · Runner on 1st · RH · 7th · Up 1',correct:'Slider — Down & Away',
+   opts:['4-Seam Fastball — Up & In','Slider — Down & Away','Changeup — Middle','Curveball — Bounce']},
+  {ctx:'3-0 · Bases Empty · LH · 3rd · Tied',correct:'4-Seam Fastball — Down the Middle',
+   opts:['4-Seam Fastball — Down the Middle','Curveball — Outside','Intentional Ball','Slider — Inside']},
+  {ctx:'Full Count · Runner on 3rd · 1 Out · 9th · Down 1',correct:'Changeup — Low & Away',
+   opts:['Fastball — Up & In','Changeup — Low & Away','Slider — Backdoor','Curveball — 12-6']},
+  {ctx:'1-1 · Bases Loaded · RH · 5th · Down 2',correct:'2-Seam Fastball — Inside',
+   opts:['2-Seam Fastball — Inside','Cutter — Away','Curveball — Outside','Splitter — Down']},
+  {ctx:'0-0 · Runner on 2nd · LH · 6th · Tied',correct:'4-Seam Fastball — Up',
+   opts:['4-Seam Fastball — Up','Slider — Glove Side','Changeup — Arm Side','Curveball — Outside']},
+  {ctx:'1-2 · Bases Empty · RH · 8th · Tied',correct:'Curveball — 12-6',
+   opts:['4-Seam Fastball — Up & In','Curveball — 12-6','Slider — Down & Away','Changeup — Arm Side']},
+  {ctx:'2-2 · Runner on 2nd · LH · 6th · Up 2',correct:'Cutter — Glove Side',
+   opts:['Cutter — Glove Side','Sinker — Down & In','4-Seam Fastball — Up','Splitter — Down']},
+  {ctx:'0-1 · Bases Loaded · RH · 7th · Down 1',correct:'Sinker — Down & In',
+   opts:['Sinker — Down & In','Slider — Outside','4-Seam Fastball — Middle','Curveball — Outside']},
+];
+
 let idx=0,score=0,correctCount=0,total=0,streak=0,timer,timeLeft=15,gameStarted=false;
-let gBalls=0,gStrikes=0,gOuts=0;
-function initGame(){gameStarted=true;idx=Math.floor(Math.random()*plays.length);renderPlay();if(!window._kzoneBooted){setTimeout(()=>{if(!window._kzoneBooted)_bootKZone();},100);}}
-function renderPlay(){const p=plays[idx%plays.length];document.getElementById('ctx').textContent=p.ctx;gBalls=0;gStrikes=0;const shuffled=[...p.opts].sort(()=>Math.random()-.5);document.getElementById('opts').innerHTML=shuffled.map(o=>`<button class="opt" onclick="pick(this,'${o.replace(/'/g,"\\'")}','${p.correct.replace(/'/g,"\\'")}')">${o}</button>`).join('');document.getElementById('next-btn').classList.remove('show');startTimer()}
-function startTimer(){clearInterval(timer);timeLeft=15;updateTimer();timer=setInterval(()=>{timeLeft--;updateTimer();if(timeLeft<=0){clearInterval(timer);timeUp()}},1000)}
-function updateTimer(){document.getElementById('timer-num').textContent=timeLeft;document.getElementById('timer-fill').style.width=(timeLeft/15*100)+'%'}
-function timeUp(){total++;streak=0;document.querySelectorAll('.opt').forEach(b=>b.disabled=true);const p=plays[idx%plays.length];document.querySelectorAll('.opt').forEach(b=>{if(b.textContent===p.correct)b.classList.add('correct')});updateScores();document.getElementById('next-btn').classList.add('show')}
+let gBalls=0,gStrikes=0,gOuts=0,pitchNum=0;
+let curPitcher=PITCHERS[0],curBatter=BATTERS[0],curOnDeck=ONCECK[0];
+let pitchLog=[];  // [{num,type,speed,result,inZone}]
 
-// Zone cell positions (cx, cy) for each of 9 pitch locations
-// K-Zone 3D functions loaded from Three.js module
+function rand(arr){return arr[Math.floor(Math.random()*arr.length)];}
 
-
-// function resetPitchZone() → loaded from K-Zone 3D module
-
-
-// function newAtBat() → loaded from K-Zone 3D module
-
-function parsePitch(s){
-  const parts=s.split(' — ');
-  return{type:parts[0]||'Pitch', loc:parts[1]||'Middle'};
+function initGame(){
+  gameStarted=true;
+  idx=Math.floor(Math.random()*plays.length);
+  curPitcher=rand(PITCHERS); curBatter=rand(BATTERS); curOnDeck=rand(ONCECK);
+  pitchNum=Math.floor(Math.random()*8)+1;
+  updateMatchupHeader();
+  renderPlay();
+  if(!window._kzoneBooted){setTimeout(()=>{if(!window._kzoneBooted)_bootKZone();},120);}
 }
+
+function updateMatchupHeader(){
+  const pn=document.getElementById('pitcher-name');
+  const pl=document.getElementById('pitcher-line');
+  const bn=document.getElementById('batter-name');
+  const bl=document.getElementById('batter-line');
+  const pc=document.getElementById('pitch-count');
+  const od=document.getElementById('on-deck');
+  if(pn) pn.textContent=curPitcher.name;
+  if(pl) pl.textContent=curPitcher.line+' · '+pitchNum+' pitches';
+  if(bn) bn.textContent=curBatter.name;
+  if(bl) bl.textContent=curBatter.line;
+  if(pc) pc.textContent=pitchNum;
+  if(od) od.textContent=curOnDeck;
+}
+
+function renderPlay(){
+  const p=plays[idx%plays.length];
+  const ctxEl=document.getElementById('ctx');
+  if(ctxEl) ctxEl.textContent=p.ctx;
+  gBalls=0; gStrikes=0;
+  const shuffled=[...p.opts].sort(()=>Math.random()-.5);
+  document.getElementById('opts').innerHTML=shuffled.map(o=>
+    `<button class="opt" onclick="pick(this,'${o.replace(/'/g,"\'")}','${p.correct.replace(/'/g,"\'")}')"> ${o}</button>`
+  ).join('');
+  document.getElementById('next-btn').classList.remove('show');
+  // Hide result overlay
+  const ov=document.getElementById('result-overlay');
+  if(ov) ov.style.display='none';
+  // Reset phase label
+  const pl=document.getElementById('phase-label');
+  if(pl){pl.textContent='K-ZONE LIVE';pl.style.color='#4fc3f7';}
+  startTimer();
+}
+
+function startTimer(){clearInterval(timer);timeLeft=15;updateTimer();timer=setInterval(()=>{timeLeft--;updateTimer();if(timeLeft<=0){clearInterval(timer);timeUp();}},1000);}
+function updateTimer(){document.getElementById('timer-num').textContent=timeLeft;document.getElementById('timer-fill').style.width=(timeLeft/15*100)+'%';}
+function timeUp(){total++;streak=0;document.querySelectorAll('.opt').forEach(b=>b.disabled=true);const p=plays[idx%plays.length];document.querySelectorAll('.opt').forEach(b=>{if(b.textContent.trim()===p.correct)b.classList.add('correct');});updateScores();document.getElementById('next-btn').classList.add('show');}
+
+function parsePitch(s){const parts=s.split(' — ');return{type:parts[0]||'Pitch',loc:parts[1]||'Middle'};}
 function getSpeed(type){
-  const speeds={'4-Seam Fastball':[93,98],'2-Seam Fastball':[90,95],'Sinker':[89,93],'Cutter':[87,92],'Slider':[82,88],'Curveball':[75,82],'Changeup':[82,87],'Splitter':[83,87],'Knuckleball':[68,75],'Fastball':[91,96]};
+  const speeds={'4-Seam Fastball':[93,98],'2-Seam Fastball':[90,95],'Sinker':[89,93],'Cutter':[87,92],
+    'Slider':[82,88],'Curveball':[75,82],'Changeup':[82,87],'Splitter':[83,87],'Knuckleball':[68,75],'Fastball':[91,96]};
   for(const[k,v]of Object.entries(speeds)){if(type.toLowerCase().includes(k.toLowerCase()))return Math.floor(v[0]+Math.random()*(v[1]-v[0]));}
   return Math.floor(86+Math.random()*10);
 }
+
+// Pitch type → short label for history strip
+const PITCH_SHORT={'4-Seam Fastball':'4FB','2-Seam Fastball':'2FB','Sinker':'SI','Cutter':'CT',
+  'Slider':'SL','Curveball':'CB','Changeup':'CH','Splitter':'SP','Knuckleball':'KN','Fastball':'FB'};
+function shortType(t){for(const[k,v]of Object.entries(PITCH_SHORT)){if(t.toLowerCase().includes(k.toLowerCase()))return v;}return t.slice(0,3).toUpperCase();}
+
+// Result type colours
+const RESULT_CLR={strikeout:'#ffb300',ball:'#4caf50',single:'#fff',fly_out:'#ef9a9a',
+  grounder:'#ef9a9a',home_run:'#F2C230',foul_ball:'#78909c'};
+const RESULT_LABEL={strikeout:'STRIKEOUT',ball:'BALL',single:'SINGLE',fly_out:'FLY OUT',
+  grounder:'GROUNDOUT',home_run:'HOME RUN!',foul_ball:'FOUL BALL'};
+
 function pick(btn,choice,correct){
-  clearInterval(timer);total++;
+  clearInterval(timer); total++;
   document.querySelectorAll('.opt').forEach(b=>b.disabled=true);
   const p=parsePitch(correct);
   const spd=getSpeed(p.type);
-  // Count advances on each pitch
-  if(choice===correct){
-    btn.classList.add('correct');score+=1+(timeLeft/15);correctCount++;streak++;
+  pitchNum++;
+
+  const isRight=(choice===correct);
+  if(isRight){
+    btn.classList.add('correct'); score+=1+(timeLeft/15); correctCount++; streak++;
     gStrikes=Math.min(2,gStrikes+1);
-    showPitchZone(p.loc,true,p.type,spd,gBalls,gStrikes,gOuts);
   } else {
-    btn.classList.add('wrong');streak=0;
-    document.querySelectorAll('.opt').forEach(b=>{if(b.textContent===correct)b.classList.add('correct')});
+    btn.classList.add('wrong'); streak=0;
+    document.querySelectorAll('.opt').forEach(b=>{if(b.textContent.trim()===correct)b.classList.add('correct');});
     gBalls=Math.min(3,gBalls+1);
-    showPitchZone(p.loc,false,p.type,spd,gBalls,gStrikes,gOuts);
-  }updateScores();document.getElementById('next-btn').classList.add('show')}
-function updateScores(){document.getElementById('score').textContent=score.toFixed(1);document.getElementById('correct').textContent=correctCount+' / '+total;document.getElementById('streak').textContent=streak}
-function nextPlay(){idx++;gOuts=(gOuts+1)%3;resetPitchZone();renderPlay()}
+  }
+
+  // Show animation
+  showPitchZone(p.loc, isRight, p.type, spd, gBalls, gStrikes, gOuts);
+
+  // Update phase label to show it's animating
+  const pl=document.getElementById('phase-label');
+  if(pl){pl.textContent='BALL IN FLIGHT';pl.style.color='#F2C230';}
+
+  // Log the pitch and update history panel after delay
+  setTimeout(()=>{
+    logPitch(p.type, spd, isRight, p.loc);
+    updateMatchupHeader();
+    const pl2=document.getElementById('phase-label');
+    if(pl2){pl2.textContent='FIELD VIEW';pl2.style.color='#66bb6a';}
+  },600);
+
+  updateScores();
+  document.getElementById('next-btn').classList.add('show');
+}
+
+function logPitch(type, speed, isRight, loc){
+  pitchLog.push({num:pitchNum, type, speed, isRight, loc});
+  renderPitchLog();
+}
+
+function renderPitchLog(){
+  const el=document.getElementById('pitch-log');
+  if(!el||!pitchLog.length) return;
+  // Show last 4 pitches ESPN-style
+  const recent=pitchLog.slice(-4).reverse();
+  el.innerHTML=recent.map((p,i)=>{
+    const clr=p.isRight?'#4caf50':'#ef5350';
+    const st=shortType(p.type);
+    return `<div style="display:grid;grid-template-columns:28px 1fr auto auto;align-items:center;gap:8px;padding:7px 14px;${i<recent.length-1?'border-bottom:1px solid var(--line);':''}">
+      <div style="background:${clr};color:#000;font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center">${p.num}</div>
+      <div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:700;color:var(--white)">${p.type}</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--muted)">${p.loc||''}</div>
+      </div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;color:var(--white)">${p.speed} MPH</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:${clr}">${p.isRight?'✓':'✗'}</div>
+    </div>`;
+  }).join('');
+}
+
+function updateScores(){
+  document.getElementById('score').textContent=score.toFixed(1);
+  document.getElementById('correct').textContent=correctCount+' / '+total;
+  document.getElementById('streak').textContent=streak;
+}
+
+function nextPlay(){
+  idx++; gOuts=(gOuts+1)%3;
+  if(gOuts===0){curBatter=rand(BATTERS); curPitcher=rand(PITCHERS); curOnDeck=rand(ONCECK);}
+  resetPitchZone();
+  renderPlay();
+}
 </script>
 
   <script type="module">
