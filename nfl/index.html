@@ -195,6 +195,174 @@
     .tbl th.sort-asc::after{content:' ▲';font-size:.55rem;color:var(--gold);opacity:.9}
     .tbl th.sort-desc::after{content:' ▼';font-size:.55rem;color:var(--gold);opacity:.9}
     .tbl th:not(.sort-asc):not(.sort-desc)::after{content:' ⇅';font-size:.5rem;color:var(--muted);opacity:.5}
+  
+    /* ── Fantasy League ─────────────────────────────────── */
+    .fl-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;border-bottom:2px solid var(--line);padding-bottom:14px}
+    .fl-nav-btn{font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:7px 18px;border-radius:6px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer;transition:all .2s}
+    .fl-nav-btn.active{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+    .fl-nav-btn:hover:not(.active){border-color:var(--gold);color:var(--gold)}
+    .fl-panel{display:none}.fl-panel.active{display:block}
+
+    /* Setup wizard */
+    .fl-wizard{max-width:680px;margin:0 auto}
+    .fl-step{background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:24px;margin-bottom:16px}
+    .fl-step-title{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--gold);margin-bottom:14px}
+    .fl-scoring-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:8px}
+    .fl-scoring-opt{background:var(--ink-3);border:2px solid var(--line);border-radius:8px;padding:14px;cursor:pointer;transition:all .2s;text-align:left}
+    .fl-scoring-opt:hover{border-color:var(--gold);background:rgba(242,194,48,.06)}
+    .fl-scoring-opt.selected{border-color:var(--gold);background:rgba(242,194,48,.1)}
+    .fl-scoring-opt-title{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;color:var(--white);margin-bottom:4px}
+    .fl-scoring-opt-sub{font-size:.72rem;color:var(--muted);line-height:1.4}
+    .fl-scoring-opt-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.58rem;font-weight:700;padding:2px 7px;border-radius:4px;margin-top:6px;text-transform:uppercase;letter-spacing:.06em}
+    .fl-badge-ssm{background:rgba(242,194,48,.15);color:var(--gold);border:1px solid rgba(242,194,48,.3)}
+    .fl-badge-std{background:rgba(79,195,247,.12);color:#4fc3f7;border:1px solid rgba(79,195,247,.3)}
+    .fl-input{width:100%;background:var(--ink-3);border:1px solid var(--line);border-radius:7px;padding:10px 14px;color:var(--white);font-size:.9rem;font-family:'JetBrains Mono',monospace;box-sizing:border-box;outline:none;transition:border-color .2s}
+    .fl-input:focus{border-color:var(--gold)}
+    .fl-input-label{font-size:.78rem;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:6px;display:block;letter-spacing:.05em;text-transform:uppercase}
+    .fl-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+    .fl-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px}
+    .fl-btn{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;padding:12px 28px;border-radius:8px;border:none;cursor:pointer;transition:all .2s}
+    .fl-btn-primary{background:var(--gold);color:var(--ink)}
+    .fl-btn-primary:hover{background:#e0b020;transform:translateY(-1px)}
+    .fl-btn-secondary{background:var(--ink-3);color:var(--muted);border:1px solid var(--line)}
+    .fl-btn-secondary:hover{border-color:var(--gold);color:var(--gold)}
+    .fl-btn-danger{background:rgba(200,58,43,.15);color:#ef5350;border:1px solid rgba(200,58,43,.3)}
+
+    /* Dashboard */
+    .fl-dashboard{display:grid;grid-template-columns:1fr 320px;gap:16px}
+    @media(max-width:768px){.fl-dashboard{grid-template-columns:1fr}}
+    .fl-card{background:var(--ink-2);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+    .fl-card-header{padding:12px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;background:var(--ink-3)}
+    .fl-card-title{font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--white)}
+    .fl-card-body{padding:16px}
+
+    /* Matchup card */
+    .fl-matchup{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line)}
+    .fl-matchup:last-child{border-bottom:none}
+    .fl-team-name{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;color:var(--white)}
+    .fl-team-score{font-family:'JetBrains Mono',monospace;font-size:1.2rem;font-weight:700;color:var(--gold)}
+    .fl-vs{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--muted);text-align:center}
+    .fl-win{color:#4caf50}.fl-loss{color:#ef5350}
+
+    /* Roster */
+    .fl-roster-row{display:grid;grid-template-columns:60px 1fr 80px 80px 60px;align-items:center;gap:8px;padding:8px 16px;border-bottom:1px solid rgba(255,255,255,.04);font-size:.82rem}
+    .fl-roster-row:hover{background:var(--ink-3)}
+    .fl-pos-badge{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;padding:2px 6px;border-radius:4px;text-align:center}
+    .fl-pos-QB{background:rgba(229,57,53,.2);color:#ef9a9a}
+    .fl-pos-RB{background:rgba(67,160,71,.2);color:#a5d6a7}
+    .fl-pos-WR{background:rgba(21,101,192,.2);color:#90caf9}
+    .fl-pos-TE{background:rgba(106,27,154,.2);color:#ce93d8}
+    .fl-pos-K{background:rgba(245,127,23,.2);color:#ffcc80}
+    .fl-pos-DEF{background:rgba(84,110,122,.2);color:#b0bec5}
+    .fl-pos-FLEX{background:rgba(0,131,143,.2);color:#80deea}
+    .fl-pos-BN{background:rgba(50,50,50,.5);color:var(--muted)}
+    .fl-player-name{font-weight:600;color:var(--white)}
+    .fl-player-team{font-size:.68rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
+    .fl-ppg-val{font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--gold);font-weight:700}
+    .fl-std-val{font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--muted)}
+
+    /* Standings */
+    .fl-standings-row{display:grid;grid-template-columns:28px 1fr 50px 50px 50px 80px;align-items:center;gap:8px;padding:9px 16px;border-bottom:1px solid rgba(255,255,255,.04);font-size:.82rem}
+    .fl-standings-row.header{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;padding:7px 16px;background:var(--ink-3)}
+    .fl-rank{font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--muted);text-align:center}
+    .fl-rank.top3{color:var(--gold);font-weight:700}
+
+    /* Waiver / FA */
+    .fl-fa-row{display:grid;grid-template-columns:60px 1fr 80px 80px 80px auto;align-items:center;gap:8px;padding:9px 16px;border-bottom:1px solid rgba(255,255,255,.04);font-size:.82rem}
+    .fl-fa-row:hover{background:var(--ink-3)}
+    .fl-add-btn{font-family:'Barlow Condensed',sans-serif;font-size:.75rem;font-weight:700;padding:4px 12px;border-radius:5px;border:1px solid rgba(76,175,80,.5);color:#4caf50;background:rgba(76,175,80,.1);cursor:pointer;white-space:nowrap;transition:all .2s}
+    .fl-add-btn:hover{background:rgba(76,175,80,.22);border-color:#4caf50}
+    .fl-drop-btn{border-color:rgba(239,83,80,.5);color:#ef5350;background:rgba(239,83,80,.1)}
+    .fl-drop-btn:hover{background:rgba(239,83,80,.22);border-color:#ef5350}
+
+    /* Trade */
+    .fl-trade-grid{display:grid;grid-template-columns:1fr 60px 1fr;gap:12px;align-items:start}
+    .fl-trade-side{background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:12px}
+    .fl-trade-side-title{font-family:'Barlow Condensed',sans-serif;font-size:.85rem;font-weight:800;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+    .fl-trade-player{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:6px;background:var(--ink-2);margin-bottom:6px;cursor:pointer;border:1px solid transparent;transition:all .2s}
+    .fl-trade-player:hover{border-color:var(--gold)}
+    .fl-trade-player.selected{border-color:var(--gold);background:rgba(242,194,48,.08)}
+    .fl-trade-arrow{font-size:1.4rem;text-align:center;color:var(--gold);padding-top:60px}
+
+    /* Scoring breakdown modal */
+    .fl-scoring-table{width:100%;border-collapse:collapse;font-size:.82rem}
+    .fl-scoring-table th{text-align:left;padding:7px 12px;background:var(--ink-3);color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:.65rem;text-transform:uppercase;letter-spacing:.08em}
+    .fl-scoring-table td{padding:8px 12px;border-bottom:1px solid rgba(255,255,255,.05);color:var(--white)}
+    .fl-scoring-table td.pts{font-family:'JetBrains Mono',monospace;color:var(--gold);font-weight:700}
+    .fl-scoring-table td.ssm{font-family:'JetBrains Mono',monospace;color:#4fc3f7;font-weight:700}
+    .fl-ssm-note{background:rgba(242,194,48,.06);border:1px solid rgba(242,194,48,.2);border-radius:8px;padding:12px 16px;font-size:.72rem;color:var(--muted);line-height:1.5;margin-top:14px}
+
+  
+    /* ── Draft Room ───────────────────────────────────── */
+    .dr-wrap{display:grid;grid-template-columns:1fr 300px;gap:14px;max-height:780px}
+    @media(max-width:900px){.dr-wrap{grid-template-columns:1fr;max-height:none}}
+    .dr-main{display:flex;flex-direction:column;gap:10px;min-height:0}
+    .dr-sidebar{display:flex;flex-direction:column;gap:10px;min-height:0}
+
+    /* Draft board header */
+    .dr-header{background:var(--ink-2);border:1px solid var(--line);border-radius:10px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+    .dr-pick-badge{font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+    .dr-pick-num{font-family:'Barlow Condensed',sans-serif;font-size:1.6rem;font-weight:900;color:var(--gold);line-height:1}
+    .dr-on-clock{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:700;color:var(--white)}
+    .dr-timer{font-family:'JetBrains Mono',monospace;font-size:2rem;font-weight:700;min-width:52px;text-align:right}
+    .dr-timer.urgent{color:#ef5350;animation:timerPulse .6s ease-in-out infinite}
+    @keyframes timerPulse{0%,100%{opacity:1}50%{opacity:.5}}
+    .dr-timer.ok{color:var(--gold)}
+    .dr-timer.good{color:#4caf50}
+
+    /* Player pool */
+    .dr-pool-wrap{background:var(--ink-2);border:1px solid var(--line);border-radius:10px;overflow:hidden;flex:1;display:flex;flex-direction:column;min-height:0}
+    .dr-pool-controls{padding:10px 14px;background:var(--ink-3);border-bottom:1px solid var(--line);display:flex;gap:8px;flex-wrap:wrap}
+    .dr-pool-list{overflow-y:auto;flex:1}
+    .dr-player-row{display:grid;grid-template-columns:52px 1fr 72px 72px 72px 100px;align-items:center;gap:6px;padding:8px 14px;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;transition:background .15s}
+    .dr-player-row:hover{background:rgba(242,194,48,.06)}
+    .dr-player-row.drafted{opacity:.35;cursor:default;pointer-events:none}
+    .dr-player-row.drafted:hover{background:transparent}
+    .dr-player-row.my-pick{background:rgba(242,194,48,.08);border-left:3px solid var(--gold)}
+    .dr-player-row.header{background:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;cursor:default;padding:7px 14px;position:sticky;top:0;z-index:1}
+    .dr-player-row.header:hover{background:var(--ink-3)}
+    .dr-rank{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--muted);text-align:center}
+    .dr-draft-btn{font-family:'Barlow Condensed',sans-serif;font-size:.82rem;font-weight:800;text-transform:uppercase;padding:5px 14px;border-radius:5px;border:none;cursor:pointer;background:var(--gold);color:var(--ink);transition:all .2s;white-space:nowrap}
+    .dr-draft-btn:hover{background:#e0b020;transform:translateY(-1px)}
+    .dr-draft-btn:disabled{background:var(--ink-3);color:var(--muted);cursor:not-allowed;transform:none}
+    .dr-ssm-val{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--gold);font-weight:700}
+    .dr-std-val{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--muted)}
+
+    /* Draft board grid */
+    .dr-board-wrap{background:var(--ink-2);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+    .dr-board-scroll{overflow-x:auto}
+    .dr-board-grid{display:grid;min-width:max-content}
+    .dr-board-cell{padding:5px 8px;border-right:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06);font-size:.68rem;min-width:90px;min-height:40px}
+    .dr-board-cell.team-label{background:var(--ink-3);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.78rem;color:var(--white);text-align:center;min-height:32px;display:flex;align-items:center;justify-content:center}
+    .dr-board-cell.round-label{background:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--muted);display:flex;align-items:center;justify-content:center;min-width:40px;min-height:40px}
+    .dr-board-cell.pick-empty{background:rgba(255,255,255,.02)}
+    .dr-board-cell.pick-filled{background:rgba(242,194,48,.06);border-left:2px solid var(--gold)}
+    .dr-board-cell.pick-filled.my-pick{background:rgba(242,194,48,.14);border-left:2px solid var(--gold)}
+    .dr-board-cell.pick-active{background:rgba(79,195,247,.08);border:1px solid rgba(79,195,247,.4);animation:cellPulse 1s ease-in-out infinite}
+    @keyframes cellPulse{0%,100%{border-color:rgba(79,195,247,.4)}50%{border-color:rgba(79,195,247,.9)}}
+    .dr-pick-player{font-weight:600;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .dr-pick-meta{color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:.56rem;white-space:nowrap}
+
+    /* My picks panel */
+    .dr-my-picks{background:var(--ink-2);border:1px solid var(--line);border-radius:10px;overflow:hidden;max-height:340px;overflow-y:auto}
+    .dr-my-pick-row{display:grid;grid-template-columns:36px 1fr 60px;align-items:center;gap:8px;padding:7px 12px;border-bottom:1px solid rgba(255,255,255,.04)}
+    .dr-my-pick-row:last-child{border-bottom:none}
+
+    /* Watchlist */
+    .dr-watchlist{background:var(--ink-2);border:1px solid var(--line);border-radius:10px;overflow:hidden;flex:1}
+    .dr-watch-row{display:grid;grid-template-columns:1fr 60px 28px;align-items:center;gap:6px;padding:7px 12px;border-bottom:1px solid rgba(255,255,255,.04);font-size:.78rem}
+    .dr-watch-btn{font-size:.7rem;padding:2px 8px;border-radius:4px;border:1px solid rgba(242,194,48,.4);color:var(--gold);background:transparent;cursor:pointer;white-space:nowrap}
+    .dr-watch-btn:hover{background:rgba(242,194,48,.1)}
+    .dr-remove-btn{color:#ef5350;background:transparent;border:none;cursor:pointer;font-size:.8rem;padding:2px}
+
+    /* Draft complete */
+    .dr-complete{text-align:center;padding:40px 20px}
+    .dr-complete-title{font-family:'Barlow Condensed',sans-serif;font-size:2.2rem;font-weight:900;color:var(--gold);margin-bottom:8px}
+    .dr-grade{font-family:'JetBrains Mono',monospace;font-size:3rem;font-weight:700;margin:16px 0}
+
+    /* Autopick indicator */
+    .dr-auto-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.55rem;font-weight:700;padding:1px 6px;border-radius:3px;background:rgba(79,195,247,.15);color:#4fc3f7;border:1px solid rgba(79,195,247,.3);margin-left:4px;vertical-align:middle}
+
   </style>
   <script src="/assets/ssc-live.js"></script>
 </head>
@@ -405,9 +573,8 @@
 <div id="tab-stats" class="tab-panel">
   <div class="sec-label">// 2025 Season</div>
   <div class="sec-title">NFL Stats</div>
-  <div style="display:flex;gap:10px;margin-bottom:22px;align-items:center">
-    <button class="type-btn active" onclick="showType('player',this)" style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:9px 22px;border-radius:6px;border:2px solid var(--gold);background:var(--gold);color:var(--ink);cursor:pointer;transition:all .2s">👤 Player Stats</button>
-    <button class="type-btn" onclick="showType('team',this)" style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:9px 22px;border-radius:6px;border:2px solid var(--line);background:var(--ink-2);color:var(--muted);cursor:pointer;transition:all .2s">🏟️ Team Stats</button> <a href="/teams/index.html#nfl" style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:9px 22px;border-radius:6px;border:2px solid var(--line);background:var(--ink-2);color:var(--white);cursor:pointer;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;gap:6px">🏟 All Teams →</a>
+  <div style="display:flex;gap:10px;margin-bottom:22px;align-items:center"><button class="type-btn active" onclick="showType('player',this)" style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:9px 22px;border-radius:6px;border:2px solid var(--gold);background:var(--gold);color:var(--ink);cursor:pointer;transition:all .2s">👤 Player Stats</button>
+    <button class="type-btn" onclick="showType('team',this)" style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:9px 22px;border-radius:6px;border:2px solid var(--line);background:var(--ink-2);color:var(--muted);cursor:pointer;transition:all .2s">🏟️ Team Stats</button> <a href="/teams/index.html#nfl" style="display:inline-flex;align-items:center;gap:6px;font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:9px 22px;border-radius:6px;cursor:pointer;transition:all .2s;text-decoration:none;border:2px solid var(--line);background:var(--ink-2);color:var(--white);vertical-align:middle">🏟 All Teams →</a>
   </div>
 
   <!-- PLAYER STATS -->
@@ -438,14 +605,23 @@
       <button class="sub-tab active" onclick="showSub('nfl-team-off')">Offense</button>
       <button class="sub-tab" onclick="showSub('nfl-team-def')">Defense</button>
       <button class="sub-tab" onclick="showSub('nfl-team-spec')">Special Teams</button>
+      <button class="sub-tab" onclick="showSub('nfl-tppg')" style="background:rgba(242,194,48,.08);border-color:rgba(242,194,48,.3);color:var(--gold)">⭐ T-PPG</button>
     </div>
-    <div id="sub-nfl-team-off" class="sub-panel active"><div class="tbl-wrap"></div></div>
-    <div id="sub-nfl-team-def" class="sub-panel"><div class="tbl-wrap"><div class="tbl-wrap">
-  <button class="csv-btn" onclick="exportTableCSV('tbl-nfl-5','nfl_team_defense_2025')" title="Export Team Defense to CSV"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 1v7M3.5 5.5L6 8l2.5-2.5"/><path d="M1 9v1.5a.5.5 0 00.5.5h9a.5.5 0 00.5-.5V9"/></svg> Export CSV</button>
-  <table class="tbl" id="tbl-nfl-5"><thead><tr><th>Team</th><th>PPG Allowed</th><th>YPPG Allowed</th><th>SACK</th><th>INT</th><th>TO</th><th>RZ%</th></tr></thead><tbody><tr><td class="pl"><a href="/teams/nfl-ravens.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">Baltimore Ravens</a></td><td class="hi">16.2</td><td class="">288.4</td><td class="">44</td><td class="">14</td><td class="">28</td><td class="">48.2%</td></tr><tr><td class="pl"><a href="/teams/nfl-ravens.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">Cleveland Browns</a></td><td class="hi">17.4</td><td class="">298.8</td><td class="">38</td><td class="">12</td><td class="">24</td><td class="">50.4%</td></tr><tr><td class="pl"><a href="/teams/nfl-ravens.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">Pittsburgh Steelers</a></td><td class="hi">17.8</td><td class="">304.2</td><td class="">42</td><td class="">11</td><td class="">22</td><td class="">52.2%</td></tr><tr><td class="pl"><a href="/teams/nfl-eagles.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">Dallas Cowboys</a></td><td class="hi">18.2</td><td class="">312.4</td><td class="">36</td><td class="">13</td><td class="">26</td><td class="">54.4%</td></tr><tr><td class="pl"><a href="/teams/nfl-49ers.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">San Francisco 49ers</a></td><td class="hi">18.8</td><td class="">318.8</td><td class="">34</td><td class="">10</td><td class="">20</td><td class="">56.2%</td></tr><tr><td class="pl"><a href="/teams/nfl-chiefs.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">New England Patriots</a></td><td class="hi">19.4</td><td class="">324.2</td><td class="">32</td><td class="">9</td><td class="">18</td><td class="">58.8%</td></tr></tbody></table></div></div></div>
-    <div id="sub-nfl-team-spec" class="sub-panel"><div class="tbl-wrap"><div class="tbl-wrap">
-  <button class="csv-btn" onclick="exportTableCSV('tbl-nfl-6','nfl_special_teams_2025')" title="Export Special Teams to CSV"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 1v7M3.5 5.5L6 8l2.5-2.5"/><path d="M1 9v1.5a.5.5 0 00.5.5h9a.5.5 0 00.5-.5V9"/></svg> Export CSV</button>
-  <table class="tbl" id="tbl-nfl-6"><thead><tr><th>Team</th><th>FG%</th><th>XP%</th><th>Punt AVG</th><th>KO Ret AVG</th><th>Net Punt</th></tr></thead><tbody><tr><td class="pl"><a href="/teams/nfl-ravens.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">Baltimore Ravens</a></td><td class="hi">94.4%</td><td class="">100%</td><td class="">48.8</td><td class="">26.4</td><td class="">42.2</td></tr><tr><td class="pl"><a href="/teams/nfl-chiefs.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">Kansas City Chiefs</a></td><td class="hi">92.8%</td><td class="">98.4%</td><td class="">47.2</td><td class="">24.8</td><td class="">40.8</td></tr><tr><td class="pl"><a href="/teams/nfl-eagles.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">Philadelphia Eagles</a></td><td class="hi">91.2%</td><td class="">97.8%</td><td class="">46.8</td><td class="">25.2</td><td class="">41.4</td></tr><tr><td class="pl"><a href="/teams/nfl-chiefs.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">Buffalo Bills</a></td><td class="hi">90.4%</td><td class="">98.2%</td><td class="">46.2</td><td class="">24.4</td><td class="">40.2</td></tr><tr><td class="pl"><a href="/teams/nfl-chiefs.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">Green Bay Packers</a></td><td class="hi">88.8%</td><td class="">97.4%</td><td class="">45.8</td><td class="">23.8</td><td class="">39.8</td></tr></tbody></table></div></div></div>
+    <div id="sub-nfl-team-off" class="sub-panel active">
+<div style="margin:0 0 14px;padding:8px 14px;background:rgba(242,194,48,.06);border:1px solid rgba(242,194,48,.2);border-radius:7px;font-family:'JetBrains Mono',monospace;font-size:.64rem;color:var(--gold)">★ <em style="color:var(--white)">Italic gold columns</em> are original SSM metrics. T-PPG = ((Off Yds×0.08)+(Opp TO×3)−(Def Yds×0.08)−(Own TO×3))÷G</div>
+<div class="tbl-wrap"><button class="csv-btn" onclick="exportTableCSV('tbl-nfl-team-off','nfl_team_offense_2025')" title="Export CSV"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 1v7M3.5 5.5L6 8l2.5-2.5"/><path d="M1 9v1.5a.5.5 0 00.5.5h9a.5.5 0 00.5-.5V9"/></svg> Export CSV</button><table class="tbl" id="tbl-nfl-team-off"><thead><tr><th>Team</th><th>G</th><th>PPG</th><th>YPPG</th><th>PASS YPG</th><th>RUSH YPG</th><th>3D%</th><th>RZ%</th><th style="color:var(--gold);font-style:italic" title="SSM Metric">T-PPG</th></tr></thead><tbody><tr><td class="pl">Kansas City Chiefs</td><td>13</td><td class="hi">30.4</td><td class="hi">388.2</td><td>268.4</td><td>119.8</td><td>48.2%</td><td>68.4%</td><td class="hi">+7.31</td></tr><tr><td class="pl">Philadelphia Eagles</td><td>13</td><td class="hi">28.8</td><td class="hi">374.4</td><td>244.2</td><td>130.2</td><td>46.8%</td><td>66.2%</td><td class="hi">+6.44</td></tr><tr><td class="pl">Baltimore Ravens</td><td>13</td><td class="hi">28.2</td><td class="hi">368.8</td><td>228.8</td><td>140.0</td><td>45.4%</td><td>64.8%</td><td class="hi">+5.88</td></tr><tr><td class="pl">Detroit Lions</td><td>13</td><td class="hi">27.8</td><td class="hi">362.4</td><td>238.2</td><td>124.2</td><td>47.2%</td><td>62.4%</td><td class="hi">+5.42</td></tr><tr><td class="pl">Miami Dolphins</td><td>13</td><td class="hi">26.4</td><td class="hi">354.2</td><td>264.8</td><td>89.4</td><td>44.8%</td><td>60.2%</td><td class="hi">+4.88</td></tr><tr><td class="pl">San Francisco 49ers</td><td>13</td><td class="hi">25.8</td><td class="hi">348.8</td><td>218.4</td><td>130.4</td><td>43.4%</td><td>58.8%</td><td class="hi">+4.22</td></tr><tr><td class="pl">Buffalo Bills</td><td>13</td><td class="hi">25.2</td><td class="hi">342.4</td><td>232.8</td><td>109.6</td><td>42.8%</td><td>57.4%</td><td class="hi">+3.84</td></tr><tr><td class="pl">Dallas Cowboys</td><td>13</td><td class="hi">24.6</td><td class="hi">336.2</td><td>244.2</td><td>92.0</td><td>41.8%</td><td>56.2%</td><td class="hi">+3.22</td></tr><tr><td class="pl">Cincinnati Bengals</td><td>13</td><td class="hi">24.2</td><td class="hi">330.8</td><td>248.4</td><td>82.4</td><td>41.2%</td><td>54.8%</td><td class="hi">+2.88</td></tr><tr><td class="pl">Jacksonville Jaguars</td><td>13</td><td class="hi">23.8</td><td class="hi">324.4</td><td>238.2</td><td>86.2</td><td>40.4%</td><td>53.4%</td><td class="hi">+2.44</td></tr><tr><td class="pl">Los Angeles Rams</td><td>13</td><td class="hi">23.4</td><td class="hi">318.8</td><td>228.8</td><td>90.0</td><td>40.0%</td><td>52.2%</td><td class="hi">+2.08</td></tr><tr><td class="pl">Minnesota Vikings</td><td>13</td><td class="hi">22.8</td><td class="hi">312.4</td><td>232.4</td><td>80.0</td><td>39.4%</td><td>51.0%</td><td class="hi">+1.62</td></tr></tbody></table></div>
+    </div>
+    <div id="sub-nfl-team-def" class="sub-panel">
+<div class="tbl-wrap"><button class="csv-btn" onclick="exportTableCSV('tbl-nfl-5','nfl_team_defense_2025')" title="Export CSV"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 1v7M3.5 5.5L6 8l2.5-2.5"/><path d="M1 9v1.5a.5.5 0 00.5.5h9a.5.5 0 00.5-.5V9"/></svg> Export CSV</button><table class="tbl" id="tbl-nfl-5"><thead><tr><th>Team</th><th>G</th><th>PPG Allowed</th><th>YPPG Allowed</th><th>PASS YPG All</th><th>RUSH YPG All</th><th>SACK</th><th>INT</th><th>TO</th><th>RZ%</th></tr></thead><tbody><tr><td class="pl">Baltimore Ravens</td><td>13</td><td class="hi">16.2</td><td class="hi">288.4</td><td>192.4</td><td>96.0</td><td>44</td><td>14</td><td>28</td><td>48.2%</td></tr><tr><td class="pl">Cleveland Browns</td><td>13</td><td class="hi">17.4</td><td class="hi">298.8</td><td>204.2</td><td>94.6</td><td>38</td><td>12</td><td>24</td><td>50.4%</td></tr><tr><td class="pl">Pittsburgh Steelers</td><td>13</td><td class="hi">17.8</td><td class="hi">304.2</td><td>208.8</td><td>95.4</td><td>42</td><td>11</td><td>22</td><td>52.2%</td></tr><tr><td class="pl">Dallas Cowboys</td><td>13</td><td class="hi">18.2</td><td class="hi">312.4</td><td>218.4</td><td>94.0</td><td>36</td><td>13</td><td>26</td><td>54.4%</td></tr><tr><td class="pl">San Francisco 49ers</td><td>13</td><td class="hi">18.8</td><td class="hi">318.8</td><td>224.2</td><td>94.6</td><td>34</td><td>10</td><td>20</td><td>56.2%</td></tr><tr><td class="pl">New England Patriots</td><td>13</td><td class="hi">19.4</td><td class="hi">324.2</td><td>228.8</td><td>95.4</td><td>32</td><td>9</td><td>18</td><td>58.8%</td></tr><tr><td class="pl">New York Jets</td><td>13</td><td class="hi">20.2</td><td class="hi">332.4</td><td>234.2</td><td>98.2</td><td>30</td><td>10</td><td>20</td><td>60.2%</td></tr><tr><td class="pl">Los Angeles Chargers</td><td>13</td><td class="hi">20.8</td><td class="hi">338.8</td><td>242.4</td><td>96.4</td><td>28</td><td>8</td><td>16</td><td>61.8%</td></tr><tr><td class="pl">Denver Broncos</td><td>13</td><td class="hi">21.4</td><td class="hi">344.4</td><td>248.8</td><td>95.6</td><td>26</td><td>7</td><td>14</td><td>63.4%</td></tr><tr><td class="pl">Green Bay Packers</td><td>13</td><td class="hi">22.0</td><td class="hi">350.8</td><td>254.2</td><td>96.6</td><td>24</td><td>8</td><td>16</td><td>65.0%</td></tr><tr><td class="pl">Tennessee Titans</td><td>13</td><td class="hi">22.8</td><td class="hi">358.4</td><td>262.4</td><td>96.0</td><td>22</td><td>6</td><td>12</td><td>66.8%</td></tr><tr><td class="pl">Carolina Panthers</td><td>13</td><td class="hi">24.4</td><td class="hi">372.4</td><td>274.8</td><td>97.6</td><td>18</td><td>5</td><td>10</td><td>70.4%</td></tr></tbody></table></div>
+    </div>
+    <div id="sub-nfl-team-spec" class="sub-panel">
+<div class="tbl-wrap"><button class="csv-btn" onclick="exportTableCSV('tbl-nfl-6','nfl_special_teams_2025')" title="Export CSV"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 1v7M3.5 5.5L6 8l2.5-2.5"/><path d="M1 9v1.5a.5.5 0 00.5.5h9a.5.5 0 00.5-.5V9"/></svg> Export CSV</button><table class="tbl" id="tbl-nfl-6"><thead><tr><th>Team</th><th>G</th><th>FG%</th><th>FG Long</th><th>XP%</th><th>Punt AVG</th><th>Net Punt</th><th>KO Ret AVG</th><th>PR AVG</th></tr></thead><tbody><tr><td class="pl">Baltimore Ravens</td><td>13</td><td>94.4%</td><td>61</td><td>100%</td><td>48.8</td><td>42.4</td><td>22.8</td><td>9.4</td></tr><tr><td class="pl">Kansas City Chiefs</td><td>13</td><td>92.8%</td><td>57</td><td>100%</td><td>47.4</td><td>41.2</td><td>23.4</td><td>10.2</td></tr><tr><td class="pl">San Francisco 49ers</td><td>13</td><td>91.2%</td><td>55</td><td>100%</td><td>46.8</td><td>40.8</td><td>22.4</td><td>9.8</td></tr><tr><td class="pl">Dallas Cowboys</td><td>13</td><td>90.4%</td><td>54</td><td>99%</td><td>46.2</td><td>40.2</td><td>21.8</td><td>9.2</td></tr><tr><td class="pl">Buffalo Bills</td><td>13</td><td>89.8%</td><td>53</td><td>100%</td><td>45.8</td><td>39.8</td><td>21.4</td><td>8.8</td></tr><tr><td class="pl">Cincinnati Bengals</td><td>13</td><td>88.4%</td><td>52</td><td>98%</td><td>45.4</td><td>39.4</td><td>21.0</td><td>8.4</td></tr><tr><td class="pl">Philadelphia Eagles</td><td>13</td><td>87.8%</td><td>54</td><td>100%</td><td>45.0</td><td>39.0</td><td>20.8</td><td>8.2</td></tr><tr><td class="pl">Detroit Lions</td><td>13</td><td>86.4%</td><td>51</td><td>99%</td><td>44.6</td><td>38.6</td><td>20.4</td><td>7.8</td></tr><tr><td class="pl">Miami Dolphins</td><td>13</td><td>85.8%</td><td>50</td><td>98%</td><td>44.2</td><td>38.2</td><td>20.0</td><td>7.4</td></tr><tr><td class="pl">Minnesota Vikings</td><td>13</td><td>84.4%</td><td>49</td><td>99%</td><td>43.8</td><td>37.8</td><td>19.6</td><td>7.0</td></tr><tr><td class="pl">New York Jets</td><td>13</td><td>83.2%</td><td>48</td><td>97%</td><td>43.4</td><td>37.4</td><td>19.2</td><td>6.6</td></tr><tr><td class="pl">Green Bay Packers</td><td>13</td><td>82.0%</td><td>47</td><td>98%</td><td>43.0</td><td>37.0</td><td>18.8</td><td>6.2</td></tr></tbody></table></div>
+    </div>
+    <div id="sub-nfl-tppg" class="sub-panel">
+<div style="margin:0 0 14px;padding:8px 14px;background:rgba(242,194,48,.06);border:1px solid rgba(242,194,48,.2);border-radius:7px;font-family:'JetBrains Mono',monospace;font-size:.64rem;color:var(--gold)">★ <em style="color:var(--white)">Italic gold columns</em> are original SSM metrics. T-PPG = ((Off Yds×0.08)+(Opp TO×3)−(Def Yds×0.08)−(Own TO×3))÷G</div>
+      <p class="sec-body" style="margin-bottom:14px">T-PPG = ((Off Yds×0.08)+(Opp TO×3)−(Def Yds×0.08)−(Own TO×3))÷G. Positive = team generates more value than it concedes. All 32 teams ranked.</p>
+<div class="tbl-wrap"><button class="csv-btn" onclick="exportTableCSV('tbl-nfl-tppg','nfl_tppg_rankings_2025')" title="Export CSV"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 1v7M3.5 5.5L6 8l2.5-2.5"/><path d="M1 9v1.5a.5.5 0 00.5.5h9a.5.5 0 00.5-.5V9"/></svg> Export CSV</button><table class="tbl" id="tbl-nfl-tppg"><thead><tr><th>Rank</th><th>Team</th><th>G</th><th>Off YPG</th><th>Def YPG</th><th>Own TO/G</th><th>Opp TO/G</th><th style="color:var(--gold);font-style:italic" title="SSM Metric">T-PPG</th><th style="color:var(--gold);font-style:italic" title="SSM Metric">OVR</th></tr></thead><tbody><tr><td class="pl">1</td><td>Kansas City Chiefs</td><td>13</td><td>388.2</td><td>302.4</td><td>0.92</td><td>1.62</td><td class="hi">+7.31</td><td class="hi">98</td></tr><tr><td class="pl">2</td><td>Philadelphia Eagles</td><td>13</td><td>374.4</td><td>288.8</td><td>0.85</td><td>1.54</td><td class="hi">+6.44</td><td class="hi">95</td></tr><tr><td class="pl">3</td><td>Baltimore Ravens</td><td>13</td><td>368.8</td><td>288.4</td><td>0.77</td><td>1.46</td><td class="hi">+5.88</td><td class="hi">93</td></tr><tr><td class="pl">4</td><td>Detroit Lions</td><td>13</td><td>362.4</td><td>294.2</td><td>0.85</td><td>1.38</td><td class="hi">+5.42</td><td class="hi">91</td></tr><tr><td class="pl">5</td><td>Miami Dolphins</td><td>13</td><td>354.2</td><td>298.8</td><td>0.92</td><td>1.31</td><td class="hi">+4.88</td><td class="hi">89</td></tr><tr><td class="pl">6</td><td>San Francisco 49ers</td><td>13</td><td>348.8</td><td>318.8</td><td>0.77</td><td>1.54</td><td class="hi">+4.22</td><td class="hi">87</td></tr><tr><td class="pl">7</td><td>Buffalo Bills</td><td>13</td><td>342.4</td><td>308.4</td><td>0.85</td><td>1.38</td><td class="hi">+3.84</td><td class="hi">85</td></tr><tr><td class="pl">8</td><td>Dallas Cowboys</td><td>13</td><td>336.2</td><td>312.4</td><td>1.00</td><td>1.62</td><td class="hi">+3.22</td><td class="hi">83</td></tr><tr><td class="pl">9</td><td>Cincinnati Bengals</td><td>13</td><td>330.8</td><td>318.8</td><td>1.08</td><td>1.46</td><td class="hi">+2.88</td><td class="hi">82</td></tr><tr><td class="pl">10</td><td>Jacksonville Jaguars</td><td>13</td><td>324.4</td><td>322.4</td><td>1.00</td><td>1.31</td><td class="hi">+2.44</td><td class="hi">80</td></tr><tr><td class="pl">11</td><td>Los Angeles Rams</td><td>13</td><td>318.8</td><td>326.2</td><td>0.92</td><td>1.23</td><td class="hi">+2.08</td><td class="hi">78</td></tr><tr><td class="pl">12</td><td>Minnesota Vikings</td><td>13</td><td>312.4</td><td>328.8</td><td>0.85</td><td>1.15</td><td class="hi">+1.62</td><td class="hi">76</td></tr><tr><td class="pl">13</td><td>Cleveland Browns</td><td>13</td><td>298.4</td><td>298.8</td><td>1.08</td><td>1.85</td><td class="hi">+1.14</td><td class="hi">74</td></tr><tr><td class="pl">14</td><td>Pittsburgh Steelers</td><td>13</td><td>288.8</td><td>304.2</td><td>1.15</td><td>1.69</td><td class="hi">+0.88</td><td class="hi">72</td></tr><tr><td class="pl">15</td><td>New York Giants</td><td>13</td><td>284.4</td><td>318.4</td><td>1.23</td><td>1.31</td><td class="hi">+0.22</td><td class="hi">70</td></tr><tr><td class="pl">16</td><td>Indianapolis Colts</td><td>13</td><td>280.8</td><td>322.8</td><td>1.15</td><td>1.15</td><td class="hi">-0.08</td><td class="hi">68</td></tr><tr><td class="pl">17</td><td>Los Angeles Chargers</td><td>13</td><td>276.4</td><td>338.8</td><td>1.31</td><td>1.23</td><td class="hi">-0.88</td><td class="hi">66</td></tr><tr><td class="pl">18</td><td>Denver Broncos</td><td>13</td><td>272.8</td><td>344.4</td><td>1.38</td><td>1.15</td><td class="hi">-1.22</td><td class="hi">64</td></tr><tr><td class="pl">19</td><td>New York Jets</td><td>13</td><td>268.4</td><td>332.4</td><td>1.46</td><td>1.23</td><td class="hi">-1.44</td><td class="hi">62</td></tr><tr><td class="pl">20</td><td>Green Bay Packers</td><td>13</td><td>264.8</td><td>350.8</td><td>1.31</td><td>1.08</td><td class="hi">-0.44</td><td class="hi">60</td></tr><tr><td class="pl">21</td><td>Seattle Seahawks</td><td>13</td><td>260.4</td><td>358.4</td><td>1.38</td><td>1.00</td><td class="hi">-1.88</td><td class="hi">58</td></tr><tr><td class="pl">22</td><td>New England Patriots</td><td>13</td><td>256.8</td><td>324.2</td><td>1.54</td><td>0.92</td><td class="hi">-2.14</td><td class="hi">56</td></tr><tr><td class="pl">23</td><td>Tennessee Titans</td><td>13</td><td>252.4</td><td>358.4</td><td>1.62</td><td>0.85</td><td class="hi">-2.88</td><td class="hi">54</td></tr><tr><td class="pl">24</td><td>New Orleans Saints</td><td>13</td><td>248.8</td><td>362.8</td><td>1.69</td><td>0.77</td><td class="hi">-3.22</td><td class="hi">52</td></tr><tr><td class="pl">25</td><td>Arizona Cardinals</td><td>13</td><td>244.4</td><td>368.4</td><td>1.77</td><td>0.69</td><td class="hi">-3.88</td><td class="hi">50</td></tr><tr><td class="pl">26</td><td>Las Vegas Raiders</td><td>13</td><td>240.8</td><td>374.2</td><td>1.85</td><td>0.62</td><td class="hi">-4.44</td><td class="hi">48</td></tr><tr><td class="pl">27</td><td>Atlanta Falcons</td><td>13</td><td>236.4</td><td>380.8</td><td>1.92</td><td>0.54</td><td class="hi">-4.88</td><td class="hi">46</td></tr><tr><td class="pl">28</td><td>Tampa Bay Buccaneers</td><td>13</td><td>232.8</td><td>386.4</td><td>2.00</td><td>0.46</td><td class="hi">-5.22</td><td class="hi">44</td></tr><tr><td class="pl">29</td><td>Carolina Panthers</td><td>13</td><td>228.4</td><td>372.4</td><td>2.08</td><td>0.54</td><td class="hi">-5.44</td><td class="hi">42</td></tr><tr><td class="pl">30</td><td>Washington Commanders</td><td>13</td><td>224.8</td><td>392.8</td><td>2.15</td><td>0.46</td><td class="hi">-5.88</td><td class="hi">40</td></tr><tr><td class="pl">31</td><td>Chicago Bears</td><td>13</td><td>220.4</td><td>398.4</td><td>2.23</td><td>0.38</td><td class="hi">-6.22</td><td class="hi">38</td></tr><tr><td class="pl">32</td><td>Houston Texans</td><td>13</td><td>216.8</td><td>404.2</td><td>2.31</td><td>0.31</td><td class="hi">-6.88</td><td class="hi">36</td></tr></tbody></table></div>
+    </div>
   </div>
 
 <div style="margin-top:24px;border-top:1px solid var(--line);padding-top:20px">
@@ -566,29 +742,204 @@
 
 <div id="tab-fantasy" class="tab-panel">
   <div class="sec-label">// NFL Fantasy</div>
-  <div class="sec-title">Fantasy & Games</div>
-  <div class="sec-body">Test your football IQ with our interactive games, or manage your fantasy leagues.</div>
-  <div class="fantasy-grid">
-    <div class="f-card" onclick="showTab('guess')">
-      <div class="f-icon">🔮</div>
-      <h3>Guess the <span>Play</span></h3>
-      <p>Test your play-calling instincts using real NFL play-by-play data from 2013–2024. 15 seconds per play.</p>
-      <span class="f-tag">New Feature</span>
-    </div>
-    <div class="f-card">
-      <div class="f-icon">👥</div>
-      <h3>Fantasy <span>Leagues</span></h3>
-      <p>Manage your teams, waivers, trades, and weekly matchups all in one place.</p>
-      <span class="f-tag">Coming Soon</span>
-    </div>
-    <div class="f-card">
-      <div class="f-icon">🏆</div>
-      <h3>Prediction <span>Leaderboard</span></h3>
-      <p>See how your prediction accuracy stacks up against other fans globally.</p>
-      <span class="f-tag">Coming Soon</span>
+  <div class="sec-title">Fantasy League</div>
+
+  <!-- ── TOP NAV ── -->
+  <div class="fl-nav" id="fl-nav">
+    <button class="fl-nav-btn active" onclick="flShow('setup')">⚙️ Setup</button>
+    <button class="fl-nav-btn" onclick="flShow('dashboard')">🏠 Dashboard</button>
+    <button class="fl-nav-btn" onclick="flShow('roster')">📋 My Roster</button>
+    <button class="fl-nav-btn" onclick="flShow('matchup')">⚔️ Matchup</button>
+    <button class="fl-nav-btn" onclick="flShow('standings')">🏆 Standings</button>
+    <button class="fl-nav-btn" onclick="flShow('waiver')">📥 Waivers</button>
+    <button class="fl-nav-btn" onclick="flShow('trade')">🔄 Trade</button>
+    <button class="fl-nav-btn" onclick="flShow('scoring')">📊 Scoring</button>
+    <button class="fl-nav-btn" onclick="flShow('draft')" style="background:rgba(242,194,48,.08);border-color:rgba(242,194,48,.3);color:var(--gold)">🏈 Draft Room</button>
+  </div>
+
+  <!-- ════════════════════ SETUP ════════════════════ -->
+  <div class="fl-panel active" id="fl-setup">
+    <div class="fl-wizard">
+      <div class="fl-step">
+        <div class="fl-step-title">Step 1 — League Info</div>
+        <div class="fl-row">
+          <div>
+            <label class="fl-input-label">League Name</label>
+            <input class="fl-input" id="fl-league-name" placeholder="My Fantasy League" value="SSC Fantasy League">
+          </div>
+          <div>
+            <label class="fl-input-label">Commissioner</label>
+            <input class="fl-input" id="fl-commissioner" placeholder="Your name">
+          </div>
+        </div>
+        <div class="fl-row-3">
+          <div>
+            <label class="fl-input-label">Teams</label>
+            <select class="fl-input" id="fl-teams">
+              <option value="8">8 Teams</option>
+              <option value="10" selected>10 Teams</option>
+              <option value="12">12 Teams</option>
+              <option value="14">14 Teams</option>
+            </select>
+          </div>
+          <div>
+            <label class="fl-input-label">Season</label>
+            <select class="fl-input" id="fl-season">
+              <option value="2025" selected>2025 Season</option>
+              <option value="2024">2024 Season</option>
+            </select>
+          </div>
+          <div>
+            <label class="fl-input-label">Draft Type</label>
+            <select class="fl-input" id="fl-draft-type">
+              <option value="snake">Snake Draft</option>
+              <option value="auction">Auction</option>
+              <option value="auto">Auto Draft</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="fl-step">
+        <div class="fl-step-title">Step 2 — Scoring System</div>
+        <p style="font-size:.8rem;color:var(--muted);margin-bottom:14px">Choose how your league scores points. SSM metrics use the original Points Per Down / PPG methodology from <em>The Sports Statistics Manual</em>.</p>
+        <div class="fl-scoring-grid">
+
+          <div class="fl-scoring-opt selected" onclick="flSelectScoring(this,'ssm-ppg')" data-scoring="ssm-ppg">
+            <div class="fl-scoring-opt-title">⭐ SSM Full PPG</div>
+            <div class="fl-scoring-opt-sub">Q-PPG · RB-PPG · WR-PPG · K-PPG. Every scoring decision is context-weighted by field zone, down, and distance. The most analytically complete scoring system.</div>
+            <span class="fl-scoring-opt-badge fl-badge-ssm">SSM Metric</span>
+          </div>
+
+          <div class="fl-scoring-opt" onclick="flSelectScoring(this,'ssm-hybrid')" data-scoring="ssm-hybrid">
+            <div class="fl-scoring-opt-title">⭐ SSM Hybrid</div>
+            <div class="fl-scoring-opt-sub">Standard touchdowns + yardage as the base, with SSM PPG multipliers as a bonus modifier. Easier transition from standard leagues.</div>
+            <span class="fl-scoring-opt-badge fl-badge-ssm">SSM Metric</span>
+          </div>
+
+          <div class="fl-scoring-opt" onclick="flSelectScoring(this,'ppr')" data-scoring="ppr">
+            <div class="fl-scoring-opt-title">Standard PPR</div>
+            <div class="fl-scoring-opt-sub">1 point per reception. TD = 6 pts. 1 pt per 10 rush yards, 1 pt per 25 pass yards. The most common format in established leagues.</div>
+            <span class="fl-scoring-opt-badge fl-badge-std">Standard</span>
+          </div>
+
+          <div class="fl-scoring-opt" onclick="flSelectScoring(this,'half-ppr')" data-scoring="half-ppr">
+            <div class="fl-scoring-opt-title">Half PPR</div>
+            <div class="fl-scoring-opt-sub">0.5 points per reception. Balances the value of volume receivers vs. big-play receivers. Popular compromise format.</div>
+            <span class="fl-scoring-opt-badge fl-badge-std">Standard</span>
+          </div>
+
+          <div class="fl-scoring-opt" onclick="flSelectScoring(this,'standard')" data-scoring="standard">
+            <div class="fl-scoring-opt-title">No PPR</div>
+            <div class="fl-scoring-opt-sub">Receptions worth 0 points. Rushing and receiving touchdowns = 6 pts. Rewards big-play efficiency over volume.</div>
+            <span class="fl-scoring-opt-badge fl-badge-std">Standard</span>
+          </div>
+
+          <div class="fl-scoring-opt" onclick="flSelectScoring(this,'td-only')" data-scoring="td-only">
+            <div class="fl-scoring-opt-title">TD Only</div>
+            <div class="fl-scoring-opt-sub">Only touchdowns score. QB TD = 4 pts, Skill TD = 6 pts. High variance, great for casual or office leagues.</div>
+            <span class="fl-scoring-opt-badge fl-badge-std">Standard</span>
+          </div>
+        </div>
+        <div id="fl-scoring-desc" style="margin-top:12px;padding:12px 16px;background:var(--ink-3);border-radius:8px;font-size:.78rem;color:var(--muted);line-height:1.6;border-left:3px solid var(--gold)">
+          <strong style="color:var(--gold)">SSM Full PPG selected.</strong> Each play is scored using the Points Per Down formula — completions, rushing, and receptions are all weighted by field zone (5 zones from own 1–19 to red zone) and down/distance. Q-PPG for QBs, RB-PPG for running backs, WR-PPG for receivers. See the Scoring tab for full breakdown.
+        </div>
+      </div>
+
+      <div class="fl-step">
+        <div class="fl-step-title">Step 3 — Roster Slots</div>
+        <div class="fl-row-3">
+          <div>
+            <label class="fl-input-label">QB Starters</label>
+            <select class="fl-input" id="fl-slot-qb"><option>1</option><option>2</option></select>
+          </div>
+          <div>
+            <label class="fl-input-label">RB Starters</label>
+            <select class="fl-input" id="fl-slot-rb"><option>1</option><option value="2" selected>2</option><option>3</option></select>
+          </div>
+          <div>
+            <label class="fl-input-label">WR Starters</label>
+            <select class="fl-input" id="fl-slot-wr"><option>1</option><option>2</option><option value="3" selected>3</option></select>
+          </div>
+          <div>
+            <label class="fl-input-label">TE Starters</label>
+            <select class="fl-input" id="fl-slot-te"><option value="1" selected>1</option><option>2</option></select>
+          </div>
+          <div>
+            <label class="fl-input-label">FLEX (RB/WR/TE)</label>
+            <select class="fl-input" id="fl-slot-flex"><option>0</option><option value="1" selected>1</option><option>2</option></select>
+          </div>
+          <div>
+            <label class="fl-input-label">K / DEF</label>
+            <select class="fl-input" id="fl-slot-k"><option value="1" selected>1 K + 1 DEF</option><option>1 K only</option><option>No K/DEF</option></select>
+          </div>
+        </div>
+        <div>
+          <label class="fl-input-label">Bench Spots</label>
+          <select class="fl-input" style="max-width:200px" id="fl-slot-bench">
+            <option>4</option><option value="5" selected>5</option><option>6</option><option>7</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="fl-step">
+        <div class="fl-step-title">Step 4 — Team Names</div>
+        <p style="font-size:.78rem;color:var(--muted);margin-bottom:14px">Enter team names. Your team goes first.</p>
+        <div id="fl-team-names" style="display:grid;grid-template-columns:1fr 1fr;gap:8px"></div>
+      </div>
+
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
+        <button class="fl-btn fl-btn-secondary" onclick="flReset()">Reset</button>
+        <button class="fl-btn fl-btn-primary" onclick="flCreate()">Create League →</button>
+      </div>
     </div>
   </div>
+
+  <!-- ════════════════════ DASHBOARD ════════════════════ -->
+  <div class="fl-panel" id="fl-dashboard">
+    <div id="fl-dashboard-content"></div>
+  </div>
+
+  <!-- ════════════════════ ROSTER ════════════════════ -->
+  <div class="fl-panel" id="fl-roster">
+    <div id="fl-roster-content"></div>
+  </div>
+
+  <!-- ════════════════════ MATCHUP ════════════════════ -->
+  <div class="fl-panel" id="fl-matchup">
+    <div id="fl-matchup-content"></div>
+  </div>
+
+  <!-- ════════════════════ STANDINGS ════════════════════ -->
+  <div class="fl-panel" id="fl-standings">
+    <div id="fl-standings-content"></div>
+  </div>
+
+  <!-- ════════════════════ WAIVER ════════════════════ -->
+  <div class="fl-panel" id="fl-waiver">
+    <div id="fl-waiver-content"></div>
+  </div>
+
+  <!-- ════════════════════ TRADE ════════════════════ -->
+  <div class="fl-panel" id="fl-trade">
+    <div id="fl-trade-content"></div>
+  </div>
+
+  <!-- ════════════════════ SCORING ════════════════════ -->
+  <div class="fl-panel" id="fl-scoring">
+    <div id="fl-scoring-content"></div>
+  </div>
+
 </div>
+
+  <!-- ════════════ DRAFT ROOM ════════════ -->
+  <div class="fl-panel" id="fl-draft">
+    <div id="fl-draft-content">
+      <div style="text-align:center;padding:40px;color:var(--muted)">Create your league first in the Setup tab.</div>
+    </div>
+  </div>
+
+
 
 <!-- GUESS THE PLAY -->
 <div id="tab-guess" class="tab-panel">
@@ -1110,6 +1461,1368 @@ function initSortableTables() {
   });
 }
 document.addEventListener('DOMContentLoaded', initSortableTables);
+</script>
+<script>
+
+// ══════════════════════════════════════════════════════════════
+// ── NFL FANTASY LEAGUE ENGINE ─────────────────────────────────
+// ══════════════════════════════════════════════════════════════
+
+// ── SCORING SYSTEMS ────────────────────────────────────────────
+const FL_SCORING = {
+  'ssm-ppg': {
+    name: 'SSM Full PPG',
+    desc: 'Q-PPG, RB-PPG, WR-PPG — context-weighted by field zone and down.',
+    rules: [
+      {cat:'Quarterback', stat:'Q-PPG Points',      pts:'Full PPG value', ssm:true},
+      {cat:'Quarterback', stat:'TD Pass',            pts:'+4.0', ssm:false},
+      {cat:'Quarterback', stat:'INT Thrown',         pts:'-2.0', ssm:false},
+      {cat:'Quarterback', stat:'Rush TD',            pts:'+6.0', ssm:false},
+      {cat:'Running Back', stat:'RB-PPG Points',     pts:'Full PPG value', ssm:true},
+      {cat:'Running Back', stat:'Rush TD',           pts:'+6.0', ssm:false},
+      {cat:'Running Back', stat:'Reception (PPR)',   pts:'+0.5', ssm:false},
+      {cat:'Wide Receiver', stat:'WR-PPG Points',    pts:'Full PPG value', ssm:true},
+      {cat:'Wide Receiver', stat:'Receiving TD',     pts:'+6.0', ssm:false},
+      {cat:'Tight End', stat:'WR-PPG Points',        pts:'Full PPG value', ssm:true},
+      {cat:'Tight End', stat:'Receiving TD',         pts:'+6.0', ssm:false},
+      {cat:'Kicker', stat:'FG 0-39 yds',            pts:'+3.0', ssm:false},
+      {cat:'Kicker', stat:'FG 40-49 yds',           pts:'+4.0', ssm:false},
+      {cat:'Kicker', stat:'FG 50+ yds',             pts:'+5.0', ssm:false},
+      {cat:'Defense', stat:'Sack',                   pts:'+1.0', ssm:false},
+      {cat:'Defense', stat:'INT',                    pts:'+2.0', ssm:false},
+      {cat:'Defense', stat:'TD',                     pts:'+6.0', ssm:false},
+    ]
+  },
+  'ssm-hybrid': {
+    name: 'SSM Hybrid',
+    desc: 'Standard scoring + SSM PPG as a bonus modifier column.',
+    rules: [
+      {cat:'Quarterback', stat:'Pass Yards (per 25)', pts:'+1.0', ssm:false},
+      {cat:'Quarterback', stat:'TD Pass',             pts:'+4.0', ssm:false},
+      {cat:'Quarterback', stat:'INT Thrown',          pts:'-2.0', ssm:false},
+      {cat:'Quarterback', stat:'Q-PPG Bonus',         pts:'+PPG×0.5', ssm:true},
+      {cat:'Running Back', stat:'Rush Yards (per 10)',pts:'+1.0', ssm:false},
+      {cat:'Running Back', stat:'Rush TD',            pts:'+6.0', ssm:false},
+      {cat:'Running Back', stat:'Reception',          pts:'+0.5', ssm:false},
+      {cat:'Running Back', stat:'RB-PPG Bonus',       pts:'+PPG×0.4', ssm:true},
+      {cat:'Wide Receiver', stat:'Rec Yards (per 10)',pts:'+1.0', ssm:false},
+      {cat:'Wide Receiver', stat:'Receiving TD',      pts:'+6.0', ssm:false},
+      {cat:'Wide Receiver', stat:'Reception',         pts:'+1.0', ssm:false},
+      {cat:'Wide Receiver', stat:'WR-PPG Bonus',      pts:'+PPG×0.4', ssm:true},
+      {cat:'Kicker', stat:'FG Made',                  pts:'+3-5', ssm:false},
+      {cat:'Defense', stat:'Sack / INT / TD',         pts:'+1/+2/+6', ssm:false},
+    ]
+  },
+  'ppr': {
+    name: 'Standard PPR',
+    desc: '1 point per reception. The most popular format.',
+    rules: [
+      {cat:'Quarterback', stat:'Pass Yards (per 25)', pts:'+1.0', ssm:false},
+      {cat:'Quarterback', stat:'TD Pass',             pts:'+4.0', ssm:false},
+      {cat:'Quarterback', stat:'INT',                 pts:'-2.0', ssm:false},
+      {cat:'Quarterback', stat:'Rush Yards (per 10)', pts:'+1.0', ssm:false},
+      {cat:'Quarterback', stat:'Rush TD',             pts:'+6.0', ssm:false},
+      {cat:'Running Back', stat:'Rush Yards (per 10)',pts:'+1.0', ssm:false},
+      {cat:'Running Back', stat:'Rush TD',            pts:'+6.0', ssm:false},
+      {cat:'Running Back', stat:'Reception',          pts:'+1.0', ssm:false},
+      {cat:'Running Back', stat:'Rec Yards (per 10)', pts:'+1.0', ssm:false},
+      {cat:'Wide Receiver', stat:'Reception',         pts:'+1.0', ssm:false},
+      {cat:'Wide Receiver', stat:'Rec Yards (per 10)',pts:'+1.0', ssm:false},
+      {cat:'Wide Receiver', stat:'Receiving TD',      pts:'+6.0', ssm:false},
+      {cat:'Tight End', stat:'Reception',             pts:'+1.0', ssm:false},
+      {cat:'Tight End', stat:'Rec Yards (per 10)',    pts:'+1.0', ssm:false},
+      {cat:'Tight End', stat:'Receiving TD',          pts:'+6.0', ssm:false},
+      {cat:'Kicker', stat:'FG 0-39',                  pts:'+3.0', ssm:false},
+      {cat:'Kicker', stat:'FG 40-49',                 pts:'+4.0', ssm:false},
+      {cat:'Kicker', stat:'FG 50+',                   pts:'+5.0', ssm:false},
+      {cat:'Defense', stat:'Sack',                    pts:'+1.0', ssm:false},
+      {cat:'Defense', stat:'INT',                     pts:'+2.0', ssm:false},
+      {cat:'Defense', stat:'Fumble Recovery',         pts:'+2.0', ssm:false},
+      {cat:'Defense', stat:'TD',                      pts:'+6.0', ssm:false},
+    ]
+  },
+  'half-ppr': {
+    name: 'Half PPR',
+    desc: '0.5 points per reception. Popular compromise format.',
+    rules: [] // same as PPR with 0.5 per rec
+  },
+  'standard': {
+    name: 'No PPR',
+    desc: 'No reception points. Pure yardage and touchdowns.',
+    rules: []
+  },
+  'td-only': {
+    name: 'TD Only',
+    desc: 'Only touchdowns score. High variance, casual friendly.',
+    rules: [
+      {cat:'Quarterback', stat:'TD Pass',   pts:'+4.0', ssm:false},
+      {cat:'Quarterback', stat:'Rush TD',   pts:'+6.0', ssm:false},
+      {cat:'Running Back', stat:'Rush TD',  pts:'+6.0', ssm:false},
+      {cat:'Running Back', stat:'Rec TD',   pts:'+6.0', ssm:false},
+      {cat:'Wide Receiver', stat:'Rec TD',  pts:'+6.0', ssm:false},
+      {cat:'Tight End', stat:'Rec TD',      pts:'+6.0', ssm:false},
+      {cat:'Defense', stat:'TD',            pts:'+6.0', ssm:false},
+    ]
+  },
+};
+
+// ── 2025 PLAYER POOL ───────────────────────────────────────────
+const FL_PLAYERS = [
+  // QB
+  {name:'P. Mahomes', team:'KC',  pos:'QB', byeWk:10, qppg:9.42, stdPts:28.4, proj:28.2, status:'Active'},
+  {name:'L. Jackson', team:'BAL', pos:'QB', byeWk:14, qppg:9.28, stdPts:27.8, proj:27.5, status:'Active'},
+  {name:'J. Hurts',   team:'PHI', pos:'QB', byeWk: 5, qppg:8.84, stdPts:26.4, proj:26.0, status:'Active'},
+  {name:'J. Burrow',  team:'CIN', pos:'QB', byeWk:12, qppg:8.14, stdPts:24.2, proj:23.8, status:'Active'},
+  {name:'J. Goff',    team:'DET', pos:'QB', byeWk: 9, qppg:8.04, stdPts:23.8, proj:23.2, status:'Active'},
+  {name:'D. Prescott', team:'DAL',pos:'QB', byeWk: 7, qppg:7.22, stdPts:21.4, proj:20.8, status:'Active'},
+  {name:'T. Lawrence', team:'JAX',pos:'QB', byeWk:12, qppg:7.08, stdPts:20.8, proj:20.2, status:'Active'},
+  {name:'J. Allen',   team:'BUF', pos:'QB', byeWk:12, qppg:8.44, stdPts:25.4, proj:25.0, status:'Active'},
+  // RB
+  {name:'C. McCaffrey',team:'SF', pos:'RB', byeWk: 9, rbppg:6.88, stdPts:24.2, proj:23.8, status:'Active'},
+  {name:'S. Barkley',  team:'PHI',pos:'RB', byeWk: 5, rbppg:6.52, stdPts:22.4, proj:22.0, status:'Active'},
+  {name:'D. Achane',   team:'MIA',pos:'RB', byeWk:10, rbppg:6.44, stdPts:21.8, proj:21.4, status:'Active'},
+  {name:'J. Gibbs',    team:'DET',pos:'RB', byeWk: 9, rbppg:6.32, stdPts:21.2, proj:20.8, status:'Active'},
+  {name:'D. Henry',    team:'TEN',pos:'RB', byeWk: 5, rbppg:6.24, stdPts:20.8, proj:20.4, status:'Active'},
+  {name:'T. Pollard',  team:'TEN',pos:'RB', byeWk: 5, rbppg:5.94, stdPts:19.4, proj:18.8, status:'Active'},
+  {name:'J. Mixon',    team:'HOU',pos:'RB', byeWk:14, rbppg:5.44, stdPts:17.8, proj:17.2, status:'Active'},
+  {name:'R. Stevenson',team:'NE', pos:'RB', byeWk:14, rbppg:4.88, stdPts:15.4, proj:14.8, status:'Active'},
+  {name:'A. Jones',    team:'MIN',pos:'RB', byeWk:13, rbppg:4.72, stdPts:14.8, proj:14.2, status:'Active'},
+  {name:'T. Etienne',  team:'JAX',pos:'RB', byeWk:12, rbppg:5.12, stdPts:16.8, proj:16.2, status:'Q'},
+  // WR
+  {name:'T. Hill',     team:'MIA',pos:'WR', byeWk:10, wrppg:4.80, stdPts:22.4, proj:22.0, status:'Active'},
+  {name:'J. Chase',    team:'CIN',pos:'WR', byeWk:12, wrppg:4.90, stdPts:22.8, proj:22.4, status:'Active'},
+  {name:'C. Lamb',     team:'DAL',pos:'WR', byeWk: 7, wrppg:4.32, stdPts:20.4, proj:20.0, status:'Active'},
+  {name:'S. Diggs',    team:'BUF',pos:'WR', byeWk:12, wrppg:3.88, stdPts:18.4, proj:17.8, status:'Active'},
+  {name:'D. Adams',    team:'LV', pos:'WR', byeWk:13, wrppg:3.75, stdPts:17.8, proj:17.2, status:'Active'},
+  {name:'A. Cooper',   team:'CLE',pos:'WR', byeWk:10, wrppg:3.63, stdPts:17.2, proj:16.6, status:'Active'},
+  {name:'J. Jefferson', team:'MIN',pos:'WR',byeWk:13, wrppg:4.44, stdPts:21.0, proj:20.6, status:'Active'},
+  {name:'D. Hopkins',  team:'TEN',pos:'WR', byeWk: 5, wrppg:3.42, stdPts:16.2, proj:15.6, status:'Active'},
+  {name:'G. Pickens',  team:'PIT',pos:'WR', byeWk:11, wrppg:3.28, stdPts:15.4, proj:14.8, status:'Active'},
+  {name:'C. Olave',    team:'NO', pos:'WR', byeWk:11, wrppg:3.44, stdPts:16.4, proj:15.8, status:'Q'},
+  // TE
+  {name:'T. Kelce',    team:'KC', pos:'TE', byeWk:10, wrppg:3.62, stdPts:17.2, proj:16.8, status:'Active'},
+  {name:'M. Andrews',  team:'BAL',pos:'TE', byeWk:14, wrppg:2.88, stdPts:13.4, proj:13.0, status:'Active'},
+  {name:'T. Hockenson',team:'MIN',pos:'TE', byeWk:13, wrppg:2.64, stdPts:12.2, proj:11.8, status:'Active'},
+  {name:'D. Schultz',  team:'HOU',pos:'TE', byeWk:14, wrppg:2.44, stdPts:11.2, proj:10.8, status:'Active'},
+  {name:'E. Engram',   team:'JAX',pos:'TE', byeWk:12, wrppg:2.38, stdPts:11.0, proj:10.4, status:'Active'},
+  // K
+  {name:'J. Tucker',   team:'BAL',pos:'K',  byeWk:14, stdPts:9.4, proj:9.2, status:'Active'},
+  {name:'E. McPherson',team:'CIN',pos:'K',  byeWk:12, stdPts:8.8, proj:8.6, status:'Active'},
+  {name:'H. Butker',   team:'KC', pos:'K',  byeWk:10, stdPts:8.6, proj:8.4, status:'Active'},
+  {name:'B. McManus',  team:'CAR',pos:'K',  byeWk: 5, stdPts:8.0, proj:7.8, status:'Active'},
+  // DEF
+  {name:'49ers DEF',   team:'SF', pos:'DEF',byeWk: 9, stdPts:10.2, proj:10.0, status:'Active'},
+  {name:'Cowboys DEF', team:'DAL',pos:'DEF',byeWk: 7, stdPts:9.8,  proj: 9.6, status:'Active'},
+  {name:'Eagles DEF',  team:'PHI',pos:'DEF',byeWk: 5, stdPts:9.4,  proj: 9.2, status:'Active'},
+  {name:'Bills DEF',   team:'BUF',pos:'DEF',byeWk:12, stdPts:9.0,  proj: 8.8, status:'Active'},
+  {name:'Browns DEF',  team:'CLE',pos:'DEF',byeWk:10, stdPts:8.6,  proj: 8.4, status:'Active'},
+];
+
+// ── LEAGUE STATE ───────────────────────────────────────────────
+let FL = {
+  created: false,
+  name: 'SSC Fantasy League',
+  scoring: 'ssm-ppg',
+  teams: 10,
+  season: 2025,
+  week: 1,
+  myTeam: 0,
+  teamNames: [],
+  rosters: [],      // rosters[teamIdx] = [playerIdx, ...]
+  waiverOrder: [],
+  matchups: [],     // matchups[week] = [{home, away, hScore, aScore}]
+  standings: [],    // {teamIdx, w, l, pf, pa}
+  transactions: [],
+};
+
+// ── SETUP HELPERS ──────────────────────────────────────────────
+function flSelectScoring(el, key) {
+  document.querySelectorAll('.fl-scoring-opt').forEach(o=>o.classList.remove('selected'));
+  el.classList.add('selected');
+  FL.scoring = key;
+  const s = FL_SCORING[key];
+  const desc = document.getElementById('fl-scoring-desc');
+  if (desc) {
+    const isSSM = key.startsWith('ssm');
+    desc.innerHTML = `<strong style="color:${isSSM?'var(--gold)':'#4fc3f7'}">${s.name} selected.</strong> ${s.desc}`;
+    desc.style.borderLeftColor = isSSM ? 'var(--gold)' : '#4fc3f7';
+  }
+  // Update team count for team name fields
+  flGenTeamFields();
+}
+
+function flGenTeamFields() {
+  const n = parseInt(document.getElementById('fl-teams')?.value||10);
+  const wrap = document.getElementById('fl-team-names');
+  if (!wrap) return;
+  wrap.innerHTML = '';
+  for (let i=0; i<n; i++) {
+    const val = FL.teamNames[i] || (i===0?'My Team':`Team ${i+1}`);
+    wrap.innerHTML += `<div>
+      <label class="fl-input-label">${i===0?'★ Your Team':'Team '+(i+1)}</label>
+      <input class="fl-input" id="fl-tn-${i}" value="${val}" placeholder="Team ${i+1} name">
+    </div>`;
+  }
+}
+
+function flCreate() {
+  const n = parseInt(document.getElementById('fl-teams')?.value||10);
+  FL.name        = document.getElementById('fl-league-name')?.value || 'SSC Fantasy League';
+  FL.scoring     = FL.scoring || 'ssm-ppg';
+  FL.teams       = n;
+  FL.season      = parseInt(document.getElementById('fl-season')?.value||2025);
+  FL.week        = 1;
+  FL.myTeam      = 0;
+  FL.teamNames   = Array.from({length:n},(_,i)=>document.getElementById(`fl-tn-${i}`)?.value||`Team ${i+1}`);
+
+  // Auto-draft rosters (snake style simulation)
+  const pool = [...FL_PLAYERS];
+  FL.rosters = Array.from({length:n},()=>[]);
+  const slots = parseInt(document.getElementById('fl-slot-qb')?.value||1)
+    + parseInt(document.getElementById('fl-slot-rb')?.value||2)
+    + parseInt(document.getElementById('fl-slot-wr')?.value||3)
+    + parseInt(document.getElementById('fl-slot-te')?.value||1)
+    + parseInt(document.getElementById('fl-slot-flex')?.value||1)
+    + (document.getElementById('fl-slot-k')?.value?.includes('DEF')?2:1)
+    + parseInt(document.getElementById('fl-slot-bench')?.value||5);
+
+  // Sort pool by projected value for auto-draft
+  const sorted = pool
+    .map((p,i)=>({...p,idx:i}))
+    .sort((a,b)=>(b.proj||0)-(a.proj||0));
+
+  let pick=0, dir=1, team=0;
+  for (let r=0; r<slots && sorted.length>0; r++) {
+    for (let t=0; t<n && sorted.length>0; t++) {
+      const team = dir>0?t:(n-1-t);
+      FL.rosters[team].push(sorted.shift().idx);
+    }
+    dir*=-1;
+  }
+
+  // Generate matchup schedule
+  FL.matchups = [];
+  for (let w=1; w<=17; w++) {
+    const wk = [];
+    const teamIdxs = Array.from({length:n},(_,i)=>i);
+    // Simple round-robin
+    for (let i=0; i<n; i+=2) {
+      const h=teamIdxs[i], a=teamIdxs[(i+1)%n];
+      wk.push({home:h, away:a,
+        hScore: flSimScore(h, w),
+        aScore: flSimScore(a, w)});
+    }
+    FL.matchups.push(wk);
+  }
+
+  // Standings
+  FL.standings = Array.from({length:n},(_,i)=>({teamIdx:i,w:0,l:0,pf:0,pa:0}));
+  for (let w=0; w<Math.min(FL.week-1,17); w++) {
+    FL.matchups[w].forEach(m=>{
+      const hs=FL.standings.find(s=>s.teamIdx===m.home);
+      const as=FL.standings.find(s=>s.teamIdx===m.away);
+      hs.pf+=m.hScore; hs.pa+=m.aScore;
+      as.pf+=m.aScore; as.pa+=m.hScore;
+      if(m.hScore>m.aScore){hs.w++;as.l++;}else{as.w++;hs.l++;}
+    });
+  }
+  FL.standings.sort((a,b)=>b.w-a.w||b.pf-a.pf);
+  FL.waiverOrder=[...Array.from({length:n},(_,i)=>i)];
+  FL.created=true;
+
+  // Show prompt to go to draft or dashboard
+  if(confirm('League created! Go to Draft Room now?')) {
+    flShow('draft');
+  } else {
+    flShow('dashboard');
+  }
+}
+
+function flSimScore(teamIdx, week) {
+  const roster=FL.rosters[teamIdx]||[];
+  let total=0;
+  roster.slice(0,8).forEach(pi=>{
+    const p=FL_PLAYERS[pi];
+    if(!p) return;
+    const base=p.proj||p.stdPts||10;
+    total+=base*(0.75+Math.random()*0.55);
+  });
+  return Math.round(total*10)/10;
+}
+
+function flPlayerScore(p) {
+  if (!p) return 0;
+  const s = FL.scoring;
+  if (s==='ssm-ppg')  return p.qppg||p.rbppg||p.wrppg||p.stdPts||0;
+  if (s==='ssm-hybrid') return ((p.qppg||p.rbppg||p.wrppg||0)*0.45 + (p.stdPts||0)*0.55);
+  return p.stdPts||0;
+}
+
+function flPPGLabel() {
+  return FL.scoring.startsWith('ssm') ? 'PPG (SSM)' : 'Proj Pts';
+}
+
+function flReset() {
+  if (!confirm('Reset all league settings?')) return;
+  FL = {...FL, created:false, teamNames:[], rosters:[], matchups:[], standings:[]};
+  flShow('setup'); flGenTeamFields();
+}
+
+// ── NAVIGATION ─────────────────────────────────────────────────
+function flShow(panel) {
+  document.querySelectorAll('.fl-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.fl-nav-btn').forEach(b=>b.classList.remove('active'));
+  const el = document.getElementById('fl-'+panel);
+  if (el) el.classList.add('active');
+  const btns = document.querySelectorAll('.fl-nav-btn');
+  btns.forEach(b=>{ if(b.textContent.toLowerCase().includes(panel.replace('-',''))
+    ||b.getAttribute('onclick')?.includes(panel)) b.classList.add('active'); });
+
+  if (!FL.created && panel!=='setup') {
+    el.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted)">Create your league first in the Setup tab.</div>';
+    return;
+  }
+
+  if (panel==='setup')       { flGenTeamFields(); return; }
+  if (panel==='dashboard')   flRenderDashboard();
+  if (panel==='roster')      flRenderRoster();
+  if (panel==='matchup')     flRenderMatchup();
+  if (panel==='standings')   flRenderStandings();
+  if (panel==='waiver')      flRenderWaiver();
+  if (panel==='trade')       flRenderTrade();
+  if (panel==='scoring')     flRenderScoring();
+}
+
+// ── DASHBOARD ──────────────────────────────────────────────────
+function flRenderDashboard() {
+  const el = document.getElementById('fl-dashboard-content');
+  const myStand = FL.standings.findIndex(s=>s.teamIdx===FL.myTeam)+1;
+  const myRec   = FL.standings.find(s=>s.teamIdx===FL.myTeam);
+  const wkMatch = FL.matchups[FL.week-1]?.find(m=>m.home===FL.myTeam||m.away===FL.myTeam);
+  const opp     = wkMatch ? (wkMatch.home===FL.myTeam?wkMatch.away:wkMatch.home) : null;
+
+  el.innerHTML = `
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:20px">
+    ${[
+      {label:'League',val:FL.name},
+      {label:'Scoring',val:FL_SCORING[FL.scoring]?.name||FL.scoring},
+      {label:'Week',val:'Week '+FL.week+' of 17'},
+      {label:'Standing',val:myRec?`${myRec.w}-${myRec.l} (Rank #${myStand})`:'—'},
+      {label:'Pts For',val:myRec?myRec.pf.toFixed(1):'0.0'},
+      {label:'Teams',val:FL.teams+' teams'},
+    ].map(({label,val})=>`
+      <div style="background:var(--ink-2);border:1px solid var(--line);border-radius:8px;padding:14px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">${label}</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:1.05rem;font-weight:800;color:var(--white)">${val}</div>
+      </div>`).join('')}
+  </div>
+
+  <div class="fl-dashboard">
+    <div>
+      <div class="fl-card" style="margin-bottom:14px">
+        <div class="fl-card-header"><span class="fl-card-title">⚔️ Week ${FL.week} Matchup</span></div>
+        <div class="fl-card-body">
+          ${wkMatch ? `
+          <div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px;padding:8px 0">
+            <div>
+              <div class="fl-team-name">${FL.teamNames[FL.myTeam]}</div>
+              <div style="font-size:.72rem;color:var(--muted);margin-top:2px">Your team</div>
+              <div class="fl-team-score" style="font-size:1.6rem;margin-top:8px">${wkMatch.hScore}</div>
+            </div>
+            <div class="fl-vs">VS</div>
+            <div style="text-align:right">
+              <div class="fl-team-name">${FL.teamNames[opp]}</div>
+              <div style="font-size:.72rem;color:var(--muted);margin-top:2px">Opponent</div>
+              <div class="fl-team-score" style="font-size:1.6rem;margin-top:8px">${wkMatch.aScore}</div>
+            </div>
+          </div>
+          <div style="text-align:center;margin-top:10px;padding-top:10px;border-top:1px solid var(--line);font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--muted)">
+            ${wkMatch.hScore>wkMatch.aScore?'🟢 Leading':'🔴 Trailing'} by ${Math.abs(wkMatch.hScore-wkMatch.aScore).toFixed(1)} pts
+          </div>` : '<div style="color:var(--muted);font-size:.84rem">No matchup data</div>'}
+        </div>
+      </div>
+
+      <div class="fl-card">
+        <div class="fl-card-header"><span class="fl-card-title">📋 Top Starters This Week</span></div>
+        <div>
+          <div class="fl-roster-row" style="background:var(--ink-3);font-family:\'JetBrains Mono\',monospace;font-size:.6rem;letter-spacing:.08em;color:var(--muted);text-transform:uppercase">
+            <span>Pos</span><span>Player</span><span>${flPPGLabel()}</span><span>Proj</span><span>Status</span>
+          </div>
+          ${(FL.rosters[FL.myTeam]||[]).slice(0,8).map(pi=>{
+            const p=FL_PLAYERS[pi];
+            if(!p) return '';
+            const ppg=flPlayerScore(p);
+            return `<div class="fl-roster-row">
+              <span class="fl-pos-badge fl-pos-${p.pos}">${p.pos}</span>
+              <span><div class="fl-player-name">${p.name}</div><div class="fl-player-team">${p.team} · Bye ${p.byeWk}</div></span>
+              <span class="fl-ppg-val">${typeof ppg==='number'?ppg.toFixed(2):'—'}</span>
+              <span class="fl-std-val">${p.proj?.toFixed(1)||'—'}</span>
+              <span style="font-size:.68rem;color:${p.status==='Active'?'#4caf50':p.status==='Q'?'#ffb300':'#ef5350'}">${p.status}</span>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="fl-card" style="margin-bottom:14px">
+        <div class="fl-card-header"><span class="fl-card-title">🏆 Standings</span></div>
+        <div>
+          ${FL.standings.slice(0,6).map((s,i)=>`
+          <div style="display:grid;grid-template-columns:26px 1fr 60px;align-items:center;gap:8px;padding:8px 14px;border-bottom:1px solid rgba(255,255,255,.04)">
+            <span class="fl-rank ${i<3?'top3':''}">${i<3?['🥇','🥈','🥉'][i]:i+1}</span>
+            <span style="font-size:.85rem;font-weight:${s.teamIdx===FL.myTeam?700:400};color:${s.teamIdx===FL.myTeam?'var(--white)':'var(--muted)'}">${FL.teamNames[s.teamIdx]}</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--muted);text-align:right">${s.w}-${s.l}</span>
+          </div>`).join('')}
+        </div>
+      </div>
+
+      <div class="fl-card">
+        <div class="fl-card-header"><span class="fl-card-title">📰 Transactions</span></div>
+        <div class="fl-card-body">
+          ${FL.transactions.length?FL.transactions.slice(0,5).map(t=>`<div style="font-size:.78rem;color:var(--muted);padding:4px 0;border-bottom:1px solid rgba(255,255,255,.04)">${t}</div>`).join('')
+          :'<div style="font-size:.82rem;color:var(--muted)">No transactions yet.</div>'}
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ── ROSTER ─────────────────────────────────────────────────────
+function flRenderRoster() {
+  const el = document.getElementById('fl-roster-content');
+  const roster = FL.rosters[FL.myTeam]||[];
+  const positions=['QB','RB','RB','WR','WR','WR','TE','FLEX','K','DEF'];
+  el.innerHTML = `
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+    <div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:800;color:var(--white)">${FL.teamNames[FL.myTeam]}</div>
+      <div style="font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace">${FL_SCORING[FL.scoring]?.name||FL.scoring} · Week ${FL.week}</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="fl-btn fl-btn-secondary" style="font-size:.82rem;padding:7px 14px" onclick="flShow('waiver')">+ Add Player</button>
+      <button class="fl-btn fl-btn-secondary" style="font-size:.82rem;padding:7px 14px" onclick="flShow('trade')">🔄 Trade</button>
+    </div>
+  </div>
+  <div class="fl-card">
+    <div class="fl-card-header"><span class="fl-card-title">Starting Lineup</span></div>
+    <div class="fl-roster-row" style="background:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.08em;color:var(--muted);text-transform:uppercase">
+      <span>Slot</span><span>Player</span><span>${flPPGLabel()}</span><span>Proj</span><span>Status</span>
+    </div>
+    ${positions.map((slot,i)=>{
+      const pi=roster[i]; const p=FL_PLAYERS[pi];
+      const ppg=p?flPlayerScore(p):null;
+      return `<div class="fl-roster-row">
+        <span class="fl-pos-badge fl-pos-${slot}">${slot}</span>
+        ${p?`<span><div class="fl-player-name">${p.name}</div><div class="fl-player-team">${p.team} · Bye Wk ${p.byeWk}</div></span>
+        <span class="fl-ppg-val">${ppg!==null?ppg.toFixed(2):'—'}</span>
+        <span class="fl-std-val">${p.proj?.toFixed(1)||'—'}</span>
+        <span style="font-size:.68rem;color:${p.status==='Active'?'#4caf50':p.status==='Q'?'#ffb300':'#ef5350'}">${p.status}</span>`
+        :`<span style="color:var(--muted);font-style:italic;font-size:.82rem">Empty slot</span><span></span><span></span><span></span>`}
+      </div>`;
+    }).join('')}
+    <div class="fl-card-header" style="margin-top:4px"><span class="fl-card-title">Bench</span></div>
+    ${roster.slice(positions.length).map(pi=>{
+      const p=FL_PLAYERS[pi]; if(!p) return '';
+      const ppg=flPlayerScore(p);
+      return `<div class="fl-roster-row">
+        <span class="fl-pos-badge fl-pos-BN">BN</span>
+        <span><div class="fl-player-name">${p.name}</div><div class="fl-player-team">${p.team} · Bye Wk ${p.byeWk}</div></span>
+        <span class="fl-ppg-val">${typeof ppg==='number'?ppg.toFixed(2):'—'}</span>
+        <span class="fl-std-val">${p.proj?.toFixed(1)||'—'}</span>
+        <span style="font-size:.68rem;color:${p.status==='Active'?'#4caf50':p.status==='Q'?'#ffb300':'#ef5350'}">${p.status}</span>
+      </div>`;
+    }).join('')}
+  </div>`;
+}
+
+// ── MATCHUP ────────────────────────────────────────────────────
+function flRenderMatchup() {
+  const el = document.getElementById('fl-matchup-content');
+  const wk = FL.matchups[FL.week-1]||[];
+  el.innerHTML = `
+  <div style="font-family:'Barlow Condensed',sans-serif;font-size:.85rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px">Week ${FL.week} Matchups</div>
+  <div class="fl-card">
+    ${wk.map(m=>`
+    <div class="fl-matchup">
+      <div style="text-align:left">
+        <div class="fl-team-name ${m.hScore>m.aScore?'fl-win':m.hScore<m.aScore?'fl-loss':''}">${FL.teamNames[m.home]}</div>
+        <div class="fl-team-score">${m.hScore}</div>
+      </div>
+      <div class="fl-vs">VS<br><span style="font-size:.6rem">WEEK ${FL.week}</span></div>
+      <div style="text-align:right">
+        <div class="fl-team-name ${m.aScore>m.hScore?'fl-win':m.aScore<m.hScore?'fl-loss':''}">${FL.teamNames[m.away]}</div>
+        <div class="fl-team-score">${m.aScore}</div>
+      </div>
+    </div>`).join('')}
+  </div>
+  <div style="display:flex;gap:8px;margin-top:12px">
+    <button class="fl-btn fl-btn-secondary" style="font-size:.82rem;padding:7px 16px" onclick="if(FL.week>1){FL.week--;flRenderMatchup()}">← Prev Week</button>
+    <button class="fl-btn fl-btn-secondary" style="font-size:.82rem;padding:7px 16px" onclick="if(FL.week<17){FL.week++;flRenderMatchup()}">Next Week →</button>
+  </div>`;
+}
+
+// ── STANDINGS ──────────────────────────────────────────────────
+function flRenderStandings() {
+  const el = document.getElementById('fl-standings-content');
+  el.innerHTML = `
+  <div class="fl-card">
+    <div class="fl-card-header"><span class="fl-card-title">🏆 ${FL.name} Standings · Week ${FL.week}</span></div>
+    <div class="fl-standings-row header">
+      <span>#</span><span>Team</span><span>W</span><span>L</span><span>PF</span><span>${flPPGLabel()} Avg</span>
+    </div>
+    ${FL.standings.map((s,i)=>`
+    <div class="fl-standings-row ${s.teamIdx===FL.myTeam?'style="background:rgba(242,194,48,.04)"':''}">
+      <span class="fl-rank ${i<3?'top3':''}">${i<3?['🥇','🥈','🥉'][i]:i+1}</span>
+      <span style="font-weight:${s.teamIdx===FL.myTeam?700:400};color:${s.teamIdx===FL.myTeam?'var(--white)':'var(--muted)'}">${FL.teamNames[s.teamIdx]}${s.teamIdx===FL.myTeam?' ★':''}</span>
+      <span class="fl-win">${s.w}</span>
+      <span class="fl-loss">${s.l}</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--gold)">${s.pf.toFixed(1)}</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--muted)">${s.w+s.l>0?(s.pf/(s.w+s.l)).toFixed(1):'—'}</span>
+    </div>`).join('')}
+  </div>`;
+}
+
+// ── WAIVER ─────────────────────────────────────────────────────
+function flRenderWaiver() {
+  const el = document.getElementById('fl-waiver-content');
+  const rostered = new Set(FL.rosters.flat());
+  const fas = FL_PLAYERS.map((p,i)=>({...p,idx:i})).filter(p=>!rostered.has(p.idx));
+  el.innerHTML = `
+  <div style="margin-bottom:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+    <input class="fl-input" id="fl-fa-search" placeholder="Search free agents..." style="max-width:260px" oninput="flFilterFA()">
+    <select class="fl-input" id="fl-fa-pos" style="max-width:120px" onchange="flFilterFA()">
+      <option value="">All Positions</option>
+      <option>QB</option><option>RB</option><option>WR</option><option>TE</option><option>K</option><option>DEF</option>
+    </select>
+  </div>
+  <div class="fl-card">
+    <div class="fl-card-header"><span class="fl-card-title">📥 Free Agents & Waiver Wire</span><span style="font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace">${fas.length} available</span></div>
+    <div class="fl-fa-row" style="background:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.08em;color:var(--muted);text-transform:uppercase">
+      <span>Pos</span><span>Player</span><span>${flPPGLabel()}</span><span>Proj</span><span>Status</span><span></span>
+    </div>
+    <div id="fl-fa-list">
+      ${fas.slice(0,20).map(p=>{
+        const ppg=flPlayerScore(p);
+        return `<div class="fl-fa-row" data-pos="${p.pos}" data-name="${p.name.toLowerCase()}">
+          <span class="fl-pos-badge fl-pos-${p.pos}">${p.pos}</span>
+          <span><div class="fl-player-name">${p.name}</div><div class="fl-player-team">${p.team} · Bye ${p.byeWk}</div></span>
+          <span class="fl-ppg-val">${typeof ppg==='number'?ppg.toFixed(2):'—'}</span>
+          <span class="fl-std-val">${p.proj?.toFixed(1)||'—'}</span>
+          <span style="font-size:.68rem;color:${p.status==='Active'?'#4caf50':p.status==='Q'?'#ffb300':'#ef5350'}">${p.status}</span>
+          <button class="fl-add-btn" onclick="flAddPlayer(${p.idx})">+ Add</button>
+        </div>`;
+      }).join('')}
+    </div>
+  </div>`;
+}
+
+function flFilterFA() {
+  const q=(document.getElementById('fl-fa-search')?.value||'').toLowerCase();
+  const pos=document.getElementById('fl-fa-pos')?.value||'';
+  document.querySelectorAll('#fl-fa-list .fl-fa-row').forEach(row=>{
+    const nm=row.dataset.name||'', rp=row.dataset.pos||'';
+    const show=(!q||nm.includes(q))&&(!pos||rp===pos);
+    row.style.display=show?'':'none';
+  });
+}
+
+function flAddPlayer(idx) {
+  const p=FL_PLAYERS[idx];
+  if(!p) return;
+  FL.rosters[FL.myTeam].push(idx);
+  FL.transactions.unshift(`Wk ${FL.week}: Added ${p.name} (${p.pos}, ${p.team})`);
+  alert(`Added ${p.name} to your roster!`);
+  flRenderWaiver();
+}
+
+// ── TRADE ──────────────────────────────────────────────────────
+let flTradeSelected = {my:[], their:[]};
+
+function flRenderTrade() {
+  const el=document.getElementById('fl-trade-content');
+  const opp=FL.teams>1?1:0; // default trade with team 1
+  flTradeSelected={my:[],their:[]};
+  el.innerHTML = `
+  <div style="margin-bottom:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+    <span style="font-size:.82rem;color:var(--muted)">Trade with:</span>
+    <select class="fl-input" id="fl-trade-opp" style="max-width:200px" onchange="flRenderTrade()">
+      ${FL.teamNames.map((n,i)=>i===FL.myTeam?'':`<option value="${i}">${n}</option>`).join('')}
+    </select>
+  </div>
+  <div class="fl-trade-grid">
+    <div class="fl-trade-side">
+      <div class="fl-trade-side-title">Your Players</div>
+      ${(FL.rosters[FL.myTeam]||[]).map(pi=>{
+        const p=FL_PLAYERS[pi]; if(!p) return '';
+        const ppg=flPlayerScore(p);
+        return `<div class="fl-trade-player" onclick="flToggleTrade(this,'my',${pi})" data-idx="${pi}">
+          <span class="fl-pos-badge fl-pos-${p.pos}">${p.pos}</span>
+          <span style="flex:1"><div class="fl-player-name" style="font-size:.84rem">${p.name}</div>
+            <div style="font-size:.62rem;color:var(--muted);font-family:'JetBrains Mono',monospace">${p.team} · ${typeof ppg==='number'?ppg.toFixed(2):'—'} ${flPPGLabel()}</div></span>
+        </div>`;
+      }).join('')}
+    </div>
+    <div class="fl-trade-arrow">⇄</div>
+    <div class="fl-trade-side">
+      <div class="fl-trade-side-title">${FL.teamNames[opp]}'s Players</div>
+      ${(FL.rosters[opp]||[]).map(pi=>{
+        const p=FL_PLAYERS[pi]; if(!p) return '';
+        const ppg=flPlayerScore(p);
+        return `<div class="fl-trade-player" onclick="flToggleTrade(this,'their',${pi})" data-idx="${pi}">
+          <span class="fl-pos-badge fl-pos-${p.pos}">${p.pos}</span>
+          <span style="flex:1"><div class="fl-player-name" style="font-size:.84rem">${p.name}</div>
+            <div style="font-size:.62rem;color:var(--muted);font-family:'JetBrains Mono',monospace">${p.team} · ${typeof ppg==='number'?ppg.toFixed(2):'—'} ${flPPGLabel()}</div></span>
+        </div>`;
+      }).join('')}
+    </div>
+  </div>
+  <div id="fl-trade-summary" style="margin-top:14px;padding:14px;background:var(--ink-2);border:1px solid var(--line);border-radius:8px;display:none">
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:800;color:var(--white);margin-bottom:8px">Trade Summary</div>
+    <div id="fl-trade-detail" style="font-size:.82rem;color:var(--muted)"></div>
+    <button class="fl-btn fl-btn-primary" style="margin-top:12px;font-size:.85rem;padding:9px 20px" onclick="flProposeTrade()">Propose Trade</button>
+  </div>`;
+}
+
+function flToggleTrade(el, side, idx) {
+  el.classList.toggle('selected');
+  const arr = flTradeSelected[side];
+  const i = arr.indexOf(idx);
+  if(i>=0) arr.splice(i,1); else arr.push(idx);
+  flUpdateTradeSummary();
+}
+
+function flUpdateTradeSummary() {
+  const {my, their} = flTradeSelected;
+  const sumEl=document.getElementById('fl-trade-summary');
+  const detEl=document.getElementById('fl-trade-detail');
+  if(!my.length&&!their.length){sumEl.style.display='none';return;}
+  sumEl.style.display='block';
+  const myVal=my.reduce((s,i)=>s+flPlayerScore(FL_PLAYERS[i]),0);
+  const theirVal=their.reduce((s,i)=>s+flPlayerScore(FL_PLAYERS[i]),0);
+  const diff=myVal-theirVal;
+  detEl.innerHTML=`
+    You give: <strong style="color:var(--white)">${my.map(i=>FL_PLAYERS[i]?.name).join(', ')||'—'}</strong>
+    (${myVal.toFixed(2)} ${flPPGLabel()})<br>
+    You get: <strong style="color:var(--white)">${their.map(i=>FL_PLAYERS[i]?.name).join(', ')||'—'}</strong>
+    (${theirVal.toFixed(2)} ${flPPGLabel()})<br>
+    <span style="color:${diff>0?'#ef5350':diff<0?'#4caf50':'var(--muted)'}">
+    ${diff>0?'You lose':'You gain'} ${Math.abs(diff).toFixed(2)} ${flPPGLabel()} in value</span>`;
+}
+
+function flProposeTrade() {
+  const{my,their}=flTradeSelected;
+  if(!my.length||!their.length){alert('Select at least one player from each side.');return;}
+  const oppIdx=parseInt(document.getElementById('fl-trade-opp')?.value||1);
+  my.forEach(i=>{
+    FL.rosters[FL.myTeam]=FL.rosters[FL.myTeam].filter(x=>x!==i);
+    FL.rosters[oppIdx].push(i);
+  });
+  their.forEach(i=>{
+    FL.rosters[oppIdx]=FL.rosters[oppIdx].filter(x=>x!==i);
+    FL.rosters[FL.myTeam].push(i);
+  });
+  FL.transactions.unshift(`Wk ${FL.week}: Trade — You sent ${my.map(i=>FL_PLAYERS[i]?.name).join(',')} | Received ${their.map(i=>FL_PLAYERS[i]?.name).join(',')}`);
+  alert('Trade proposed and accepted!');
+  flRenderTrade();
+}
+
+// ── SCORING BREAKDOWN ──────────────────────────────────────────
+function flRenderScoring() {
+  const el=document.getElementById('fl-scoring-content');
+  const s=FL_SCORING[FL.scoring];
+  if(!s){el.innerHTML='<div style="color:var(--muted)">Create your league to see scoring.</div>';return;}
+  const cats=[...new Set(s.rules.map(r=>r.cat))];
+  el.innerHTML=`
+  <div class="fl-card">
+    <div class="fl-card-header">
+      <span class="fl-card-title">📊 ${s.name} — Full Scoring Rules</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:${FL.scoring.startsWith('ssm')?'var(--gold)':'#4fc3f7'}">${FL.scoring.startsWith('ssm')?'★ SSM METRIC':'STANDARD'}</span>
+    </div>
+    <div class="fl-card-body" style="padding:0">
+      ${cats.map(cat=>`
+      <div style="padding:10px 16px 0;font-family:'Barlow Condensed',sans-serif;font-size:.85rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--gold)">${cat}</div>
+      <table class="fl-scoring-table">
+        <thead><tr><th>Stat / Event</th><th>Points</th></tr></thead>
+        <tbody>
+        ${s.rules.filter(r=>r.cat===cat).map(r=>`
+          <tr><td>${r.stat}</td><td class="${r.ssm?'ssm':'pts'}">${r.pts}</td></tr>`).join('')}
+        </tbody>
+      </table>`).join('')}
+    </div>
+  </div>
+  ${FL.scoring.startsWith('ssm')?`
+  <div class="fl-ssm-note">
+    ★ <strong style="color:var(--gold)">SSM Metrics Explained:</strong> Q-PPG, RB-PPG, and WR-PPG are original metrics from
+    <em>The Sports Statistics Manual</em> by Chris Cain. Each play is weighted by field zone (Zone 1 = own 1–19, Zone 5 = red zone ≈16× Zone 1),
+    down, and distance. A 10-yard completion on 3rd-and-7 from the red zone scores dramatically more than the same completion at midfield.
+    This creates a more strategically accurate scoring system than standard yardage totals.
+  </div>`:''}`;
+}
+
+// Init team fields on load
+document.addEventListener('DOMContentLoaded', () => {
+  if(document.getElementById('fl-team-names')) flGenTeamFields();
+});
+
+</script>
+<script>
+
+// ══════════════════════════════════════════════════════════════
+// ── DRAFT ROOM ENGINE ─────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════
+
+let DR = {
+  active:      false,
+  pick:        0,          // 0-indexed overall pick
+  totalPicks:  0,
+  timerSec:    90,
+  timerMax:    90,
+  timerInterval: null,
+  draftOrder:  [],         // [teamIdx] per pick (snake)
+  picks:       [],         // [{pickNum,teamIdx,playerIdx,auto}]
+  drafted:     new Set(),  // playerIdx set
+  watchlist:   [],         // [playerIdx]
+  posFilter:   '',
+  nameFilter:  '',
+  sortKey:     'rank',
+  paused:      false,
+  speed:       1,          // 1=normal, 3=fast, 0=pause
+};
+
+// ── EXTENDED PLAYER POOL (more depth for full draft) ──────────
+const DR_EXTRA_PLAYERS = [
+  // More QBs
+  {name:'K. Murray',    team:'ARI',pos:'QB',byeWk: 5,qppg:6.88,stdPts:20.4,proj:19.8,status:'Active'},
+  {name:'T. Lance',     team:'SF', pos:'QB',byeWk: 9,qppg:5.44,stdPts:16.2,proj:15.4,status:'Active'},
+  {name:'B. Mayfield',  team:'TB', pos:'QB',byeWk:11,qppg:6.44,stdPts:19.2,proj:18.6,status:'Active'},
+  {name:'J. Daniels',   team:'WAS',pos:'QB',byeWk:14,qppg:7.44,stdPts:22.2,proj:21.8,status:'Active'},
+  {name:'C. Stroud',    team:'HOU',pos:'QB',byeWk:14,qppg:7.12,stdPts:21.4,proj:20.8,status:'Active'},
+  // More RBs
+  {name:'B. Hall',      team:'NYJ',pos:'RB',byeWk: 7,rbppg:5.22,stdPts:17.2,proj:16.6,status:'Active'},
+  {name:'D. Pierce',    team:'HOU',pos:'RB',byeWk:14,rbppg:4.88,stdPts:16.0,proj:15.4,status:'Active'},
+  {name:'R. White',     team:'TB', pos:'RB',byeWk:11,rbppg:4.54,stdPts:14.8,proj:14.2,status:'Active'},
+  {name:'C. Hubbard',   team:'CAR',pos:'RB',byeWk: 5,rbppg:4.22,stdPts:13.8,proj:13.2,status:'Active'},
+  {name:'K. Williams',  team:'GB', pos:'RB',byeWk: 6,rbppg:4.68,stdPts:15.4,proj:14.8,status:'Active'},
+  {name:'J. Warren',    team:'PIT',pos:'RB',byeWk:11,rbppg:3.98,stdPts:12.8,proj:12.2,status:'Active'},
+  {name:'Z. Charbonnet',team:'SEA',pos:'RB',byeWk: 5,rbppg:4.42,stdPts:14.4,proj:13.8,status:'Active'},
+  {name:'I. Pacheco',   team:'KC', pos:'RB',byeWk:10,rbppg:4.14,stdPts:13.4,proj:12.8,status:'Active'},
+  {name:'J. Taylor',    team:'IND',pos:'RB',byeWk:14,rbppg:5.62,stdPts:18.4,proj:17.8,status:'Active'},
+  {name:'D. Williams',  team:'LAC',pos:'RB',byeWk:10,rbppg:3.74,stdPts:11.8,proj:11.2,status:'Active'},
+  // More WRs
+  {name:'T. McLaurin',  team:'WAS',pos:'WR',byeWk:14,wrppg:3.54,stdPts:16.8,proj:16.2,status:'Active'},
+  {name:'N. Collins',   team:'HOU',pos:'WR',byeWk:14,wrppg:3.44,stdPts:16.4,proj:15.8,status:'Active'},
+  {name:'B. Aiyuk',     team:'SF', pos:'WR',byeWk: 9,wrppg:3.62,stdPts:17.2,proj:16.6,status:'Active'},
+  {name:'C. Kirk',      team:'JAX',pos:'WR',byeWk:12,wrppg:3.18,stdPts:14.8,proj:14.2,status:'Active'},
+  {name:'P. Nacua',     team:'LAR',pos:'WR',byeWk: 6,wrppg:3.36,stdPts:15.8,proj:15.2,status:'Active'},
+  {name:'D. Samuel',    team:'SF', pos:'WR',byeWk: 9,wrppg:3.22,stdPts:15.2,proj:14.6,status:'Active'},
+  {name:'K. Shakir',    team:'BUF',pos:'WR',byeWk:12,wrppg:2.98,stdPts:14.0,proj:13.4,status:'Active'},
+  {name:'M. Williams',  team:'LAC',pos:'WR',byeWk:10,wrppg:2.84,stdPts:13.2,proj:12.6,status:'Q'},
+  {name:'J. Meyers',    team:'LV', pos:'WR',byeWk:13,wrppg:2.72,stdPts:12.8,proj:12.2,status:'Active'},
+  {name:'Z. Flowers',   team:'BAL',pos:'WR',byeWk:14,wrppg:3.08,stdPts:14.4,proj:13.8,status:'Active'},
+  // More TEs
+  {name:'S. LaPorta',   team:'DET',pos:'TE',byeWk: 9,wrppg:2.28,stdPts:10.4,proj:10.0,status:'Active'},
+  {name:'T. McBride',   team:'ARI',pos:'TE',byeWk: 5,wrppg:2.14,stdPts: 9.8,proj: 9.4,status:'Active'},
+  {name:'I. Thomas',    team:'NO', pos:'TE',byeWk:11,wrppg:2.04,stdPts: 9.2,proj: 8.8,status:'Active'},
+  {name:'C. Otton',     team:'TB', pos:'TE',byeWk:11,wrppg:1.94,stdPts: 8.8,proj: 8.4,status:'Active'},
+  // More Ks
+  {name:'T. Bass',      team:'BUF',pos:'K', byeWk:12,stdPts:8.2,proj:8.0,status:'Active'},
+  {name:'C. Santos',    team:'KC', pos:'K', byeWk:10,stdPts:7.8,proj:7.6,status:'Active'},
+  {name:'G. Gano',      team:'NYG',pos:'K', byeWk: 9,stdPts:7.4,proj:7.2,status:'Active'},
+  // More DEFs
+  {name:'Ravens DEF',   team:'BAL',pos:'DEF',byeWk:14,stdPts:9.6, proj:9.4,status:'Active'},
+  {name:'Chiefs DEF',   team:'KC', pos:'DEF',byeWk:10,stdPts:8.8, proj:8.6,status:'Active'},
+  {name:'Steelers DEF', team:'PIT',pos:'DEF',byeWk:11,stdPts:8.4, proj:8.2,status:'Active'},
+  {name:'Jets DEF',     team:'NYJ',pos:'DEF',byeWk: 7,stdPts:8.0, proj:7.8,status:'Active'},
+];
+
+// Merge pools for draft
+function drGetPool() {
+  return [...FL_PLAYERS, ...DR_EXTRA_PLAYERS];
+}
+
+// Get player PPG value for draft ranking
+function drPlayerValue(p) {
+  const s = FL.scoring;
+  if (s === 'ssm-ppg')    return p.qppg || p.rbppg || p.wrppg || p.proj || 0;
+  if (s === 'ssm-hybrid') return ((p.qppg||p.rbppg||p.wrppg||0)*.45 + (p.proj||0)*.55);
+  return p.proj || p.stdPts || 0;
+}
+
+function drValueLabel() {
+  return FL.scoring.startsWith('ssm') ? 'SSM PPG' : 'Proj';
+}
+
+// ── BUILD SNAKE ORDER ─────────────────────────────────────────
+function drBuildSnakeOrder(teams, rounds) {
+  const order = [];
+  for (let r = 0; r < rounds; r++) {
+    const row = Array.from({length: teams}, (_, i) => i);
+    if (r % 2 === 1) row.reverse();
+    order.push(...row);
+  }
+  return order;
+}
+
+// ── START DRAFT ───────────────────────────────────────────────
+function drStart() {
+  if (!FL.created) { flShow('setup'); return; }
+
+  const rounds = parseInt(document.getElementById('fl-slot-qb')?.value||1)
+    + parseInt(document.getElementById('fl-slot-rb')?.value||2)
+    + parseInt(document.getElementById('fl-slot-wr')?.value||3)
+    + parseInt(document.getElementById('fl-slot-te')?.value||1)
+    + parseInt(document.getElementById('fl-slot-flex')?.value||1)
+    + 2  // K + DEF
+    + parseInt(document.getElementById('fl-slot-bench')?.value||5);
+
+  DR.active      = true;
+  DR.pick        = 0;
+  DR.totalPicks  = FL.teams * rounds;
+  DR.timerSec    = 90;
+  DR.draftOrder  = drBuildSnakeOrder(FL.teams, rounds);
+  DR.picks       = [];
+  DR.drafted     = new Set();
+  DR.watchlist   = DR.watchlist || [];
+  DR.paused      = false;
+  DR.speed       = 1;
+  DR.posFilter   = '';
+  DR.nameFilter  = '';
+
+  // Reset rosters
+  FL.rosters = Array.from({length: FL.teams}, () => []);
+
+  flShow('draft');
+  drRender();
+  drStartTimer();
+}
+
+// ── TIMER ─────────────────────────────────────────────────────
+function drStartTimer() {
+  clearInterval(DR.timerInterval);
+  DR.timerSec = DR.timerMax;
+  drUpdateTimer();
+  DR.timerInterval = setInterval(() => {
+    if (DR.paused) return;
+    DR.timerSec -= DR.speed;
+    if (DR.timerSec <= 0) {
+      drAutoPickCurrent();
+    } else {
+      drUpdateTimer();
+    }
+  }, 1000);
+}
+
+function drUpdateTimer() {
+  const el = document.getElementById('dr-timer');
+  if (!el) return;
+  el.textContent = Math.max(0, Math.ceil(DR.timerSec)) + 's';
+  el.className = 'dr-timer ' + (DR.timerSec <= 15 ? 'urgent' : DR.timerSec <= 30 ? 'ok' : 'good');
+}
+
+// ── AUTO-PICK ─────────────────────────────────────────────────
+function drAutoPickCurrent() {
+  const teamIdx = DR.draftOrder[DR.pick];
+  // Pick the best available player for this team's needs
+  const pool = drSortedPool();
+  const available = pool.filter(p => !DR.drafted.has(p._poolIdx));
+  const needs = drGetTeamNeeds(teamIdx);
+  // Prioritise position needs, fall back to best available
+  let pick = available.find(p => needs.includes(p.pos)) || available[0];
+  if (pick) drExecutePick(pick._poolIdx, true);
+}
+
+function drGetTeamNeeds(teamIdx) {
+  const roster = FL.rosters[teamIdx] || [];
+  const pool = drGetPool();
+  const counts = {QB:0, RB:0, WR:0, TE:0, K:0, DEF:0};
+  roster.forEach(i => { const p = pool[i]; if (p) counts[p.pos] = (counts[p.pos]||0)+1; });
+  const needs = [];
+  if (counts.QB < 2) needs.push('QB');
+  if (counts.RB < 4) needs.push('RB');
+  if (counts.WR < 5) needs.push('WR');
+  if (counts.TE < 2) needs.push('TE');
+  if (counts.K  < 1) needs.push('K');
+  if (counts.DEF< 1) needs.push('DEF');
+  return needs.length ? needs : ['RB','WR','QB','TE'];
+}
+
+// ── EXECUTE PICK ──────────────────────────────────────────────
+function drExecutePick(poolIdx, auto = false) {
+  if (DR.pick >= DR.totalPicks) return;
+  const teamIdx = DR.draftOrder[DR.pick];
+  const pool = drGetPool();
+  const p = pool[poolIdx];
+  if (!p || DR.drafted.has(poolIdx)) return;
+
+  DR.drafted.add(poolIdx);
+  FL.rosters[teamIdx].push(poolIdx);
+  DR.picks.push({ pickNum: DR.pick + 1, teamIdx, playerIdx: poolIdx, auto });
+  DR.pick++;
+
+  clearInterval(DR.timerInterval);
+
+  if (DR.pick >= DR.totalPicks) {
+    drComplete();
+    return;
+  }
+
+  // If next pick is CPU, auto-pick after short delay
+  const nextTeam = DR.draftOrder[DR.pick];
+  drRender();
+  drStartTimer();
+
+  if (nextTeam !== FL.myTeam) {
+    // CPU auto-picks after 1.2s (normal) or 300ms (fast)
+    const delay = DR.speed >= 3 ? 300 : 1200;
+    setTimeout(() => {
+      if (DR.active && DR.draftOrder[DR.pick] !== FL.myTeam) {
+        drAutoPickCurrent();
+      }
+    }, delay);
+  }
+}
+
+// ── SORTED PLAYER POOL ────────────────────────────────────────
+function drSortedPool() {
+  const pool = drGetPool().map((p, i) => ({...p, _poolIdx: i}));
+  let filtered = pool;
+
+  if (DR.posFilter) filtered = filtered.filter(p => p.pos === DR.posFilter);
+  if (DR.nameFilter) {
+    const q = DR.nameFilter.toLowerCase();
+    filtered = filtered.filter(p => p.name.toLowerCase().includes(q) || p.team.toLowerCase().includes(q));
+  }
+
+  // Sort
+  filtered.sort((a, b) => {
+    if (DR.sortKey === 'rank')    return drPlayerValue(b) - drPlayerValue(a);
+    if (DR.sortKey === 'name')    return a.name.localeCompare(b.name);
+    if (DR.sortKey === 'pos')     return a.pos.localeCompare(b.pos);
+    if (DR.sortKey === 'proj')    return (b.proj||0) - (a.proj||0);
+    if (DR.sortKey === 'byeWk')   return (a.byeWk||20) - (b.byeWk||20);
+    return 0;
+  });
+
+  return filtered;
+}
+
+// ── RENDER DRAFT ROOM ─────────────────────────────────────────
+function drRender() {
+  const el = document.getElementById('fl-draft-content');
+  if (!el) return;
+
+  if (!DR.active) {
+    el.innerHTML = drRenderPreDraft();
+    return;
+  }
+
+  if (DR.pick >= DR.totalPicks) {
+    drComplete();
+    return;
+  }
+
+  const currentTeam = DR.draftOrder[DR.pick];
+  const isMyPick = currentTeam === FL.myTeam;
+  const pool = drGetPool();
+
+  el.innerHTML = `
+  <!-- ── DRAFT HEADER ── -->
+  <div class="dr-header" style="margin-bottom:10px">
+    <div>
+      <div class="dr-pick-badge">Overall Pick</div>
+      <div class="dr-pick-num">#${DR.pick + 1}</div>
+      <div class="dr-on-clock">
+        ${isMyPick
+          ? `<span style="color:var(--gold)">★ YOUR PICK</span>`
+          : `On Clock: <span style="color:var(--white)">${FL.teamNames[currentTeam]}</span>`}
+        &nbsp;<span style="font-size:.7rem;color:var(--muted)">Rd ${Math.floor(DR.pick/FL.teams)+1} · Pick ${(DR.pick%FL.teams)+1}</span>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:14px">
+      <div>
+        <div class="dr-pick-badge">Time Remaining</div>
+        <div id="dr-timer" class="dr-timer good">90s</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <button class="fl-btn fl-btn-secondary" style="font-size:.72rem;padding:5px 12px"
+          onclick="DR.paused=!DR.paused;this.textContent=DR.paused?'▶ Resume':'⏸ Pause'">⏸ Pause</button>
+        <button class="fl-btn fl-btn-secondary" style="font-size:.72rem;padding:5px 12px"
+          onclick="DR.speed=DR.speed===1?4:1;this.textContent=DR.speed===1?'⚡ Fast Mode':'🐢 Normal'">⚡ Fast Mode</button>
+      </div>
+      <div>
+        <button class="fl-btn fl-btn-secondary" style="font-size:.72rem;padding:5px 12px" onclick="drAutoPickCurrent()">
+          🤖 Auto Pick
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PROGRESS BAR ── -->
+  <div style="background:var(--ink-3);border-radius:4px;height:6px;margin-bottom:12px;overflow:hidden">
+    <div style="height:100%;background:var(--gold);border-radius:4px;width:${(DR.pick/DR.totalPicks*100).toFixed(1)}%;transition:width .4s"></div>
+  </div>
+
+  <div class="dr-wrap">
+    <!-- ── LEFT: PLAYER POOL ── -->
+    <div class="dr-main">
+      <div class="dr-pool-wrap">
+        <div class="dr-pool-controls">
+          <input class="fl-input" id="dr-search" placeholder="Search players..." style="max-width:200px;font-size:.8rem;padding:6px 10px"
+            value="${DR.nameFilter}" oninput="DR.nameFilter=this.value;drRenderPool()">
+          <select class="fl-input" id="dr-pos" style="max-width:100px;font-size:.8rem;padding:6px 10px"
+            onchange="DR.posFilter=this.value;drRenderPool()">
+            <option value="" ${!DR.posFilter?'selected':''}>All Pos</option>
+            <option ${DR.posFilter==='QB'?'selected':''}>QB</option>
+            <option ${DR.posFilter==='RB'?'selected':''}>RB</option>
+            <option ${DR.posFilter==='WR'?'selected':''}>WR</option>
+            <option ${DR.posFilter==='TE'?'selected':''}>TE</option>
+            <option ${DR.posFilter==='K'?'selected':''}>K</option>
+            <option ${DR.posFilter==='DEF'?'selected':''}>DEF</option>
+          </select>
+          <select class="fl-input" style="max-width:120px;font-size:.8rem;padding:6px 10px"
+            onchange="DR.sortKey=this.value;drRenderPool()">
+            <option value="rank" ${DR.sortKey==='rank'?'selected':''}>Sort: Rank</option>
+            <option value="proj" ${DR.sortKey==='proj'?'selected':''}>Sort: Proj</option>
+            <option value="pos"  ${DR.sortKey==='pos' ?'selected':''}>Sort: Pos</option>
+            <option value="byeWk" ${DR.sortKey==='byeWk'?'selected':''}>Sort: Bye</option>
+          </select>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--muted);margin-left:auto;white-space:nowrap">
+            ${drGetPool().length - DR.drafted.size} available
+          </span>
+        </div>
+        <div class="dr-pool-list" id="dr-pool-list">
+          <div class="dr-player-row header">
+            <span>Rank</span><span>Player</span><span>${drValueLabel()}</span><span>Proj</span><span>Bye</span><span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── RIGHT: SIDEBAR ── -->
+    <div class="dr-sidebar">
+
+      <!-- My Picks -->
+      <div class="dr-card-header" style="background:var(--ink-2);border:1px solid var(--line);border-radius:10px 10px 0 0;padding:10px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between">
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:800;text-transform:uppercase;color:var(--white)">★ My Roster</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--muted)">${FL.teamNames[FL.myTeam]}</span>
+      </div>
+      <div class="dr-my-picks" style="border-radius:0 0 10px 10px;border-top:none;max-height:260px">
+        ${DR.picks.filter(pk=>pk.teamIdx===FL.myTeam).length === 0
+          ? '<div style="padding:16px;font-size:.8rem;color:var(--muted);text-align:center">No picks yet</div>'
+          : DR.picks.filter(pk=>pk.teamIdx===FL.myTeam).map(pk=>{
+              const p=drGetPool()[pk.playerIdx]; if(!p) return '';
+              const v=drPlayerValue(p);
+              return `<div class="dr-my-pick-row">
+                <span class="fl-pos-badge fl-pos-${p.pos}">${p.pos}</span>
+                <span>
+                  <div style="font-weight:600;font-size:.82rem;color:var(--white)">${p.name}</div>
+                  <div style="font-size:.62rem;color:var(--muted);font-family:'JetBrains Mono',monospace">${p.team} · Bye ${p.byeWk} · Pick #${pk.pickNum}</div>
+                </span>
+                <span class="dr-ssm-val">${v.toFixed(2)}</span>
+              </div>`;
+            }).join('')}
+      </div>
+
+      <!-- Watchlist -->
+      <div style="background:var(--ink-2);border:1px solid var(--line);border-radius:10px;overflow:hidden;flex:1">
+        <div style="padding:10px 14px;background:var(--ink-3);border-bottom:1px solid var(--line)">
+          <span style="font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:800;text-transform:uppercase;color:var(--white)">👁 Watchlist</span>
+        </div>
+        <div id="dr-watchlist-body" style="max-height:220px;overflow-y:auto">
+          ${DR.watchlist.length === 0
+            ? '<div style="padding:14px;font-size:.78rem;color:var(--muted);text-align:center">Click ♡ on any player to add</div>'
+            : DR.watchlist.map(wi => {
+                const p=drGetPool()[wi]; if(!p) return '';
+                const drafted=DR.drafted.has(wi);
+                return `<div class="dr-watch-row ${drafted?'opacity:.4':''}">
+                  <span>
+                    <div style="font-weight:600;color:${drafted?'var(--muted)':'var(--white)'};">${p.name}${drafted?'<span style="font-size:.6rem;color:#ef5350;margin-left:4px">DRAFTED</span>':''}</div>
+                    <div style="font-size:.6rem;color:var(--muted);font-family:\'JetBrains Mono\',monospace">${p.pos} · ${p.team}</div>
+                  </span>
+                  <span class="dr-ssm-val">${drPlayerValue(p).toFixed(2)}</span>
+                  <button class="dr-remove-btn" onclick="drRemoveWatch(${wi})">✕</button>
+                </div>`;
+              }).join('')}
+        </div>
+      </div>
+
+      <!-- Recent Picks -->
+      <div style="background:var(--ink-2);border:1px solid var(--line);border-radius:10px;overflow:hidden">
+        <div style="padding:10px 14px;background:var(--ink-3);border-bottom:1px solid var(--line)">
+          <span style="font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:800;text-transform:uppercase;color:var(--white)">📋 Recent Picks</span>
+        </div>
+        <div style="max-height:160px;overflow-y:auto">
+          ${DR.picks.slice(-6).reverse().map(pk=>{
+            const p=drGetPool()[pk.playerIdx]; if(!p) return '';
+            const isMine=pk.teamIdx===FL.myTeam;
+            return `<div style="display:grid;grid-template-columns:30px 1fr;align-items:center;gap:8px;padding:6px 12px;border-bottom:1px solid rgba(255,255,255,.04);background:${isMine?'rgba(242,194,48,.06)':'transparent'}">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--muted);text-align:center">#${pk.pickNum}</span>
+              <span>
+                <div style="font-size:.78rem;font-weight:${isMine?700:400};color:${isMine?'var(--white)':'var(--muted)'}">${p.name} <span class="fl-pos-badge fl-pos-${p.pos}" style="font-size:.55rem">${p.pos}</span>${pk.auto?'<span class="dr-auto-badge">AUTO</span>':''}</div>
+                <div style="font-size:.6rem;color:var(--muted);font-family:'JetBrains Mono',monospace">${FL.teamNames[pk.teamIdx]} · ${p.team}</div>
+              </span>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── DRAFT BOARD (full grid) ── -->
+  <div style="margin-top:14px">
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--white);margin-bottom:8px">Draft Board</div>
+    <div class="dr-board-wrap">
+      <div class="dr-board-scroll" id="dr-board-scroll">
+        ${drRenderBoard()}
+      </div>
+    </div>
+  </div>`;
+
+  drRenderPool();
+  drUpdateTimer();
+}
+
+// ── RENDER POOL LIST ──────────────────────────────────────────
+function drRenderPool() {
+  const listEl = document.getElementById('dr-pool-list');
+  if (!listEl) return;
+  const sorted = drSortedPool();
+  const isMyPick = DR.draftOrder[DR.pick] === FL.myTeam;
+
+  // Keep header, replace rows
+  const header = listEl.querySelector('.header');
+  const rows = sorted.slice(0, 80).map((p, rank) => {
+    const drafted = DR.drafted.has(p._poolIdx);
+    const watched = DR.watchlist.includes(p._poolIdx);
+    const v = drPlayerValue(p);
+    return `<div class="dr-player-row ${drafted?'drafted':''}" id="drp-${p._poolIdx}">
+      <span class="dr-rank">${rank+1}</span>
+      <span>
+        <div style="display:flex;align-items:center;gap:6px">
+          <span class="fl-pos-badge fl-pos-${p.pos}">${p.pos}</span>
+          <div>
+            <div class="fl-player-name" style="font-size:.84rem">${p.name}</div>
+            <div class="fl-player-team">${p.team} · Bye ${p.byeWk}
+              ${p.status==='Q'?'<span style="color:#ffb300;font-size:.6rem"> ⚠ Q</span>':''}
+            </div>
+          </div>
+        </div>
+      </span>
+      <span class="dr-ssm-val">${v.toFixed(2)}</span>
+      <span class="dr-std-val">${(p.proj||0).toFixed(1)}</span>
+      <span class="dr-std-val">${p.byeWk}</span>
+      <span style="display:flex;gap:5px;align-items:center">
+        <button onclick="drToggleWatch(${p._poolIdx})"
+          style="background:none;border:none;cursor:pointer;font-size:.9rem;color:${watched?'var(--gold)':'rgba(200,200,200,.4)'};padding:2px"
+          title="Add to watchlist">♡</button>
+        ${isMyPick && !drafted
+          ? `<button class="dr-draft-btn" onclick="drExecutePick(${p._poolIdx})">Draft</button>`
+          : `<button class="dr-draft-btn" disabled>${drafted?'Drafted':'—'}</button>`}
+      </span>
+    </div>`;
+  }).join('');
+
+  listEl.innerHTML = (header ? header.outerHTML : '') + rows;
+}
+
+// ── DRAFT BOARD GRID ──────────────────────────────────────────
+function drRenderBoard() {
+  const rounds = Math.ceil(DR.totalPicks / FL.teams);
+  const pool = drGetPool();
+  const cols = FL.teams + 1; // +1 for round label
+
+  let html = `<div class="dr-board-grid" style="grid-template-columns:40px repeat(${FL.teams},minmax(90px,1fr))">`;
+
+  // Header row — team names
+  html += `<div class="dr-board-cell team-label" style="background:var(--ink-3)"></div>`;
+  for (let t = 0; t < FL.teams; t++) {
+    const isMe = t === FL.myTeam;
+    html += `<div class="dr-board-cell team-label" style="${isMe?'color:var(--gold)':''}">${FL.teamNames[t]}</div>`;
+  }
+
+  // Round rows
+  for (let r = 0; r < rounds; r++) {
+    html += `<div class="dr-board-cell round-label">R${r+1}</div>`;
+    for (let t = 0; t < FL.teams; t++) {
+      const pickNum = r * FL.teams + (r % 2 === 0 ? t : FL.teams - 1 - t);
+      const pick = DR.picks.find(pk => pk.pickNum === pickNum + 1);
+      const isActive = DR.pick === pickNum;
+      const isMe = DR.draftOrder[pickNum] === FL.myTeam;
+      let cls = 'dr-board-cell ';
+      if (isActive) cls += 'pick-active';
+      else if (pick) cls += `pick-filled ${isMe ? 'my-pick' : ''}`;
+      else cls += 'pick-empty';
+
+      if (pick) {
+        const p = pool[pick.playerIdx];
+        html += `<div class="${cls}">
+          <div class="dr-pick-player">${p ? p.name : '?'}</div>
+          <div class="dr-pick-meta">${p ? p.pos+' · '+p.team : ''}${pick.auto ? ' AUTO' : ''}</div>
+        </div>`;
+      } else {
+        html += `<div class="${cls}"><div class="dr-pick-meta" style="color:rgba(255,255,255,.2)">#${pickNum+1}${isActive?' ←':''}</div></div>`;
+      }
+    }
+  }
+
+  html += '</div>';
+  return html;
+}
+
+// ── WATCHLIST ─────────────────────────────────────────────────
+function drToggleWatch(poolIdx) {
+  const i = DR.watchlist.indexOf(poolIdx);
+  if (i >= 0) DR.watchlist.splice(i, 1);
+  else DR.watchlist.unshift(poolIdx);
+  drRenderPool();
+  const wb = document.getElementById('dr-watchlist-body');
+  if (wb) {
+    const pool = drGetPool();
+    wb.innerHTML = DR.watchlist.length === 0
+      ? '<div style="padding:14px;font-size:.78rem;color:var(--muted);text-align:center">Click ♡ on any player to add</div>'
+      : DR.watchlist.map(wi => {
+          const p = pool[wi]; if (!p) return '';
+          const drafted = DR.drafted.has(wi);
+          return `<div class="dr-watch-row">
+            <span style="opacity:${drafted?.5:1}">
+              <div style="font-weight:600;color:${drafted?'var(--muted)':'var(--white)'};">${p.name}${drafted?'<span style="font-size:.6rem;color:#ef5350;margin-left:4px">DRAFTED</span>':''}</div>
+              <div style="font-size:.6rem;color:var(--muted);font-family:\'JetBrains Mono\',monospace">${p.pos} · ${p.team}</div>
+            </span>
+            <span class="dr-ssm-val">${drPlayerValue(p).toFixed(2)}</span>
+            <button class="dr-remove-btn" onclick="drRemoveWatch(${wi})">✕</button>
+          </div>`;
+        }).join('');
+  }
+}
+
+function drRemoveWatch(poolIdx) {
+  DR.watchlist = DR.watchlist.filter(w => w !== poolIdx);
+  drRender();
+}
+
+// ── PRE-DRAFT SCREEN ──────────────────────────────────────────
+function drRenderPreDraft() {
+  return `
+  <div style="max-width:640px;margin:0 auto">
+    <div class="fl-step">
+      <div class="fl-step-title">Draft Room</div>
+      <p style="font-size:.84rem;color:var(--muted);margin-bottom:20px">
+        ${FL.created
+          ? `League: <strong style="color:var(--white)">${FL.name}</strong> · ${FL.teams} teams · ${FL_SCORING[FL.scoring]?.name||FL.scoring} scoring`
+          : 'Create your league in the Setup tab first.'}
+      </p>
+
+      ${FL.created ? `
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">
+        <div style="background:var(--ink-3);border-radius:8px;padding:14px">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--muted);text-transform:uppercase;margin-bottom:6px">Draft Order</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;color:var(--white)">Snake Draft</div>
+          <div style="font-size:.72rem;color:var(--muted);margin-top:4px">Your pick position: #${FL.myTeam+1}</div>
+        </div>
+        <div style="background:var(--ink-3);border-radius:8px;padding:14px">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--muted);text-transform:uppercase;margin-bottom:6px">Scoring</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;color:${FL.scoring.startsWith('ssm')?'var(--gold)':'var(--white)'}">${FL_SCORING[FL.scoring]?.name||FL.scoring}</div>
+          <div style="font-size:.72rem;color:var(--muted);margin-top:4px">${FL.scoring.startsWith('ssm')?'★ SSM Metrics active':'Standard scoring'}</div>
+        </div>
+        <div style="background:var(--ink-3);border-radius:8px;padding:14px">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--muted);text-transform:uppercase;margin-bottom:6px">Timer</div>
+          <select class="fl-input" id="dr-timer-select" style="margin-top:4px">
+            <option value="30">30 seconds</option>
+            <option value="60">60 seconds</option>
+            <option value="90" selected>90 seconds</option>
+            <option value="120">2 minutes</option>
+            <option value="0">No timer</option>
+          </select>
+        </div>
+        <div style="background:var(--ink-3);border-radius:8px;padding:14px">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--muted);text-transform:uppercase;margin-bottom:6px">Player Pool</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;color:var(--white)">${drGetPool().length} Players</div>
+          <div style="font-size:.72rem;color:var(--muted);margin-top:4px">All positions · 2025 projections</div>
+        </div>
+      </div>
+
+      <div style="background:rgba(242,194,48,.06);border:1px solid rgba(242,194,48,.2);border-radius:8px;padding:14px;margin-bottom:20px;font-size:.78rem;color:var(--muted)">
+        <strong style="color:var(--gold)">How it works:</strong> You pick when it's your turn. CPU teams auto-pick using best available by position need. Use the watchlist to queue players. Fast Mode speeds up CPU picks. Auto Pick lets the computer pick for you if you're unsure.
+      </div>
+
+      <button class="fl-btn fl-btn-primary" style="font-size:1.1rem;padding:14px 36px" onclick="DR.timerMax=parseInt(document.getElementById('dr-timer-select')?.value||90)||999;drStart()">
+        🏈 Start Draft
+      </button>
+      ` : '<button class="fl-btn fl-btn-secondary" onclick="flShow(\'setup\')">← Go to Setup</button>'}
+    </div>
+  </div>`;
+}
+
+// ── DRAFT COMPLETE ────────────────────────────────────────────
+function drComplete() {
+  clearInterval(DR.timerInterval);
+  DR.active = false;
+
+  // Grade the draft based on value captured
+  const pool = drGetPool();
+  const myPicks = DR.picks.filter(pk => pk.teamIdx === FL.myTeam);
+  const myValue = myPicks.reduce((s, pk) => s + drPlayerValue(pool[pk.playerIdx]||{}), 0);
+  const avgValue = DR.picks.reduce((s, pk) => s + drPlayerValue(pool[pk.playerIdx]||{}), 0) / FL.teams;
+  const diff = myValue - avgValue;
+  const grade = diff > 8 ? 'A+' : diff > 4 ? 'A' : diff > 1 ? 'B+' : diff > -2 ? 'B' : diff > -5 ? 'C+' : 'C';
+  const gradeClr = grade.startsWith('A') ? '#4caf50' : grade.startsWith('B') ? 'var(--gold)' : '#ffb300';
+
+  const el = document.getElementById('fl-draft-content');
+  if (!el) return;
+
+  el.innerHTML = `
+  <div class="dr-complete">
+    <div class="dr-complete-title">🏈 Draft Complete!</div>
+    <div style="font-size:.84rem;color:var(--muted);margin-bottom:16px">${FL.name} · ${FL_SCORING[FL.scoring]?.name} Scoring</div>
+    <div class="dr-grade" style="color:${gradeClr}">${grade}</div>
+    <div style="font-size:.82rem;color:var(--muted);margin-bottom:24px">
+      Your team captured <strong style="color:${diff>=0?'#4caf50':'#ef5350'}">${diff>=0?'+':''}${diff.toFixed(1)}</strong> ${drValueLabel()} vs league average
+    </div>
+
+    <div style="max-width:560px;margin:0 auto;text-align:left;background:var(--ink-2);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:20px">
+      <div style="padding:12px 16px;background:var(--ink-3);border-bottom:1px solid var(--line);font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.95rem;text-transform:uppercase;color:var(--white)">
+        ★ ${FL.teamNames[FL.myTeam]} — Full Roster
+      </div>
+      ${myPicks.map(pk => {
+        const p = pool[pk.playerIdx]; if (!p) return '';
+        const v = drPlayerValue(p);
+        return `<div style="display:grid;grid-template-columns:52px 1fr 70px 50px;align-items:center;gap:8px;padding:8px 16px;border-bottom:1px solid rgba(255,255,255,.04)">
+          <span class="fl-pos-badge fl-pos-${p.pos}">${p.pos}</span>
+          <span>
+            <div style="font-weight:600;color:var(--white);font-size:.84rem">${p.name}</div>
+            <div style="font-size:.62rem;color:var(--muted);font-family:'JetBrains Mono',monospace">${p.team} · Bye ${p.byeWk} · Pick #${pk.pickNum}${pk.auto?' (AUTO)':''}</div>
+          </span>
+          <span class="dr-ssm-val">${v.toFixed(2)}</span>
+          <span style="font-size:.68rem;color:${p.status==='Active'?'#4caf50':p.status==='Q'?'#ffb300':'#ef5350'}">${p.status}</span>
+        </div>`;
+      }).join('')}
+    </div>
+
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+      <button class="fl-btn fl-btn-primary" onclick="flShow('dashboard')">Go to Dashboard →</button>
+      <button class="fl-btn fl-btn-secondary" onclick="flShow('roster')">View Full Roster</button>
+      <button class="fl-btn fl-btn-secondary" onclick="drStart()">Redraft</button>
+    </div>
+  </div>`;
+}
+
+// ── WIRE INTO flShow ──────────────────────────────────────────
+const _origFlShow = window.flShow;
+window.flShow = function(panel) {
+  _origFlShow(panel);
+  if (panel === 'draft') {
+    const el = document.getElementById('fl-draft-content');
+    if (!el) return;
+    if (!FL.created) {
+      el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)">Create your league first in the Setup tab.</div>';
+      return;
+    }
+    if (DR.active) drRender();
+    else el.innerHTML = drRenderPreDraft();
+  }
+};
+
 </script>
 </body>
 </html>
