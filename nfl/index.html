@@ -363,6 +363,225 @@
     /* Autopick indicator */
     .dr-auto-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.55rem;font-weight:700;padding:1px 6px;border-radius:3px;background:rgba(79,195,247,.15);color:#4fc3f7;border:1px solid rgba(79,195,247,.3);margin-left:4px;vertical-align:middle}
 
+  
+    /* ══════════════════════════════════════════════
+       ESPN-STYLE FANTASY DRAFT BOARD
+    ══════════════════════════════════════════════ */
+
+    /* ── Layout ── */
+    .edr-wrap{display:grid;grid-template-rows:auto auto 1fr;height:calc(100vh - 180px);min-height:600px;gap:0;background:var(--ink);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+    .edr-header{background:#1a1f28;border-bottom:2px solid var(--line);padding:0}
+    .edr-body{display:grid;grid-template-columns:280px 1fr 260px;min-height:0;overflow:hidden}
+    @media(max-width:1100px){.edr-body{grid-template-columns:240px 1fr 220px}}
+    @media(max-width:800px){.edr-body{grid-template-columns:1fr};.edr-sidebar-right{display:none}}
+
+    /* ── Header bar ── */
+    .edr-hbar{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom:1px solid var(--line)}
+    .edr-hbar-left{display:flex;align-items:center;gap:16px}
+    .edr-league-name{font-family:'Barlow Condensed',sans-serif;font-size:1.2rem;font-weight:900;color:var(--white);letter-spacing:.02em}
+    .edr-scoring-badge{font-family:'JetBrains Mono',monospace;font-size:.58rem;font-weight:700;padding:3px 9px;border-radius:4px;letter-spacing:.08em;text-transform:uppercase}
+    .edr-scoring-ssm{background:rgba(242,194,48,.15);color:var(--gold);border:1px solid rgba(242,194,48,.3)}
+    .edr-scoring-std{background:rgba(79,195,247,.12);color:#4fc3f7;border:1px solid rgba(79,195,247,.3)}
+
+    /* ── On-clock strip ── */
+    .edr-clock-bar{display:flex;align-items:center;gap:0;background:#0f1318;border-bottom:1px solid var(--line)}
+    .edr-clock-pick{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 24px;border-right:1px solid var(--line);min-width:100px}
+    .edr-clock-pick-num{font-family:'Barlow Condensed',sans-serif;font-size:2rem;font-weight:900;color:var(--gold);line-height:1}
+    .edr-clock-pick-lbl{font-family:'JetBrains Mono',monospace;font-size:.55rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+    .edr-clock-team{flex:1;padding:10px 20px;border-right:1px solid var(--line)}
+    .edr-clock-team-name{font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:800;color:var(--white);margin-bottom:2px}
+    .edr-clock-team-sub{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--muted)}
+    .edr-clock-my{background:rgba(242,194,48,.06);border-color:rgba(242,194,48,.2)!important}
+    .edr-clock-my .edr-clock-team-name{color:var(--gold)}
+    .edr-timer-wrap{display:flex;align-items:center;gap:14px;padding:10px 20px;border-right:1px solid var(--line)}
+    .edr-timer-num{font-family:'Barlow Condensed',sans-serif;font-size:2.2rem;font-weight:900;line-height:1;min-width:60px;text-align:center}
+    .edr-timer-ok{color:#4caf50}
+    .edr-timer-warn{color:var(--gold)}
+    .edr-timer-urgent{color:#ef5350;animation:edrPulse .55s ease-in-out infinite}
+    @keyframes edrPulse{0%,100%{opacity:1}50%{opacity:.4}}
+    .edr-timer-bar{width:100%;height:4px;background:var(--ink-3);border-radius:2px;overflow:hidden;margin-top:4px}
+    .edr-timer-fill{height:100%;border-radius:2px;transition:width .9s linear,background .3s}
+    .edr-controls{display:flex;gap:8px;padding:10px 16px;align-items:center;flex-wrap:wrap}
+    .edr-ctrl-btn{font-family:'Barlow Condensed',sans-serif;font-size:.8rem;font-weight:700;text-transform:uppercase;padding:6px 14px;border-radius:5px;border:1px solid var(--line);background:var(--ink-3);color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap}
+    .edr-ctrl-btn:hover{border-color:var(--gold);color:var(--gold)}
+    .edr-ctrl-btn.active{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+    .edr-ctrl-btn.danger{border-color:rgba(239,83,80,.4);color:#ef5350}
+    .edr-progress-bar{height:3px;background:var(--ink-3)}
+    .edr-progress-fill{height:100%;background:var(--gold);transition:width .5s ease}
+
+    /* ── Left sidebar: Player pool ── */
+    .edr-sidebar-left{background:#0f1318;border-right:1px solid var(--line);display:flex;flex-direction:column;overflow:hidden}
+    .edr-pool-header{padding:10px 12px;background:#1a1f28;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:6px;flex-shrink:0}
+    .edr-pool-title{font-family:'Barlow Condensed',sans-serif;font-size:.85rem;font-weight:800;text-transform:uppercase;color:var(--white);letter-spacing:.06em}
+    .edr-search{width:100%;background:var(--ink-3);border:1px solid var(--line);border-radius:5px;padding:6px 10px;color:var(--white);font-size:.78rem;font-family:'Inter',sans-serif;outline:none}
+    .edr-search:focus{border-color:var(--gold)}
+    .edr-pos-filters{display:flex;gap:4px;flex-wrap:wrap}
+    .edr-pos-btn{font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;padding:3px 8px;border-radius:3px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer;transition:all .15s}
+    .edr-pos-btn:hover{border-color:var(--gold);color:var(--gold)}
+    .edr-pos-btn.active{border-color:var(--gold);background:rgba(242,194,48,.12);color:var(--gold)}
+    .edr-pool-list{overflow-y:auto;flex:1}
+    .edr-pool-list::-webkit-scrollbar{width:4px}
+    .edr-pool-list::-webkit-scrollbar-track{background:var(--ink)}
+    .edr-pool-list::-webkit-scrollbar-thumb{background:var(--line);border-radius:2px}
+
+    /* ── Player row ── */
+    .edr-player{display:grid;grid-template-columns:28px 1fr 54px 54px 52px;align-items:center;gap:4px;padding:7px 10px;border-bottom:1px solid rgba(255,255,255,.035);cursor:pointer;transition:background .12s;position:relative}
+    .edr-player:hover{background:rgba(242,194,48,.07)}
+    .edr-player.drafted{opacity:.28;cursor:default;pointer-events:none}
+    .edr-player.watched::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--gold)}
+    .edr-player.my-pick{background:rgba(242,194,48,.06)}
+    .edr-player-rank{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--muted);text-align:center}
+    .edr-player-info{min-width:0}
+    .edr-player-name{font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:700;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .edr-player-meta{font-family:'JetBrains Mono',monospace;font-size:.56rem;color:var(--muted);white-space:nowrap}
+    .edr-player-val{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--gold);font-weight:700;text-align:right}
+    .edr-player-proj{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--muted);text-align:right}
+    .edr-draft-now-btn{font-family:'Barlow Condensed',sans-serif;font-size:.72rem;font-weight:800;text-transform:uppercase;padding:4px 8px;border-radius:4px;border:none;background:var(--gold);color:var(--ink);cursor:pointer;white-space:nowrap;transition:all .15s}
+    .edr-draft-now-btn:hover{background:#e0b020;transform:scale(1.04)}
+    .edr-draft-now-btn:disabled{background:var(--ink-3);color:var(--muted);cursor:not-allowed;transform:none}
+    .edr-watch-star{background:none;border:none;color:rgba(242,194,48,.3);font-size:.9rem;cursor:pointer;padding:2px;line-height:1;transition:color .15s}
+    .edr-watch-star.on{color:var(--gold)}
+    .edr-watch-star:hover{color:var(--gold)}
+    .edr-pool-header-row{display:grid;grid-template-columns:28px 1fr 54px 54px 52px;gap:4px;padding:5px 10px;background:#1a1f28;border-bottom:1px solid var(--line);font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;cursor:pointer;flex-shrink:0}
+    .edr-pool-header-row span:hover{color:var(--gold)}
+    .edr-sort-active{color:var(--gold)!important}
+
+    /* ── Center: Draft board ── */
+    .edr-board-area{background:var(--ink);display:flex;flex-direction:column;overflow:hidden}
+    .edr-board-tabs{display:flex;border-bottom:1px solid var(--line);background:#1a1f28;flex-shrink:0}
+    .edr-board-tab{font-family:'Barlow Condensed',sans-serif;font-size:.82rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:10px 18px;border-bottom:2px solid transparent;color:var(--muted);cursor:pointer;transition:all .15s;white-space:nowrap}
+    .edr-board-tab.active{color:var(--white);border-bottom-color:var(--gold)}
+    .edr-board-tab:hover:not(.active){color:var(--white)}
+    .edr-board-view{flex:1;overflow:auto;position:relative}
+    .edr-board-view::-webkit-scrollbar{width:5px;height:5px}
+    .edr-board-view::-webkit-scrollbar-track{background:var(--ink)}
+    .edr-board-view::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px}
+
+    /* Draft board grid */
+    .edr-grid{display:grid;min-width:max-content}
+    .edr-grid-cell{padding:6px 10px;border-right:1px solid rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.05);min-width:110px;min-height:48px;font-size:.7rem}
+    .edr-grid-cell.corner{min-width:50px;background:#0f1318;position:sticky;left:0;z-index:2;border-right:1px solid var(--line)}
+    .edr-grid-cell.team-hdr{background:#1a1f28;font-family:'Barlow Condensed',sans-serif;font-size:.8rem;font-weight:800;color:var(--white);display:flex;align-items:center;justify-content:center;text-align:center;min-height:38px;position:sticky;top:0;z-index:3;border-bottom:1px solid var(--line)}
+    .edr-grid-cell.team-hdr.me{color:var(--gold);background:#1e2310}
+    .edr-grid-cell.rnd-lbl{background:#0f1318;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--muted);display:flex;align-items:center;justify-content:center;min-width:50px;position:sticky;left:0;z-index:2;border-right:1px solid var(--line)}
+    .edr-grid-cell.empty{background:rgba(255,255,255,.01)}
+    .edr-grid-cell.active-cell{background:rgba(79,195,247,.06);outline:1px solid rgba(79,195,247,.5);animation:cellPulse2 1s ease-in-out infinite}
+    @keyframes cellPulse2{0%,100%{outline-color:rgba(79,195,247,.4)}50%{outline-color:rgba(79,195,247,.95)}}
+    .edr-grid-cell.filled{background:rgba(255,255,255,.025)}
+    .edr-grid-cell.filled.mine{background:rgba(242,194,48,.07);border-left:2px solid var(--gold)}
+    .edr-pick-name{font-family:'Barlow Condensed',sans-serif;font-size:.8rem;font-weight:700;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2}
+    .edr-pick-meta{font-family:'JetBrains Mono',monospace;font-size:.56rem;color:var(--muted);margin-top:1px;white-space:nowrap}
+    .edr-pick-auto{font-family:'JetBrains Mono',monospace;font-size:.48rem;color:#4fc3f7;text-transform:uppercase;letter-spacing:.06em}
+
+    /* ── Right sidebar ── */
+    .edr-sidebar-right{background:#0f1318;border-left:1px solid var(--line);display:flex;flex-direction:column;overflow:hidden}
+    .edr-side-section{border-bottom:1px solid var(--line);flex-shrink:0}
+    .edr-side-title{font-family:'Barlow Condensed',sans-serif;font-size:.8rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:var(--white);padding:9px 12px;background:#1a1f28;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+    .edr-my-roster{overflow-y:auto;flex:1}
+    .edr-roster-row{display:grid;grid-template-columns:34px 1fr 46px;align-items:center;gap:6px;padding:6px 10px;border-bottom:1px solid rgba(255,255,255,.04)}
+    .edr-recent-pick{display:flex;align-items:center;gap:8px;padding:6px 10px;border-bottom:1px solid rgba(255,255,255,.04);font-size:.72rem}
+    .edr-pick-num-badge{font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+    /* ── Mock draft specific ── */
+    .edr-mock-banner{background:rgba(79,195,247,.08);border:1px solid rgba(79,195,247,.25);border-radius:8px;padding:12px 16px;margin-bottom:14px;font-size:.78rem;color:#4fc3f7;display:flex;align-items:center;gap:10px}
+
+    /* ── Draft complete ── */
+    .edr-complete-wrap{padding:24px;text-align:center}
+    .edr-grade-ring{width:100px;height:100px;border-radius:50%;border:4px solid;display:flex;align-items:center;justify-content:center;margin:16px auto;font-family:'Barlow Condensed',sans-serif;font-size:2.8rem;font-weight:900}
+    .edr-pos-summary{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px;margin:16px 0;text-align:center}
+    .edr-pos-card{background:var(--ink-3);border-radius:6px;padding:8px 4px}
+    .edr-pos-card-count{font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:800;color:var(--white)}
+    .edr-pos-card-lbl{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--muted);text-transform:uppercase}
+
+    /* ── Watchlist ── */
+    .edr-watch-row{display:grid;grid-template-columns:1fr 48px 22px;align-items:center;gap:6px;padding:6px 10px;border-bottom:1px solid rgba(255,255,255,.04);font-size:.72rem}
+
+    /* ── Pre-draft lobby ── */
+    .edr-lobby{max-width:780px;margin:0 auto;padding:20px 0}
+    .edr-lobby-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
+    @media(max-width:600px){.edr-lobby-grid{grid-template-columns:1fr}}
+    .edr-lobby-card{background:var(--ink-2);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+    .edr-lobby-card-title{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}
+    .edr-lobby-card-val{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:800;color:var(--white)}
+    .edr-lobby-card-sub{font-size:.72rem;color:var(--muted);margin-top:3px}
+    .edr-order-strip{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+    .edr-order-pill{font-family:'JetBrains Mono',monospace;font-size:.65rem;padding:3px 10px;border-radius:12px;border:1px solid var(--line);color:var(--muted)}
+    .edr-order-pill.me{border-color:var(--gold);color:var(--gold);background:rgba(242,194,48,.08);font-weight:700}
+    .edr-start-btn{background:var(--gold);color:var(--ink);font-family:'Barlow Condensed',sans-serif;font-size:1.2rem;font-weight:900;text-transform:uppercase;letter-spacing:.05em;padding:15px 40px;border-radius:8px;border:none;cursor:pointer;transition:all .2s;display:block;width:100%;margin-top:16px}
+    .edr-start-btn:hover{background:#e0b020;transform:translateY(-1px);box-shadow:0 4px 16px rgba(242,194,48,.3)}
+    .edr-start-btn.mock{background:transparent;border:2px solid #4fc3f7;color:#4fc3f7}
+    .edr-start-btn.mock:hover{background:rgba(79,195,247,.1)}
+    .edr-tier-label{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:5px 10px;background:var(--ink-3);border-top:1px solid var(--line);border-bottom:1px solid var(--line);color:var(--muted);grid-column:1/-1}
+
+    /* Position color dots */
+    .pos-dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:4px;flex-shrink:0}
+    .pos-dot-QB{background:#ef5350}.pos-dot-RB{background:#4caf50}
+    .pos-dot-WR{background:#4fc3f7}.pos-dot-TE{background:#ab47bc}
+    .pos-dot-K{background:#ffb300}.pos-dot-DEF{background:#78909c}
+
+  
+    /* ── League Lobby ───────────────────────────────── */
+    .fll-wrap{max-width:860px;margin:0 auto}
+    .fll-hero{text-align:center;padding:32px 20px 24px;border-bottom:1px solid var(--line);margin-bottom:28px}
+    .fll-hero-title{font-family:'Barlow Condensed',sans-serif;font-size:2.2rem;font-weight:900;color:var(--white);margin-bottom:6px}
+    .fll-hero-sub{font-size:.84rem;color:var(--muted);max-width:520px;margin:0 auto}
+    .fll-choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px}
+    @media(max-width:600px){.fll-choice-grid{grid-template-columns:1fr}}
+    .fll-choice-card{background:var(--ink-2);border:2px solid var(--line);border-radius:14px;padding:28px 24px;cursor:pointer;transition:all .22s;text-align:center;position:relative;overflow:hidden}
+    .fll-choice-card:hover{border-color:var(--gold);background:rgba(242,194,48,.04);transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,.4)}
+    .fll-choice-card.selected{border-color:var(--gold);background:rgba(242,194,48,.06)}
+    .fll-choice-icon{font-size:2.4rem;margin-bottom:10px;display:block}
+    .fll-choice-title{font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--white);margin-bottom:6px}
+    .fll-choice-desc{font-size:.78rem;color:var(--muted);line-height:1.5}
+
+    /* privacy toggle */
+    .fll-privacy-row{display:flex;gap:10px;margin-top:12px}
+    .fll-privacy-opt{flex:1;display:flex;align-items:center;gap:10px;background:var(--ink-3);border:2px solid var(--line);border-radius:8px;padding:12px 14px;cursor:pointer;transition:all .2s}
+    .fll-privacy-opt:hover{border-color:var(--gold)}
+    .fll-privacy-opt.selected{border-color:var(--gold);background:rgba(242,194,48,.07)}
+    .fll-privacy-dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--line);flex-shrink:0;transition:all .2s}
+    .fll-privacy-opt.selected .fll-privacy-dot{border-color:var(--gold);background:var(--gold)}
+    .fll-privacy-label{font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:800;color:var(--white)}
+    .fll-privacy-sub{font-size:.68rem;color:var(--muted);margin-top:2px;line-height:1.4}
+
+    /* league code */
+    .fll-code-wrap{background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px;text-align:center;margin:14px 0}
+    .fll-code{font-family:'JetBrains Mono',monospace;font-size:2rem;font-weight:700;color:var(--gold);letter-spacing:.3em;margin:8px 0}
+    .fll-code-sub{font-size:.72rem;color:var(--muted)}
+    .fll-copy-btn{font-family:'Barlow Condensed',sans-serif;font-size:.82rem;font-weight:700;padding:6px 18px;border-radius:5px;border:1px solid rgba(242,194,48,.4);color:var(--gold);background:transparent;cursor:pointer;margin-top:8px;transition:all .2s}
+    .fll-copy-btn:hover{background:rgba(242,194,48,.1)}
+
+    /* join form */
+    .fll-join-code-input{font-family:'JetBrains Mono',monospace;font-size:1.4rem;font-weight:700;text-align:center;letter-spacing:.2em;text-transform:uppercase;padding:14px;border-radius:8px;background:var(--ink-3);border:2px solid var(--line);color:var(--white);width:100%;outline:none;transition:border-color .2s}
+    .fll-join-code-input:focus{border-color:var(--gold)}
+
+    /* public leagues browser */
+    .fll-league-card{background:var(--ink-2);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px;margin-bottom:8px;transition:border-color .2s}
+    .fll-league-card:hover{border-color:var(--gold)}
+    .fll-league-card-name{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;color:var(--white);margin-bottom:3px}
+    .fll-league-card-meta{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--muted)}
+    .fll-league-spots{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;padding:3px 10px;border-radius:12px;white-space:nowrap}
+    .fll-spots-open{background:rgba(76,175,80,.15);color:#4caf50;border:1px solid rgba(76,175,80,.3)}
+    .fll-spots-full{background:rgba(239,83,80,.12);color:#ef5350;border:1px solid rgba(239,83,80,.3)}
+    .fll-join-btn{font-family:'Barlow Condensed',sans-serif;font-size:.82rem;font-weight:800;text-transform:uppercase;padding:7px 18px;border-radius:6px;border:none;background:var(--gold);color:var(--ink);cursor:pointer;transition:all .2s;white-space:nowrap}
+    .fll-join-btn:hover{background:#e0b020}
+    .fll-join-btn:disabled{background:var(--ink-3);color:var(--muted);cursor:not-allowed}
+
+    /* Status badges */
+    .fll-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.55rem;font-weight:700;padding:2px 7px;border-radius:3px;text-transform:uppercase;letter-spacing:.06em;margin-left:6px}
+    .fll-badge-pub{background:rgba(76,175,80,.15);color:#4caf50;border:1px solid rgba(76,175,80,.3)}
+    .fll-badge-prv{background:rgba(158,158,158,.12);color:#9e9e9e;border:1px solid rgba(158,158,158,.3)}
+    .fll-badge-comm{background:rgba(242,194,48,.12);color:var(--gold);border:1px solid rgba(242,194,48,.3)}
+
+    /* step indicator */
+    .fll-steps{display:flex;align-items:center;gap:0;margin-bottom:24px}
+    .fll-step-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;flex-shrink:0;transition:all .2s}
+    .fll-step-dot.done{background:var(--gold);color:var(--ink)}
+    .fll-step-dot.active{background:var(--ink-3);color:var(--white);border:2px solid var(--gold)}
+    .fll-step-dot.todo{background:var(--ink-3);color:var(--muted);border:2px solid var(--line)}
+    .fll-step-line{flex:1;height:2px;background:var(--line)}
+    .fll-step-line.done{background:var(--gold)}
+
   </style>
   <script src="/assets/ssc-live.js"></script>
 </head>
@@ -574,7 +793,7 @@
   <div class="sec-label">// 2025 Season</div>
   <div class="sec-title">NFL Stats</div>
   <div style="display:flex;gap:10px;margin-bottom:22px;align-items:center"><button class="type-btn active" onclick="showType('player',this)" style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:9px 22px;border-radius:6px;border:2px solid var(--gold);background:var(--gold);color:var(--ink);cursor:pointer;transition:all .2s">👤 Player Stats</button>
-    <button class="type-btn" onclick="showType('team',this)" style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:9px 22px;border-radius:6px;border:2px solid var(--line);background:var(--ink-2);color:var(--muted);cursor:pointer;transition:all .2s">🏟️ Team Stats</button> <a href="/teams/index.html#nfl" style="display:inline-flex;align-items:center;gap:6px;font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:9px 22px;border-radius:6px;cursor:pointer;transition:all .2s;text-decoration:none;border:2px solid var(--line);background:var(--ink-2);color:var(--white);vertical-align:middle">🏟 All Teams →</a>
+    <button class="type-btn" onclick="showType('team',this)" style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:9px 22px;border-radius:6px;border:2px solid var(--line);background:var(--ink-2);color:var(--muted);cursor:pointer;transition:all .2s">🏟️ Team Stats</button> <button onclick="window.location='/teams/index.html#nfl'" style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:9px 22px;border-radius:6px;border:2px solid var(--line);background:var(--ink-2);color:var(--white);cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:6px" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--line)';this.style.color='var(--white)'">🏟 All Teams →</button>
   </div>
 
   <!-- PLAYER STATS -->
@@ -746,7 +965,7 @@
 
   <!-- ── TOP NAV ── -->
   <div class="fl-nav" id="fl-nav">
-    <button class="fl-nav-btn active" onclick="flShow('setup')">⚙️ Setup</button>
+    <button class="fl-nav-btn active" onclick="flShow('setup')">🏠 My Leagues</button>
     <button class="fl-nav-btn" onclick="flShow('dashboard')">🏠 Dashboard</button>
     <button class="fl-nav-btn" onclick="flShow('roster')">📋 My Roster</button>
     <button class="fl-nav-btn" onclick="flShow('matchup')">⚔️ Matchup</button>
@@ -1731,7 +1950,7 @@ function flCreate() {
   FL.created=true;
 
   // Show prompt to go to draft or dashboard
-  if(confirm('League created! Go to Draft Room now?')) {
+  if(confirm('League created! Go to Draft Room?')) {
     flShow('draft');
   } else {
     flShow('dashboard');
@@ -2822,6 +3041,1330 @@ window.flShow = function(panel) {
     else el.innerHTML = drRenderPreDraft();
   }
 };
+
+</script>
+<script>
+
+// ══════════════════════════════════════════════════════════════
+// ── ESPN-STYLE DRAFT BOARD ENGINE v2 ─────────────────────────
+// ══════════════════════════════════════════════════════════════
+
+// Tier breakpoints by overall rank
+const DR_TIERS = [
+  {max:12,  label:'Elite — Tier 1',   color:'#F2C230'},
+  {max:24,  label:'Stud — Tier 2',    color:'#4caf50'},
+  {max:48,  label:'Strong — Tier 3',  color:'#4fc3f7'},
+  {max:72,  label:'Mid — Tier 4',     color:'#ab47bc'},
+  {max:120, label:'Depth — Tier 5',   color:'#78909c'},
+  {max:9999,label:'Flier — Tier 6',   color:'#546e7a'},
+];
+
+// Position color map
+const POS_CLR = {QB:'#ef5350',RB:'#4caf50',WR:'#4fc3f7',TE:'#ab47bc',K:'#ffb300',DEF:'#78909c'};
+
+// ── State ─────────────────────────────────────────────────────
+let EDR = {
+  mode:        'idle',   // idle | live | mock | complete
+  isMock:      false,
+  pick:        0,
+  totalPicks:  0,
+  rounds:      13,
+  timerSec:    90,
+  timerMax:    90,
+  timerInt:    null,
+  draftOrder:  [],
+  picks:       [],
+  drafted:     new Set(),
+  watchlist:   [],
+  posFilter:   '',
+  search:      '',
+  sortKey:     'rank',
+  sortDir:     -1,
+  speed:       1,
+  paused:      false,
+  boardView:   'grid',   // grid | myteam | rankings
+  mockRosters: [],
+};
+
+// ── Helpers ───────────────────────────────────────────────────
+function edrPool(){ return [...FL_PLAYERS,...DR_EXTRA_PLAYERS]; }
+function edrVal(p){
+  if(!p) return 0;
+  const s=FL.scoring;
+  if(s==='ssm-ppg')    return p.qppg||p.rbppg||p.wrppg||p.proj||0;
+  if(s==='ssm-hybrid') return ((p.qppg||p.rbppg||p.wrppg||0)*.45+(p.proj||0)*.55);
+  return p.proj||p.stdPts||0;
+}
+function edrValLabel(){ return FL.scoring.startsWith('ssm')?'SSM PPG':'Proj'; }
+function edrTier(rank){
+  for(const t of DR_TIERS) if(rank<=t.max) return t;
+  return DR_TIERS[DR_TIERS.length-1];
+}
+function edrSnake(teams,rounds){
+  const o=[];
+  for(let r=0;r<rounds;r++){
+    const row=Array.from({length:teams},(_,i)=>i);
+    if(r%2===1) row.reverse();
+    o.push(...row);
+  }
+  return o;
+}
+function edrNeeds(teamIdx){
+  const pool=edrPool();
+  const counts={QB:0,RB:0,WR:0,TE:0,K:0,DEF:0};
+  (FL.rosters[teamIdx]||[]).forEach(i=>{const p=pool[i];if(p) counts[p.pos]=(counts[p.pos]||0)+1;});
+  const n=[];
+  if(counts.QB<2) n.push('QB');
+  if(counts.RB<4) n.push('RB');
+  if(counts.WR<5) n.push('WR');
+  if(counts.TE<2) n.push('TE');
+  if(counts.K <1) n.push('K');
+  if(counts.DEF<1)n.push('DEF');
+  return n.length?n:['RB','WR','QB','TE'];
+}
+function edrSortedPool(){
+  const pool=edrPool().map((p,i)=>({...p,_i:i,_val:edrVal(p)}));
+  let out=pool;
+  if(EDR.posFilter) out=out.filter(p=>p.pos===EDR.posFilter);
+  if(EDR.search){const q=EDR.search.toLowerCase();out=out.filter(p=>p.name.toLowerCase().includes(q)||p.team.toLowerCase().includes(q));}
+  out.sort((a,b)=>{
+    let av,bv;
+    if(EDR.sortKey==='rank')  {av=a._val;bv=b._val;}
+    else if(EDR.sortKey==='proj')  {av=a.proj||0;bv=b.proj||0;}
+    else if(EDR.sortKey==='name')  {return EDR.sortDir*(a.name.localeCompare(b.name));}
+    else if(EDR.sortKey==='pos')   {return EDR.sortDir*(a.pos.localeCompare(b.pos));}
+    else if(EDR.sortKey==='bye')   {av=-(a.byeWk||20);bv=-(b.byeWk||20);}
+    else {av=a._val;bv=b._val;}
+    return EDR.sortDir*(bv-av);
+  });
+  return out;
+}
+
+// ── Start / Reset ─────────────────────────────────────────────
+function edrLaunch(mock=false){
+  if(!FL.created){flShow('setup');return;}
+  EDR.isMock    = mock;
+  EDR.mode      = mock?'mock':'live';
+  EDR.pick      = 0;
+  EDR.rounds    = 13;
+  EDR.totalPicks= FL.teams*EDR.rounds;
+  EDR.draftOrder= edrSnake(FL.teams,EDR.rounds);
+  EDR.picks     = [];
+  EDR.drafted   = new Set();
+  EDR.paused    = false;
+  EDR.speed     = 1;
+  EDR.boardView = 'grid';
+  FL.rosters    = Array.from({length:FL.teams},()=>[]);
+  // Mock: create separate mock rosters so real league isn't affected
+  EDR.mockRosters = Array.from({length:FL.teams},()=>[]);
+  edrRender();
+  edrStartTimer();
+  // If not my pick, CPU goes first
+  if(EDR.draftOrder[0]!==FL.myTeam) setTimeout(edrAutoCPU,1000);
+}
+
+function edrStop(){
+  clearInterval(EDR.timerInt);
+  EDR.mode='idle';
+  edrShowLobby();
+}
+
+// ── Timer ─────────────────────────────────────────────────────
+function edrStartTimer(){
+  clearInterval(EDR.timerInt);
+  EDR.timerSec=EDR.timerMax;
+  edrUpdateTimer();
+  EDR.timerInt=setInterval(()=>{
+    if(EDR.paused) return;
+    EDR.timerSec-=EDR.speed;
+    if(EDR.timerSec<=0){edrAutoPickCurrent();}
+    else edrUpdateTimer();
+  },1000);
+}
+function edrUpdateTimer(){
+  const el=document.getElementById('edr-timer-num');
+  const fill=document.getElementById('edr-timer-fill');
+  if(!el) return;
+  const s=Math.max(0,Math.ceil(EDR.timerSec));
+  el.textContent=s+'s';
+  const pct=s/EDR.timerMax*100;
+  const cls=s<=10?'edr-timer-urgent':s<=25?'edr-timer-warn':'edr-timer-ok';
+  el.className='edr-timer-num '+cls;
+  if(fill){
+    fill.style.width=pct+'%';
+    fill.style.background=s<=10?'#ef5350':s<=25?'var(--gold)':'#4caf50';
+  }
+}
+
+// ── Auto-pick logic ───────────────────────────────────────────
+function edrAutoPickCurrent(){
+  const ti=EDR.draftOrder[EDR.pick];
+  const pool=edrSortedPool();
+  const avail=pool.filter(p=>!EDR.drafted.has(p._i));
+  const needs=edrNeeds(ti);
+  const pick=avail.find(p=>needs.includes(p.pos))||avail[0];
+  if(pick) edrExecutePick(pick._i,true);
+}
+function edrAutoCPU(){
+  if(EDR.mode==='idle'||EDR.mode==='complete') return;
+  if(EDR.pick>=EDR.totalPicks) return;
+  const ti=EDR.draftOrder[EDR.pick];
+  if(ti===FL.myTeam) return; // wait for user
+  edrAutoPickCurrent();
+}
+
+// ── Execute pick ──────────────────────────────────────────────
+function edrExecutePick(poolIdx,auto=false){
+  if(EDR.pick>=EDR.totalPicks) return;
+  const pool=edrPool();
+  const p=pool[poolIdx];
+  if(!p||EDR.drafted.has(poolIdx)) return;
+  const ti=EDR.draftOrder[EDR.pick];
+  EDR.drafted.add(poolIdx);
+  if(EDR.isMock) EDR.mockRosters[ti].push(poolIdx);
+  else           FL.rosters[ti].push(poolIdx);
+  EDR.picks.push({pickNum:EDR.pick+1,teamIdx:ti,playerIdx:poolIdx,auto});
+  EDR.pick++;
+  clearInterval(EDR.timerInt);
+  if(EDR.pick>=EDR.totalPicks){edrComplete();return;}
+  edrRender();
+  const nextTi=EDR.draftOrder[EDR.pick];
+  edrStartTimer();
+  if(nextTi!==FL.myTeam){
+    const delay=EDR.speed>=3?280:1100;
+    setTimeout(()=>{if(EDR.mode!=='idle'&&EDR.draftOrder[EDR.pick]!==FL.myTeam)edrAutoCPU();},delay);
+  }
+}
+
+// ── Main render ───────────────────────────────────────────────
+function edrRender(){
+  const el=document.getElementById('fl-draft-content');
+  if(!el) return;
+  if(EDR.mode==='idle'){edrShowLobby();return;}
+  if(EDR.mode==='complete'||EDR.mode==='mock-complete'){edrRenderComplete();return;}
+
+  const ti=EDR.draftOrder[EDR.pick]||0;
+  const isMe=ti===FL.myTeam;
+  const pool=edrPool();
+  const rd=Math.floor(EDR.pick/FL.teams)+1;
+  const pk=(EDR.pick%FL.teams)+1;
+
+  el.innerHTML=`
+  <div class="edr-wrap">
+
+    <!-- ── HEADER ── -->
+    <div class="edr-header">
+      <div class="edr-hbar">
+        <div class="edr-hbar-left">
+          <div class="edr-league-name">${FL.name}</div>
+          <span class="edr-scoring-badge ${FL.scoring.startsWith('ssm')?'edr-scoring-ssm':'edr-scoring-std'}">
+            ${FL.scoring.startsWith('ssm')?'★ ':''} ${(FL_SCORING[FL.scoring]?.name||FL.scoring)}
+          </span>
+          ${EDR.isMock?'<span class="edr-scoring-badge" style="background:rgba(79,195,247,.12);color:#4fc3f7;border-color:rgba(79,195,247,.3)">MOCK DRAFT</span>':''}
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <div style="font-family:\'JetBrains Mono\',monospace;font-size:.62rem;color:var(--muted)">
+            Pick ${EDR.pick}/${EDR.totalPicks} · Rd ${rd} of ${EDR.rounds}
+          </div>
+          <button class="edr-ctrl-btn danger" onclick="if(confirm('Exit draft?'))edrStop()">✕ Exit</button>
+        </div>
+      </div>
+
+      <!-- Progress bar -->
+      <div class="edr-progress-bar"><div class="edr-progress-fill" id="edr-prog" style="width:${(EDR.pick/EDR.totalPicks*100).toFixed(1)}%"></div></div>
+
+      <!-- On-clock strip -->
+      <div class="edr-clock-bar">
+        <div class="edr-clock-pick">
+          <div class="edr-clock-pick-num">#${EDR.pick+1}</div>
+          <div class="edr-clock-pick-lbl">Overall</div>
+        </div>
+        <div class="edr-clock-team ${isMe?'edr-clock-my':''}">
+          <div class="edr-clock-team-name">${isMe?'★ YOUR PICK':FL.teamNames[ti]}</div>
+          <div class="edr-clock-team-sub">Round ${rd} · Pick ${pk} of ${FL.teams} · ${EDR.isMock?'Mock Draft':'Live Draft'}</div>
+        </div>
+        <div class="edr-timer-wrap">
+          <div>
+            <div class="edr-clock-pick-lbl" style="margin-bottom:3px">Time</div>
+            <div class="edr-timer-num edr-timer-ok" id="edr-timer-num">${EDR.timerMax}s</div>
+            <div class="edr-timer-bar"><div class="edr-timer-fill" id="edr-timer-fill" style="width:100%;background:#4caf50"></div></div>
+          </div>
+        </div>
+        <div class="edr-controls">
+          <button class="edr-ctrl-btn" id="edr-pause-btn" onclick="edrTogglePause()">⏸ Pause</button>
+          <button class="edr-ctrl-btn" id="edr-speed-btn" onclick="edrToggleSpeed()">⚡ Fast</button>
+          <button class="edr-ctrl-btn" onclick="edrAutoPickCurrent()">🤖 Auto Pick</button>
+          <button class="edr-ctrl-btn" onclick="edrSetView('grid')" id="edr-vbtn-grid" style="border-color:var(--gold);color:var(--gold)">📋 Board</button>
+          <button class="edr-ctrl-btn" onclick="edrSetView('myteam')" id="edr-vbtn-myteam">⭐ My Team</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── BODY ── -->
+    <div class="edr-body">
+
+      <!-- LEFT: Player pool -->
+      <div class="edr-sidebar-left">
+        <div class="edr-pool-header">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div class="edr-pool-title">Available Players</div>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--muted)">${edrPool().length-EDR.drafted.size} left</span>
+          </div>
+          <input class="edr-search" id="edr-search" placeholder="Search name or team…" value="${EDR.search}" oninput="EDR.search=this.value;edrRefreshPool()">
+          <div class="edr-pos-filters">
+            ${['','QB','RB','WR','TE','K','DEF'].map(pos=>`
+              <button class="edr-pos-btn ${EDR.posFilter===pos?'active':''}" onclick="EDR.posFilter='${pos}';document.querySelectorAll('.edr-pos-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active');edrRefreshPool()">${pos||'All'}</button>
+            `).join('')}
+          </div>
+        </div>
+        <div class="edr-pool-header-row">
+          <span onclick="edrSort('rank')" class="${EDR.sortKey==='rank'?'edr-sort-active':''}">#</span>
+          <span onclick="edrSort('name')" class="${EDR.sortKey==='name'?'edr-sort-active':''}">Player</span>
+          <span onclick="edrSort('rank')" class="${EDR.sortKey==='rank'?'edr-sort-active':''}" style="text-align:right">${edrValLabel()}</span>
+          <span onclick="edrSort('proj')" class="${EDR.sortKey==='proj'?'edr-sort-active':''}" style="text-align:right">Proj</span>
+          <span></span>
+        </div>
+        <div class="edr-pool-list" id="edr-pool-list"></div>
+      </div>
+
+      <!-- CENTER: Board view -->
+      <div class="edr-board-area">
+        <div class="edr-board-tabs">
+          <div class="edr-board-tab ${EDR.boardView==='grid'?'active':''}" onclick="edrSetView('grid')">Draft Board</div>
+          <div class="edr-board-tab ${EDR.boardView==='myteam'?'active':''}" onclick="edrSetView('myteam')">My Team</div>
+          <div class="edr-board-tab ${EDR.boardView==='rankings'?'active':''}" onclick="edrSetView('rankings')">Rankings</div>
+        </div>
+        <div class="edr-board-view" id="edr-board-view"></div>
+      </div>
+
+      <!-- RIGHT: Sidebar -->
+      <div class="edr-sidebar-right">
+        <!-- My roster -->
+        <div class="edr-side-section">
+          <div class="edr-side-title">
+            ★ ${FL.teamNames[FL.myTeam]}
+            <span style="font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--muted);font-weight:400">${EDR.picks.filter(pk=>pk.teamIdx===FL.myTeam).length} picks</span>
+          </div>
+          <div style="max-height:220px;overflow-y:auto">
+            ${EDR.picks.filter(pk=>pk.teamIdx===FL.myTeam).length===0
+              ?'<div style="padding:14px;font-size:.75rem;color:var(--muted);text-align:center">No picks yet</div>'
+              :EDR.picks.filter(pk=>pk.teamIdx===FL.myTeam).map(pk=>{
+                const p=edrPool()[pk.playerIdx];if(!p) return '';
+                return `<div class="edr-roster-row">
+                  <span class="fl-pos-badge fl-pos-${p.pos}" style="font-size:.55rem">${p.pos}</span>
+                  <span>
+                    <div style="font-family:'Barlow Condensed',sans-serif;font-size:.82rem;font-weight:700;color:var(--white)">${p.name}</div>
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:.56rem;color:var(--muted)">${p.team} · Bye ${p.byeWk} · #${pk.pickNum}</div>
+                  </span>
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--gold);text-align:right">${edrVal(p).toFixed(1)}</span>
+                </div>`;
+              }).join('')}
+          </div>
+        </div>
+
+        <!-- Watchlist -->
+        <div class="edr-side-section">
+          <div class="edr-side-title">👁 Watchlist <span style="font-size:.58rem;color:var(--muted);font-weight:400">${EDR.watchlist.length}</span></div>
+          <div style="max-height:140px;overflow-y:auto">
+            ${EDR.watchlist.length===0
+              ?'<div style="padding:12px;font-size:.72rem;color:var(--muted);text-align:center">★ any player to watch</div>'
+              :EDR.watchlist.map(wi=>{
+                const p=edrPool()[wi];if(!p) return '';
+                const gone=EDR.drafted.has(wi);
+                return `<div class="edr-watch-row" style="opacity:${gone?.35:1}">
+                  <span style="color:${gone?'var(--muted)':'var(--white)'}">
+                    <span class="pos-dot pos-dot-${p.pos}"></span>
+                    ${p.name}${gone?' <span style="font-size:.55rem;color:#ef5350">GONE</span>':''}
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:.56rem;color:var(--muted)">${p.pos}·${p.team}</div>
+                  </span>
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--gold);text-align:right">${edrVal(p).toFixed(1)}</span>
+                  <button onclick="edrRemWatch(${wi})" style="background:none;border:none;color:#ef5350;cursor:pointer;font-size:.8rem">✕</button>
+                </div>`;
+              }).join('')}
+          </div>
+        </div>
+
+        <!-- Recent picks -->
+        <div class="edr-side-section" style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+          <div class="edr-side-title">📋 Recent Picks</div>
+          <div style="overflow-y:auto;flex:1">
+            ${EDR.picks.slice(-8).reverse().map(pk=>{
+              const p=edrPool()[pk.playerIdx];if(!p) return '';
+              const isMine=pk.teamIdx===FL.myTeam;
+              const clr=isMine?'var(--gold)':POS_CLR[p.pos]||'#888';
+              return `<div class="edr-recent-pick" style="background:${isMine?'rgba(242,194,48,.05)':'transparent'}">
+                <div class="edr-pick-num-badge" style="background:${clr}22;color:${clr};border:1px solid ${clr}44">#${pk.pickNum}</div>
+                <div style="flex:1;min-width:0">
+                  <div style="font-family:'Barlow Condensed',sans-serif;font-size:.82rem;font-weight:700;color:${isMine?'var(--white)':'var(--muted)'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
+                    <span class="pos-dot pos-dot-${p.pos}"></span>${p.name}
+                    ${pk.auto?'<span style="font-family:\'JetBrains Mono\',monospace;font-size:.5rem;color:#4fc3f7;margin-left:3px">AUTO</span>':''}
+                  </div>
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:.56rem;color:var(--muted)">${FL.teamNames[pk.teamIdx]} · ${p.pos}·${p.team}</div>
+                </div>
+              </div>`;
+            }).join('')}
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>`;
+
+  edrRefreshPool();
+  edrRefreshBoardView();
+  edrUpdateTimer();
+}
+
+// ── Pool refresh (no full re-render) ─────────────────────────
+function edrRefreshPool(){
+  const list=document.getElementById('edr-pool-list');
+  if(!list) return;
+  const isMe=EDR.draftOrder[EDR.pick]===FL.myTeam;
+  const sorted=edrSortedPool();
+  let lastTier=-1, rank=0, html='';
+
+  sorted.forEach((p,i)=>{
+    const realRank=edrPool().filter(x=>!EDR.drafted.has(edrPool().indexOf(x))).indexOf(p)+1||i+1;
+    const tier=edrTier(i+1);
+    if(tier!==edrTier(i)&&i>0||i===0){
+      // Show tier label every ~12 undrafted players
+    }
+    const drafted=EDR.drafted.has(p._i);
+    const watched=EDR.watchlist.includes(p._i);
+    const canDraft=isMe&&!drafted;
+    html+=`<div class="edr-player${drafted?' drafted':''}${watched?' watched':''}" id="edrp-${p._i}">
+      <span class="edr-player-rank">${i+1}</span>
+      <span class="edr-player-info">
+        <span class="edr-player-name">
+          <span class="pos-dot pos-dot-${p.pos}"></span>${p.name}
+        </span>
+        <span class="edr-player-meta">${p.pos} · ${p.team} · Bye ${p.byeWk}${p.status==='Q'?' ⚠Q':''}</span>
+      </span>
+      <span class="edr-player-val">${p._val.toFixed(1)}</span>
+      <span class="edr-player-proj">${(p.proj||0).toFixed(1)}</span>
+      <span style="display:flex;align-items:center;gap:3px">
+        <button class="edr-watch-star ${watched?'on':''}" onclick="edrTogWatch(${p._i},event)">★</button>
+        ${canDraft
+          ?`<button class="edr-draft-now-btn" onclick="edrExecutePick(${p._i})">Draft</button>`
+          :drafted
+            ?`<button class="edr-draft-now-btn" disabled>✓</button>`
+            :`<button class="edr-draft-now-btn" disabled>—</button>`}
+      </span>
+    </div>`;
+  });
+  list.innerHTML=html||'<div style="padding:16px;color:var(--muted);font-size:.78rem;text-align:center">No players match filter</div>';
+}
+
+// ── Board views ───────────────────────────────────────────────
+function edrSetView(v){
+  EDR.boardView=v;
+  document.querySelectorAll('.edr-board-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.edr-board-tab').forEach(t=>{if(t.textContent.toLowerCase().includes(v.replace('myteam','my team').replace('rankings','rank')))t.classList.add('active');});
+  edrRefreshBoardView();
+}
+
+function edrRefreshBoardView(){
+  const el=document.getElementById('edr-board-view');
+  if(!el) return;
+  if(EDR.boardView==='grid')      el.innerHTML=edrBuildGrid();
+  else if(EDR.boardView==='myteam') el.innerHTML=edrBuildMyTeam();
+  else if(EDR.boardView==='rankings') el.innerHTML=edrBuildRankings();
+}
+
+function edrBuildGrid(){
+  const rounds=EDR.rounds;
+  const teams=FL.teams;
+  const pool=edrPool();
+  let html=`<div class="edr-grid" style="grid-template-columns:50px repeat(${teams},minmax(110px,1fr))">`;
+  // Header row
+  html+=`<div class="edr-grid-cell corner team-hdr" style="min-height:38px"></div>`;
+  for(let t=0;t<teams;t++){
+    const isMe=t===FL.myTeam;
+    html+=`<div class="edr-grid-cell team-hdr${isMe?' me':''}">${FL.teamNames[t]}</div>`;
+  }
+  // Round rows
+  for(let r=0;r<rounds;r++){
+    html+=`<div class="edr-grid-cell rnd-lbl">R${r+1}</div>`;
+    for(let t=0;t<teams;t++){
+      const pickNum=r*teams+(r%2===0?t:teams-1-t);
+      const isActive=EDR.pick===pickNum;
+      const pk=EDR.picks.find(p=>p.pickNum===pickNum+1);
+      const isMe=EDR.draftOrder[pickNum]===FL.myTeam;
+      let cls='edr-grid-cell ';
+      if(isActive) cls+='active-cell';
+      else if(pk)  cls+=`filled${isMe?' mine':''}`;
+      else         cls+='empty';
+      if(pk){
+        const p=pool[pk.playerIdx];
+        const clr=POS_CLR[p?.pos]||'#888';
+        html+=`<div class="${cls}">
+          <div class="edr-pick-name" style="color:${isMe?'var(--white)':'var(--muted)'}">
+            <span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:${clr};margin-right:4px;vertical-align:middle"></span>${p?p.name:'?'}
+          </div>
+          <div class="edr-pick-meta">${p?`${p.pos}·${p.team}`:''}${pk.auto?' <span class="edr-pick-auto">AUTO</span>':''}</div>
+          ${isMe?`<div style="font-family:'JetBrains Mono',monospace;font-size:.52rem;color:var(--gold)">${p?edrVal(p).toFixed(1):''} ${edrValLabel()}</div>`:''}
+        </div>`;
+      } else {
+        html+=`<div class="${cls}">
+          <div class="edr-pick-meta" style="color:rgba(255,255,255,.15)">#${pickNum+1}${isActive?' ◀ ON CLOCK':''}</div>
+        </div>`;
+      }
+    }
+  }
+  html+='</div>';
+  return html;
+}
+
+function edrBuildMyTeam(){
+  const pool=edrPool();
+  const myPicks=EDR.picks.filter(pk=>pk.teamIdx===FL.myTeam);
+  const SLOTS=['QB','RB','RB','WR','WR','WR','TE','FLEX','K','DEF','BN','BN','BN'];
+
+  if(!myPicks.length) return '<div style="padding:30px;text-align:center;color:var(--muted);font-size:.84rem">No picks yet — your roster will appear here</div>';
+
+  let html=`<div style="padding:14px">
+    <table style="width:100%;border-collapse:collapse;font-size:.82rem">
+      <thead><tr style="background:var(--ink-3)">
+        <th style="padding:8px 12px;text-align:left;font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.08em;color:var(--muted);text-transform:uppercase">Slot</th>
+        <th style="padding:8px 12px;text-align:left;font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.08em;color:var(--muted);text-transform:uppercase">Player</th>
+        <th style="padding:8px 12px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.08em;color:var(--muted);text-transform:uppercase">${edrValLabel()}</th>
+        <th style="padding:8px 12px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.08em;color:var(--muted);text-transform:uppercase">Proj</th>
+        <th style="padding:8px 12px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.08em;color:var(--muted);text-transform:uppercase">Bye</th>
+        <th style="padding:8px 12px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.08em;color:var(--muted);text-transform:uppercase">Pick#</th>
+      </tr></thead>
+      <tbody>`;
+
+  myPicks.forEach((pk,i)=>{
+    const p=pool[pk.playerIdx];if(!p) return;
+    const slot=SLOTS[i]||'BN';
+    const v=edrVal(p);
+    html+=`<tr style="border-bottom:1px solid rgba(255,255,255,.05)">
+      <td style="padding:8px 12px"><span class="fl-pos-badge fl-pos-${slot}">${slot}</span></td>
+      <td style="padding:8px 12px">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:700;color:var(--white)">
+          <span class="pos-dot pos-dot-${p.pos}"></span>${p.name}
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--muted)">${p.team} · ${p.pos}${p.status==='Q'?' · <span style="color:#ffb300">⚠ Q</span>':''}</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--gold);font-weight:700">${v.toFixed(2)}</td>
+      <td style="padding:8px 12px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--muted)">${(p.proj||0).toFixed(1)}</td>
+      <td style="padding:8px 12px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--muted)">${p.byeWk}</td>
+      <td style="padding:8px 12px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--muted)">#${pk.pickNum}${pk.auto?' <span style="color:#4fc3f7;font-size:.55rem">AUTO</span>':''}</td>
+    </tr>`;
+  });
+
+  html+='</tbody></table></div>';
+  return html;
+}
+
+function edrBuildRankings(){
+  const pool=edrPool().map((p,i)=>({...p,_i:i,_val:edrVal(p)})).sort((a,b)=>b._val-a._val);
+  let html='<div style="padding:10px">';
+  let lastTier='';
+  pool.forEach((p,i)=>{
+    const tier=edrTier(i+1);
+    if(tier.label!==lastTier){
+      lastTier=tier.label;
+      html+=`<div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:6px 10px;background:var(--ink-3);border-top:1px solid var(--line);border-bottom:1px solid var(--line);color:${tier.color};margin:0 -10px;display:flex;align-items:center;gap:6px">
+        <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${tier.color}"></span>${tier.label}</div>`;
+    }
+    const drafted=EDR.drafted.has(p._i);
+    const watched=EDR.watchlist.includes(p._i);
+    html+=`<div style="display:grid;grid-template-columns:32px 1fr 60px 60px 36px;align-items:center;gap:6px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);opacity:${drafted?.3:1}">
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--muted);text-align:center">${i+1}</span>
+      <span>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:.88rem;font-weight:700;color:${drafted?'var(--muted)':'var(--white)'}">
+          <span class="pos-dot pos-dot-${p.pos}"></span>${p.name}${drafted?' <span style="font-size:.55rem;color:#4caf50">✓ DRAFTED</span>':''}
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.56rem;color:var(--muted)">${p.pos} · ${p.team} · Bye ${p.byeWk}</div>
+      </span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--gold);font-weight:700;text-align:right">${p._val.toFixed(1)}</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--muted);text-align:right">${(p.proj||0).toFixed(1)}</span>
+      <button class="edr-watch-star ${watched?'on':''}" onclick="edrTogWatch(${p._i},event)" style="font-size:.85rem">★</button>
+    </div>`;
+  });
+  return html+'</div>';
+}
+
+// ── Watchlist helpers ──────────────────────────────────────────
+function edrTogWatch(poolIdx,e){
+  e&&e.stopPropagation();
+  const i=EDR.watchlist.indexOf(poolIdx);
+  if(i>=0) EDR.watchlist.splice(i,1); else EDR.watchlist.unshift(poolIdx);
+  edrRefreshPool();
+  edrRefreshBoardView();
+  // Update star in pool
+  document.querySelectorAll(`#edrp-${poolIdx} .edr-watch-star`).forEach(s=>{
+    s.classList.toggle('on', EDR.watchlist.includes(poolIdx));
+  });
+}
+function edrRemWatch(poolIdx){
+  EDR.watchlist=EDR.watchlist.filter(w=>w!==poolIdx);
+  edrRender();
+}
+
+// ── Controls ──────────────────────────────────────────────────
+function edrSort(key){
+  if(EDR.sortKey===key) EDR.sortDir*=-1; else {EDR.sortKey=key;EDR.sortDir=-1;}
+  edrRefreshPool();
+}
+function edrTogglePause(){
+  EDR.paused=!EDR.paused;
+  const btn=document.getElementById('edr-pause-btn');
+  if(btn) btn.textContent=EDR.paused?'▶ Resume':'⏸ Pause';
+  if(btn) btn.classList.toggle('active',EDR.paused);
+}
+function edrToggleSpeed(){
+  EDR.speed=EDR.speed===1?4:1;
+  const btn=document.getElementById('edr-speed-btn');
+  if(btn){btn.textContent=EDR.speed===1?'⚡ Fast':'🐢 Normal';btn.classList.toggle('active',EDR.speed>1);}
+}
+
+// ── Lobby ─────────────────────────────────────────────────────
+function edrShowLobby(){
+  const el=document.getElementById('fl-draft-content');
+  if(!el) return;
+  if(!FL.created){
+    el.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted)">Create your league in the Setup tab first.</div>';
+    return;
+  }
+  const myPos=FL.myTeam+1;
+  const order=EDR.draftOrder.length?EDR.draftOrder:edrSnake(FL.teams,13);
+
+  el.innerHTML=`
+  <div class="edr-lobby">
+    <div style="margin-bottom:20px">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:1.6rem;font-weight:900;color:var(--white);margin-bottom:4px">🏈 ${FL.name} — Draft Room</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--muted)">ESPN-style draft board · ${FL.teams} teams · Snake draft · ${edrPool().length} players in pool</div>
+    </div>
+
+    <div class="edr-lobby-grid">
+      <div class="edr-lobby-card">
+        <div class="edr-lobby-card-title">Scoring System</div>
+        <div class="edr-lobby-card-val" style="color:${FL.scoring.startsWith('ssm')?'var(--gold)':'var(--white)'}">${FL_SCORING[FL.scoring]?.name||FL.scoring}</div>
+        <div class="edr-lobby-card-sub">${FL.scoring.startsWith('ssm')?'★ SSM Metrics · Rankings use PPG values':'Standard rankings · Projected points'}</div>
+      </div>
+      <div class="edr-lobby-card">
+        <div class="edr-lobby-card-title">Your Draft Position</div>
+        <div class="edr-lobby-card-val">Pick #${myPos} of ${FL.teams}</div>
+        <div class="edr-lobby-card-sub">Round 1 · Round 2 pick #${FL.teams+1-myPos} (snake)</div>
+      </div>
+      <div class="edr-lobby-card">
+        <div class="edr-lobby-card-title">Roster Size</div>
+        <div class="edr-lobby-card-val">13 Rounds</div>
+        <div class="edr-lobby-card-sub">QB·RB×2·WR×3·TE·FLEX·K·DEF + 3 Bench</div>
+      </div>
+      <div class="edr-lobby-card">
+        <div class="edr-lobby-card-title">Pick Timer</div>
+        <select class="fl-input" id="edr-timer-select" style="margin-top:4px;font-size:.82rem">
+          <option value="30">30 seconds</option>
+          <option value="60">60 seconds</option>
+          <option value="90" selected>90 seconds</option>
+          <option value="120">2 minutes</option>
+          <option value="9999">No timer</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Draft order preview -->
+    <div class="edr-lobby-card" style="margin-bottom:16px">
+      <div class="edr-lobby-card-title">Round 1 Draft Order</div>
+      <div class="edr-order-strip" style="margin-top:8px">
+        ${FL.teamNames.map((n,i)=>`<span class="edr-order-pill ${i===FL.myTeam?'me':''}">${i+1}. ${n}</span>`).join('')}
+      </div>
+    </div>
+
+    <!-- Player pool preview top 10 -->
+    <div class="edr-lobby-card" style="margin-bottom:20px">
+      <div class="edr-lobby-card-title" style="margin-bottom:10px">Top 10 Available — ${edrValLabel()} Rankings</div>
+      ${edrPool().map((p,i)=>({...p,_i:i,_v:edrVal(p)})).sort((a,b)=>b._v-a._v).slice(0,10).map((p,i)=>`
+      <div style="display:grid;grid-template-columns:28px 1fr 64px 64px;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.05)">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--muted);text-align:center">${i+1}</span>
+        <span>
+          <span class="pos-dot pos-dot-${p.pos}"></span>
+          <span style="font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:700;color:var(--white)">${p.name}</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--muted);margin-left:6px">${p.pos} · ${p.team}</span>
+        </span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--gold);font-weight:700;text-align:right">${p._v.toFixed(2)}</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--muted);text-align:right">${(p.proj||0).toFixed(1)} proj</span>
+      </div>`).join('')}
+    </div>
+
+    <button class="edr-start-btn" onclick="EDR.timerMax=parseInt(document.getElementById('edr-timer-select')?.value||90);edrLaunch(false)">
+      🏈 Start Live Draft
+    </button>
+    <button class="edr-start-btn mock" style="margin-top:10px" onclick="EDR.timerMax=parseInt(document.getElementById('edr-timer-select')?.value||90);edrLaunch(true)">
+      🎯 Run Mock Draft
+    </button>
+  </div>`;
+}
+
+// ── Draft complete ─────────────────────────────────────────────
+function edrComplete(){
+  clearInterval(EDR.timerInt);
+  EDR.mode=EDR.isMock?'mock-complete':'complete';
+  const pool=edrPool();
+  const myPicks=EDR.picks.filter(pk=>pk.teamIdx===FL.myTeam);
+  const myVal=myPicks.reduce((s,pk)=>s+edrVal(pool[pk.playerIdx]||{}),0);
+  const avgVal=EDR.picks.reduce((s,pk)=>s+edrVal(pool[pk.playerIdx]||{}),0)/FL.teams;
+  const diff=myVal-avgVal;
+  const grade=diff>10?'A+':diff>5?'A':diff>2?'B+':diff>-1?'B':diff>-4?'C+':'C';
+  const gClr=grade.startsWith('A')?'#4caf50':grade.startsWith('B')?'var(--gold)':'#ffb300';
+
+  // Position counts
+  const posCounts={QB:0,RB:0,WR:0,TE:0,K:0,DEF:0};
+  myPicks.forEach(pk=>{const p=pool[pk.playerIdx];if(p)posCounts[p.pos]=(posCounts[p.pos]||0)+1;});
+
+  const el=document.getElementById('fl-draft-content');
+  if(!el) return;
+  el.innerHTML=`
+  <div class="edr-complete-wrap">
+    ${EDR.isMock?'<div class="edr-mock-banner">🎯 Mock Draft Complete — Your real league roster was not affected. Run another mock or start your live draft.</div>':''}
+    <div style="font-family:\'Barlow Condensed\',sans-serif;font-size:2rem;font-weight:900;color:var(--white)">Draft Complete! 🏈</div>
+    <div style="font-family:\'JetBrains Mono\',monospace;font-size:.7rem;color:var(--muted);margin-top:4px">${FL.name} · ${FL_SCORING[FL.scoring]?.name} · ${FL.teams} teams</div>
+    <div class="edr-grade-ring" style="border-color:${gClr};color:${gClr}">${grade}</div>
+    <div style="font-size:.84rem;color:var(--muted);margin-bottom:6px">
+      Your team captured <strong style="color:${diff>=0?'#4caf50':'#ef5350'}">${diff>=0?'+':''}${diff.toFixed(1)}</strong> ${edrValLabel()} vs league average
+    </div>
+    <div class="edr-pos-summary">
+      ${Object.entries(posCounts).map(([pos,n])=>`
+      <div class="edr-pos-card">
+        <div class="edr-pos-card-count" style="color:${POS_CLR[pos]||'var(--white)'}">${n}</div>
+        <div class="edr-pos-card-lbl">${pos}</div>
+      </div>`).join('')}
+    </div>
+
+    <!-- Full roster -->
+    <div style="max-width:600px;margin:16px auto;background:var(--ink-2);border:1px solid var(--line);border-radius:10px;overflow:hidden;text-align:left">
+      <div style="padding:10px 16px;background:var(--ink-3);border-bottom:1px solid var(--line);font-family:\'Barlow Condensed\',sans-serif;font-weight:800;font-size:.95rem;text-transform:uppercase;color:var(--gold)">★ ${FL.teamNames[FL.myTeam]}</div>
+      ${myPicks.map((pk,i)=>{
+        const p=pool[pk.playerIdx];if(!p) return '';
+        const slots=['QB','RB','RB','WR','WR','WR','TE','FLEX','K','DEF','BN','BN','BN'];
+        const slot=slots[i]||'BN';
+        return `<div style="display:grid;grid-template-columns:44px 1fr 60px 50px;align-items:center;gap:8px;padding:8px 16px;border-bottom:1px solid rgba(255,255,255,.04)">
+          <span class="fl-pos-badge fl-pos-${slot}">${slot}</span>
+          <span>
+            <div style="font-family:\'Barlow Condensed\',sans-serif;font-size:.9rem;font-weight:700;color:var(--white)">
+              <span class="pos-dot pos-dot-${p.pos}"></span>${p.name}
+            </div>
+            <div style="font-family:\'JetBrains Mono\',monospace;font-size:.58rem;color:var(--muted)">${p.pos}·${p.team}·Bye ${p.byeWk}·#${pk.pickNum}${pk.auto?' AUTO':''}</div>
+          </span>
+          <span style="font-family:\'JetBrains Mono\',monospace;font-size:.75rem;color:var(--gold);font-weight:700;text-align:right">${edrVal(p).toFixed(2)}</span>
+          <span style="font-size:.68rem;color:${p.status==='Active'?'#4caf50':p.status==='Q'?'#ffb300':'#ef5350'}">${p.status}</span>
+        </div>`;
+      }).join('')}
+    </div>
+
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:20px">
+      ${EDR.isMock
+        ?`<button class="fl-btn fl-btn-primary" onclick="edrLaunch(true)">🔄 Redo Mock</button>
+           <button class="fl-btn fl-btn-secondary" onclick="edrLaunch(false)">🏈 Start Live Draft</button>`
+        :`<button class="fl-btn fl-btn-primary" onclick="flShow('dashboard')">Go to Dashboard →</button>
+           <button class="fl-btn fl-btn-secondary" onclick="flShow('roster')">View Roster</button>
+           <button class="fl-btn fl-btn-secondary" onclick="edrLaunch(true)">🎯 Mock Draft</button>`}
+      <button class="fl-btn fl-btn-secondary" onclick="edrShowLobby()">Back to Lobby</button>
+    </div>
+  </div>`;
+}
+
+// ── Hook into flShow ──────────────────────────────────────────
+(function(){
+  const _orig=window.flShow;
+  window.flShow=function(panel){
+    _orig&&_orig(panel);
+    if(panel==='draft'){
+      const el=document.getElementById('fl-draft-content');
+      if(!el) return;
+      if(!FL.created){el.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted)">Create your league in the Setup tab first.</div>';return;}
+      if(EDR.mode==='live'||EDR.mode==='mock') edrRender();
+      else edrShowLobby();
+    }
+  };
+})();
+
+</script>
+<script>
+
+// ══════════════════════════════════════════════════════════════
+// ── FANTASY LEAGUE LOBBY — Create / Join / Public / Private ──
+// ══════════════════════════════════════════════════════════════
+
+// Simulated public leagues (in a real app these would be server-side)
+const FLL_PUBLIC_LEAGUES = [
+  {id:'SSC2025A', name:'SSC Open League 2025',    scoring:'ssm-ppg',   teams:10, spots:4, commissioner:'SSC Admin',   privacy:'public'},
+  {id:'SSC2025B', name:'NFL Fanatics Weekly',     scoring:'ppr',       teams:12, spots:3, commissioner:'Mike T.',     privacy:'public'},
+  {id:'SSC2025C', name:'Touchdown Tuesday League',scoring:'half-ppr',  teams:10, spots:2, commissioner:'Chris C.',    privacy:'public'},
+  {id:'SSC2025D', name:'SSM Analytics League',    scoring:'ssm-hybrid',teams:10, spots:5, commissioner:'Stats Guru',  privacy:'public'},
+  {id:'SSC2025E', name:'Gridiron Guru Challenge', scoring:'standard',  teams:8,  spots:0, commissioner:'Dave R.',     privacy:'public'},
+  {id:'SSC2025F', name:'Monday Night Madness',    scoring:'ppr',       teams:12, spots:1, commissioner:'Jenny L.',    privacy:'public'},
+];
+
+// Stored leagues (localStorage — persists between sessions)
+function fllLoad(){ try{ return JSON.parse(localStorage.getItem('ssc_fl_leagues')||'[]'); } catch(e){ return []; } }
+function fllSave(leagues){ try{ localStorage.setItem('ssc_fl_leagues', JSON.stringify(leagues)); } catch(e){} }
+function fllLoadMy(){ try{ return JSON.parse(localStorage.getItem('ssc_fl_my_leagues')||'[]'); } catch(e){ return []; } }
+function fllSaveMy(leagues){ try{ localStorage.setItem('ssc_fl_my_leagues', JSON.stringify(leagues)); } catch(e){} }
+
+// Generate a readable 6-char league code
+function fllGenCode(){
+  const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  return Array.from({length:6},()=>chars[Math.floor(Math.random()*chars.length)]).join('');
+}
+
+// ── Lobby state ───────────────────────────────────────────────
+let FLL = {
+  mode:      'lobby',    // lobby | create | join | browse
+  privacy:   'private',  // private | public
+  createStep: 1,         // 1=info, 2=scoring, 3=roster, 4=teams, 5=confirm
+  joinCode:   '',
+  leagueCode: '',
+  joinSearch: '',
+};
+
+// ── Main lobby render ─────────────────────────────────────────
+function fllShowLobby(){
+  FLL.mode='lobby';
+  const el=document.getElementById('fl-setup');
+  if(!el) return;
+
+  // Check if already in a league
+  const myLeagues=fllLoadMy();
+
+  el.innerHTML=`
+  <div class="fll-wrap">
+    <div class="fll-hero">
+      <div class="fll-hero-title">🏈 NFL Fantasy League</div>
+      <div class="fll-hero-sub">Create your own league, join a friend's private league with a code, or browse public leagues open to new members.</div>
+    </div>
+
+    ${myLeagues.length?`
+    <!-- Already in leagues -->
+    <div style="margin-bottom:24px">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--white);margin-bottom:10px">
+        Your Leagues <span class="fll-badge fll-badge-pub" style="font-size:.62rem">${myLeagues.length}</span>
+      </div>
+      ${myLeagues.map(lg=>`
+      <div class="fll-league-card" style="cursor:pointer" onclick="fllLoadLeague('${lg.id}')">
+        <div>
+          <div class="fll-league-card-name">
+            ${lg.name}
+            <span class="fll-badge ${lg.privacy==='public'?'fll-badge-pub':'fll-badge-prv'}">${lg.privacy}</span>
+            ${lg.isCommissioner?'<span class="fll-badge fll-badge-comm">Commissioner</span>':''}
+          </div>
+          <div class="fll-league-card-meta">${FL_SCORING[lg.scoring]?.name||lg.scoring} · ${lg.teams} teams · Code: ${lg.code||'—'}</div>
+        </div>
+        <button class="fll-join-btn" style="background:var(--ink-3);color:var(--white);border:1px solid var(--line)" onclick="event.stopPropagation();fllLoadLeague('${lg.id}')">Open →</button>
+      </div>`).join('')}
+    </div>`:``}
+
+    <!-- Three options -->
+    <div class="fll-choice-grid">
+      <div class="fll-choice-card" onclick="fllShowCreate()">
+        <span class="fll-choice-icon">🏗️</span>
+        <div class="fll-choice-title">Create a League</div>
+        <div class="fll-choice-desc">Set up your own league from scratch. Choose your scoring system, roster format, number of teams, and whether it's public or private. You'll be the commissioner.</div>
+      </div>
+      <div class="fll-choice-card" onclick="fllShowJoin()">
+        <span class="fll-choice-icon">🔑</span>
+        <div class="fll-choice-title">Join a League</div>
+        <div class="fll-choice-desc">Have a 6-character invite code? Enter it to join a private league. Or browse public leagues that are open to new members right now.</div>
+      </div>
+    </div>
+
+    <!-- Public league browser preview -->
+    <div style="margin-top:8px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--white)">
+          Public Leagues <span class="fll-badge fll-badge-pub">${FLL_PUBLIC_LEAGUES.filter(l=>l.spots>0).length} open</span>
+        </div>
+        <button class="fl-btn fl-btn-secondary" style="font-size:.78rem;padding:5px 14px" onclick="fllShowBrowse()">Browse All →</button>
+      </div>
+      ${FLL_PUBLIC_LEAGUES.slice(0,3).map(lg=>`
+      <div class="fll-league-card">
+        <div>
+          <div class="fll-league-card-name">
+            ${lg.name}
+            <span class="fll-badge fll-badge-pub">Public</span>
+          </div>
+          <div class="fll-league-card-meta">${FL_SCORING[lg.scoring]?.name||lg.scoring} · ${lg.teams} teams · Commissioner: ${lg.commissioner}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+          <span class="fll-league-spots ${lg.spots>0?'fll-spots-open':'fll-spots-full'}">${lg.spots>0?lg.spots+' spots':'Full'}</span>
+          <button class="fll-join-btn" ${lg.spots===0?'disabled':''} onclick="fllJoinPublic('${lg.id}')">
+            ${lg.spots>0?'Join →':'Full'}
+          </button>
+        </div>
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+// ── CREATE FLOW ───────────────────────────────────────────────
+function fllShowCreate(){
+  FLL.mode='create'; FLL.createStep=1;
+  fllRenderCreate();
+}
+
+function fllRenderCreate(){
+  const el=document.getElementById('fl-setup');
+  if(!el) return;
+  const steps=['Info','Scoring','Roster','Teams','Confirm'];
+
+  el.innerHTML=`
+  <div class="fll-wrap">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
+      <button onclick="fllShowLobby()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:.85rem;padding:0">← Back</button>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:1.2rem;font-weight:900;color:var(--white)">Create a League</div>
+    </div>
+
+    <!-- Step indicator -->
+    <div class="fll-steps" style="margin-bottom:24px">
+      ${steps.map((s,i)=>{
+        const n=i+1;
+        const cls=n<FLL.createStep?'done':n===FLL.createStep?'active':'todo';
+        return `${i>0?`<div class="fll-step-line ${n<=FLL.createStep?'done':''}"></div>`:''}
+        <div class="fll-step-dot ${cls}" title="${s}">${n<FLL.createStep?'✓':n}</div>`;
+      }).join('')}
+    </div>
+
+    <div id="fll-create-step-content"></div>
+  </div>`;
+
+  fllRenderCreateStep();
+}
+
+function fllRenderCreateStep(){
+  const el=document.getElementById('fll-create-step-content');
+  if(!el) return;
+
+  if(FLL.createStep===1){
+    el.innerHTML=`
+    <div class="fl-step">
+      <div class="fl-step-title">Step 1 — League Info</div>
+      <div class="fl-row">
+        <div>
+          <label class="fl-input-label">League Name</label>
+          <input class="fl-input" id="fll-name" placeholder="My Fantasy League" value="${FL.name||'SSC Fantasy League 2025'}">
+        </div>
+        <div>
+          <label class="fl-input-label">Your Team Name</label>
+          <input class="fl-input" id="fll-myteam" placeholder="My Team" value="${FL.teamNames?.[0]||'My Team'}">
+        </div>
+      </div>
+      <div class="fl-row">
+        <div>
+          <label class="fl-input-label">Commissioner Name</label>
+          <input class="fl-input" id="fll-comm" placeholder="Your name">
+        </div>
+        <div>
+          <label class="fl-input-label">Season</label>
+          <select class="fl-input" id="fll-season">
+            <option value="2025" selected>2025 NFL Season</option>
+            <option value="2024">2024 NFL Season</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Privacy -->
+      <div class="fl-step-title" style="margin-top:16px;margin-bottom:10px">League Privacy</div>
+      <div class="fll-privacy-row">
+        <div class="fll-privacy-opt ${FLL.privacy==='private'?'selected':''}" onclick="fllSetPrivacy('private')">
+          <div class="fll-privacy-dot"></div>
+          <div>
+            <div class="fll-privacy-label">🔒 Private</div>
+            <div class="fll-privacy-sub">Only people with your invite code can join. Great for friend groups.</div>
+          </div>
+        </div>
+        <div class="fll-privacy-opt ${FLL.privacy==='public'?'selected':''}" onclick="fllSetPrivacy('public')">
+          <div class="fll-privacy-dot"></div>
+          <div>
+            <div class="fll-privacy-label">🌐 Public</div>
+            <div class="fll-privacy-sub">Listed in the public league browser. Anyone can request to join.</div>
+          </div>
+        </div>
+      </div>
+      ${FLL.privacy==='private'?`
+      <div style="margin-top:10px;padding:10px 14px;background:var(--ink-3);border-radius:7px;font-size:.75rem;color:var(--muted)">
+        🔑 Your league will get a unique 6-character invite code when created. Share it with friends to let them join.
+      </div>`:`
+      <div style="margin-top:10px;padding:10px 14px;background:var(--ink-3);border-radius:7px;font-size:.75rem;color:var(--muted)">
+        🌐 Your league will appear in the public browser. You approve join requests as commissioner.
+      </div>`}
+    </div>
+    <div style="display:flex;justify-content:flex-end;margin-top:8px">
+      <button class="fl-btn fl-btn-primary" onclick="fllCreateNext()">Next: Scoring →</button>
+    </div>`;
+  }
+
+  else if(FLL.createStep===2){
+    el.innerHTML=`
+    <div class="fl-step">
+      <div class="fl-step-title">Step 2 — Scoring System</div>
+      <p style="font-size:.78rem;color:var(--muted);margin-bottom:14px">Choose how your league scores. SSM metrics use the original PPG methodology from <em>The Sports Statistics Manual</em>.</p>
+      <div class="fl-scoring-grid">
+        ${[
+          {key:'ssm-ppg',   title:'⭐ SSM Full PPG',   badge:'ssm', desc:'Q-PPG · RB-PPG · WR-PPG — context-weighted by field zone, down, and distance.'},
+          {key:'ssm-hybrid',title:'⭐ SSM Hybrid',      badge:'ssm', desc:'Standard base + SSM PPG bonus modifier. Easy transition from standard leagues.'},
+          {key:'ppr',       title:'Standard PPR',       badge:'std', desc:'1 point per reception. Most popular format. TD=6pts, 25 pass yds=1pt, 10 rush/rec yds=1pt.'},
+          {key:'half-ppr',  title:'Half PPR',           badge:'std', desc:'0.5 per reception. Balances volume receivers vs. big-play receivers.'},
+          {key:'standard',  title:'No PPR',             badge:'std', desc:'No reception points. Rewards efficiency and touchdowns.'},
+          {key:'td-only',   title:'TD Only',            badge:'std', desc:'Only touchdowns score. High variance, casual friendly.'},
+        ].map(opt=>`
+        <div class="fl-scoring-opt ${FL.scoring===opt.key?'selected':''}" onclick="flSelectScoring(this,'${opt.key}')">
+          <div class="fl-scoring-opt-title">${opt.title}</div>
+          <div class="fl-scoring-opt-sub">${opt.desc}</div>
+          <span class="fl-scoring-opt-badge ${opt.badge==='ssm'?'fl-badge-ssm':'fl-badge-std'}">${opt.badge==='ssm'?'SSM Metric':'Standard'}</span>
+        </div>`).join('')}
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
+      <button class="fl-btn fl-btn-secondary" onclick="FLL.createStep=1;fllRenderCreateStep()">← Back</button>
+      <button class="fl-btn fl-btn-primary" onclick="fllCreateNext()">Next: Roster →</button>
+    </div>`;
+  }
+
+  else if(FLL.createStep===3){
+    el.innerHTML=`
+    <div class="fl-step">
+      <div class="fl-step-title">Step 3 — Roster Slots</div>
+      <div class="fl-row-3">
+        <div><label class="fl-input-label">QB Starters</label><select class="fl-input" id="fl-slot-qb"><option>1</option><option>2</option></select></div>
+        <div><label class="fl-input-label">RB Starters</label><select class="fl-input" id="fl-slot-rb"><option>1</option><option value="2" selected>2</option><option>3</option></select></div>
+        <div><label class="fl-input-label">WR Starters</label><select class="fl-input" id="fl-slot-wr"><option>1</option><option>2</option><option value="3" selected>3</option></select></div>
+        <div><label class="fl-input-label">TE Starters</label><select class="fl-input" id="fl-slot-te"><option value="1" selected>1</option><option>2</option></select></div>
+        <div><label class="fl-input-label">FLEX (RB/WR/TE)</label><select class="fl-input" id="fl-slot-flex"><option>0</option><option value="1" selected>1</option><option>2</option></select></div>
+        <div><label class="fl-input-label">K + DEF</label><select class="fl-input" id="fl-slot-k"><option value="both" selected>1 K + 1 DEF</option><option value="k">1 K only</option><option value="none">No K/DEF</option></select></div>
+      </div>
+      <div><label class="fl-input-label">Bench Spots</label><select class="fl-input" style="max-width:200px" id="fl-slot-bench"><option>4</option><option value="5" selected>5</option><option>6</option><option>7</option></select></div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
+      <button class="fl-btn fl-btn-secondary" onclick="FLL.createStep=2;fllRenderCreateStep()">← Back</button>
+      <button class="fl-btn fl-btn-primary" onclick="fllCreateNext()">Next: Teams →</button>
+    </div>`;
+  }
+
+  else if(FLL.createStep===4){
+    el.innerHTML=`
+    <div class="fl-step">
+      <div class="fl-step-title">Step 4 — Teams</div>
+      <div class="fl-row">
+        <div>
+          <label class="fl-input-label">Number of Teams</label>
+          <select class="fl-input" id="fl-teams" onchange="fllGenTeamFields()">
+            <option value="8">8 Teams</option><option value="10" selected>10 Teams</option>
+            <option value="12">12 Teams</option><option value="14">14 Teams</option>
+          </select>
+        </div>
+        <div>
+          <label class="fl-input-label">Draft Type</label>
+          <select class="fl-input" id="fl-draft-type">
+            <option value="snake">Snake Draft</option><option value="auction">Auction</option><option value="auto">Auto Draft</option>
+          </select>
+        </div>
+      </div>
+      <div class="fl-step-title" style="margin-top:14px;font-size:.9rem">Team Names</div>
+      <p style="font-size:.75rem;color:var(--muted);margin-bottom:10px">Your team is first. Others can rename their teams after joining.</p>
+      <div id="fl-team-names" style="display:grid;grid-template-columns:1fr 1fr;gap:8px"></div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
+      <button class="fl-btn fl-btn-secondary" onclick="FLL.createStep=3;fllRenderCreateStep()">← Back</button>
+      <button class="fl-btn fl-btn-primary" onclick="fllCreateNext()">Next: Confirm →</button>
+    </div>`;
+    flGenTeamFields();
+  }
+
+  else if(FLL.createStep===5){
+    const code=fllGenCode();
+    FLL.leagueCode=code;
+    const n=parseInt(document.getElementById('fl-teams')?.value||10);
+    const name=document.getElementById('fll-name')?.value||'SSC Fantasy League';
+    el.innerHTML=`
+    <div class="fl-step">
+      <div class="fl-step-title">Step 5 — Confirm & Launch</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
+        <div style="background:var(--ink-3);border-radius:8px;padding:12px 14px">
+          <div class="fl-input-label">League</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:800;color:var(--white)">${name}</div>
+        </div>
+        <div style="background:var(--ink-3);border-radius:8px;padding:12px 14px">
+          <div class="fl-input-label">Scoring</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:800;color:${FL.scoring.startsWith('ssm')?'var(--gold)':'var(--white)'}">${FL_SCORING[FL.scoring]?.name||FL.scoring}</div>
+        </div>
+        <div style="background:var(--ink-3);border-radius:8px;padding:12px 14px">
+          <div class="fl-input-label">Teams</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:800;color:var(--white)">${n} teams</div>
+        </div>
+        <div style="background:var(--ink-3);border-radius:8px;padding:12px 14px">
+          <div class="fl-input-label">Privacy</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:800;color:var(--white)">${FLL.privacy==='private'?'🔒 Private':'🌐 Public'}</div>
+        </div>
+      </div>
+
+      ${FLL.privacy==='private'?`
+      <div class="fll-code-wrap">
+        <div class="fll-code-sub">Your League Invite Code</div>
+        <div class="fll-code" id="fll-code-display">${code}</div>
+        <div class="fll-code-sub">Share this code with up to ${n-1} friends to fill your league</div>
+        <button class="fll-copy-btn" onclick="navigator.clipboard.writeText('${code}').then(()=>{this.textContent='✓ Copied!';setTimeout(()=>this.textContent='Copy Code',2000)})">Copy Code</button>
+      </div>`:`
+      <div style="background:rgba(76,175,80,.08);border:1px solid rgba(76,175,80,.25);border-radius:8px;padding:12px 14px;font-size:.78rem;color:#4caf50;margin-bottom:12px">
+        🌐 Your league will appear in the public browser. Players can request to join and you'll approve them as commissioner.
+      </div>`}
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
+      <button class="fl-btn fl-btn-secondary" onclick="FLL.createStep=4;fllRenderCreateStep()">← Back</button>
+      <button class="fl-btn fl-btn-primary" style="font-size:1.05rem;padding:12px 32px" onclick="fllFinishCreate()">🏈 Create League</button>
+    </div>`;
+  }
+}
+
+function fllCreateNext(){
+  if(FLL.createStep===1){
+    const name=document.getElementById('fll-name')?.value?.trim();
+    if(!name){alert('Please enter a league name.');return;}
+    FL.name=name;
+    FL.teamNames=[document.getElementById('fll-myteam')?.value||'My Team'];
+  }
+  FLL.createStep=Math.min(5,FLL.createStep+1);
+  fllRenderCreate();
+}
+
+function fllSetPrivacy(p){
+  FLL.privacy=p;
+  document.querySelectorAll('.fll-privacy-opt').forEach(el=>{
+    el.classList.toggle('selected', el.onclick?.toString().includes(p));
+  });
+  fllRenderCreateStep();
+}
+
+function fllFinishCreate(){
+  // Save to FL state + localStorage
+  const n=parseInt(document.getElementById('fl-teams')?.value||10);
+  FL.name        = document.getElementById('fll-name')?.value||'SSC Fantasy League';
+  FL.scoring     = FL.scoring||'ssm-ppg';
+  FL.teams       = n;
+  FL.season      = parseInt(document.getElementById('fll-season')?.value||2025);
+  FL.week        = 1;
+  FL.myTeam      = 0;
+  FL.privacy     = FLL.privacy;
+  FL.leagueCode  = FLL.leagueCode;
+  FL.teamNames   = Array.from({length:n},(_,i)=>{
+    const el=document.getElementById(`fl-tn-${i}`);
+    return el?.value||`Team ${i+1}`;
+  });
+  FL.teamNames[0] = document.getElementById('fll-myteam')?.value||FL.teamNames[0];
+
+  FL.rosters    = Array.from({length:n},()=>[]);
+  FL.matchups   = [];
+  FL.standings  = Array.from({length:n},(_,i)=>({teamIdx:i,w:0,l:0,pf:0,pa:0}));
+  FL.waiverOrder= Array.from({length:n},(_,i)=>i);
+  FL.transactions=[];
+  FL.created    = true;
+
+  // Generate schedule
+  FL.matchups=[];
+  for(let w=1;w<=17;w++){
+    const wk=[];
+    for(let i=0;i<n;i+=2){
+      wk.push({home:i,away:(i+1)%n,hScore:flSimScore(i,w),aScore:flSimScore((i+1)%n,w)});
+    }
+    FL.matchups.push(wk);
+  }
+
+  // Save to localStorage
+  const myLeagues=fllLoadMy();
+  const existing=myLeagues.findIndex(l=>l.id===FL.leagueCode);
+  const leagueData={
+    id: FL.leagueCode||fllGenCode(),
+    name: FL.name, scoring: FL.scoring, teams: n,
+    privacy: FLL.privacy, code: FL.leagueCode,
+    commissioner: document.getElementById('fll-comm')?.value||'Commissioner',
+    isCommissioner: true, joinedAt: Date.now(),
+  };
+  if(existing>=0) myLeagues[existing]=leagueData;
+  else myLeagues.push(leagueData);
+  fllSaveMy(myLeagues);
+
+  if(confirm('League created! 🎉 Go to Draft Room now?')){
+    flShow('draft');
+  } else {
+    flShow('dashboard');
+  }
+}
+
+// ── JOIN FLOW ─────────────────────────────────────────────────
+function fllShowJoin(){
+  FLL.mode='join';
+  const el=document.getElementById('fl-setup');
+  if(!el) return;
+
+  el.innerHTML=`
+  <div class="fll-wrap">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
+      <button onclick="fllShowLobby()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:.85rem;padding:0">← Back</button>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:1.2rem;font-weight:900;color:var(--white)">Join a League</div>
+    </div>
+
+    <!-- Private: enter code -->
+    <div class="fl-step" style="margin-bottom:16px">
+      <div class="fl-step-title">🔑 Join with Invite Code</div>
+      <p style="font-size:.78rem;color:var(--muted);margin-bottom:14px">Enter the 6-character code your league commissioner shared with you.</p>
+      <input class="fll-join-code-input" id="fll-join-code" placeholder="A B C 1 2 3" maxlength="6"
+        oninput="this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')"
+        onkeydown="if(event.key==='Enter')fllJoinByCode()">
+      <div style="margin-top:10px">
+        <div>
+          <label class="fl-input-label">Your Team Name</label>
+          <input class="fl-input" id="fll-join-teamname" placeholder="My Team" style="max-width:300px">
+        </div>
+      </div>
+      <button class="fl-btn fl-btn-primary" style="margin-top:14px" onclick="fllJoinByCode()">Join League →</button>
+    </div>
+
+    <!-- Public league browser -->
+    <div class="fl-step">
+      <div class="fl-step-title">🌐 Browse Public Leagues</div>
+      <div style="margin-bottom:12px;display:flex;gap:8px">
+        <input class="fl-input" id="fll-browse-search" placeholder="Search leagues..." style="flex:1"
+          oninput="FLL.joinSearch=this.value;fllRefreshBrowse()">
+        <select class="fl-input" style="max-width:160px" onchange="fllRefreshBrowse()">
+          <option value="">All Scoring</option>
+          <option value="ssm">SSM Leagues</option>
+          <option value="ppr">PPR</option>
+          <option value="standard">Standard</option>
+        </select>
+      </div>
+      <div id="fll-browse-list"></div>
+    </div>
+  </div>`;
+
+  fllRefreshBrowse();
+}
+
+function fllRefreshBrowse(){
+  const el=document.getElementById('fll-browse-list');
+  if(!el) return;
+  const q=(FLL.joinSearch||'').toLowerCase();
+  const filtered=FLL_PUBLIC_LEAGUES.filter(l=>
+    (!q||l.name.toLowerCase().includes(q)||l.commissioner.toLowerCase().includes(q))
+  );
+  el.innerHTML=filtered.map(lg=>`
+  <div class="fll-league-card">
+    <div>
+      <div class="fll-league-card-name">
+        ${lg.name} <span class="fll-badge fll-badge-pub">Public</span>
+      </div>
+      <div class="fll-league-card-meta">${FL_SCORING[lg.scoring]?.name||lg.scoring} · ${lg.teams} teams · Commissioner: ${lg.commissioner} · ${lg.spots} spots open</div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+      <span class="fll-league-spots ${lg.spots>0?'fll-spots-open':'fll-spots-full'}">${lg.spots>0?lg.spots+' spots open':'Full'}</span>
+      <button class="fll-join-btn" ${lg.spots===0?'disabled':''} onclick="fllJoinPublic('${lg.id}')">
+        ${lg.spots>0?'Request to Join':'Full'}
+      </button>
+    </div>
+  </div>`).join('')||'<div style="padding:20px;text-align:center;color:var(--muted);font-size:.84rem">No leagues match your search</div>';
+}
+
+function fllShowBrowse(){
+  FLL.mode='browse';
+  fllShowJoin();
+}
+
+function fllJoinByCode(){
+  const code=(document.getElementById('fll-join-code')?.value||'').trim().toUpperCase();
+  if(code.length!==6){alert('Please enter a valid 6-character code.');return;}
+  const teamName=document.getElementById('fll-join-teamname')?.value||'My Team';
+
+  // Check if it matches any stored league
+  const stored=fllLoad().find(l=>l.code===code||l.id===code);
+  const publicMatch=FLL_PUBLIC_LEAGUES.find(l=>l.id===code);
+
+  if(!stored&&!publicMatch){
+    // Simulate joining — in production this would be server-verified
+    if(!confirm(`Join league with code "${code}"?\n\nIn a live app this would verify the code with the league server.`)) return;
+  }
+
+  const lg=stored||publicMatch||{id:code,name:'Private League',scoring:'ppr',teams:10,privacy:'private'};
+
+  // Load the league
+  FL.name=lg.name; FL.scoring=lg.scoring||'ppr'; FL.teams=lg.teams||10;
+  FL.created=true; FL.week=1; FL.myTeam=0;
+  FL.teamNames=Array.from({length:FL.teams},(_,i)=>i===0?teamName:`Team ${i+1}`);
+  FL.rosters=Array.from({length:FL.teams},()=>[]);
+  FL.standings=Array.from({length:FL.teams},(_,i)=>({teamIdx:i,w:0,l:0,pf:0,pa:0}));
+  FL.matchups=[]; FL.transactions=[];
+
+  // Save to my leagues
+  const myLeagues=fllLoadMy();
+  if(!myLeagues.find(l=>l.id===code)){
+    myLeagues.push({id:code,name:lg.name,scoring:lg.scoring,teams:lg.teams,
+      privacy:lg.privacy||'private',code,isCommissioner:false,joinedAt:Date.now()});
+    fllSaveMy(myLeagues);
+  }
+
+  alert(`✅ Joined "${lg.name}"! Your team: ${teamName}`);
+  flShow('dashboard');
+}
+
+function fllJoinPublic(id){
+  const lg=FLL_PUBLIC_LEAGUES.find(l=>l.id===id);
+  if(!lg||lg.spots===0){alert('This league is full.');return;}
+  const teamName=prompt('Enter your team name:','My Team')||'My Team';
+  FL.name=lg.name; FL.scoring=lg.scoring; FL.teams=lg.teams;
+  FL.created=true; FL.week=1; FL.myTeam=0;
+  FL.teamNames=Array.from({length:lg.teams},(_,i)=>i===0?teamName:`Team ${i+1}`);
+  FL.rosters=Array.from({length:lg.teams},()=>[]); FL.standings=[];
+  FL.matchups=[]; FL.transactions=[];
+  const myLeagues=fllLoadMy();
+  myLeagues.push({id,name:lg.name,scoring:lg.scoring,teams:lg.teams,
+    privacy:'public',code:id,isCommissioner:false,joinedAt:Date.now()});
+  fllSaveMy(myLeagues);
+  lg.spots=Math.max(0,lg.spots-1);
+  alert(`✅ Joined "${lg.name}"!`);
+  flShow('dashboard');
+}
+
+function fllLoadLeague(id){
+  const myLeagues=fllLoadMy();
+  const lg=myLeagues.find(l=>l.id===id);
+  if(!lg) return;
+  FL.name=lg.name; FL.scoring=lg.scoring||'ppr'; FL.teams=lg.teams||10;
+  FL.created=true; FL.week=1; FL.myTeam=0;
+  FL.leagueCode=lg.code||id; FL.privacy=lg.privacy;
+  if(!FL.teamNames?.length) FL.teamNames=Array.from({length:FL.teams},(_,i)=>`Team ${i+1}`);
+  if(!FL.rosters?.length)   FL.rosters=Array.from({length:FL.teams},()=>[]);
+  if(!FL.standings?.length) FL.standings=Array.from({length:FL.teams},(_,i)=>({teamIdx:i,w:0,l:0,pf:0,pa:0}));
+  if(!FL.matchups?.length)  FL.matchups=[];
+  if(!FL.transactions)      FL.transactions=[];
+  flShow('dashboard');
+}
+
+// ── Override flShow to show lobby first ───────────────────────
+(function(){
+  const _origSetup=window.flShow;
+  window.flShow=function(panel){
+    if(panel==='setup'){
+      // Show lobby instead of raw setup
+      const el=document.getElementById('fl-setup');
+      if(el){
+        document.querySelectorAll('.fl-panel').forEach(p=>p.classList.remove('active'));
+        document.querySelectorAll('.fl-nav-btn').forEach(b=>b.classList.remove('active'));
+        const setupEl=document.getElementById('fl-setup');
+        if(setupEl) setupEl.classList.add('active');
+        const btn=document.querySelector('.fl-nav-btn[onclick*="setup"]');
+        if(btn) btn.classList.add('active');
+        fllShowLobby();
+        return;
+      }
+    }
+    _origSetup&&_origSetup(panel);
+  };
+  // Also init lobby on load if setup is the default
+  document.addEventListener('DOMContentLoaded',()=>{
+    const setupEl=document.getElementById('fl-setup');
+    if(setupEl&&setupEl.classList.contains('active')) fllShowLobby();
+  });
+})();
 
 </script>
 </body>
