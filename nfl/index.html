@@ -582,6 +582,51 @@
     .fll-step-line{flex:1;height:2px;background:var(--line)}
     .fll-step-line.done{background:var(--gold)}
 
+  
+    /* ── Game Preview Cards ──────────────────────────────── */
+    .preview-section-label{font-family:'JetBrains Mono',monospace;font-size:.62rem;
+      letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;
+      display:flex;align-items:center;gap:8px}
+    .preview-section-label::after{content:'';flex:1;height:1px;background:rgba(242,194,48,.2)}
+    .preview-card{background:var(--ink-2);border:1px solid var(--line);border-radius:10px;
+      overflow:hidden;cursor:pointer;transition:all .2s;position:relative}
+    .preview-card:hover{border-color:var(--gold);transform:translateY(-2px);
+      box-shadow:0 6px 24px rgba(0,0,0,.4)}
+    .preview-hdr{background:var(--ink-3);padding:7px 12px;display:flex;align-items:center;
+      justify-content:space-between;border-bottom:1px solid var(--line)}
+    .preview-hdr-time{font-family:'JetBrains Mono',monospace;font-size:.6rem;
+      color:var(--muted);letter-spacing:.08em}
+    .preview-hdr-network{font-family:'JetBrains Mono',monospace;font-size:.58rem;
+      font-weight:700;color:var(--gold);letter-spacing:.06em}
+    .preview-matchup{padding:12px 14px}
+    .preview-team-row{display:flex;align-items:center;gap:8px;padding:5px 0}
+    .preview-team-logo{width:28px;height:28px;object-fit:contain;flex-shrink:0}
+    .preview-team-info{flex:1;min-width:0}
+    .preview-team-name{font-family:'Barlow Condensed',sans-serif;font-size:.95rem;
+      font-weight:700;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .preview-team-record{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--muted)}
+    .preview-team-odds{font-family:'JetBrains Mono',monospace;font-size:.7rem;
+      font-weight:700;text-align:right;flex-shrink:0}
+    .preview-odds-fav{color:#4caf50}
+    .preview-odds-dog{color:var(--muted)}
+    .preview-divider{display:flex;align-items:center;gap:8px;padding:4px 0}
+    .preview-vs{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--muted);
+      letter-spacing:.1em}
+    .preview-spread-line{flex:1;height:1px;background:var(--line)}
+    .preview-footer{padding:8px 14px;border-top:1px solid var(--line);
+      display:flex;align-items:center;justify-content:space-between;background:rgba(0,0,0,.15)}
+    .preview-stat-chip{font-family:'JetBrains Mono',monospace;font-size:.58rem;
+      color:var(--muted);display:flex;align-items:center;gap:4px}
+    .preview-stat-val{color:var(--white);font-weight:700}
+    .preview-upcoming-badge{position:absolute;top:8px;right:8px;
+      background:rgba(79,195,247,.15);border:1px solid rgba(79,195,247,.3);
+      color:#4fc3f7;font-family:'JetBrains Mono',monospace;font-size:.52rem;
+      font-weight:700;padding:2px 7px;border-radius:3px;letter-spacing:.08em;
+      text-transform:uppercase}
+    .preview-prime-badge{background:rgba(242,194,48,.15);border-color:rgba(242,194,48,.3);
+      color:var(--gold)}
+    .preview-tppg-bar{height:3px;border-radius:2px;margin-top:3px;background:var(--ink-3);overflow:hidden}
+    .preview-tppg-fill{height:100%;border-radius:2px;background:var(--gold)}
   </style>
   <script src="/assets/ssc-live.js"></script>
 </head>
@@ -683,9 +728,294 @@
     </div>
     <span id="live-timestamp" style="font-family:JetBrains Mono,monospace;font-size:.62rem;color:var(--muted)"></span>
   </div>
-  <div class="sec-label">// Week 14 Results</div>
-  <div class="sec-title">Scores & Results</div>
-  <p style="font-size:.8rem;color:var(--muted);margin-bottom:16px;font-family:'JetBrains Mono',monospace">Tap any game to open Gamecast &amp; Box Score</p>
+
+    <div class="preview-section-label" style="margin-top:4px">Week 15 — Upcoming</div>
+    <div class="scores-grid" id="preview-grid" style="margin-bottom:28px">
+    <div class="preview-card" onclick="window.location='/nfl/gameday.html'">
+      <span class="preview-upcoming-badge preview-prime-badge">★ PRIME TIME</span>
+      <div class="preview-hdr">
+        <span class="preview-hdr-time">Thu · Dec 12 · 8:15 PM ET</span>
+        <span class="preview-hdr-network">TNF / Prime</span>
+      </div>
+      <div class="preview-matchup">
+        <div class="preview-team-row">
+          <img src="/assets/nfl/browns.png" class="preview-team-logo" onerror="this.style.display='none'">
+          <div class="preview-team-info">
+            <div class="preview-team-name">Cleveland Browns</div>
+            <div class="preview-team-record">3-10
+              <span style="color:#4caf50;margin-left:6px">T-PPG +1.14</span>
+            </div>
+            <div class="preview-tppg-bar"><div class="preview-tppg-fill" style="width:57%;background:#4caf50"></div></div>
+          </div>
+          <div class="preview-team-odds preview-odds-dog">+3</div>
+        </div>
+        <div class="preview-divider">
+          <div class="preview-spread-line"></div>
+          <span class="preview-vs">VS</span>
+          <div class="preview-spread-line"></div>
+        </div>
+        <div class="preview-team-row">
+          <img src="/assets/nfl/steelers.png" class="preview-team-logo" onerror="this.style.display='none'">
+          <div class="preview-team-info">
+            <div class="preview-team-name">Pittsburgh Steelers</div>
+            <div class="preview-team-record">9-4
+              <span style="color:#4caf50;margin-left:6px">T-PPG +0.88</span>
+            </div>
+            <div class="preview-tppg-bar"><div class="preview-tppg-fill" style="width:55%;background:#4caf50"></div></div>
+          </div>
+          <div class="preview-team-odds preview-odds-fav">-3</div>
+        </div>
+      </div>
+      <div class="preview-footer">
+        <div class="preview-stat-chip">Spread <span class="preview-stat-val">&nbsp;PIT -3</span></div>
+        <div class="preview-stat-chip">O/U <span class="preview-stat-val">&nbsp;O/U 41.5</span></div>
+        <div class="preview-stat-chip" style="cursor:pointer;color:var(--gold)" onclick="event.stopPropagation()">Preview →</div>
+      </div>
+    </div>    <div class="preview-card" onclick="window.location='/nfl/gameday.html'">
+      <span class="preview-upcoming-badge">UPCOMING</span>
+      <div class="preview-hdr">
+        <span class="preview-hdr-time">Sun · Dec 15 · 4:25 PM ET</span>
+        <span class="preview-hdr-network">FOX</span>
+      </div>
+      <div class="preview-matchup">
+        <div class="preview-team-row">
+          <img src="/assets/nfl/chargers.png" class="preview-team-logo" onerror="this.style.display='none'">
+          <div class="preview-team-info">
+            <div class="preview-team-name">Los Angeles Chargers</div>
+            <div class="preview-team-record">8-5
+              <span style="color:#ef5350;margin-left:6px">T-PPG -0.88</span>
+            </div>
+            <div class="preview-tppg-bar"><div class="preview-tppg-fill" style="width:44%;background:#ef5350"></div></div>
+          </div>
+          <div class="preview-team-odds preview-odds-dog">+6.5</div>
+        </div>
+        <div class="preview-divider">
+          <div class="preview-spread-line"></div>
+          <span class="preview-vs">VS</span>
+          <div class="preview-spread-line"></div>
+        </div>
+        <div class="preview-team-row">
+          <img src="/assets/nfl/chiefs.png" class="preview-team-logo" onerror="this.style.display='none'">
+          <div class="preview-team-info">
+            <div class="preview-team-name">Kansas City Chiefs</div>
+            <div class="preview-team-record">12-1
+              <span style="color:#4caf50;margin-left:6px">T-PPG +7.31</span>
+            </div>
+            <div class="preview-tppg-bar"><div class="preview-tppg-fill" style="width:95%;background:#4caf50"></div></div>
+          </div>
+          <div class="preview-team-odds preview-odds-fav">-6.5</div>
+        </div>
+      </div>
+      <div class="preview-footer">
+        <div class="preview-stat-chip">Spread <span class="preview-stat-val">&nbsp;KC -6.5</span></div>
+        <div class="preview-stat-chip">O/U <span class="preview-stat-val">&nbsp;O/U 44.5</span></div>
+        <div class="preview-stat-chip" style="cursor:pointer;color:var(--gold)" onclick="event.stopPropagation()">Preview →</div>
+      </div>
+    </div>    <div class="preview-card" onclick="window.location='/nfl/gameday.html'">
+      <span class="preview-upcoming-badge">UPCOMING</span>
+      <div class="preview-hdr">
+        <span class="preview-hdr-time">Sun · Dec 15 · 1:00 PM ET</span>
+        <span class="preview-hdr-network">CBS</span>
+      </div>
+      <div class="preview-matchup">
+        <div class="preview-team-row">
+          <img src="/assets/nfl/panthers.png" class="preview-team-logo" onerror="this.style.display='none'">
+          <div class="preview-team-info">
+            <div class="preview-team-name">Carolina Panthers</div>
+            <div class="preview-team-record">3-10
+              <span style="color:#ef5350;margin-left:6px">T-PPG -5.44</span>
+            </div>
+            <div class="preview-tppg-bar"><div class="preview-tppg-fill" style="width:15%;background:#ef5350"></div></div>
+          </div>
+          <div class="preview-team-odds preview-odds-dog">+4</div>
+        </div>
+        <div class="preview-divider">
+          <div class="preview-spread-line"></div>
+          <span class="preview-vs">VS</span>
+          <div class="preview-spread-line"></div>
+        </div>
+        <div class="preview-team-row">
+          <img src="/assets/nfl/eagles.png" class="preview-team-logo" onerror="this.style.display='none'">
+          <div class="preview-team-info">
+            <div class="preview-team-name">Philadelphia Eagles</div>
+            <div class="preview-team-record">11-2
+              <span style="color:#4caf50;margin-left:6px">T-PPG +6.44</span>
+            </div>
+            <div class="preview-tppg-bar"><div class="preview-tppg-fill" style="width:90%;background:#4caf50"></div></div>
+          </div>
+          <div class="preview-team-odds preview-odds-fav">-4</div>
+        </div>
+      </div>
+      <div class="preview-footer">
+        <div class="preview-stat-chip">Spread <span class="preview-stat-val">&nbsp;PHI -4</span></div>
+        <div class="preview-stat-chip">O/U <span class="preview-stat-val">&nbsp;O/U 43.0</span></div>
+        <div class="preview-stat-chip" style="cursor:pointer;color:var(--gold)" onclick="event.stopPropagation()">Preview →</div>
+      </div>
+    </div>    <div class="preview-card" onclick="window.location='/nfl/gameday.html'">
+      <span class="preview-upcoming-badge">UPCOMING</span>
+      <div class="preview-hdr">
+        <span class="preview-hdr-time">Sun · Dec 15 · 1:00 PM ET</span>
+        <span class="preview-hdr-network">FOX</span>
+      </div>
+      <div class="preview-matchup">
+        <div class="preview-team-row">
+          <img src="/assets/nfl/bills.png" class="preview-team-logo" onerror="this.style.display='none'">
+          <div class="preview-team-info">
+            <div class="preview-team-name">Buffalo Bills</div>
+            <div class="preview-team-record">10-3
+              <span style="color:#4caf50;margin-left:6px">T-PPG +3.84</span>
+            </div>
+            <div class="preview-tppg-bar"><div class="preview-tppg-fill" style="width:74%;background:#4caf50"></div></div>
+          </div>
+          <div class="preview-team-odds preview-odds-dog">+7</div>
+        </div>
+        <div class="preview-divider">
+          <div class="preview-spread-line"></div>
+          <span class="preview-vs">VS</span>
+          <div class="preview-spread-line"></div>
+        </div>
+        <div class="preview-team-row">
+          <img src="/assets/nfl/lions.png" class="preview-team-logo" onerror="this.style.display='none'">
+          <div class="preview-team-info">
+            <div class="preview-team-name">Detroit Lions</div>
+            <div class="preview-team-record">11-2
+              <span style="color:#4caf50;margin-left:6px">T-PPG +5.42</span>
+            </div>
+            <div class="preview-tppg-bar"><div class="preview-tppg-fill" style="width:83%;background:#4caf50"></div></div>
+          </div>
+          <div class="preview-team-odds preview-odds-fav">-7</div>
+        </div>
+      </div>
+      <div class="preview-footer">
+        <div class="preview-stat-chip">Spread <span class="preview-stat-val">&nbsp;DET -7</span></div>
+        <div class="preview-stat-chip">O/U <span class="preview-stat-val">&nbsp;O/U 51.5</span></div>
+        <div class="preview-stat-chip" style="cursor:pointer;color:var(--gold)" onclick="event.stopPropagation()">Preview →</div>
+      </div>
+    </div>    <div class="preview-card" onclick="window.location='/nfl/gameday.html'">
+      <span class="preview-upcoming-badge">UPCOMING</span>
+      <div class="preview-hdr">
+        <span class="preview-hdr-time">Sun · Dec 15 · 1:00 PM ET</span>
+        <span class="preview-hdr-network">CBS</span>
+      </div>
+      <div class="preview-matchup">
+        <div class="preview-team-row">
+          <img src="/assets/nfl/giants.png" class="preview-team-logo" onerror="this.style.display='none'">
+          <div class="preview-team-info">
+            <div class="preview-team-name">New York Giants</div>
+            <div class="preview-team-record">3-10
+              <span style="color:#4caf50;margin-left:6px">T-PPG +0.22</span>
+            </div>
+            <div class="preview-tppg-bar"><div class="preview-tppg-fill" style="width:51%;background:#4caf50"></div></div>
+          </div>
+          <div class="preview-team-odds preview-odds-dog">+5</div>
+        </div>
+        <div class="preview-divider">
+          <div class="preview-spread-line"></div>
+          <span class="preview-vs">VS</span>
+          <div class="preview-spread-line"></div>
+        </div>
+        <div class="preview-team-row">
+          <img src="/assets/nfl/ravens.png" class="preview-team-logo" onerror="this.style.display='none'">
+          <div class="preview-team-info">
+            <div class="preview-team-name">Baltimore Ravens</div>
+            <div class="preview-team-record">9-4
+              <span style="color:#4caf50;margin-left:6px">T-PPG +5.88</span>
+            </div>
+            <div class="preview-tppg-bar"><div class="preview-tppg-fill" style="width:86%;background:#4caf50"></div></div>
+          </div>
+          <div class="preview-team-odds preview-odds-fav">-5</div>
+        </div>
+      </div>
+      <div class="preview-footer">
+        <div class="preview-stat-chip">Spread <span class="preview-stat-val">&nbsp;BAL -5</span></div>
+        <div class="preview-stat-chip">O/U <span class="preview-stat-val">&nbsp;O/U 42.0</span></div>
+        <div class="preview-stat-chip" style="cursor:pointer;color:var(--gold)" onclick="event.stopPropagation()">Preview →</div>
+      </div>
+    </div>    <div class="preview-card" onclick="window.location='/nfl/gameday.html'">
+      <span class="preview-upcoming-badge preview-prime-badge">★ PRIME TIME</span>
+      <div class="preview-hdr">
+        <span class="preview-hdr-time">Sun · Dec 15 · 8:20 PM ET</span>
+        <span class="preview-hdr-network">NBC / SNF</span>
+      </div>
+      <div class="preview-matchup">
+        <div class="preview-team-row">
+          <img src="/assets/nfl/bengals.png" class="preview-team-logo" onerror="this.style.display='none'">
+          <div class="preview-team-info">
+            <div class="preview-team-name">Cincinnati Bengals</div>
+            <div class="preview-team-record">6-7
+              <span style="color:#4caf50;margin-left:6px">T-PPG +2.88</span>
+            </div>
+            <div class="preview-tppg-bar"><div class="preview-tppg-fill" style="width:68%;background:#4caf50"></div></div>
+          </div>
+          <div class="preview-team-odds preview-odds-fav">-2.5</div>
+        </div>
+        <div class="preview-divider">
+          <div class="preview-spread-line"></div>
+          <span class="preview-vs">VS</span>
+          <div class="preview-spread-line"></div>
+        </div>
+        <div class="preview-team-row">
+          <img src="/assets/nfl/cowboys.png" class="preview-team-logo" onerror="this.style.display='none'">
+          <div class="preview-team-info">
+            <div class="preview-team-name">Dallas Cowboys</div>
+            <div class="preview-team-record">5-8
+              <span style="color:#4caf50;margin-left:6px">T-PPG +3.22</span>
+            </div>
+            <div class="preview-tppg-bar"><div class="preview-tppg-fill" style="width:70%;background:#4caf50"></div></div>
+          </div>
+          <div class="preview-team-odds preview-odds-dog">+2.5</div>
+        </div>
+      </div>
+      <div class="preview-footer">
+        <div class="preview-stat-chip">Spread <span class="preview-stat-val">&nbsp;CIN -2.5</span></div>
+        <div class="preview-stat-chip">O/U <span class="preview-stat-val">&nbsp;O/U 45.0</span></div>
+        <div class="preview-stat-chip" style="cursor:pointer;color:var(--gold)" onclick="event.stopPropagation()">Preview →</div>
+      </div>
+    </div>    <div class="preview-card" onclick="window.location='/nfl/gameday.html'">
+      <span class="preview-upcoming-badge preview-prime-badge">★ PRIME TIME</span>
+      <div class="preview-hdr">
+        <span class="preview-hdr-time">Mon · Dec 16 · 8:15 PM ET</span>
+        <span class="preview-hdr-network">ESPN / MNF</span>
+      </div>
+      <div class="preview-matchup">
+        <div class="preview-team-row">
+          <img src="/assets/nfl/rams.png" class="preview-team-logo" onerror="this.style.display='none'">
+          <div class="preview-team-info">
+            <div class="preview-team-name">Los Angeles Rams</div>
+            <div class="preview-team-record">8-5
+              <span style="color:#4caf50;margin-left:6px">T-PPG +2.08</span>
+            </div>
+            <div class="preview-tppg-bar"><div class="preview-tppg-fill" style="width:63%;background:#4caf50"></div></div>
+          </div>
+          <div class="preview-team-odds preview-odds-fav">-1</div>
+        </div>
+        <div class="preview-divider">
+          <div class="preview-spread-line"></div>
+          <span class="preview-vs">VS</span>
+          <div class="preview-spread-line"></div>
+        </div>
+        <div class="preview-team-row">
+          <img src="/assets/nfl/49ers.png" class="preview-team-logo" onerror="this.style.display='none'">
+          <div class="preview-team-info">
+            <div class="preview-team-name">San Francisco 49ers</div>
+            <div class="preview-team-record">6-7
+              <span style="color:#4caf50;margin-left:6px">T-PPG +4.22</span>
+            </div>
+            <div class="preview-tppg-bar"><div class="preview-tppg-fill" style="width:76%;background:#4caf50"></div></div>
+          </div>
+          <div class="preview-team-odds preview-odds-dog">+1</div>
+        </div>
+      </div>
+      <div class="preview-footer">
+        <div class="preview-stat-chip">Spread <span class="preview-stat-val">&nbsp;LAR -1</span></div>
+        <div class="preview-stat-chip">O/U <span class="preview-stat-val">&nbsp;O/U 46.5</span></div>
+        <div class="preview-stat-chip" style="cursor:pointer;color:var(--gold)" onclick="event.stopPropagation()">Preview →</div>
+      </div>
+    </div>
+    </div>
+    <div class="sec-label" style="margin-top:8px">// Week 14 Results</div>
+    <div class="sec-title" style="margin-bottom:4px">Scores & Results</div>
+    <p style="font-size:.8rem;color:var(--muted);margin-bottom:16px;font-family:'JetBrains Mono',monospace">Tap any game to open Gamecast &amp; Box Score</p>
   <div class="scores-grid" id="live-scores-grid">
     <div class="score-card" onclick="window.location='/nfl/gameday.html'" style="cursor:pointer">
       <div class="score-hdr">Sun · Dec 8 · Final</div>
@@ -1328,15 +1658,33 @@ function nextPlay() {
 </script>
 
   <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-    import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+    import { initializeApp }   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import { getAuth, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup }
+                               from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+    // NOTE: When you deploy, also add firebase-functions import:
+    // import { getFunctions, httpsCallable } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-functions.js';
+    import { getFirestore, doc, setDoc, getDoc, collection,
+             getDocs, onSnapshot, updateDoc, deleteDoc, query, where, orderBy }
+                               from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
     const firebaseConfig = {
-      apiKey:"YOUR_API_KEY", authDomain:"YOUR_PROJECT.firebaseapp.com",
-      projectId:"YOUR_PROJECT_ID", storageBucket:"YOUR_PROJECT.appspot.com",
-      messagingSenderId:"YOUR_SENDER_ID", appId:"YOUR_APP_ID"
+      apiKey:            "AIzaSyC_hGMiHK3RaI54Dxm8_GmQPhRHLpjPO5U",
+      authDomain:        "fantasy-sports-1e6cf.firebaseapp.com",
+      projectId:         "fantasy-sports-1e6cf",
+      storageBucket:     "fantasy-sports-1e6cf.firebasestorage.app",
+      messagingSenderId: "150042816249",
+      appId:             "1:150042816249:web:4de18353ba84f106fb3c28",
+      measurementId:     "G-10EQQMP0VK"
     };
-    const app = initializeApp(firebaseConfig);
+    const app  = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db   = getFirestore(app);
+    // Expose to non-module scripts
+    window._fbApp  = app;
+    window._fbAuth = auth;
+    window._fbDb   = db;
+    window._fbSDK  = { doc, setDoc, getDoc, collection, getDocs,
+                       onSnapshot, updateDoc, deleteDoc, query, where, orderBy,
+                       GoogleAuthProvider, signInWithPopup, signOut };
     onAuthStateChanged(auth, user => {
       const cta = document.getElementById('nav-cta');
       const av  = document.getElementById('nav-avatar');
@@ -4233,6 +4581,652 @@ function fllLoadLeague(id){
     fllShowLobby();
   });
 })();
+
+</script>
+<script>
+// ══════════════════════════════════════════════════════════════
+// ── FIREBASE SYNC LAYER — Web ↔ Flutter via Firestore ────────
+// All fantasy data reads/writes go through here.
+// localStorage is kept as an offline cache only.
+// ══════════════════════════════════════════════════════════════
+
+const FS = {
+  // ── Firestore data model ──────────────────────────────────
+  // /users/{uid}/profile
+  // /leagues/{leagueId}  { name, scoring, teams, privacy, code, season,
+  //                        commissioner, createdAt, memberUids[] }
+  // /leagues/{leagueId}/rosters/{uid}   { teamName, picks[], lineup[] }
+  // /leagues/{leagueId}/draft/{pickNum}  { teamIdx, playerIdx, auto, ts }
+  // /leagues/{leagueId}/matchups/{week}  { results[] }
+  // /leagues/{leagueId}/waivers/{claimId}
+  // /leagues/{leagueId}/trades/{tradeId}
+  // /leagues/{leagueId}/chat/{msgId}
+
+  uid: null,
+  displayName: null,
+  unsubscribers: [],   // active Firestore listeners to clean up
+
+  // ── Auth state ─────────────────────────────────────────────
+  init() {
+    const auth = window._fbAuth;
+    if (!auth) { console.warn('Firebase not ready'); return; }
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        FS.uid = user.uid;
+        FS.displayName = user.displayName || user.email?.split('@')[0] || 'Player';
+        FS._onSignedIn(user);
+      } else {
+        FS.uid = null;
+        FS._onSignedOut();
+      }
+    });
+  },
+
+  async signInGoogle() {
+    const { GoogleAuthProvider, signInWithPopup } = window._fbSDK;
+    const auth = window._fbAuth;
+    try {
+      const provider = new GoogleAuthProvider();
+      await signInWithPopup(auth, provider);
+    } catch(e) { console.error('Sign-in error:', e); alert('Sign-in failed: ' + e.message); }
+  },
+
+  async signInEmail(email, password) {
+    const { signInWithEmailAndPassword } = window._fbSDK || {};
+    // Email/password requires the full auth module — for now show prompt
+    alert('Email sign-in: add signInWithEmailAndPassword to auth imports.');
+  },
+
+  async signOut() {
+    const { signOut } = window._fbSDK;
+    await signOut(window._fbAuth);
+  },
+
+  _onSignedIn(user) {
+    console.log('Signed in:', user.email);
+    // Ensure user profile doc exists
+    FS.upsertProfile(user);
+    // Reload lobby to show cloud leagues
+    if (typeof fllShowLobby === 'function') fllShowLobby();
+    FS._updateAuthUI(true, user);
+  },
+
+  _onSignedOut() {
+    console.log('Signed out');
+    FS.unsubscribers.forEach(u => u());
+    FS.unsubscribers = [];
+    if (typeof fllShowLobby === 'function') fllShowLobby();
+    FS._updateAuthUI(false, null);
+  },
+
+  _updateAuthUI(signedIn, user) {
+    const btn = document.getElementById('fs-auth-btn');
+    const name = document.getElementById('fs-auth-name');
+    if (btn)  btn.textContent = signedIn ? 'Sign Out' : 'Sign In with Google';
+    if (name) name.textContent = signedIn ? (user?.displayName || user?.email || '') : '';
+  },
+
+  // ── User profile ──────────────────────────────────────────
+  async upsertProfile(user) {
+    const { doc, setDoc } = window._fbSDK;
+    const db = window._fbDb;
+    if (!db || !user) return;
+    await setDoc(doc(db, 'users', user.uid), {
+      displayName: user.displayName || '',
+      email: user.email || '',
+      photoURL: user.photoURL || '',
+      lastSeen: Date.now(),
+    }, { merge: true });
+  },
+
+  // ── League CRUD ───────────────────────────────────────────
+  async createLeague(leagueData) {
+    const { doc, setDoc, collection } = window._fbSDK;
+    const db = window._fbDb;
+    if (!db) { console.warn('No Firestore — saving locally only'); return null; }
+    if (!FS.uid) { alert('Please sign in to save your league to the cloud.'); return null; }
+
+    const leagueId = leagueData.code || FS._genId();
+    const payload = {
+      ...leagueData,
+      id: leagueId,
+      commissioner: FS.uid,
+      commissionerName: FS.displayName,
+      memberUids: [FS.uid],
+      createdAt: Date.now(),
+    };
+
+    await setDoc(doc(db, 'leagues', leagueId), payload);
+    // Create commissioner's roster slot
+    await setDoc(doc(db, 'leagues', leagueId, 'rosters', FS.uid), {
+      uid: FS.uid,
+      teamName: leagueData.myTeamName || 'My Team',
+      picks: [],
+      lineup: [],
+      joinedAt: Date.now(),
+    });
+    console.log('League created in Firestore:', leagueId);
+    return leagueId;
+  },
+
+  async getLeague(leagueId) {
+    const { doc, getDoc } = window._fbSDK;
+    const db = window._fbDb;
+    if (!db) return null;
+    const snap = await getDoc(doc(db, 'leagues', leagueId));
+    return snap.exists() ? snap.data() : null;
+  },
+
+  async joinLeague(leagueId, teamName) {
+    const { doc, getDoc, updateDoc, setDoc } = window._fbSDK;
+    const db = window._fbDb;
+    if (!db || !FS.uid) { alert('Please sign in to join a league.'); return false; }
+
+    const lgDoc = await FS.getLeague(leagueId);
+    if (!lgDoc) { alert('League not found. Check the code and try again.'); return false; }
+
+    if (lgDoc.memberUids?.includes(FS.uid)) {
+      alert('You are already in this league!'); return true;
+    }
+    if ((lgDoc.memberUids?.length || 0) >= lgDoc.teams) {
+      alert('This league is full.'); return false;
+    }
+
+    // Add member
+    await updateDoc(doc(db, 'leagues', leagueId), {
+      memberUids: [...(lgDoc.memberUids || []), FS.uid],
+    });
+    // Create roster slot
+    await setDoc(doc(db, 'leagues', leagueId, 'rosters', FS.uid), {
+      uid: FS.uid,
+      teamName: teamName || FS.displayName || 'My Team',
+      picks: [],
+      lineup: [],
+      joinedAt: Date.now(),
+    });
+    console.log('Joined league:', leagueId);
+    return true;
+  },
+
+  // Get all leagues the current user is in
+  async getMyLeagues() {
+    const { collection, query, where, getDocs } = window._fbSDK;
+    const db = window._fbDb;
+    if (!db || !FS.uid) return [];
+    try {
+      const q = query(collection(db, 'leagues'), where('memberUids', 'array-contains', FS.uid));
+      const snap = await getDocs(q);
+      return snap.docs.map(d => d.data());
+    } catch(e) { console.warn('getMyLeagues error:', e); return []; }
+  },
+
+  // Get public leagues with open spots
+  async getPublicLeagues() {
+    const { collection, query, where, getDocs } = window._fbSDK;
+    const db = window._fbDb;
+    if (!db) return [];
+    try {
+      const q = query(collection(db, 'leagues'), where('privacy', '==', 'public'));
+      const snap = await getDocs(q);
+      return snap.docs.map(d => d.data()).filter(lg => (lg.memberUids?.length || 0) < lg.teams);
+    } catch(e) { console.warn('getPublicLeagues error:', e); return []; }
+  },
+
+  // ── Draft sync ────────────────────────────────────────────
+  async saveDraftPick(leagueId, pick) {
+    // pick = { pickNum, teamIdx, playerIdx, playerName, pos, team, auto, ts }
+    const { doc, setDoc } = window._fbSDK;
+    const db = window._fbDb;
+    if (!db) return;
+    await setDoc(doc(db, 'leagues', leagueId, 'draft', String(pick.pickNum)), {
+      ...pick,
+      savedBy: FS.uid,
+      ts: Date.now(),
+    });
+  },
+
+  async getDraftPicks(leagueId) {
+    const { collection, getDocs, orderBy, query } = window._fbSDK;
+    const db = window._fbDb;
+    if (!db) return [];
+    const snap = await getDocs(query(collection(db, 'leagues', leagueId, 'draft'), orderBy('pickNum')));
+    return snap.docs.map(d => d.data());
+  },
+
+  // Live draft listener — fires whenever a new pick is made
+  listenDraft(leagueId, onPick) {
+    const { collection, onSnapshot, query, orderBy } = window._fbSDK;
+    const db = window._fbDb;
+    if (!db) return;
+    const q = query(collection(db, 'leagues', leagueId, 'draft'), orderBy('pickNum'));
+    const unsub = onSnapshot(q, snap => {
+      snap.docChanges().forEach(change => {
+        if (change.type === 'added') onPick(change.doc.data());
+      });
+    });
+    FS.unsubscribers.push(unsub);
+    return unsub;
+  },
+
+  // ── Roster sync ───────────────────────────────────────────
+  async saveRoster(leagueId, picks, lineup) {
+    const { doc, updateDoc } = window._fbSDK;
+    const db = window._fbDb;
+    if (!db || !FS.uid) return;
+    await updateDoc(doc(db, 'leagues', leagueId, 'rosters', FS.uid), {
+      picks: picks.map(pk => ({
+        pickNum: pk.pickNum,
+        playerIdx: pk.playerIdx,
+        auto: pk.auto || false,
+      })),
+      lineup: lineup || [],
+      updatedAt: Date.now(),
+    });
+  },
+
+  async getRoster(leagueId, uid) {
+    const { doc, getDoc } = window._fbSDK;
+    const db = window._fbDb;
+    if (!db) return null;
+    const snap = await getDoc(doc(db, 'leagues', leagueId, 'rosters', uid || FS.uid));
+    return snap.exists() ? snap.data() : null;
+  },
+
+  async getAllRosters(leagueId) {
+    const { collection, getDocs } = window._fbSDK;
+    const db = window._fbDb;
+    if (!db) return [];
+    const snap = await getDocs(collection(db, 'leagues', leagueId, 'rosters'));
+    return snap.docs.map(d => d.data());
+  },
+
+  // ── Matchup / Scores ──────────────────────────────────────
+  async saveMatchupResults(leagueId, week, results) {
+    const { doc, setDoc } = window._fbSDK;
+    const db = window._fbDb;
+    if (!db) return;
+    await setDoc(doc(db, 'leagues', leagueId, 'matchups', String(week)), {
+      week, results, updatedAt: Date.now(),
+    });
+  },
+
+  async getMatchupResults(leagueId, week) {
+    const { doc, getDoc } = window._fbSDK;
+    const db = window._fbDb;
+    if (!db) return null;
+    const snap = await getDoc(doc(db, 'leagues', leagueId, 'matchups', String(week)));
+    return snap.exists() ? snap.data() : null;
+  },
+
+  // ── Waivers ───────────────────────────────────────────────
+  async submitWaiverClaim(leagueId, addPlayerIdx, dropPlayerIdx) {
+    const { doc, setDoc } = window._fbSDK;
+    const db = window._fbDb;
+    if (!db || !FS.uid) return;
+    const claimId = `${FS.uid}_${Date.now()}`;
+    await setDoc(doc(db, 'leagues', leagueId, 'waivers', claimId), {
+      uid: FS.uid,
+      addPlayerIdx,
+      dropPlayerIdx: dropPlayerIdx || null,
+      status: 'pending',
+      submittedAt: Date.now(),
+    });
+  },
+
+  // ── Trades ────────────────────────────────────────────────
+  async proposeTrade(leagueId, toUid, myPlayerIdxs, theirPlayerIdxs) {
+    const { doc, setDoc } = window._fbSDK;
+    const db = window._fbDb;
+    if (!db || !FS.uid) return;
+    const tradeId = `trade_${Date.now()}`;
+    await setDoc(doc(db, 'leagues', leagueId, 'trades', tradeId), {
+      fromUid: FS.uid,
+      toUid,
+      myPlayers: myPlayerIdxs,
+      theirPlayers: theirPlayerIdxs,
+      status: 'pending',
+      proposedAt: Date.now(),
+    });
+  },
+
+  async respondTrade(leagueId, tradeId, accept) {
+    const { doc, updateDoc } = window._fbSDK;
+    const db = window._fbDb;
+    if (!db) return;
+    await updateDoc(doc(db, 'leagues', leagueId, 'trades', tradeId), {
+      status: accept ? 'accepted' : 'rejected',
+      respondedAt: Date.now(),
+    });
+  },
+
+  // ── Helpers ───────────────────────────────────────────────
+  _genId() {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    return Array.from({length:6}, () => chars[Math.floor(Math.random()*chars.length)]).join('');
+  },
+
+  isSignedIn() { return !!FS.uid; },
+};
+
+// ── Patch fllSaveMy / fllLoadMy to also write to Firestore ───
+// These are called whenever a league is created or joined
+const _origSaveMy = window.fllSaveMy;
+window.fllSaveMy = function(leagues) {
+  // Always keep localStorage as offline cache
+  try { localStorage.setItem('ssc_fl_my_leagues', JSON.stringify(leagues)); } catch(e) {}
+};
+
+const _origLoadMy = window.fllLoadMy;
+window.fllLoadMy = function() {
+  try { return JSON.parse(localStorage.getItem('ssc_fl_my_leagues') || '[]'); } catch(e) { return []; }
+};
+
+// ── Patch fllFinishCreate to also write to Firestore ─────────
+const _origFinish = window.fllFinishCreate;
+window.fllFinishCreate = async function() {
+  // Run original (sets FL state, localStorage)
+  if (_origFinish) _origFinish();
+  // Also sync to Firestore if signed in
+  if (FS.isSignedIn()) {
+    try {
+      await FS.createLeague({
+        name: FL.name,
+        scoring: FL.scoring,
+        teams: FL.teams,
+        season: FL.season || 2025,
+        privacy: FL.privacy || 'private',
+        code: FL.leagueCode,
+        myTeamName: FL.teamNames?.[0] || 'My Team',
+        teamNames: FL.teamNames || [],
+      });
+      console.log('League synced to Firestore ✓');
+    } catch(e) { console.warn('Firestore sync failed (offline?):', e); }
+  }
+};
+
+// ── Patch fllJoinByCode to also join in Firestore ────────────
+const _origJoinCode = window.fllJoinByCode;
+window.fllJoinByCode = async function() {
+  const code = (document.getElementById('fll-join-code')?.value || '').trim().toUpperCase();
+  const teamName = document.getElementById('fll-join-teamname')?.value || 'My Team';
+  if (FS.isSignedIn() && code.length === 6) {
+    const ok = await FS.joinLeague(code, teamName);
+    if (!ok) return;
+  }
+  if (_origJoinCode) _origJoinCode();
+};
+
+// ── Patch edrExecutePick to sync to Firestore ────────────────
+const _origExecPick = window.edrExecutePick;
+window.edrExecutePick = async function(poolIdx, auto = false) {
+  if (_origExecPick) _origExecPick(poolIdx, auto);
+  // Sync this pick to Firestore if in a live (non-mock) draft
+  if (!EDR.isMock && FS.isSignedIn() && FL.leagueCode) {
+    const pool = [...FL_PLAYERS, ...DR_EXTRA_PLAYERS];
+    const p = pool[poolIdx];
+    const lastPick = EDR.picks[EDR.picks.length - 1];
+    if (lastPick && p) {
+      try {
+        await FS.saveDraftPick(FL.leagueCode, {
+          pickNum: lastPick.pickNum,
+          teamIdx: lastPick.teamIdx,
+          playerIdx: poolIdx,
+          playerName: p.name,
+          pos: p.pos,
+          team: p.team,
+          auto: auto,
+        });
+      } catch(e) { console.warn('Draft pick sync failed:', e); }
+    }
+  }
+};
+
+// ── Auth UI button in fantasy nav ─────────────────────────────
+function fsRenderAuthBtn() {
+  const nav = document.getElementById('fl-nav');
+  if (!nav || document.getElementById('fs-auth-wrap')) return;
+  const wrap = document.createElement('div');
+  wrap.id = 'fs-auth-wrap';
+  wrap.style.cssText = 'display:flex;align-items:center;gap:10px;margin-left:auto';
+  wrap.innerHTML = `
+    <span id="fs-auth-name" style="font-family:'JetBrains Mono',monospace;font-size:.64rem;color:var(--muted)"></span>
+    <button id="fs-auth-btn" onclick="FS.isSignedIn()?FS.signOut():FS.signInGoogle()"
+      class="fl-nav-btn" style="margin-left:0;font-size:.75rem;padding:5px 14px;border-color:rgba(242,194,48,.4);color:var(--gold)">
+      Sign In with Google
+    </button>`;
+  nav.appendChild(wrap);
+}
+
+// ── Boot ──────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  // Wait for Firebase module to expose globals
+  let attempts = 0;
+  const waitForFb = setInterval(() => {
+    if (window._fbAuth && window._fbDb) {
+      clearInterval(waitForFb);
+      FS.init();
+      fsRenderAuthBtn();
+      console.log('Firebase sync layer ready ✓');
+    } else if (++attempts > 30) {
+      clearInterval(waitForFb);
+      console.warn('Firebase not available — running in offline mode');
+    }
+  }, 200);
+});
+
+// Expose globally
+window.FS = FS;
+
+</script>
+<script>
+// ══════════════════════════════════════════════════════════════
+// ── EMAIL INVITE UI — Web side ────────────────────────────────
+// Calls Firebase Cloud Function sendLeagueInvite / sendBulkInvites
+// ══════════════════════════════════════════════════════════════
+
+// ── Call a Cloud Function ─────────────────────────────────────
+async function callFunction(name, data) {
+  // Uses Firebase Functions callable API
+  if (!window._fbApp) throw new Error('Firebase not ready');
+  const { getFunctions, httpsCallable } = await import(
+    'https://www.gstatic.com/firebasejs/10.12.0/firebase-functions.js'
+  );
+  const fns = getFunctions(window._fbApp);
+  const fn  = httpsCallable(fns, name);
+  const result = await fn(data);
+  return result.data;
+}
+
+// ── Show invite modal ─────────────────────────────────────────
+function fllShowInviteModal(leagueId, leagueName, leagueCode) {
+  // Remove existing modal
+  document.getElementById('fll-invite-modal')?.remove();
+
+  const modal = document.createElement('div');
+  modal.id = 'fll-invite-modal';
+  modal.style.cssText = [
+    'position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9999',
+    'display:flex;align-items:center;justify-content:center;padding:16px',
+  ].join(';');
+
+  modal.innerHTML = `
+  <div style="background:var(--ink-2);border:1px solid var(--line);border-radius:14px;
+              width:100%;max-width:520px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,.6)">
+
+    <!-- Header -->
+    <div style="background:var(--ink-3);padding:16px 20px;border-bottom:1px solid var(--line);
+                display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:900;color:var(--white)">
+          📧 Invite Players
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--muted);margin-top:2px">
+          ${leagueName}
+        </div>
+      </div>
+      <button onclick="document.getElementById('fll-invite-modal').remove()"
+        style="background:none;border:none;color:var(--muted);font-size:1.3rem;cursor:pointer;padding:4px">✕</button>
+    </div>
+
+    <!-- Invite code display -->
+    <div style="padding:16px 20px;border-bottom:1px solid var(--line);background:rgba(242,194,48,.04)">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">Share Invite Code</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:1.8rem;font-weight:700;color:var(--gold);letter-spacing:.25em">${leagueCode}</div>
+        <button onclick="navigator.clipboard.writeText('${leagueCode}').then(()=>{this.textContent='✓ Copied';setTimeout(()=>this.textContent='Copy Code',2000)})"
+          style="font-family:'Barlow Condensed',sans-serif;font-size:.78rem;font-weight:700;padding:6px 14px;border-radius:5px;
+                 border:1px solid rgba(242,194,48,.4);color:var(--gold);background:transparent;cursor:pointer">
+          Copy Code
+        </button>
+        <button onclick="navigator.clipboard.writeText('Join my SSC Fantasy League! Code: ${leagueCode} — https://thesportscompanionapp.com/nfl/index.html#fantasy').then(()=>{this.textContent='✓ Copied';setTimeout(()=>this.textContent='Copy Link',2000)})"
+          style="font-family:'Barlow Condensed',sans-serif;font-size:.78rem;font-weight:700;padding:6px 14px;border-radius:5px;
+                 border:1px solid var(--line);color:var(--muted);background:transparent;cursor:pointer">
+          Copy Link
+        </button>
+      </div>
+    </div>
+
+    <!-- Email invites -->
+    <div style="padding:20px">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">
+        Send Email Invites
+        ${!FS?.isSignedIn() ? '<span style="color:#ef5350;font-size:.58rem"> — Sign in required</span>' : ''}
+      </div>
+
+      <!-- Email rows -->
+      <div id="fll-email-rows">
+        ${[1,2,3].map(i => `
+        <div style="display:grid;grid-template-columns:1fr 160px 28px;gap:6px;margin-bottom:8px">
+          <input class="fl-input" placeholder="email@example.com" id="fll-email-${i}"
+            style="font-size:.82rem;padding:8px 10px">
+          <input class="fl-input" placeholder="Name (optional)" id="fll-name-${i}"
+            style="font-size:.82rem;padding:8px 10px">
+          <button onclick="this.closest('div').remove()"
+            style="background:none;border:1px solid var(--line);border-radius:5px;color:var(--muted);cursor:pointer;font-size:.9rem">✕</button>
+        </div>`).join('')}
+      </div>
+
+      <button onclick="fllAddEmailRow()"
+        style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--muted);background:none;border:1px dashed var(--line);
+               border-radius:5px;padding:6px 14px;cursor:pointer;width:100%;margin-bottom:14px;transition:all .2s"
+        onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'"
+        onmouseout="this.style.borderColor='var(--line)';this.style.color='var(--muted)'">
+        + Add another email
+      </button>
+
+      <!-- Draft date optional -->
+      <div style="margin-bottom:14px">
+        <label class="fl-input-label">Draft Date (optional — included in email)</label>
+        <input class="fl-input" id="fll-draft-date" placeholder="e.g. Saturday Aug 30 at 8:00 PM ET"
+          style="font-size:.82rem;padding:8px 10px">
+      </div>
+
+      <!-- Status -->
+      <div id="fll-invite-status" style="font-size:.78rem;margin-bottom:12px;min-height:20px"></div>
+
+      <!-- Actions -->
+      <div style="display:flex;gap:8px;justify-content:flex-end">
+        <button onclick="document.getElementById('fll-invite-modal').remove()"
+          class="fl-btn fl-btn-secondary" style="font-size:.85rem;padding:9px 20px">Cancel</button>
+        <button onclick="fllSendInvites('${leagueId}')"
+          class="fl-btn fl-btn-primary" id="fll-send-btn" style="font-size:.85rem;padding:9px 20px"
+          ${!FS?.isSignedIn() ? 'disabled title="Sign in to send emails"' : ''}>
+          📧 Send Invites
+        </button>
+      </div>
+    </div>
+  </div>`;
+
+  document.body.appendChild(modal);
+  // Close on backdrop click
+  modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+}
+
+function fllAddEmailRow() {
+  const rows = document.getElementById('fll-email-rows');
+  if (!rows) return;
+  const count = rows.children.length + 1;
+  const div = document.createElement('div');
+  div.style.cssText = 'display:grid;grid-template-columns:1fr 160px 28px;gap:6px;margin-bottom:8px';
+  div.innerHTML = `
+    <input class="fl-input" placeholder="email@example.com" id="fll-email-${count}"
+      style="font-size:.82rem;padding:8px 10px">
+    <input class="fl-input" placeholder="Name (optional)" id="fll-name-${count}"
+      style="font-size:.82rem;padding:8px 10px">
+    <button onclick="this.closest('div').remove()"
+      style="background:none;border:1px solid var(--line);border-radius:5px;color:var(--muted);cursor:pointer;font-size:.9rem">✕</button>`;
+  rows.appendChild(div);
+}
+
+async function fllSendInvites(leagueId) {
+  const btn    = document.getElementById('fll-send-btn');
+  const status = document.getElementById('fll-invite-status');
+  const rows   = document.getElementById('fll-email-rows');
+  if (!rows || !btn || !status) return;
+
+  // Collect emails
+  const emails = [];
+  const inputs = rows.querySelectorAll('input[id^="fll-email-"]');
+  inputs.forEach((inp, i) => {
+    const email = inp.value.trim();
+    const nameInp = document.getElementById(`fll-name-${i+1}`);
+    const name = nameInp?.value?.trim() || '';
+    if (email && email.includes('@')) emails.push({ email, name });
+  });
+
+  if (!emails.length) {
+    status.innerHTML = '<span style="color:#ef5350">Enter at least one valid email address.</span>';
+    return;
+  }
+
+  const draftDate = document.getElementById('fll-draft-date')?.value?.trim() || '';
+
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+  status.innerHTML = '<span style="color:var(--muted)">Sending invites…</span>';
+
+  try {
+    const result = await callFunction('sendBulkInvites', {
+      leagueId, emails, draftDate: draftDate || undefined,
+    });
+    const { sent, results } = result;
+    const failed = results.filter(r => !r.success);
+
+    status.innerHTML = `
+      <span style="color:#4caf50">✓ ${sent} invite${sent !== 1 ? 's' : ''} sent!</span>
+      ${failed.length ? `<br><span style="color:#ef5350">✗ Failed: ${failed.map(r=>r.email).join(', ')}</span>` : ''}`;
+
+    btn.textContent = '✓ Done';
+    setTimeout(() => {
+      document.getElementById('fll-invite-modal')?.remove();
+    }, 2500);
+  } catch (e) {
+    status.innerHTML = `<span style="color:#ef5350">Error: ${e.message}. Make sure you are signed in.</span>`;
+    btn.disabled = false;
+    btn.textContent = '📧 Send Invites';
+  }
+}
+
+// ── Add invite button to league cards ────────────────────────
+// Called from fllShowLobby after rendering
+function fllAttachInviteButtons() {
+  document.querySelectorAll('[data-league-id][data-is-commissioner]').forEach(card => {
+    const leagueId   = card.dataset.leagueId;
+    const leagueName = card.dataset.leagueName;
+    const leagueCode = card.dataset.leagueCode;
+    if (!leagueId || card.querySelector('.fll-invite-btn')) return;
+    const btn = document.createElement('button');
+    btn.className = 'fll-invite-btn fl-btn fl-btn-secondary';
+    btn.style.cssText = 'font-size:.78rem;padding:5px 14px;border-color:rgba(79,195,247,.4);color:#4fc3f7';
+    btn.textContent = '📧 Invite';
+    btn.onclick = () => fllShowInviteModal(leagueId, leagueName, leagueCode);
+    card.querySelector('.fll-card-actions')?.appendChild(btn);
+  });
+}
+
+window.fllShowInviteModal = fllShowInviteModal;
+window.fllAddEmailRow     = fllAddEmailRow;
+window.fllSendInvites     = fllSendInvites;
 
 </script>
 </body>
