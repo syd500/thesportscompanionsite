@@ -978,140 +978,8 @@
 
   <!-- ════════════════════ SETUP ════════════════════ -->
   <div class="fl-panel active" id="fl-setup">
-    <div class="fl-wizard">
-      <div class="fl-step">
-        <div class="fl-step-title">Step 1 — League Info</div>
-        <div class="fl-row">
-          <div>
-            <label class="fl-input-label">League Name</label>
-            <input class="fl-input" id="fl-league-name" placeholder="My Fantasy League" value="SSC Fantasy League">
-          </div>
-          <div>
-            <label class="fl-input-label">Commissioner</label>
-            <input class="fl-input" id="fl-commissioner" placeholder="Your name">
-          </div>
-        </div>
-        <div class="fl-row-3">
-          <div>
-            <label class="fl-input-label">Teams</label>
-            <select class="fl-input" id="fl-teams">
-              <option value="8">8 Teams</option>
-              <option value="10" selected>10 Teams</option>
-              <option value="12">12 Teams</option>
-              <option value="14">14 Teams</option>
-            </select>
-          </div>
-          <div>
-            <label class="fl-input-label">Season</label>
-            <select class="fl-input" id="fl-season">
-              <option value="2025" selected>2025 Season</option>
-              <option value="2024">2024 Season</option>
-            </select>
-          </div>
-          <div>
-            <label class="fl-input-label">Draft Type</label>
-            <select class="fl-input" id="fl-draft-type">
-              <option value="snake">Snake Draft</option>
-              <option value="auction">Auction</option>
-              <option value="auto">Auto Draft</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <div class="fl-step">
-        <div class="fl-step-title">Step 2 — Scoring System</div>
-        <p style="font-size:.8rem;color:var(--muted);margin-bottom:14px">Choose how your league scores points. SSM metrics use the original Points Per Down / PPG methodology from <em>The Sports Statistics Manual</em>.</p>
-        <div class="fl-scoring-grid">
-
-          <div class="fl-scoring-opt selected" onclick="flSelectScoring(this,'ssm-ppg')" data-scoring="ssm-ppg">
-            <div class="fl-scoring-opt-title">⭐ SSM Full PPG</div>
-            <div class="fl-scoring-opt-sub">Q-PPG · RB-PPG · WR-PPG · K-PPG. Every scoring decision is context-weighted by field zone, down, and distance. The most analytically complete scoring system.</div>
-            <span class="fl-scoring-opt-badge fl-badge-ssm">SSM Metric</span>
-          </div>
-
-          <div class="fl-scoring-opt" onclick="flSelectScoring(this,'ssm-hybrid')" data-scoring="ssm-hybrid">
-            <div class="fl-scoring-opt-title">⭐ SSM Hybrid</div>
-            <div class="fl-scoring-opt-sub">Standard touchdowns + yardage as the base, with SSM PPG multipliers as a bonus modifier. Easier transition from standard leagues.</div>
-            <span class="fl-scoring-opt-badge fl-badge-ssm">SSM Metric</span>
-          </div>
-
-          <div class="fl-scoring-opt" onclick="flSelectScoring(this,'ppr')" data-scoring="ppr">
-            <div class="fl-scoring-opt-title">Standard PPR</div>
-            <div class="fl-scoring-opt-sub">1 point per reception. TD = 6 pts. 1 pt per 10 rush yards, 1 pt per 25 pass yards. The most common format in established leagues.</div>
-            <span class="fl-scoring-opt-badge fl-badge-std">Standard</span>
-          </div>
-
-          <div class="fl-scoring-opt" onclick="flSelectScoring(this,'half-ppr')" data-scoring="half-ppr">
-            <div class="fl-scoring-opt-title">Half PPR</div>
-            <div class="fl-scoring-opt-sub">0.5 points per reception. Balances the value of volume receivers vs. big-play receivers. Popular compromise format.</div>
-            <span class="fl-scoring-opt-badge fl-badge-std">Standard</span>
-          </div>
-
-          <div class="fl-scoring-opt" onclick="flSelectScoring(this,'standard')" data-scoring="standard">
-            <div class="fl-scoring-opt-title">No PPR</div>
-            <div class="fl-scoring-opt-sub">Receptions worth 0 points. Rushing and receiving touchdowns = 6 pts. Rewards big-play efficiency over volume.</div>
-            <span class="fl-scoring-opt-badge fl-badge-std">Standard</span>
-          </div>
-
-          <div class="fl-scoring-opt" onclick="flSelectScoring(this,'td-only')" data-scoring="td-only">
-            <div class="fl-scoring-opt-title">TD Only</div>
-            <div class="fl-scoring-opt-sub">Only touchdowns score. QB TD = 4 pts, Skill TD = 6 pts. High variance, great for casual or office leagues.</div>
-            <span class="fl-scoring-opt-badge fl-badge-std">Standard</span>
-          </div>
-        </div>
-        <div id="fl-scoring-desc" style="margin-top:12px;padding:12px 16px;background:var(--ink-3);border-radius:8px;font-size:.78rem;color:var(--muted);line-height:1.6;border-left:3px solid var(--gold)">
-          <strong style="color:var(--gold)">SSM Full PPG selected.</strong> Each play is scored using the Points Per Down formula — completions, rushing, and receptions are all weighted by field zone (5 zones from own 1–19 to red zone) and down/distance. Q-PPG for QBs, RB-PPG for running backs, WR-PPG for receivers. See the Scoring tab for full breakdown.
-        </div>
-      </div>
-
-      <div class="fl-step">
-        <div class="fl-step-title">Step 3 — Roster Slots</div>
-        <div class="fl-row-3">
-          <div>
-            <label class="fl-input-label">QB Starters</label>
-            <select class="fl-input" id="fl-slot-qb"><option>1</option><option>2</option></select>
-          </div>
-          <div>
-            <label class="fl-input-label">RB Starters</label>
-            <select class="fl-input" id="fl-slot-rb"><option>1</option><option value="2" selected>2</option><option>3</option></select>
-          </div>
-          <div>
-            <label class="fl-input-label">WR Starters</label>
-            <select class="fl-input" id="fl-slot-wr"><option>1</option><option>2</option><option value="3" selected>3</option></select>
-          </div>
-          <div>
-            <label class="fl-input-label">TE Starters</label>
-            <select class="fl-input" id="fl-slot-te"><option value="1" selected>1</option><option>2</option></select>
-          </div>
-          <div>
-            <label class="fl-input-label">FLEX (RB/WR/TE)</label>
-            <select class="fl-input" id="fl-slot-flex"><option>0</option><option value="1" selected>1</option><option>2</option></select>
-          </div>
-          <div>
-            <label class="fl-input-label">K / DEF</label>
-            <select class="fl-input" id="fl-slot-k"><option value="1" selected>1 K + 1 DEF</option><option>1 K only</option><option>No K/DEF</option></select>
-          </div>
-        </div>
-        <div>
-          <label class="fl-input-label">Bench Spots</label>
-          <select class="fl-input" style="max-width:200px" id="fl-slot-bench">
-            <option>4</option><option value="5" selected>5</option><option>6</option><option>7</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="fl-step">
-        <div class="fl-step-title">Step 4 — Team Names</div>
-        <p style="font-size:.78rem;color:var(--muted);margin-bottom:14px">Enter team names. Your team goes first.</p>
-        <div id="fl-team-names" style="display:grid;grid-template-columns:1fr 1fr;gap:8px"></div>
-      </div>
-
-      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
-        <button class="fl-btn fl-btn-secondary" onclick="flReset()">Reset</button>
-        <button class="fl-btn fl-btn-primary" onclick="flCreate()">Create League →</button>
-      </div>
-    </div>
+    <div id="fl-setup-inner" style="min-height:200px"><div style="text-align:center;padding:48px;color:var(--muted);font-size:.84rem">Loading league lobby…</div></div>
+  </div>
   </div>
 
   <!-- ════════════════════ DASHBOARD ════════════════════ -->
@@ -4361,8 +4229,8 @@ function fllLoadLeague(id){
   };
   // Also init lobby on load if setup is the default
   document.addEventListener('DOMContentLoaded',()=>{
-    const setupEl=document.getElementById('fl-setup');
-    if(setupEl&&setupEl.classList.contains('active')) fllShowLobby();
+    // Always pre-render the lobby into the setup panel so it's ready instantly
+    fllShowLobby();
   });
 })();
 
