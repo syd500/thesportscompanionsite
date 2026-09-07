@@ -4060,16 +4060,19 @@ function fllShowLobby(){
         Your Leagues <span class="fll-badge fll-badge-pub" style="font-size:.62rem">${myLeagues.length}</span>
       </div>
       ${myLeagues.map(lg=>`
-      <div class="fll-league-card" style="cursor:pointer" onclick="fllLoadLeague('${lg.id}')">
-        <div>
+      <div class="fll-league-card">
+        <div style="flex:1;cursor:pointer" onclick="fllLoadLeague('${lg.id}')">
           <div class="fll-league-card-name">
             ${lg.name}
             <span class="fll-badge ${lg.privacy==='public'?'fll-badge-pub':'fll-badge-prv'}">${lg.privacy}</span>
             ${lg.isCommissioner?'<span class="fll-badge fll-badge-comm">Commissioner</span>':''}
           </div>
-          <div class="fll-league-card-meta">${FL_SCORING[lg.scoring]?.name||lg.scoring} · ${lg.teams} teams · Code: ${lg.code||'—'}</div>
+          <div class="fll-league-card-meta">${FL_SCORING[lg.scoring]?.name||lg.scoring} · ${lg.teams} teams · Code: <strong style="color:var(--gold);font-family:'JetBrains Mono',monospace;letter-spacing:.1em">${lg.code||'—'}</strong></div>
         </div>
-        <button class="fll-join-btn" style="background:var(--ink-3);color:var(--white);border:1px solid var(--line)" onclick="event.stopPropagation();fllLoadLeague('${lg.id}')">Open →</button>
+        <div style="display:flex;gap:8px;align-items:center;flex-shrink:0">
+          ${lg.isCommissioner?`<button class="fll-join-btn" style="background:rgba(79,195,247,.12);color:#4fc3f7;border:1px solid rgba(79,195,247,.3)" onclick="event.stopPropagation();fllShowInviteModal('${lg.id}','${lg.name}','${lg.code||lg.id}')">📧 Invite</button>`:''}
+          <button class="fll-join-btn" style="background:var(--ink-3);color:var(--white);border:1px solid var(--line)" onclick="event.stopPropagation();fllLoadLeague('${lg.id}')">Open →</button>
+        </div>
       </div>`).join('')}
     </div>`:``}
 
