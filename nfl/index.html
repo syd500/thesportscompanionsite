@@ -5050,15 +5050,36 @@ window.FS = FS;
 
 // ── Call a Cloud Function ─────────────────────────────────────
 async function callFunction(name, data) {
-  // Uses Firebase Functions callable API
-  if (!window._fbApp) throw new Error('Firebase not ready');
-  const { getFunctions, httpsCallable } = await import(
-    'https://www.gstatic.com/firebasejs/10.12.0/firebase-functions.js'
-  );
-  const fns = getFunctions(window._fbApp);
-  const fn  = httpsCallable(fns, name);
-  const result = await fn(data);
-  return result.data;
+  // Debug log
+  console.log('callFunction called:', name, data);
+
+  // Check Firebase is ready
+  if (!window._fbApp) {
+    console.error('Firebase not ready - _fbApp is null');
+    throw new Error('Firebase not ready. Please refresh the page and try again.');
+  }
+
+  // Check user is signed in
+  if (!window._fbAuth?.currentUser) {
+    console.error('User not signed in');
+    throw new Error('You must be signed in to send invites.');
+  }
+
+  console.log('Signed in as:', window._fbAuth.currentUser.email);
+
+  try {
+    const { getFunctions, httpsCallable, connectFunctionsEmulator } =
+      await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-functions.js');
+    const fns = getFunctions(window._fbApp, 'us-central1');
+    const fn  = httpsCallable(fns, name, { timeout: 30000 });
+    console.log('Calling function:', name);
+    const result = await fn(data);
+    console.log('Function result:', result);
+    return result.data;
+  } catch(e) {
+    console.error('callFunction error:', e);
+    throw e;
+  }
 }
 
 // ── Show invite modal ─────────────────────────────────────────
@@ -5225,7 +5246,9 @@ async function fllSendInvites(leagueId) {
       document.getElementById('fll-invite-modal')?.remove();
     }, 2500);
   } catch (e) {
-    status.innerHTML = `<span style="color:#ef5350">Error: ${e.message}. Make sure you are signed in.</span>`;
+    console.error('Send invite error:', e);
+    const msg = e?.message || e?.code || JSON.stringify(e) || 'Unknown error';
+    status.innerHTML = `<span style="color:#ef5350">Error: ${msg}</span>`;
     btn.disabled = false;
     btn.textContent = '📧 Send Invites';
   }
