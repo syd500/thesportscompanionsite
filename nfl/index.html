@@ -4044,6 +4044,7 @@ function fllShowLobby(){
   const el=document.getElementById('fl-setup');
   if(!el) return;
 
+  try {
   // Check if already in a league
   const myLeagues=fllLoadMy();
 
@@ -4117,6 +4118,7 @@ function fllShowLobby(){
       </div>`).join('')}
     </div>
   </div>`;
+  } catch(e) { console.error("fllShowLobby error:", e); }
 }
 
 // ── CREATE FLOW ───────────────────────────────────────────────
@@ -4604,8 +4606,16 @@ function fllLoadLeague(id){
   };
   // Also init lobby on load if setup is the default
   document.addEventListener('DOMContentLoaded',()=>{
-    // Always pre-render the lobby into the setup panel so it's ready instantly
-    fllShowLobby();
+    // Wait a tick so all script blocks are parsed, then render lobby
+    setTimeout(()=>{
+      try {
+        fllShowLobby();
+      } catch(e) {
+        console.error('fllShowLobby error:', e);
+        const el=document.getElementById('fl-setup');
+        if(el) el.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted)">Error loading lobby. Please refresh the page.</div>';
+      }
+    }, 100);
   });
 })();
 
