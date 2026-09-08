@@ -4045,83 +4045,92 @@ function fllShowLobby(){
   if(!el) return;
 
   try {
-  // Check if already in a league
-  const myLeagues=fllLoadMy();
+    const myLeagues = fllLoadMy();
+    let html = '<div class="fll-wrap">';
 
-  el.innerHTML=`
-  <div class="fll-wrap">
-    <div class="fll-hero">
-      <div class="fll-hero-title">🏈 NFL Fantasy League</div>
-      <div class="fll-hero-sub">Create your own league, join a friend's private league with a code, or browse public leagues open to new members.</div>
-    </div>
+    // Hero
+    html += '<div class="fll-hero">';
+    html += '<div class="fll-hero-title">🏈 NFL Fantasy League</div>';
+    html += '<div class="fll-hero-sub">Create your own league, join a friend\'s private league with a code, or browse public leagues open to new members.</div>';
+    html += '</div>';
 
-    ${myLeagues.length?`
-    <!-- Already in leagues -->
-    <div style="margin-bottom:24px">
-      <div style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--white);margin-bottom:10px">
-        Your Leagues <span class="fll-badge fll-badge-pub" style="font-size:.62rem">${myLeagues.length}</span>
-      </div>
-      ${myLeagues.map(lg=>`
-      <div class="fll-league-card">
-        <div style="flex:1;cursor:pointer" onclick="fllLoadLeague('${lg.id}')">
-          <div class="fll-league-card-name">
-            ${lg.name}
-            <span class="fll-badge ${lg.privacy==='public'?'fll-badge-pub':'fll-badge-prv'}">${lg.privacy}</span>
-            ${lg.isCommissioner?'<span class="fll-badge fll-badge-comm">Commissioner</span>':''}
-          </div>
-          <div class="fll-league-card-meta">${FL_SCORING[lg.scoring]?.name||lg.scoring} · ${lg.teams} teams · Code: <strong style="color:var(--gold);font-family:'JetBrains Mono',monospace;letter-spacing:.1em">${lg.code||'—'}</strong></div>
-        </div>
-        <div style="display:flex;gap:8px;align-items:center;flex-shrink:0">
-          ${lg.isCommissioner?`<button class="fll-join-btn" style="background:rgba(79,195,247,.12);color:#4fc3f7;border:1px solid rgba(79,195,247,.3)" onclick="event.stopPropagation();fllShowInviteModal('${lg.id}','${lg.name}','${lg.code||lg.id}')">📧 Invite</button>`:''}
-          <button class="fll-join-btn" style="background:var(--ink-3);color:var(--white);border:1px solid var(--line)" onclick="event.stopPropagation();fllLoadLeague('${lg.id}')">Open →</button>
-        </div>
-      </div>`).join('')}
-    </div>`:``}
+    // My leagues
+    if(myLeagues.length) {
+      html += '<div style="margin-bottom:24px">';
+      html += '<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--white);margin-bottom:10px">';
+      html += 'Your Leagues <span class="fll-badge fll-badge-pub" style="font-size:.62rem">' + myLeagues.length + '</span>';
+      html += '</div>';
 
-    <!-- Three options -->
-    <div class="fll-choice-grid">
-      <div class="fll-choice-card" onclick="fllShowCreate()">
-        <span class="fll-choice-icon">🏗️</span>
-        <div class="fll-choice-title">Create a League</div>
-        <div class="fll-choice-desc">Set up your own league from scratch. Choose your scoring system, roster format, number of teams, and whether it's public or private. You'll be the commissioner.</div>
-      </div>
-      <div class="fll-choice-card" onclick="fllShowJoin()">
-        <span class="fll-choice-icon">🔑</span>
-        <div class="fll-choice-title">Join a League</div>
-        <div class="fll-choice-desc">Have a 6-character invite code? Enter it to join a private league. Or browse public leagues that are open to new members right now.</div>
-      </div>
-    </div>
+      myLeagues.forEach(function(lg) {
+        const scoringName = (FL_SCORING[lg.scoring] && FL_SCORING[lg.scoring].name) || lg.scoring;
+        const privacyBadge = lg.privacy === 'public' ? 'fll-badge-pub' : 'fll-badge-prv';
+        html += '<div class="fll-league-card">';
+        html += '<div style="flex:1;cursor:pointer" onclick="fllLoadLeague(\'' + lg.id + '\')">';
+        html += '<div class="fll-league-card-name">' + lg.name;
+        html += '<span class="fll-badge ' + privacyBadge + '">' + lg.privacy + '</span>';
+        if(lg.isCommissioner) html += '<span class="fll-badge fll-badge-comm">Commissioner</span>';
+        html += '</div>';
+        html += '<div class="fll-league-card-meta">' + scoringName + ' · ' + lg.teams + ' teams · Code: ';
+        html += '<strong style="color:var(--gold);font-family:\'JetBrains Mono\',monospace;letter-spacing:.1em">' + (lg.code||'—') + '</strong></div>';
+        html += '</div>';
+        html += '<div style="display:flex;gap:8px;align-items:center;flex-shrink:0">';
+        if(lg.isCommissioner) {
+          html += '<button class="fll-join-btn" style="background:rgba(79,195,247,.12);color:#4fc3f7;border:1px solid rgba(79,195,247,.3)" ';
+          html += 'onclick="event.stopPropagation();fllShowInviteModal(\'' + lg.id + '\',\'' + lg.name.replace(/'/g,"\\'") + '\',\'' + (lg.code||lg.id) + '\')">📧 Invite</button>';
+        }
+        html += '<button class="fll-join-btn" style="background:var(--ink-3);color:var(--white);border:1px solid var(--line)" ';
+        html += 'onclick="event.stopPropagation();fllLoadLeague(\'' + lg.id + '\')">Open →</button>';
+        html += '</div></div>';
+      });
+      html += '</div>';
+    }
 
-    <!-- Public league browser preview -->
-    <div style="margin-top:8px">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--white)">
-          Public Leagues <span class="fll-badge fll-badge-pub">${FLL_PUBLIC_LEAGUES.filter(l=>l.spots>0).length} open</span>
-        </div>
-        <button class="fl-btn fl-btn-secondary" style="font-size:.78rem;padding:5px 14px" onclick="fllShowBrowse()">Browse All →</button>
-      </div>
-      ${FLL_PUBLIC_LEAGUES.slice(0,3).map(lg=>`
-      <div class="fll-league-card">
-        <div>
-          <div class="fll-league-card-name">
-            ${lg.name}
-            <span class="fll-badge fll-badge-pub">Public</span>
-          </div>
-          <div class="fll-league-card-meta">${FL_SCORING[lg.scoring]?.name||lg.scoring} · ${lg.teams} teams · Commissioner: ${lg.commissioner}</div>
-        </div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
-          <span class="fll-league-spots ${lg.spots>0?'fll-spots-open':'fll-spots-full'}">${lg.spots>0?lg.spots+' spots':'Full'}</span>
-          <button class="fll-join-btn" ${lg.spots===0?'disabled':''} onclick="fllJoinPublic('${lg.id}')">
-            ${lg.spots>0?'Join →':'Full'}
-          </button>
-        </div>
-      </div>`).join('')}
-    </div>
-  </div>`;
-  } catch(e) { console.error("fllShowLobby error:", e); }
+    // Choice cards
+    html += '<div class="fll-choice-grid">';
+    html += '<div class="fll-choice-card" onclick="fllShowCreate()">';
+    html += '<span class="fll-choice-icon">🏗️</span>';
+    html += '<div class="fll-choice-title">Create a League</div>';
+    html += '<div class="fll-choice-desc">Set up your own league from scratch. Choose scoring, roster format, number of teams, and privacy. You\'ll be the commissioner.</div>';
+    html += '</div>';
+    html += '<div class="fll-choice-card" onclick="fllShowJoin()">';
+    html += '<span class="fll-choice-icon">🔑</span>';
+    html += '<div class="fll-choice-title">Join a League</div>';
+    html += '<div class="fll-choice-desc">Have a 6-character invite code? Enter it to join a private league. Or browse public leagues open to new members.</div>';
+    html += '</div>';
+    html += '</div>';
+
+    // Public leagues preview
+    const openLeagues = FLL_PUBLIC_LEAGUES.filter(function(l){ return l.spots > 0; });
+    html += '<div style="margin-top:8px">';
+    html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">';
+    html += '<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--white)">';
+    html += 'Public Leagues <span class="fll-badge fll-badge-pub">' + openLeagues.length + ' open</span></div>';
+    html += '<button class="fl-btn fl-btn-secondary" style="font-size:.78rem;padding:5px 14px" onclick="fllShowBrowse()">Browse All →</button>';
+    html += '</div>';
+
+    FLL_PUBLIC_LEAGUES.slice(0,3).forEach(function(lg) {
+      const scoringName = (FL_SCORING[lg.scoring] && FL_SCORING[lg.scoring].name) || lg.scoring;
+      html += '<div class="fll-league-card">';
+      html += '<div><div class="fll-league-card-name">' + lg.name + '<span class="fll-badge fll-badge-pub">Public</span></div>';
+      html += '<div class="fll-league-card-meta">' + scoringName + ' · ' + lg.teams + ' teams · Commissioner: ' + lg.commissioner + '</div></div>';
+      html += '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">';
+      const spotsClass = lg.spots > 0 ? 'fll-spots-open' : 'fll-spots-full';
+      html += '<span class="fll-league-spots ' + spotsClass + '">' + (lg.spots > 0 ? lg.spots + ' spots' : 'Full') + '</span>';
+      html += '<button class="fll-join-btn" ' + (lg.spots === 0 ? 'disabled' : '') + ' onclick="fllJoinPublic(\'' + lg.id + '\')">';
+      html += (lg.spots > 0 ? 'Join →' : 'Full') + '</button>';
+      html += '</div></div>';
+    });
+
+    html += '</div></div>';
+    el.innerHTML = html;
+
+  } catch(e) {
+    console.error('fllShowLobby error:', e);
+    el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)">Error loading lobby: ' + e.message + '</div>';
+  }
 }
 
-// ── CREATE FLOW ───────────────────────────────────────────────
+
 function fllShowCreate(){
   FLL.mode='create'; FLL.createStep=1;
   fllRenderCreate();
@@ -4430,9 +4439,6 @@ function fllFinishCreate(){
   if(confirm('League created! 🎉 Go to Draft Room now?')) {
     flShow('draft');
   } else {
-    flShow('dashboard');
-  }
-} else {
     flShow('dashboard');
   }
 }
