@@ -4405,9 +4405,32 @@ function fllFinishCreate(){
   else myLeagues.push(leagueData);
   fllSaveMy(myLeagues);
 
-  if(confirm('League created! 🎉 Go to Draft Room now?')){
+  // Save to Firestore if signed in
+  const db2  = window._fbDb;
+  const auth2 = window._fbAuth;
+  if(db2 && auth2?.currentUser) {
+    const uid2 = auth2.currentUser.uid;
+    const sdk2 = window._fbSDK;
+    const lgId2 = FL.leagueCode || fllGenCode();
+    sdk2.setDoc(sdk2.doc(db2,'leagues',lgId2),{
+      id:lgId2, name:FL.name, scoring:FL.scoring, teams:n,
+      season:FL.season||2025, privacy:FLL.privacy, code:lgId2,
+      commissioner:uid2,
+      commissionerName:auth2.currentUser.displayName||auth2.currentUser.email,
+      memberUids:[uid2], teamNames:FL.teamNames||[], createdAt:Date.now(),
+    }).then(()=>sdk2.setDoc(sdk2.doc(db2,'leagues',lgId2,'rosters',uid2),{
+      uid:uid2, teamName:FL.teamNames?.[0]||'My Team',
+      picks:[], lineup:[], joinedAt:Date.now(),
+    })).then(()=>console.log('✓ League saved to Firestore:',lgId2))
+      .catch(e=>console.error('Firestore save error:',e));
+  }
+
+  if(confirm('League created! 🎉 Go to Draft Room now?')) {
     flShow('draft');
   } else {
+    flShow('dashboard');
+  }
+} else {
     flShow('dashboard');
   }
 }
@@ -5234,6 +5257,27 @@ async function fllSendInvites(leagueId) {
   btn.disabled = true;
   btn.textContent = 'Sending…';
   status.innerHTML = '<span style="color:var(--muted)">Sending invites…</span>';
+
+  // Make sure league exists in Firestore before sending
+  const db = window._fbDb;
+  const auth = window._fbAuth;
+  if(db && auth?.currentUser && FL.leagueCode === leagueId) {
+    const sdk = window._fbSDK;
+    const lgSnap = await sdk.getDoc(sdk.doc(db, 'leagues', leagueId)).catch(()=>null);
+    if(!lgSnap?.exists()) {
+      console.log('League not in Firestore yet — creating...');
+      const uid = auth.currentUser.uid;
+      await sdk.setDoc(sdk.doc(db, 'leagues', leagueId), {
+        id: leagueId, name: FL.name||'SSC Fantasy League',
+        scoring: FL.scoring||'ssm-ppg', teams: FL.teams||10,
+        privacy: FL.privacy||'private', code: leagueId,
+        commissioner: uid,
+        commissionerName: auth.currentUser.displayName||auth.currentUser.email,
+        memberUids: [uid], teamNames: FL.teamNames||[],
+        createdAt: Date.now(),
+      }).catch(e => console.error('Create league error:', e));
+    }
+  }
 
   try {
     const result = await callFunction('sendBulkInvites', {
