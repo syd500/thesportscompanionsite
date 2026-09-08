@@ -1684,7 +1684,8 @@ function nextPlay() {
     window._fbDb   = db;
     window._fbSDK  = { doc, setDoc, getDoc, collection, getDocs,
                        onSnapshot, updateDoc, deleteDoc, query, where, orderBy,
-                       GoogleAuthProvider, signInWithPopup, signOut };
+                       GoogleAuthProvider, signInWithPopup, signInWithRedirect,
+                       getRedirectResult, signOut };
     onAuthStateChanged(auth, user => {
       const cta = document.getElementById('nav-cta');
       const av  = document.getElementById('nav-avatar');
@@ -4614,9 +4615,13 @@ const FS = {
     const auth = window._fbAuth;
     if (!auth) { console.warn('Firebase not ready'); return; }
     // Handle redirect result on page load
-    getRedirectResult(auth).then(result => {
-      if (result?.user) console.log('Redirect sign-in successful:', result.user.email);
-    }).catch(e => console.error('Redirect result error:', e));
+    try {
+      if (typeof getRedirectResult === 'function') {
+        getRedirectResult(auth).then(result => {
+          if (result?.user) console.log('Redirect sign-in successful:', result.user.email);
+        }).catch(e => console.error('Redirect result error:', e));
+      }
+    } catch(e) { console.warn('getRedirectResult not available:', e); }
 
     auth.onAuthStateChanged(user => {
       if (user) {
