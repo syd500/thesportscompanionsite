@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Players — The Sports Companion</title>
+  <link rel="icon" type="image/png" href="/assets/logo.png"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--ink:#0B0D0F;--ink-2:#181B1F;--ink-3:#262A30;--muted:#C8CDD6;--line:#2A2E35;--gold:#F2C230;--crimson:#C83A2B;--white:#FFFFFF}
+    body{font-family:'Inter',sans-serif;background:var(--ink);color:var(--white);min-height:100vh}
+    nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;background:rgba(11,13,15,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+    .nav-brand{display:flex;align-items:center;gap:8px;padding:0 20px;text-decoration:none;border-right:1px solid var(--line);height:56px;flex-shrink:0}
+    .nav-brand img{height:28px}
+    .nav-brand span{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;color:var(--white)}
+    .nav-brand span em{font-style:normal;color:var(--gold)}
+    .nav-leagues{display:flex;align-items:center;list-style:none;overflow-x:auto;flex:1;scrollbar-width:none}
+    .nav-leagues::-webkit-scrollbar{display:none}
+    .nav-leagues a{display:flex;align-items:center;height:56px;padding:0 15px;font-size:.8rem;font-weight:600;color:var(--muted);text-decoration:none;border-right:1px solid var(--line);white-space:nowrap}
+    .nav-leagues a:hover{color:var(--white);background:var(--ink-2)}
+    .nav-cta{margin-left:auto;padding:0 16px;height:56px;display:flex;align-items:center;gap:8px;flex-shrink:0}
+    .nav-cta a{color:var(--muted);font-size:.8rem;font-weight:600;text-decoration:none;padding:8px 12px}
+    .nav-cta a.primary{background:var(--gold);color:var(--ink);border-radius:5px}
+    .banner{background:var(--ink-2);border-bottom:1px solid var(--line);padding:28px 32px}
+    .sec-label{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;letter-spacing:.15em;color:var(--gold);text-transform:uppercase;margin-bottom:8px}
+    .sec-title{font-family:'Barlow Condensed',sans-serif;font-size:2.2rem;font-weight:900;text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
+    .sec-body{color:var(--muted);font-size:.88rem;line-height:1.6}
+    .sport-tabs{display:flex;border-top:1px solid var(--line);margin-top:20px;overflow-x:auto;scrollbar-width:none}
+    .sport-tabs::-webkit-scrollbar{display:none}
+    .stab{padding:13px 22px;font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);background:none;border:none;border-bottom:3px solid transparent;cursor:pointer;transition:all .2s;white-space:nowrap}
+    .stab:hover{color:var(--white)}
+    .stab.active{color:var(--gold);border-bottom-color:var(--gold);background:rgba(242,194,48,.04)}
+    .main{max-width:1100px;margin:0 auto;padding:32px 20px 64px}
+    .sp{display:none}.sp.active{display:block}
+    .player-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+    .player-card{background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:18px;text-decoration:none;display:block;transition:border-color .2s,transform .2s}
+    .player-card:hover{border-color:var(--gold);transform:translateY(-2px)}
+    .pc-top{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+    .pc-logo{width:36px;height:36px;object-fit:contain}
+    .pc-sport{font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+    .pc-name{font-family:'Barlow Condensed',sans-serif;font-size:1.15rem;font-weight:900;text-transform:uppercase;color:var(--white);margin-bottom:3px;line-height:1.2}
+    .pc-pos{font-size:.74rem;color:var(--muted);margin-bottom:10px}
+    .pc-ovr{display:flex;align-items:center;justify-content:space-between}
+    .ovr-badge{font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:900;padding:3px 10px;border-radius:5px}
+    .ovr-hi{background:rgba(242,194,48,.12);color:var(--gold);border:1px solid rgba(242,194,48,.3)}
+    .ovr-mid{background:rgba(56,189,248,.1);color:#38BDF8;border:1px solid rgba(56,189,248,.25)}
+    .pc-stat{font-size:.76rem;color:var(--muted);text-align:right}
+    .pc-stat span{color:var(--white);font-weight:600}
+    footer{background:var(--ink);border-top:1px solid var(--line);padding:20px 32px;text-align:center;font-size:.74rem;color:var(--muted);margin-top:48px}
+    @media(max-width:600px){.player-grid{grid-template-columns:repeat(2,1fr)}.banner{padding:18px 16px}.main{padding:20px 12px 48px}}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/index.html" class="nav-brand">
+    <img src="/assets/logo.png" alt="SSC"/>
+    <span>The Sports <em>Companion</em></span>
+  </a>
+  <ul class="nav-leagues">
+    <li><a href="/nfl/index.html">🏈 NFL</a></li>
+    <li><a href="/mlb/index.html">⚾ MLB</a></li>
+    <li><a href="/nba/index.html">🏀 NBA</a></li>
+    <li><a href="/ncaa/index.html">🎓 NCAA</a></li>
+    <li><a href="/futbol/index.html">⚽ Fútbol</a></li>
+    <li><a href="/fantasy/index.html">🏆 Fantasy</a></li>
+    <li><a href="/brackets/index.html">🗂 Brackets</a></li>
+  </ul>
+  <div class="nav-cta">
+    <a href="/login/index.html">Log In</a>
+    <a href="/signup/index.html" class="primary">Sign Up</a>
+  </div>
+</nav>
+
+<div class="banner">
+  <div class="sec-label">// Player Profiles</div>
+  <div class="sec-title">👤 Players</div>
+  <div class="sec-body">Individual player profiles with season stats, career numbers, OVR ratings, and bios across NFL, MLB, and NBA.</div>
+  <div class="sport-tabs">
+    <button class="stab active" onclick="showSport('nfl',this)">🏈 NFL</button>
+    <button class="stab" onclick="showSport('mlb',this)">⚾ MLB</button>
+    <button class="stab" onclick="showSport('nba',this)">🏀 NBA</button>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- NFL -->
+<div id="sp-nfl" class="sp active">
+  <div class="player-grid">
+    <a href="/players/nfl-mahomes.html" class="player-card">
+      <div class="pc-top"><img class="pc-logo" src="/assets/nfl/chiefs.png" onerror="this.style.display='none'"/><span class="pc-sport">NFL · QB</span></div>
+      <div class="pc-name">Patrick Mahomes</div>
+      <div class="pc-pos">Quarterback · Kansas City Chiefs</div>
+      <div class="pc-ovr"><span class="ovr-badge ovr-hi">OVR 94</span><div class="pc-stat">PPD <span>2.84</span></div></div>
+    </a>
+    <a href="/players/nfl-hurts.html" class="player-card">
+      <div class="pc-top"><img class="pc-logo" src="/assets/nfl/eagles.png" onerror="this.style.display='none'"/><span class="pc-sport">NFL · QB</span></div>
+      <div class="pc-name">Jalen Hurts</div>
+      <div class="pc-pos">Quarterback · Philadelphia Eagles</div>
+      <div class="pc-ovr"><span class="ovr-badge ovr-hi">OVR 91</span><div class="pc-stat">PPD <span>2.71</span></div></div>
+    </a>
+    <a href="/players/nfl-jackson.html" class="player-card">
+      <div class="pc-top"><img class="pc-logo" src="/assets/nfl/ravens.png" onerror="this.style.display='none'"/><span class="pc-sport">NFL · QB</span></div>
+      <div class="pc-name">Lamar Jackson</div>
+      <div class="pc-pos">Quarterback · Baltimore Ravens</div>
+      <div class="pc-ovr"><span class="ovr-badge ovr-hi">OVR 96</span><div class="pc-stat">PPD <span>2.91</span></div></div>
+    </a>
+    <a href="/players/nfl-mccaffrey.html" class="player-card">
+      <div class="pc-top"><img class="pc-logo" src="/assets/nfl/49ers.png" onerror="this.style.display='none'"/><span class="pc-sport">NFL · RB</span></div>
+      <div class="pc-name">Christian McCaffrey</div>
+      <div class="pc-pos">Running Back · San Francisco 49ers</div>
+      <div class="pc-ovr"><span class="ovr-badge ovr-hi">OVR 98</span><div class="pc-stat">PPR <span>3.44</span></div></div>
+    </a>
+    <a href="/players/nfl-henry.html" class="player-card">
+      <div class="pc-top"><img class="pc-logo" src="/assets/nfl/titans.png" onerror="this.style.display='none'"/><span class="pc-sport">NFL · RB</span></div>
+      <div class="pc-name">Derrick Henry</div>
+      <div class="pc-pos">Running Back · Tennessee Titans</div>
+      <div class="pc-ovr"><span class="ovr-badge ovr-hi">OVR 88</span><div class="pc-stat">Rush Yds <span>1,422</span></div></div>
+    </a>
+    <a href="/players/nfl-hill.html" class="player-card">
+      <div class="pc-top"><img class="pc-logo" src="/assets/nfl/dolphins.png" onerror="this.style.display='none'"/><span class="pc-sport">NFL · WR</span></div>
+      <div class="pc-name">Tyreek Hill</div>
+      <div class="pc-pos">Wide Receiver · Miami Dolphins</div>
+      <div class="pc-ovr"><span class="ovr-badge ovr-hi">OVR 90</span><div class="pc-stat">PPT <span>2.14</span></div></div>
+    </a>
+    <a href="/players/nfl-jefferson.html" class="player-card">
+      <div class="pc-top"><img class="pc-logo" src="/assets/nfl/vikings.png" onerror="this.style.display='none'"/><span class="pc-sport">NFL · WR</span></div>
+      <div class="pc-name">Justin Jefferson</div>
+      <div class="pc-pos">Wide Receiver · Minnesota Vikings</div>
+      <div class="pc-ovr"><span class="ovr-badge ovr-hi">OVR 93</span><div class="pc-stat">PPT <span>2.08</span></div></div>
+    </a>
+    <a href="/players/nfl-tucker.html" class="player-card">
+      <div class="pc-top"><img class="pc-logo" src="/assets/nfl/ravens.png" onerror="this.style.display='none'"/><span class="pc-sport">NFL · K</span></div>
+      <div class="pc-name">Justin Tucker</div>
+      <div class="pc-pos">Kicker · Baltimore Ravens</div>
+      <div class="pc-ovr"><span class="ovr-badge ovr-hi">OVR 97</span><div class="pc-stat">PPK <span>14.2</span></div></div>
+    </a>
+  </div>
+</div>
+
+<!-- MLB -->
+<div id="sp-mlb" class="sp">
+  <div class="player-grid">
+    <a href="/players/mlb-ohtani.html" class="player-card">
+      <div class="pc-top"><img class="pc-logo" src="/assets/mlb/dodgers.png" onerror="this.style.display='none'"/><span class="pc-sport">MLB · DH/SP</span></div>
+      <div class="pc-name">Shohei Ohtani</div>
+      <div class="pc-pos">Designated Hitter / Pitcher · Dodgers</div>
+      <div class="pc-ovr"><span class="ovr-badge ovr-hi">OVR 99</span><div class="pc-stat">RPG <span>8.44</span></div></div>
+    </a>
+    <a href="/players/mlb-judge.html" class="player-card">
+      <div class="pc-top"><img class="pc-logo" src="/assets/mlb/yankees.png" onerror="this.style.display='none'"/><span class="pc-sport">MLB · RF</span></div>
+      <div class="pc-name">Aaron Judge</div>
+      <div class="pc-pos">Right Field · New York Yankees</div>
+      <div class="pc-ovr"><span class="ovr-badge ovr-hi">OVR 96</span><div class="pc-stat">HR <span>58</span></div></div>
+    </a>
+    <a href="/players/mlb-trout.html" class="player-card">
+      <div class="pc-top"><img class="pc-logo" src="/assets/mlb/angels.png" onerror="this.style.display='none'"/><span class="pc-sport">MLB · CF</span></div>
+      <div class="pc-name">Mike Trout</div>
+      <div class="pc-pos">Center Field · Los Angeles Angels</div>
+      <div class="pc-ovr"><span class="ovr-badge ovr-hi">OVR 95</span><div class="pc-stat">RPG <span>7.44</span></div></div>
+    </a>
+    <a href="/players/mlb-kershaw.html" class="player-card">
+      <div class="pc-top"><img class="pc-logo" src="/assets/mlb/dodgers.png" onerror="this.style.display='none'"/><span class="pc-sport">MLB · SP</span></div>
+      <div class="pc-name">Clayton Kershaw</div>
+      <div class="pc-pos">Starting Pitcher · Los Angeles Dodgers</div>
+      <div class="pc-ovr"><span class="ovr-badge ovr-hi">OVR 88</span><div class="pc-stat">RPI <span>1.44</span></div></div>
+    </a>
+    <a href="/players/mlb-cole.html" class="player-card">
+      <div class="pc-top"><img class="pc-logo" src="/assets/mlb/yankees.png" onerror="this.style.display='none'"/><span class="pc-sport">MLB · SP</span></div>
+      <div class="pc-name">Gerrit Cole</div>
+      <div class="pc-pos">Starting Pitcher · New York Yankees</div>
+      <div class="pc-ovr"><span class="ovr-badge ovr-hi">OVR 92</span><div class="pc-stat">RPI <span>1.62</span></div></div>
+    </a>
+  </div>
+</div>
+
+<!-- NBA -->
+<div id="sp-nba" class="sp">
+  <div class="player-grid">
+    <a href="/players/nba-curry.html" class="player-card">
+      <div class="pc-top"><img class="pc-logo" src="/assets/nba/warriors.png" onerror="this.style.display='none'"/><span class="pc-sport">NBA · PG</span></div>
+      <div class="pc-name">Stephen Curry</div>
+      <div class="pc-pos">Point Guard · Golden State Warriors</div>
+      <div class="pc-ovr"><span class="ovr-badge ovr-hi">OVR 96</span><div class="pc-stat">PPG+ <span>43.6</span></div></div>
+    </a>
+    <a href="/players/nba-lebron.html" class="player-card">
+      <div class="pc-top"><img class="pc-logo" src="/assets/nba/lakers.png" onerror="this.style.display='none'"/><span class="pc-sport">NBA · SF</span></div>
+      <div class="pc-name">LeBron James</div>
+      <div class="pc-pos">Small Forward · Los Angeles Lakers</div>
+      <div class="pc-ovr"><span class="ovr-badge ovr-hi">OVR 97</span><div class="pc-stat">PPG+ <span>38.8</span></div></div>
+    </a>
+    <a href="/players/nba-jokic.html" class="player-card">
+      <div class="pc-top"><img class="pc-logo" src="/assets/nba/nuggets.png" onerror="this.style.display='none'"/><span class="pc-sport">NBA · C</span></div>
+      <div class="pc-name">Nikola Jokić</div>
+      <div class="pc-pos">Center · Denver Nuggets</div>
+      <div class="pc-ovr"><span class="ovr-badge ovr-hi">OVR 99</span><div class="pc-stat">PPG+ <span>44.8</span></div></div>
+    </a>
+    <a href="/players/nba-giannis.html" class="player-card">
+      <div class="pc-top"><img class="pc-logo" src="/assets/nba/bucks.png" onerror="this.style.display='none'"/><span class="pc-sport">NBA · PF</span></div>
+      <div class="pc-name">Giannis Antetokounmpo</div>
+      <div class="pc-pos">Power Forward · Milwaukee Bucks</div>
+      <div class="pc-ovr"><span class="ovr-badge ovr-hi">OVR 98</span><div class="pc-stat">PPG+ <span>47.6</span></div></div>
+    </a>
+    <a href="/players/nba-tatum.html" class="player-card">
+      <div class="pc-top"><img class="pc-logo" src="/assets/nba/celtics.png" onerror="this.style.display='none'"/><span class="pc-sport">NBA · SF</span></div>
+      <div class="pc-name">Jayson Tatum</div>
+      <div class="pc-pos">Small Forward · Boston Celtics</div>
+      <div class="pc-ovr"><span class="ovr-badge ovr-hi">OVR 92</span><div class="pc-stat">PPG+ <span>41.6</span></div></div>
+    </a>
+  </div>
+</div>
+
+</div><!-- /main -->
+<footer>© 2026 The Sports Companion · Chris Cain</footer>
+<script>
+function showSport(id,btn){
+  document.querySelectorAll('.sp').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.stab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sp-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+// Auto-select sport from URL hash
+const hash = location.hash.replace('#','');
+if(hash){const btn=document.querySelector(`.stab[onclick*="${hash}"]`);if(btn)btn.click();}
+</script>
+</body>
+</html>

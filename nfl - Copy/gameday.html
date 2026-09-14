@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NFL Gameday — The Sports Companion</title>
+  <link rel="icon" type="image/png" href="/assets/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--ink:#0B0D0F;--ink-2:#181B1F;--ink-3:#262A30;--muted:#C8CDD6;--line:#2A2E35;--gold:#F2C230;--crimson:#C83A2B;--white:#FFFFFF;--green:#22c55e}
+    html{scroll-behavior:smooth}
+    body{font-family:'Inter',sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+
+    /* NAV */
+    nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;background:rgba(11,13,15,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+    .nav-brand{display:flex;align-items:center;gap:8px;padding:0 20px;text-decoration:none;border-right:1px solid var(--line);height:56px;flex-shrink:0}
+    .nav-brand img{height:28px}
+    .nav-brand span{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;letter-spacing:.04em;color:var(--white);white-space:nowrap}
+    .nav-brand span em{font-style:normal;color:var(--gold)}
+    .nav-back{display:flex;align-items:center;height:56px;padding:0 20px;font-size:.82rem;font-weight:600;color:var(--muted);text-decoration:none;border-right:1px solid var(--line);gap:6px;transition:color .2s}
+    .nav-back:hover{color:var(--white)}
+    .nav-live{margin-left:auto;padding:0 20px;height:56px;display:flex;align-items:center;gap:10px}
+    .live-badge{display:flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:5px 10px;border-radius:4px;background:rgba(200,58,43,.15);color:var(--crimson);border:1px solid rgba(200,58,43,.3)}
+    .live-dot{width:6px;height:6px;border-radius:50%;background:var(--crimson);animation:pulse 1.2s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+    /* SCOREBOARD */
+    .scoreboard{background:var(--ink-2);border-bottom:1px solid var(--line);padding:24px 32px}
+    .sb-top{display:flex;align-items:center;justify-content:center;gap:0;}
+    .sb-team{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0;flex:1;max-width:200px;}
+    .sb-team-name{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.03em;text-align:center;display:flex;align-items:center;justify-content:center;gap:5px;flex-wrap:wrap;}
+    .sb-team-record{font-size:.75rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
+    .sb-score-wrap{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+    .sb-score{font-family:'Barlow Condensed',sans-serif;font-size:4rem;font-weight:900;line-height:1;}
+    .sb-score.leader{color:var(--gold)}
+    .sb-divider{font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;color:var(--line);font-weight:700;}
+    .sb-game-info{display:flex;flex-direction:column;align-items:center;gap:3px;padding:0 8px;}
+    .sb-quarter{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:800;text-transform:uppercase;color:var(--gold)}
+    .sb-clock{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--muted)}
+    .sb-possession{font-size:.72rem;color:var(--muted);margin-top:2px}
+
+    
+    .sb-inner{max-width:600px;margin:0 auto;}
+    /* QUARTER SCORES */
+    .quarter-scores{margin-top:16px;display:flex;justify-content:center}
+    .qs-table{border-collapse:collapse;font-size:.72rem;text-align:center}
+    .qs-table th{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;padding:4px 10px;text-align:center;border-bottom:1px solid var(--line)}
+    .qs-table td{padding:5px 10px;text-align:center;border-bottom:1px solid rgba(255,255,255,.04);color:var(--muted)}
+    .qs-table td:first-child{font-weight:600;color:var(--white);text-align:left;padding-right:12px}
+    .qs-table td.total{font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:800;color:var(--gold)}
+    .qs-table td.active-q{color:var(--gold);font-weight:700}
+
+    /* TABS */
+    .game-tabs{display:flex;background:var(--ink-2);border-bottom:1px solid var(--line)}
+    .game-tab{padding:13px 24px;font-size:.82rem;font-weight:600;color:var(--muted);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;transition:all .2s;white-space:nowrap}
+    .game-tab:hover{color:var(--white)}
+    .game-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+
+    /* GAMECAST PANEL */
+    #panel-gamecast{display:block}
+    .panel{display:none;padding:24px 20px}.panel-inner{max-width:860px;margin:0 auto}
+    .panel.active{display:block}
+
+    /* FIELD - Vertical Madden style */
+    .field-wrap{position:relative;margin-bottom:20px;display:flex;justify-content:center}
+    .field-canvas-wrap{position:relative;width:100%;max-width:680px;height:auto;aspect-ratio:680/340;border-radius:10px;overflow:hidden;border:2px solid #1a3d17;flex-shrink:0}
+    .field-svg{width:100%;height:100%;display:block}
+    .field-overlay{position:absolute;inset:0;pointer-events:none}
+    .down-box{position:absolute;top:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.85);border:1px solid var(--gold);border-radius:4px;padding:4px 12px;white-space:nowrap;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--gold);font-weight:600;z-index:10}
+    .td-flash{position:absolute;inset:0;background:rgba(34,197,94,.15);display:flex;align-items:center;justify-content:center;border-radius:8px;opacity:0;transition:opacity .3s;z-index:20}
+    .td-flash.show{opacity:1}
+    .td-flash span{font-family:'Barlow Condensed',sans-serif;font-size:2rem;font-weight:900;color:var(--green);text-shadow:0 0 20px rgba(34,197,94,.5)}
+
+    /* PLAY DESCRIPTION */
+    .play-desc-card{background:var(--ink-2);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin-bottom:20px}
+    .play-desc-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px}
+    .play-desc-situation{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--white);font-weight:600}
+    .play-desc-down{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--gold);font-weight:600}
+    .play-desc-text{font-size:.88rem;color:var(--muted);line-height:1.6}
+    .play-desc-td{color:var(--green);font-weight:700;font-size:.8rem;margin-top:6px}
+
+    /* PLAY CONTROLS */
+    .play-controls{display:flex;gap:8px;margin-bottom:20px;align-items:center}
+    .ctrl-btn{background:var(--ink-2);border:1px solid var(--line);color:var(--white);font-size:.82rem;font-weight:600;padding:9px 16px;border-radius:6px;cursor:pointer;transition:all .2s}
+    .ctrl-btn:hover{border-color:var(--gold);color:var(--gold)}
+    .ctrl-btn:disabled{opacity:.4;cursor:not-allowed}
+    .ctrl-btn.live{background:var(--crimson);border-color:var(--crimson);color:var(--white)}
+    .ctrl-btn.live.paused{background:var(--green);border-color:var(--green)}
+    .play-counter{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--muted);margin-left:auto}
+
+    /* PLAY BY PLAY FEED */
+    .pbp-feed{border:1px solid var(--line);border-radius:10px;overflow:hidden;max-height:400px;overflow-y:auto}
+    .pbp-feed::-webkit-scrollbar{width:4px}
+    .pbp-feed::-webkit-scrollbar-track{background:var(--ink-2)}
+    .pbp-feed::-webkit-scrollbar-thumb{background:var(--line);border-radius:2px}
+    .pbp-item{padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.04);transition:background .15s;cursor:pointer;text-align:center;}
+    .pbp-item:last-child{border-bottom:none}
+    .pbp-item:hover{background:var(--ink-2)}
+    .pbp-item.active{background:rgba(242,194,48,.08);border-left:2px solid var(--gold)}
+    .pbp-item.seen{opacity:1}
+    .pbp-item.unseen{opacity:.4}
+    .pbp-item-meta{font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--gold);margin-bottom:4px;letter-spacing:.06em;text-align:center;}
+    .pbp-item-text{font-size:.88rem;color:var(--muted);line-height:1.6;text-align:center;}
+    .pbp-item.td .pbp-item-text{font-size:.88rem;color:var(--muted);line-height:1.6;text-align:center;}
+    .pbp-item-td-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:2px 6px;border-radius:3px;background:rgba(34,197,94,.15);color:var(--green);margin-left:6px}
+
+    /* BOX SCORE */
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    .bs-tbl tbody tr{border-bottom:1px solid rgba(255,255,255,.04);transition:background .15s}
+    .bs-tbl tbody tr:hover{background:var(--ink-2)}
+    .bs-tbl tbody tr:last-child{border-bottom:none}
+    
+    
+    
+
+    /* FOOTER */
+    footer{background:var(--ink);border-top:1px solid var(--line);padding:28px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-top:48px}
+    .ft-brand{display:flex;align-items:center;gap:8px}.ft-brand img{height:22px}
+    .ft-brand span{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem}
+    .ft-brand span em{font-style:normal;color:var(--gold)}
+    .ft-copy{font-size:.75rem;color:var(--muted)}
+    .ft-links{display:flex;gap:18px}.ft-links a{font-size:.75rem;color:var(--muted);text-decoration:none}.ft-links a:hover{color:var(--white)}
+
+    @media(max-width:768px){
+      .panel{padding:16px}.panel-inner{max-width:860px;margin:0 auto}
+      .scoreboard{padding:18px 16px}
+      .sb-score{font-family:'Barlow Condensed',sans-serif;font-size:4rem;font-weight:900;line-height:1;}
+      .nav-brand span{display:none}
+    }
+  
+    /* ── CENTERED TABS & PANELS ── */
+    .game-tabs{display:flex;justify-content:center;border-bottom:1px solid var(--line);background:var(--ink-2)}
+    .panel-inner{max-width:860px;margin:0 auto;width:100%}
+  
+    /* LANGUAGE SWITCHER */
+    .lang-switch{display:flex;align-items:center;gap:2px;padding:0 12px;border-right:1px solid var(--line);height:56px;flex-shrink:0}
+    .lang-btn{background:none;border:1px solid transparent;border-radius:5px;padding:5px 9px;font-size:.75rem;font-weight:700;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;font-family:'Barlow Condensed',sans-serif;letter-spacing:.03em}
+    .lang-btn:hover{color:var(--white);border-color:var(--line)}
+    .lang-btn.active{color:var(--gold);border-color:rgba(242,194,48,.4);background:rgba(242,194,48,.08)}
+  
+    /* ── BOX SCORE IMPROVEMENTS ───────────────────────────── */
+    
+    
+    .bs-team-logo{width:42px;height:42px;object-fit:contain}
+    
+    
+    
+    
+    
+    /* Stat tables - redesigned */
+    .bs-section{margin-bottom:18px}
+    .bs-section-title{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--gold);margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid var(--line)}
+    .bs-table-wrap{overflow-x:auto;border-radius:8px;border:1px solid var(--line)}
+    .bs-tbl{width:100%;border-collapse:collapse;font-size:.8rem}
+    .bs-tbl thead tr{background:#1B2A4A}
+    .bs-tbl th{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:#8ab4d8;padding:8px 10px;text-align:center;white-space:nowrap;font-weight:600}
+    .bs-tbl th:first-child{text-align:left;padding-left:12px}
+    .bs-tbl tbody tr:nth-child(even){background:rgba(255,255,255,0.025)}
+    .bs-tbl tbody tr:hover{background:rgba(242,194,48,0.05)}
+    .bs-tbl tbody tr:last-child td{border-bottom:none}
+    .bs-tbl td{padding:8px 10px;color:var(--muted);text-align:center;white-space:nowrap;border-bottom:1px solid rgba(255,255,255,0.04);font-size:.8rem}
+    .bs-tbl td.player{color:var(--white);font-weight:600;text-align:left;padding-left:12px}
+    .bs-tbl td.hi{color:var(--gold);font-weight:700}
+    /* Team stat rows */
+    .bs-stat-row{display:grid;grid-template-columns:1fr 1.6fr 1fr;padding:8px 4px;border-bottom:1px solid rgba(255,255,255,0.04);align-items:center}
+    .bs-stat-row:last-child{border-bottom:none}
+    .bs-stat-row:nth-child(even){background:rgba(255,255,255,0.02)}
+    .bs-stat-val{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:800;color:var(--white);text-align:center}
+    .bs-stat-val.hi{color:var(--gold)}
+    .bs-stat-label{color:var(--muted);font-size:.76rem;text-align:center;font-family:'JetBrains Mono',monospace;letter-spacing:.04em}
+    .bs-teamstats-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+    .bs-team-toggle{display:flex;gap:8px;margin-top:12px;margin-bottom:12px}
+    .bs-toggle-btn{flex:1;padding:8px 0;font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;border:1px solid var(--line);background:var(--ink-3);color:var(--muted);border-radius:6px;cursor:pointer;transition:all .2s}
+    .bs-toggle-btn:hover{border-color:var(--gold);color:var(--white)}
+    .bs-toggle-btn.active{background:rgba(27,42,74,.8);border-color:#5b9bd5;color:#5b9bd5}
+    /* Line score */
+    .bs-linescore{width:100%;border-collapse:collapse;font-size:.78rem}
+    .bs-linescore th{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.08em;color:#8ab4d8;padding:7px 8px;text-align:center;background:#1B2A4A;border-bottom:1px solid var(--line)}
+    .bs-linescore th:first-child{text-align:left;padding-left:12px}
+    .bs-linescore td{padding:8px;color:var(--muted);text-align:center;border-bottom:1px solid rgba(255,255,255,0.04);font-size:.8rem}
+    .bs-linescore td:first-child{text-align:left;color:var(--white);font-weight:600;font-size:.75rem;padding-left:12px;max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .bs-linescore td.total{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:900;color:var(--gold);border-left:1px solid var(--line)}
+    .bs-card-title{font-family:'Barlow Condensed',sans-serif;font-size:1.05rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px;color:var(--white);display:flex;align-items:center;gap:8px}
+    .bs-sample-tag{font-family:'JetBrains Mono',monospace;font-size:.58rem;padding:2px 6px;border-radius:3px;background:rgba(138,143,152,.1);color:var(--muted);text-transform:lowercase}
+    .bs-card-body{font-size:.84rem;color:var(--muted);line-height:1.8}
+    .bs-card{background:var(--ink-2);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:10px}
+    .bs-linescore-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+  
+    /* ── MOBILE NAV OVERHAUL ─────────────────────────────── */
+    .hamburger{display:none;align-items:center;justify-content:center;width:44px;height:56px;background:none;border:none;cursor:pointer;color:var(--white);font-size:1.4rem;flex-shrink:0;padding:0 12px}
+    .mobile-menu{display:none;position:absolute;top:56px;left:0;right:0;background:rgba(11,13,15,.98);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);z-index:999;max-height:calc(100vh - 56px);overflow-y:auto}
+    .mobile-menu.open{display:block}
+    .mobile-menu a{display:flex;align-items:center;gap:12px;padding:14px 20px;font-size:1rem;font-weight:600;color:var(--muted);text-decoration:none;border-bottom:1px solid rgba(255,255,255,.05);transition:background .15s,color .15s}
+    .mobile-menu a:hover,.mobile-menu a.active{background:var(--ink-2);color:var(--white)}
+    .mobile-menu a.active{color:var(--gold);border-left:3px solid var(--gold)}
+    .mobile-menu a:last-child{border-bottom:none}
+    .mobile-menu-footer{padding:14px 20px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .mobile-lang{display:flex;gap:6px}
+    .mobile-lang-btn{background:var(--ink-3);border:1px solid var(--line);border-radius:5px;padding:7px 12px;font-size:.82rem;font-weight:700;color:var(--muted);cursor:pointer;transition:all .2s}
+    .mobile-lang-btn.active{background:rgba(242,194,48,.1);border-color:var(--gold);color:var(--gold)}
+    .mobile-auth{display:flex;gap:8px}
+    .mobile-auth a{font-size:.82rem;font-weight:600;text-decoration:none;padding:8px 14px;border-radius:5px}
+    .mobile-auth a.login{color:var(--muted);border:1px solid var(--line)}
+    .mobile-auth a.signup{background:var(--gold);color:var(--ink)}
+
+    @media(max-width:768px){
+      .nav-leagues{display:none}
+      .lang-switch{display:none}
+      .hamburger{display:flex}
+      .nav-cta{display:none !important}
+      .nav-avatar-btn{margin-right:8px !important;padding:5px 10px !important}
+      .nav-brand span{display:none}
+      nav{position:relative}
+    }
+    @media(min-width:769px){
+      .hamburger{display:none}
+      .mobile-menu{display:none !important}
+    }
+      .bs-score-header{display:flex;align-items:center;justify-content:center;background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:20px 12px;margin-bottom:12px;gap:8px}
+    .bs-team-side{display:flex;flex-direction:column;align-items:center;gap:5px;width:120px;flex-shrink:0}
+    .bs-team-logo{width:42px;height:42px;object-fit:contain}
+    .bs-team-name-blue{font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:800;text-transform:uppercase;color:#5b9bd5;text-align:center;white-space:nowrap;letter-spacing:.02em}
+    .bs-final-score{font-family:'Barlow Condensed',sans-serif;font-size:2.8rem;font-weight:900;line-height:1;color:var(--white);text-align:center}
+    .bs-center-info{display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;min-width:0;padding:0 8px}
+    .bs-final-label{font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:700;color:var(--muted);text-transform:uppercase}
+    .bs-game-date{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--muted);text-align:center;line-height:1.5}
+    @media(max-width:480px){.bs-score-header{padding:12px 6px}.bs-team-side{width:90px}.bs-team-name-blue{font-size:.78rem}.bs-final-score{font-size:2.2rem}}
+  </style>
+  <script src="/assets/ssc-live.js"></script>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/index.html" class="nav-brand"><img src="/assets/logo.png" alt="SSC" /><span>The Sports <em>Companion</em></span></a>
+  <a href="/nfl/index.html" class="nav-back">← NFL</a>
+  <div class="nav-live">
+    <div class="live-badge"><span class="live-dot"></span>Live</div>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--muted)" id="nav-clock">Q3 · 4:22</span>
+  </div>
+</nav>
+  <!-- MOBILE MENU (hamburger dropdown) -->
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="/nfl/index.html" class="active" onclick="closeMobileMenu()">🏈 NFL</a>
+    <a href="/mlb/index.html" class="" onclick="closeMobileMenu()">⚾ MLB</a>
+    <a href="/nba/index.html" class="" onclick="closeMobileMenu()">🏀 NBA</a>
+    <a href="/ncaa/index.html" class="" onclick="closeMobileMenu()">🎓 NCAA</a>
+    <a href="/futbol/index.html" class="" onclick="closeMobileMenu()">⚽ Fútbol</a>
+    <a href="/fantasy/index.html" class="" onclick="closeMobileMenu()">🏆 Fantasy</a>
+    <a href="/brackets/index.html" class="" onclick="closeMobileMenu()">🗂 Brackets</a>
+    <a href="/more/index.html" class="" onclick="closeMobileMenu()">• • • More</a>
+    <div class="mobile-menu-footer">
+      <div class="mobile-lang">
+        <button class="mobile-lang-btn active" data-lang="en" onclick="setLang('en',this);closeMobileMenu()">🇺🇸 EN</button>
+        <button class="mobile-lang-btn" data-lang="es" onclick="setLang('es',this);closeMobileMenu()">🇪🇸 ES</button>
+      </div>
+      <div class="mobile-auth" id="mobile-auth">
+        <a href="/login/index.html" class="login">Log In</a>
+        <a href="/signup/index.html" class="signup">Sign Up</a>
+      </div>
+    </div>
+  </div>
+
+<!-- SCOREBOARD -->
+<div class="scoreboard">
+  <div class="sb-inner">
+  <div class="sb-top">
+    <div class="sb-team">
+      <div class="sb-team-name"><img src="/assets/nfl/eagles.png" style="width:28px;height:28px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Philadelphia Eagles</div>
+      <div class="sb-team-record">(11-2)</div>
+    </div>
+    <div class="sb-score-wrap">
+      <div class="sb-score leader" id="away-score">28</div>
+      <div class="sb-divider">—</div>
+      <div class="sb-score" id="home-score">14</div>
+    </div>
+    <div class="sb-team">
+      <div class="sb-team-name"><img src="/assets/nfl/cowboys.png" style="width:28px;height:28px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Dallas Cowboys</div>
+      <div class="sb-team-record">(5-8)</div>
+    </div>
+  </div>
+  <div class="sb-game-info" style="margin-top:14px;display:flex;flex-direction:row;gap:20px;justify-content:center;align-items:center">
+    <div class="sb-quarter" id="sb-quarter">Q3</div>
+    <div class="sb-clock" id="sb-clock">4:22</div>
+    <div class="sb-possession" id="sb-possession">🏈 PHI Ball · Own 35</div>
+  </div>
+  <div class="quarter-scores">
+    <table class="qs-table">
+      <thead>
+        <tr>
+          <th>Team</th><th>Q1</th><th>Q2</th><th>Q3</th><th>Q4</th><th>F</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><img src="/assets/nfl/eagles.png" style="width:16px;height:16px;object-fit:contain;display:inline-block;vertical-align:-.2em;margin-right:4px" onerror="this.style.display='none'" />PHI</td><td>7</td><td>14</td><td class="active-q" id="phi-q3">7</td><td>—</td><td class="total" id="phi-total">28</td>
+        </tr>
+        <tr>
+          <td><img src="/assets/nfl/cowboys.png" style="width:16px;height:16px;object-fit:contain;display:inline-block;vertical-align:-.2em;margin-right:4px" onerror="this.style.display='none'" />DAL</td><td>7</td><td>0</td><td class="active-q" id="dal-q3">7</td><td>—</td><td class="total" id="dal-total">14</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="game-tabs">
+  <button class="game-tab active" onclick="showPanel('gameday')">Gameday</button>
+  <button class="game-tab" onclick="showPanel('boxscore')">Box Score</button>
+  <button class="game-tab" onclick="showPanel('pbp')">Play-by-Play</button>
+</div>
+
+<!-- GAMECAST PANEL -->
+<div id="panel-gameday" class="panel active">
+  <div class="panel-inner">
+
+  <!-- FOOTBALL FIELD - Vertical Madden Style -->
+  <div class="field-wrap">
+    <div class="field-canvas-wrap">
+            <svg id="field-svg" class="field-svg" viewBox="0 0 680 340" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a1f2e"/>
+      <stop offset="100%" stop-color="#2a3040"/>
+    </linearGradient>
+    <linearGradient id="fieldGrad3d" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1d6617"/>
+      <stop offset="50%" stop-color="#2d8a20"/>
+      <stop offset="100%" stop-color="#1a5c12"/>
+    </linearGradient>
+    <linearGradient id="ezLeft" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0d3a08"/>
+      <stop offset="100%" stop-color="#1a5c12"/>
+    </linearGradient>
+    <linearGradient id="ezRight" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#1a5c12"/>
+      <stop offset="100%" stop-color="#0d3a08"/>
+    </linearGradient>
+    <linearGradient id="sideEdge" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0a2e06"/>
+      <stop offset="100%" stop-color="#061a04"/>
+    </linearGradient>
+    <!-- Alternating stripe pattern horizontal -->
+    <pattern id="stripes" x="0" y="0" width="50" height="340" patternUnits="userSpaceOnUse">
+      <rect width="50" height="340" fill="#2d8a20"/>
+      <rect width="25" height="340" fill="#268018"/>
+    </pattern>
+  </defs>
+
+  <!-- Sky/stadium background -->
+  <rect width="680" height="340" fill="url(#skyGrad)"/>
+
+  <!-- 3D bottom edge (thickness) -->
+  <polygon points="30,310 650,310 660,322 20,322" fill="url(#sideEdge)"/>
+  <!-- Left edge -->
+  <polygon points="20,40 30,30 30,310 20,322" fill="#0a2e06"/>
+  <!-- Right edge -->
+  <polygon points="650,30 660,40 660,322 650,310" fill="#0a2e06"/>
+
+  <!-- MAIN FIELD - horizontal trapezoid (3D angle) -->
+  <polygon points="30,30 650,30 650,310 30,310" fill="url(#stripes)"/>
+
+  <!-- Left end zone -->
+  <polygon points="30,30 110,30 110,310 30,310" fill="url(#ezLeft)" opacity="0.88"/>
+  <!-- Right end zone -->
+  <polygon points="570,30 650,30 650,310 570,310" fill="url(#ezRight)" opacity="0.88"/>
+
+  <!-- Field outline -->
+  <rect x="30" y="30" width="620" height="280" fill="none" stroke="white" stroke-width="2.5" opacity="0.9"/>
+
+  <!-- End zone boundary lines -->
+  <line x1="110" y1="30"  x2="110" y2="310" stroke="white" stroke-width="2.5" opacity="0.9"/>
+  <line x1="570" y1="30"  x2="570" y2="310" stroke="white" stroke-width="2.5" opacity="0.9"/>
+
+  <!-- Yard lines — playing field x=110 to x=570 = 460px, 100 yards, 10yds=46px -->
+  <g stroke="white" opacity="0.7">
+    <line x1="156" y1="30" x2="156" y2="310" stroke-width="1.5"/>
+    <line x1="202" y1="30" x2="202" y2="310" stroke-width="1.5"/>
+    <line x1="248" y1="30" x2="248" y2="310" stroke-width="1.5"/>
+    <line x1="294" y1="30" x2="294" y2="310" stroke-width="1.5"/>
+    <line x1="340" y1="30" x2="340" y2="310" stroke-width="3" opacity="0.95"/>
+    <line x1="386" y1="30" x2="386" y2="310" stroke-width="1.5"/>
+    <line x1="432" y1="30" x2="432" y2="310" stroke-width="1.5"/>
+    <line x1="478" y1="30" x2="478" y2="310" stroke-width="1.5"/>
+    <line x1="524" y1="30" x2="524" y2="310" stroke-width="1.5"/>
+  </g>
+
+  <!-- Top hash marks -->
+  <g stroke="white" stroke-width="1.5" opacity="0.6">
+    <line x1="156" y1="110" x2="156" y2="130"/><line x1="202" y1="110" x2="202" y2="130"/>
+    <line x1="248" y1="110" x2="248" y2="130"/><line x1="294" y1="110" x2="294" y2="130"/>
+    <line x1="386" y1="110" x2="386" y2="130"/><line x1="432" y1="110" x2="432" y2="130"/>
+    <line x1="478" y1="110" x2="478" y2="130"/><line x1="524" y1="110" x2="524" y2="130"/>
+  </g>
+  <!-- Bottom hash marks -->
+  <g stroke="white" stroke-width="1.5" opacity="0.6">
+    <line x1="156" y1="180" x2="156" y2="200"/><line x1="202" y1="180" x2="202" y2="200"/>
+    <line x1="248" y1="180" x2="248" y2="200"/><line x1="294" y1="180" x2="294" y2="200"/>
+    <line x1="386" y1="180" x2="386" y2="200"/><line x1="432" y1="180" x2="432" y2="200"/>
+    <line x1="478" y1="180" x2="478" y2="200"/><line x1="524" y1="180" x2="524" y2="200"/>
+  </g>
+
+  <!-- Sideline inner markers -->
+  <line x1="110" y1="42" x2="570" y2="42"  stroke="white" stroke-width="1" opacity="0.4"/>
+  <line x1="110" y1="298" x2="570" y2="298" stroke="white" stroke-width="1" opacity="0.4"/>
+
+  <!-- Yard numbers top row -->
+  <g font-family="'Barlow Condensed',sans-serif" font-size="13" font-weight="800" fill="white" opacity="0.65" text-anchor="middle">
+    <text x="156" y="72">10</text><text x="202" y="72">20</text>
+    <text x="248" y="72">30</text><text x="294" y="72">40</text>
+    <text x="340" y="72">50</text>
+    <text x="386" y="72">40</text><text x="432" y="72">30</text>
+    <text x="478" y="72">20</text><text x="524" y="72">10</text>
+  </g>
+  <!-- Yard numbers bottom row -->
+  <g font-family="'Barlow Condensed',sans-serif" font-size="13" font-weight="800" fill="white" opacity="0.65" text-anchor="middle">
+    <text x="156" y="295">10</text><text x="202" y="295">20</text>
+    <text x="248" y="295">30</text><text x="294" y="295">40</text>
+    <text x="340" y="295">50</text>
+    <text x="386" y="295">40</text><text x="432" y="295">30</text>
+    <text x="478" y="295">20</text><text x="524" y="295">10</text>
+  </g>
+
+  <!-- End zone text -->
+  <image href="/assets/nfl/eagles.png" x="40" y="140" width="60" height="60" opacity="0.85" preserveAspectRatio="xMidYMid meet"/>
+  <image href="/assets/nfl/cowboys.png" x="580" y="140" width="60" height="60" opacity="0.85" preserveAspectRatio="xMidYMid meet"/>
+
+  <!-- Goal posts left -->
+  <line x1="30"  y1="170" x2="18"  y2="170" stroke="#F2C230" stroke-width="2.5" opacity="0.85"/>
+  <line x1="18"  y1="148" x2="18"  y2="192" stroke="#F2C230" stroke-width="2"   opacity="0.85"/>
+  <line x1="12"  y1="148" x2="18"  y2="148" stroke="#F2C230" stroke-width="1.5" opacity="0.75"/>
+  <line x1="12"  y1="192" x2="18"  y2="192" stroke="#F2C230" stroke-width="1.5" opacity="0.75"/>
+
+  <!-- Goal posts right -->
+  <line x1="650" y1="170" x2="662" y2="170" stroke="#F2C230" stroke-width="2.5" opacity="0.85"/>
+  <line x1="662" y1="148" x2="662" y2="192" stroke="#F2C230" stroke-width="2"   opacity="0.85"/>
+  <line x1="662" y1="148" x2="668" y2="148" stroke="#F2C230" stroke-width="1.5" opacity="0.75"/>
+  <line x1="662" y1="192" x2="668" y2="192" stroke="#F2C230" stroke-width="1.5" opacity="0.75"/>
+
+  <!-- Line of scrimmage (vertical line, animated) -->
+  <line id="los-line" x1="340" y1="30" x2="340" y2="310" stroke="#F2C230" stroke-width="3" opacity="0.9" stroke-dasharray="10,5"/>
+  <!-- First down marker -->
+  <line id="first-down-line" x1="386" y1="30" x2="386" y2="310" stroke="#38BDF8" stroke-width="2" opacity="0.75" stroke-dasharray="8,4"/>
+
+  <!-- Ball -->
+  <ellipse id="ball-el" cx="340" cy="170" rx="12" ry="7" fill="#8B4513" stroke="#F2C230" stroke-width="1.5"/>
+  <line id="ball-lace" x1="340" y1="163" x2="340" y2="177" stroke="white" stroke-width="1.2" opacity="0.9"/>
+  <!-- QB behind line -->
+  <!-- Wide receivers split wide -->
+  <!-- RB behind QB -->
+  <!-- LBs behind DL -->
+  <!-- DBs deep -->
+</svg>
+
+      <!-- Overlay elements -->
+      <div class="field-overlay">
+        <div class="down-box" id="down-box">1st & 10 · PHI 35</div>
+        <div class="td-flash" id="td-flash"><span style="font-family:'Barlow Condensed',sans-serif;font-size:2rem;font-weight:900;color:#22c55e;text-shadow:0 0 20px rgba(34,197,94,.5)">TOUCHDOWN! 🏈</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLAY DESCRIPTION -->
+  <div class="play-desc-card">
+    <div class="play-desc-meta">
+      <span class="play-desc-situation" id="play-situation">Q3 · PHI · Own 35</span>
+      <span class="play-desc-down" id="play-down">1st & 10</span>
+    </div>
+    <div class="play-desc-text" id="play-text">Hurts hands off to Saquon Barkley up the middle for 4 yards. Barkley breaks a tackle at the line of scrimmage.</div>
+    <div class="play-desc-td" id="play-td" style="display:none">🟢 TOUCHDOWN</div>
+  </div>
+
+  <!-- CONTROLS -->
+  <div class="play-controls">
+    <button class="ctrl-btn" id="btn-prev" onclick="prevPlay()">← Prev</button>
+    <button class="ctrl-btn live" id="btn-live" onclick="toggleLive()">⏸ Pause</button>
+    <button class="ctrl-btn" id="btn-next" onclick="nextPlay()">Next →</button>
+    <span class="play-counter" id="play-counter">Play 1 of 24</span>
+  </div>
+
+  <!-- MINI FEED -->
+  <div class="pbp-feed" id="mini-feed" style="max-height:240px"></div>
+</div>
+
+</div><!-- /panel-gameday -->
+
+<!-- BOX SCORE PANEL -->
+<div id="panel-boxscore" class="panel">
+  <div class="panel-inner">
+
+    <!-- SCORE HEADER -->
+    <div class="bs-score-header">
+      <div class="bs-team-side">
+        <img src="/assets/nfl/eagles.png" class="bs-team-logo" onerror="this.style.display='none'" />
+        <div class="bs-team-name-blue">Eagles</div>
+        <div class="bs-final-score" id="live-away-score">28</div>
+      </div>
+      <div class="bs-center-info"><span id="live-badge" style="display:none;background:rgba(34,197,94,.15);border:1px solid #22c55e;color:#22c55e;font-family:JetBrains Mono,monospace;font-size:.62rem;font-weight:700;letter-spacing:.1em;padding:3px 10px;border-radius:20px;margin-bottom:6px">● LIVE</span>
+        <div id="live-game-status" class="bs-final-label">Final</div>
+        <div class="bs-game-date"><span id="live-period"></span><span id="live-clock"></span>Dec 10, 2025 · AT&T Stadium · Dallas, TX</div>
+      </div>
+      <div class="bs-team-side">
+        <img src="/assets/nfl/cowboys.png" class="bs-team-logo" onerror="this.style.display='none'" />
+        <div class="bs-team-name-blue">Cowboys</div>
+        <div class="bs-final-score">14</div>
+      </div>
+    </div>
+
+    <!-- BETTING LINES -->
+    <div class="bs-card">
+      <div class="bs-card-title">Betting Lines <span class="bs-sample-tag">sample</span></div>
+      <div class="bs-card-body">Run line: Eagles -13.5<br>Total: O/U 47.5<br>Moneyline: Eagles -420 · Cowboys +340</div>
+    </div>
+
+    <!-- GAME SUMMARY -->
+    <div class="bs-card">
+      <div class="bs-card-title">Game Summary</div>
+      <div class="bs-card-body">The Eagles controlled this game from start to finish. Jalen Hurts rushed for a score and threw two TDs, while Saquon Barkley added a ground score. A Darius Slay interception killed a Dallas drive in the second quarter.</div>
+    </div>
+
+    <!-- LINE SCORE -->
+    <div class="bs-card">
+      <div class="bs-card-title">Line Score <span class="bs-sample-tag">sample</span></div>
+      <div class="bs-linescore-wrap"><table class="bs-linescore"><thead><tr><th>Team</th><th>Q1</th><th>Q2</th><th>Q3</th><th>Q4</th><th>F</th></tr></thead><tbody><tr><td>Philadelphia Eagles</td><td>7</td><td>14</td><td>7</td><td>0</td><td class="total">28</td></tr><tr><td>Dallas Cowboys</td><td>7</td><td>0</td><td>7</td><td>0</td><td class="total">14</td></tr></tbody></table></div>
+    </div>
+
+    <!-- TEAM STATS -->
+    <div class="bs-card">
+      <div class="bs-card-title">Team Stats <span class="bs-sample-tag">sample</span></div>
+      <div class="bs-teamstats-header">
+        <span class="bs-team-name-blue">Eagles</span>
+        <span class="bs-team-name-blue">Cowboys</span>
+      </div>
+      
+      <div class="bs-stat-row"><div class="bs-stat-val hi">28</div><div class="bs-stat-label">Final Score</div><div class="bs-stat-val">14</div></div>
+      <div class="bs-stat-row"><div class="bs-stat-val hi">388</div><div class="bs-stat-label">Total Yards</div><div class="bs-stat-val">242</div></div>
+      <div class="bs-stat-row"><div class="bs-stat-val hi">247</div><div class="bs-stat-label">Passing Yards</div><div class="bs-stat-val">161</div></div>
+      <div class="bs-stat-row"><div class="bs-stat-val hi">141</div><div class="bs-stat-label">Rushing Yards</div><div class="bs-stat-val">81</div></div>
+      <div class="bs-stat-row"><div class="bs-stat-val hi">3</div><div class="bs-stat-label">Touchdowns</div><div class="bs-stat-val">2</div></div>
+      <div class="bs-stat-row"><div class="bs-stat-val">0</div><div class="bs-stat-label">Turnovers</div><div class="bs-stat-val" style="color:#FF6B6B">1</div></div>
+      <div class="bs-stat-row"><div class="bs-stat-val hi">7/14</div><div class="bs-stat-label">3rd Down</div><div class="bs-stat-val">4/12</div></div>
+      <div class="bs-stat-row"><div class="bs-stat-val hi">32:18</div><div class="bs-stat-label">Time of Poss.</div><div class="bs-stat-val">27:42</div></div>
+    </div>
+
+    <!-- PLAYER STATS -->
+    <div class="bs-team-toggle" style="margin-top:20px">
+      <button class="bs-toggle-btn active" onclick="showBS('phi')">Philadelphia Eagles</button>
+      <button class="bs-toggle-btn" onclick="showBS('dal')">Dallas Cowboys</button>
+    </div>
+      <div id="bs-phi">
+    <div class="bs-section"><div class="bs-section-title">Passing</div><div class="bs-table-wrap"><table class="bs-tbl"><thead><tr><th>Player</th><th>CMP</th><th>ATT</th><th>YDS</th><th>TD</th><th>INT</th><th>RTG</th></tr></thead><tbody><tr><td class="player">J. Hurts</td><td>18</td><td>26</td><td class="hi">247</td><td class="hi">2</td><td>0</td><td class="hi">118.4</td></tr></tbody></table></div></div>
+    <div class="bs-section"><div class="bs-section-title">Rushing</div><div class="bs-table-wrap"><table class="bs-tbl"><thead><tr><th>Player</th><th>CAR</th><th>YDS</th><th>AVG</th><th>TD</th></tr></thead><tbody><tr><td class="player">S. Barkley</td><td>14</td><td class="hi">88</td><td>6.3</td><td class="hi">1</td></tr><tr><td class="player">J. Hurts</td><td>5</td><td>31</td><td>6.2</td><td>0</td></tr></tbody></table></div></div>
+    <div class="bs-section"><div class="bs-section-title">Receiving</div><div class="bs-table-wrap"><table class="bs-tbl"><thead><tr><th>Player</th><th>REC</th><th>TGT</th><th>YDS</th><th>TD</th></tr></thead><tbody><tr><td class="player">A.J. Brown</td><td>6</td><td>8</td><td class="hi">94</td><td class="hi">1</td></tr><tr><td class="player">D. Smith</td><td>5</td><td>7</td><td>72</td><td>1</td></tr><tr><td class="player">D. Goedert</td><td>4</td><td>5</td><td>48</td><td>0</td></tr></tbody></table></div></div>
+    <div class="bs-section"><div class="bs-section-title">Defense</div><div class="bs-table-wrap"><table class="bs-tbl"><thead><tr><th>Player</th><th>TKL</th><th>AST</th><th>SACK</th><th>INT</th></tr></thead><tbody><tr><td class="player">Z. White</td><td class="hi">9</td><td>2</td><td>0</td><td>0</td></tr><tr><td class="player">H. Reddick</td><td>4</td><td>1</td><td class="hi">2.0</td><td>0</td></tr><tr><td class="player">D. Slay</td><td>3</td><td>0</td><td>0</td><td class="hi">1</td></tr></tbody></table></div></div>
+  </div>
+  <div id="bs-dal" style="display:none">
+    <div class="bs-section"><div class="bs-section-title">Passing</div><div class="bs-table-wrap"><table class="bs-tbl"><thead><tr><th>Player</th><th>CMP</th><th>ATT</th><th>YDS</th><th>TD</th><th>INT</th><th>RTG</th></tr></thead><tbody><tr><td class="player">D. Prescott</td><td>14</td><td>24</td><td>161</td><td>1</td><td style="color:#FF6B6B">1</td><td>74.2</td></tr></tbody></table></div></div>
+    <div class="bs-section"><div class="bs-section-title">Rushing</div><div class="bs-table-wrap"><table class="bs-tbl"><thead><tr><th>Player</th><th>CAR</th><th>YDS</th><th>AVG</th><th>TD</th></tr></thead><tbody><tr><td class="player">R. Pollard</td><td>11</td><td>54</td><td>4.9</td><td class="hi">1</td></tr><tr><td class="player">D. Prescott</td><td>3</td><td>18</td><td>6.0</td><td>0</td></tr></tbody></table></div></div>
+    <div class="bs-section"><div class="bs-section-title">Receiving</div><div class="bs-table-wrap"><table class="bs-tbl"><thead><tr><th>Player</th><th>REC</th><th>TGT</th><th>YDS</th><th>TD</th></tr></thead><tbody><tr><td class="player">C. Lamb</td><td>5</td><td>9</td><td class="hi">72</td><td>1</td></tr><tr><td class="player">M. Gallup</td><td>3</td><td>5</td><td>44</td><td>0</td></tr><tr><td class="player">D. Schultz</td><td>4</td><td>6</td><td>38</td><td>0</td></tr></tbody></table></div></div>
+    <div class="bs-section"><div class="bs-section-title">Defense</div><div class="bs-table-wrap"><table class="bs-tbl"><thead><tr><th>Player</th><th>TKL</th><th>AST</th><th>SACK</th><th>INT</th></tr></thead><tbody><tr><td class="player">M. Parsons</td><td>6</td><td>2</td><td class="hi">1.5</td><td>0</td></tr><tr><td class="player">T. Diggs</td><td>7</td><td>1</td><td>0</td><td>0</td></tr><tr><td class="player">L. Vander Esch</td><td class="hi">10</td><td>3</td><td>0</td><td>0</td></tr></tbody></table></div></div>
+  </div>
+
+  </div>
+</div>
+
+<div id="panel-pbp" class="panel">
+  <div class="panel-inner">
+    <div class="pbp-header">
+      <div class="sec-label">// Play-by-Play</div>
+    </div>
+    <div class="pbp-feed" id="pbp-feed">
+<div class="pbp-item td">
+      <div class="pbp-item-meta">Q1 · 12:34 <span class="pbp-score-badge">PHI 7–0</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">🏈</span><span class="pbp-item-text">Hurts scrambles right and dives into the end zone. TOUCHDOWN Eagles! 1-yard TD run.</span></div>
+    </div>
+<div class="pbp-item td">
+      <div class="pbp-item-meta">Q1 · 8:22 <span class="pbp-score-badge">PHI 7–7</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">🏈</span><span class="pbp-item-text">Prescott rolls right, fires to Lamb in the back corner. TOUCHDOWN Cowboys! 12-yard TD pass.</span></div>
+    </div>
+<div class="pbp-item">
+      <div class="pbp-item-meta">Q1 · 4:11 <span class="pbp-score-badge">PHI 7–7</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">👟</span><span class="pbp-item-text">Eagles punt 48 yards, downed at the Dallas 22.</span></div>
+    </div>
+<div class="pbp-item td">
+      <div class="pbp-item-meta">Q2 · 14:02 <span class="pbp-score-badge">PHI 14–7</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">🏈</span><span class="pbp-item-text">Barkley breaks through the left side and outruns the secondary 22 yards. TOUCHDOWN Eagles!</span></div>
+    </div>
+<div class="pbp-item">
+      <div class="pbp-item-meta">Q2 · 9:55 <span class="pbp-score-badge">PHI 14–7</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">⚡</span><span class="pbp-item-text">Prescott forces it over the middle — Slay picks it off at the PHI 38! Eagles ball.</span></div>
+    </div>
+<div class="pbp-item td">
+      <div class="pbp-item-meta">Q2 · 7:33 <span class="pbp-score-badge">PHI 21–7</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">🏈</span><span class="pbp-item-text">Hurts fires to Brown in double coverage at the back of the end zone. TOUCHDOWN Eagles! 18-yard TD.</span></div>
+    </div>
+<div class="pbp-item">
+      <div class="pbp-item-meta">Q2 · 2:01 <span class="pbp-score-badge">PHI 21–7</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">🎯</span><span class="pbp-item-text">Elliott drills a 42-yarder as time expires in the first half. Eagles extend the lead.</span></div>
+    </div>
+<div class="pbp-item td">
+      <div class="pbp-item-meta">Q3 · 11:44 <span class="pbp-score-badge">PHI 21–14</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">🏈</span><span class="pbp-item-text">Pollard takes the toss sweep left and walks in untouched. TOUCHDOWN Cowboys! 8-yard TD run.</span></div>
+    </div>
+<div class="pbp-item td">
+      <div class="pbp-item-meta">Q3 · 2:55 <span class="pbp-score-badge">PHI 28–14</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">🏈</span><span class="pbp-item-text">Smith runs a slant behind the linebacker — Hurts hits him in stride. TOUCHDOWN Eagles! 24-yard TD.</span></div>
+    </div>
+<div class="pbp-item">
+      <div class="pbp-item-meta">Q4 · 8:12 <span class="pbp-score-badge">PHI 28–14</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">▸</span><span class="pbp-item-text">Reddick sacks Prescott for a 7-yard loss on 3rd and 4. Cowboys will punt.</span></div>
+    </div>
+<div class="pbp-item">
+      <div class="pbp-item-meta">Q4 · 0:00 <span class="pbp-score-badge">Final</span></div>
+      <div class="pbp-item-play"><span class="pbp-icon">▸</span><span class="pbp-item-text">Game over. Philadelphia Eagles defeat the Dallas Cowboys 28–14.</span></div>
+    </div>
+    </div>
+  </div>
+</div>
+
+
+<footer>
+  <div class="ft-brand"><img src="/assets/logo.png" alt="SSC" /><span>The Sports <em>Companion</em></span></div>
+  <div class="ft-links"><a href="/index.html">Home</a><a href="/nfl/index.html" class="active">NFL</a><a href="/mlb/index.html">MLB</a><a href="/nba/index.html">NBA</a></div>
+  <div class="ft-copy">© 2026 The Sports Companion</div>
+</footer>
+
+<script>
+// ── PLAY DATA ──────────────────────────────────────────────────
+const plays = [
+  { q:1, clock:'14:32', possession:'PHI', yard:25, yardLabel:'PHI 25', down:'1st & 10', td:false, awayScore:0,  homeScore:0,  text:'Hurts under center, hands off to Barkley on an inside zone. Barkley hits the gap for 6 yards.' },
+  { q:1, clock:'13:48', possession:'PHI', yard:31, yardLabel:'PHI 31', down:'2nd & 4',  td:false, awayScore:0,  homeScore:0,  text:'Hurts drops back, fires a quick slant to DeVonta Smith for 8 yards and a first down.' },
+  { q:1, clock:'12:55', possession:'PHI', yard:39, yardLabel:'PHI 39', down:'1st & 10', td:false, awayScore:0,  homeScore:0,  text:'Play action to the right side. Hurts pump-fakes and scrambles for 11 yards.' },
+  { q:1, clock:'11:40', possession:'PHI', yard:50, yardLabel:'50 Yard Line', down:'1st & 10', td:false, awayScore:0, homeScore:0, text:'Barkley takes the sweep right, bounces outside for a gain of 9.' },
+  { q:1, clock:'10:52', possession:'PHI', yard:59, yardLabel:'DAL 41', down:'2nd & 1',  td:false, awayScore:0,  homeScore:0,  text:'Hurts QB sneak on 2nd & 1. Converts easily for 3 yards.' },
+  { q:1, clock:'9:38',  possession:'PHI', yard:68, yardLabel:'DAL 32', down:'1st & 10', td:false, awayScore:0,  homeScore:0,  text:'Hurts lofts a fade route to A.J. Brown in the back of the end zone. Brown hauls it in!' },
+  { q:1, clock:'9:31',  possession:'PHI', yard:100, yardLabel:'DAL End Zone', down:'PAT', td:true,  awayScore:7,  homeScore:0,  text:'TOUCHDOWN! A.J. Brown with the 32-yard touchdown reception. Eagles lead 7-0.' },
+  { q:1, clock:'7:14',  possession:'DAL', yard:75, yardLabel:'DAL 25', down:'1st & 10', td:false, awayScore:7,  homeScore:0,  text:'Prescott drops back, fires a quick out to CeeDee Lamb for 8 yards.' },
+  { q:1, clock:'5:22',  possession:'DAL', yard:82, yardLabel:'DAL 32', down:'3rd & 6',  td:false, awayScore:7,  homeScore:0,  text:'Prescott scrambles right, throws off balance incomplete. Dallas will punt.' },
+  { q:2, clock:'14:10', possession:'PHI', yard:45, yardLabel:'PHI 45', down:'1st & 10', td:false, awayScore:7,  homeScore:0,  text:'Barkley on a draw play up the middle, breaks two tackles, gains 18 yards.' },
+  { q:2, clock:'12:30', possession:'PHI', yard:63, yardLabel:'DAL 37', down:'1st & 10', td:false, awayScore:7,  homeScore:0,  text:'Hurts rolls right, finds Goedert crossing the middle for 14 yards.' },
+  { q:2, clock:'10:48', possession:'PHI', yard:77, yardLabel:'DAL 23', down:'1st & 10', td:false, awayScore:7,  homeScore:0,  text:'Barkley off left tackle for 9 yards. Great block by the offensive line.' },
+  { q:2, clock:'9:55',  possession:'PHI', yard:86, yardLabel:'DAL 14', down:'2nd & 1',  td:false, awayScore:7,  homeScore:0,  text:'Smith runs a slant-and-go, Hurts hits him in stride. Touchdown Eagles!' },
+  { q:2, clock:'9:48',  possession:'PHI', yard:100, yardLabel:'DAL End Zone', down:'PAT', td:true, awayScore:14, homeScore:0,  text:'TOUCHDOWN! DeVonta Smith 14-yard touchdown. Eagles extend lead 14-0.' },
+  { q:2, clock:'6:20',  possession:'DAL', yard:72, yardLabel:'DAL 28', down:'1st & 10', td:false, awayScore:14, homeScore:0,  text:'Prescott finds Lamb on a crossing route for 12 yards. First down Cowboys.' },
+  { q:2, clock:'4:15',  possession:'DAL', yard:88, yardLabel:'PHI 12', down:'2nd & 4',  td:false, awayScore:14, homeScore:0,  text:'Pollard up the middle and into the end zone! Cowboys answer back!' },
+  { q:2, clock:'4:08',  possession:'DAL', yard:100, yardLabel:'PHI End Zone', down:'PAT', td:true, awayScore:14, homeScore:7,  text:'TOUCHDOWN! Rico Pollard 12-yard rushing touchdown. Cowboys trail 14-7.' },
+  { q:2, clock:'0:48',  possession:'PHI', yard:65, yardLabel:'DAL 35', down:'2nd & 8',  td:false, awayScore:14, homeScore:7,  text:'Hurts hits Brown on a deep comeback route for 24 yards with 48 seconds left.' },
+  { q:2, clock:'0:22',  possession:'PHI', yard:89, yardLabel:'DAL 11', down:'1st & 10', td:false, awayScore:14, homeScore:7,  text:'Spike the ball! Eagles stop the clock at 22 seconds.' },
+  { q:2, clock:'0:14',  possession:'PHI', yard:100, yardLabel:'DAL End Zone', down:'TD', td:true, awayScore:21, homeScore:7, text:'TOUCHDOWN! Hurts rolls left and scores on a keeper! Eagles go up 21-7 at halftime.' },
+  { q:3, clock:'12:44', possession:'DAL', yard:78, yardLabel:'DAL 22', down:'1st & 10', td:false, awayScore:21, homeScore:7,  text:'Prescott hands to Pollard on a counter. Gains 7 yards on the play.' },
+  { q:3, clock:'10:12', possession:'DAL', yard:92, yardLabel:'PHI 8',  down:'1st & 10', td:false, awayScore:21, homeScore:7,  text:'Prescott hits Lamb in the back of the end zone. Cowboys score!' },
+  { q:3, clock:'10:05', possession:'DAL', yard:100, yardLabel:'PHI End Zone', down:'PAT', td:true, awayScore:21, homeScore:14, text:'TOUCHDOWN! CeeDee Lamb 8-yard touchdown. Cowboys trail 21-14.' },
+  { q:3, clock:'4:22',  possession:'PHI', yard:35, yardLabel:'PHI 35', down:'1st & 10', td:false, awayScore:28, homeScore:14, text:'Hurts hands off to Barkley up the middle for 4 yards. Barkley breaks a tackle at the line of scrimmage.' },
+];
+
+let currentIdx = plays.length - 1;
+let isLive = true;
+let liveTimer = null;
+let animFrames = [];
+
+// ── RENDER ─────────────────────────────────────────────────────
+function renderPlay(idx) {
+  const p = plays[idx];
+
+  // Update field position
+  const fieldCX = 170; // center x of perspective field
+  const fieldX = 110 + (p.yard / 100) * 460;
+  const firstDownX = 110 + (Math.min(p.yard + 10, 100) / 100) * 460;
+  const ball = document.getElementById('ball-el');
+  const lace = document.getElementById('ball-lace');
+  const los  = document.getElementById('los-line');
+  const fdn  = document.getElementById('first-down-line');
+  if (ball) { ball.setAttribute('cx', fieldX); lace.setAttribute('x1', fieldX); lace.setAttribute('x2', fieldX); }
+  if (los)  { los.setAttribute('x1', fieldX); los.setAttribute('x2', fieldX); }
+  if (fdn)  { fdn.setAttribute('x1', firstDownX); fdn.setAttribute('x2', firstDownX); }
+  document.getElementById('down-box').textContent = `${p.down} · ${p.yardLabel}`;
+
+  // Animate the players
+
+  // Update scoreboard
+  document.getElementById('play-situation').textContent = `Q${p.q} · ${p.possession} · ${p.yardLabel}`;
+  document.getElementById('play-down').textContent = p.down;
+  document.getElementById('play-text').textContent = p.text;
+  document.getElementById('play-counter').textContent = `Play ${idx + 1} of ${plays.length}`;
+  document.getElementById('nav-clock').textContent = `Q${p.q} · ${p.clock}`;
+  document.getElementById('sb-quarter').textContent = `Q${p.q}`;
+  document.getElementById('sb-clock').textContent = p.clock;
+  document.getElementById('sb-possession').textContent = `🏈 ${p.possession} Ball · ${p.yardLabel}`;
+  document.getElementById('away-score').textContent = p.awayScore;
+  document.getElementById('home-score').textContent = p.homeScore;
+  document.getElementById('away-score').className = 'sb-score' + (p.awayScore > p.homeScore ? ' leader' : '');
+  document.getElementById('home-score').className = 'sb-score' + (p.homeScore > p.awayScore ? ' leader' : '');
+
+  // TD flash
+  const tdFlash = document.getElementById('td-flash');
+  const tdLabel = document.getElementById('play-td');
+  if (p.td) {
+    tdFlash.classList.add('show');
+    tdLabel.style.display = 'block';
+    setTimeout(() => tdFlash.classList.remove('show'), 2200);
+  } else {
+    tdFlash.classList.remove('show');
+    tdLabel.style.display = 'none';
+  }
+
+  document.getElementById('btn-prev').disabled = idx === 0;
+  document.getElementById('btn-next').disabled = idx === plays.length - 1;
+
+  renderMiniFeed(idx);
+}
+
+function renderMiniFeed(activeIdx) {
+  const feed = document.getElementById('mini-feed');
+  feed.innerHTML = plays.map((p, i) => `
+    <div class="pbp-item ${i === activeIdx ? 'active' : ''} ${i <= activeIdx ? 'seen' : 'unseen'} ${p.td ? 'td' : ''}" onclick="jumpTo(${i})">
+      <div class="pbp-item-meta">Q${p.q} · ${p.clock} · ${p.possession}</div>
+      <div class="pbp-item-text">${p.text.substring(0, 90)}...${p.td ? '<span class="pbp-item-td-badge">TD</span>' : ''}</div>
+    </div>
+  `).join('');
+  const active = feed.querySelector('.pbp-item.active');
+  if (active) active.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+}
+
+function renderFullFeed() {
+  const feed = document.getElementById('full-pbp-feed');
+  let html = '';
+  let lastQ = 0;
+  plays.forEach((p, i) => {
+    if (p.q !== lastQ) {
+      html += `<div style="padding:10px 16px;background:var(--ink-3);border-bottom:1px solid var(--line);font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--gold)">Quarter ${p.q}</div>`;
+      lastQ = p.q;
+    }
+    html += `
+      <div class="pbp-item ${p.td ? 'td' : ''}" onclick="jumpToAndShow(${i})">
+        <div class="pbp-item-meta">${p.clock} · ${p.possession} · ${p.yardLabel} · ${p.down}</div>
+        <div class="pbp-item-text">${p.text}${p.td ? '<span class="pbp-item-td-badge">TD</span>' : ''}</div>
+      </div>`;
+  });
+  feed.innerHTML = html;
+}
+
+// ── CONTROLS ───────────────────────────────────────────────────
+function prevPlay() { if (currentIdx > 0) { currentIdx--; stopLive(); renderPlay(currentIdx); } }
+function nextPlay() { if (currentIdx < plays.length - 1) { currentIdx++; renderPlay(currentIdx); } }
+function jumpTo(idx) { currentIdx = idx; stopLive(); renderPlay(idx); }
+function jumpToAndShow(idx) { currentIdx = idx; showPanel('gamecast', true); renderPlay(idx); }
+
+function toggleLive() { if (isLive) { stopLive(); } else { startLive(); } }
+function startLive() {
+  isLive = true;
+  document.getElementById('btn-live').textContent = '⏸ Pause';
+  document.getElementById('btn-live').classList.remove('paused');
+  liveTimer = setInterval(() => {
+    if (currentIdx < plays.length - 1) { currentIdx++; renderPlay(currentIdx); }
+    else { stopLive(); }
+  }, 2800);
+}
+function stopLive() {
+  isLive = false;
+  clearInterval(liveTimer);
+  document.getElementById('btn-live').textContent = '▶ Resume';
+  document.getElementById('btn-live').classList.add('paused');
+}
+
+// ── TABS ───────────────────────────────────────────────────────
+function showPanel(id, skipBtnUpdate) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.game-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  if (!skipBtnUpdate && event && event.target) event.target.classList.add('active');
+  if (id === 'pbp') renderFullFeed();
+}
+function showBS(team) {
+  document.getElementById('bs-phi').style.display = team === 'phi' ? 'block' : 'none';
+  document.getElementById('bs-dal').style.display = team === 'dal' ? 'block' : 'none';
+  document.querySelectorAll('.bs-toggle-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+// ── INIT ───────────────────────────────────────────────────────
+renderPlay(currentIdx);
+startLive();
+</script>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+    const firebaseConfig = {
+      apiKey:"AIzaSyC_hGMiHK3RaI54Dxm8_GmQPhRHLpjPO5U", authDomain:"fantasy-sports-1e6cf.firebaseapp.com",
+      projectId:"fantasy-sports-1e6cf", storageBucket:"fantasy-sports-1e6cf.firebasestorage.app",
+      messagingSenderId:"150042816249", appId:"1:150042816249:web:4de18353ba84f106fb3c28"
+    };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    onAuthStateChanged(auth, user => {
+      const cta = document.getElementById('nav-cta');
+      const av  = document.getElementById('nav-avatar');
+      if (!cta || !av) return;
+      if (user) {
+        cta.style.display = 'none'; av.style.display = 'flex';
+        const name = user.displayName || user.email || '';
+        const initials = name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+        const el = document.getElementById('nav-initials');
+        if (el) el.textContent = initials;
+        const nm = document.getElementById('nav-username');
+        if (nm) nm.textContent = name.split(' ')[0] || 'Account';
+        if (user.photoURL && el) el.innerHTML = `<img src="${user.photoURL}" style="width:24px;height:24px;border-radius:50%;object-fit:cover"/>`;
+        // open/close dropdown
+        av.addEventListener('click', () => {
+          const dd = av.querySelector('.nav-dropdown');
+          if (dd) dd.style.display = dd.style.display === 'block' ? 'none' : 'block';
+        });
+        document.addEventListener('click', e => {
+          if (!av.contains(e.target)) {
+            const dd = av.querySelector('.nav-dropdown');
+            if (dd) dd.style.display = 'none';
+          }
+        });
+      } else {
+        cta.style.display = 'flex'; av.style.display = 'none';
+      }
+    });
+    window.signOutUser = async (e) => { e.preventDefault(); await signOut(auth); window.location.href = '/index.html'; };
+  </script>
+<script>
+
+// ── LANGUAGE SYSTEM ─────────────────────────────────────────────
+const I18N = {
+  en: {
+    scores:'Scores', standings:'Standings', stats:'Stats',
+    gameday:'Gameday', box_score:'Box Score', play_by_play:'Play-by-Play',
+    player_stats:'\ud83d\udc64 Player Stats', team_stats:'\ud83c\udfd9\ufe0f Team Stats',
+    guess_the_play:'Guess the Play', guess_the_pitch:'Guess the Pitch',
+    pitch_zone:'Pitch Zone', in_zone:'In Zone', out_of_zone:'Out of Zone',
+    missed_spot:'Missed Spot', correct_spot:'Correct Spot',
+    next_play:'Next Play \u2192', next_pitch:'Next Pitch \u2192',
+    log_in:'Log In', sign_up:'Sign Up', my_profile:'My Profile',
+    favorites:'Favorites', notifications:'Notifications', sign_out:'Sign Out',
+    season:'Season', historical_view:'Historical view \u2014 representative stats.',
+    final:'Final', live:'Live', betting_lines:'Betting Lines',
+    game_summary:'Game Summary', line_score:'Line Score',
+  },
+  es: {
+    scores:'Marcadores', standings:'Clasificaci\u00f3n', stats:'Estad\u00edsticas',
+    gameday:'D\u00eda de juego', box_score:'Resumen', play_by_play:'Jugada a jugada',
+    player_stats:'\ud83d\udc64 Stats Jugadores', team_stats:'\ud83c\udfd9\ufe0f Stats Equipos',
+    guess_the_play:'Adivina la Jugada', guess_the_pitch:'Adivina el Lanzamiento',
+    pitch_zone:'Zona de lanzamiento', in_zone:'En zona', out_of_zone:'Fuera de zona',
+    missed_spot:'Punto fallado', correct_spot:'Punto correcto',
+    next_play:'Siguiente jugada \u2192', next_pitch:'Siguiente lanzamiento \u2192',
+    log_in:'Iniciar sesi\u00f3n', sign_up:'Registrarse', my_profile:'Mi perfil',
+    favorites:'Favoritos', notifications:'Notificaciones', sign_out:'Cerrar sesi\u00f3n',
+    season:'Temporada', historical_view:'Vista hist\u00f3rica \u2014 estad\u00edsticas representativas.',
+    final:'Final', live:'En vivo', betting_lines:'L\u00edneas de apuestas',
+    game_summary:'Resumen del partido', line_score:'Marcador por entradas',
+  }
+};
+
+function setLang(lang, btn) {
+  localStorage.setItem('ssc_lang', lang);
+  document.documentElement.setAttribute('lang', lang);
+  // Update buttons
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.lang-btn[data-lang="'+lang+'"]').forEach(b => b.classList.add('active'));
+  applyTranslations(lang);
+}
+
+function applyTranslations(lang) {
+  const t = I18N[lang] || I18N.en;
+  // Translate all elements with data-i18n attribute
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (t[key]) el.textContent = t[key];
+  });
+  // Tab buttons (match by text content proximity)
+  const tabMap = {
+    'Scores':t.scores, 'Standings':t.standings, 'Stats':t.stats,
+    'Gameday':t.gameday, 'Box Score':t.box_score, 'Play-by-Play':t.play_by_play,
+    'Fantasy & Games': lang==='es' ? 'Fantasy' : 'Fantasy & Games',
+  };
+  document.querySelectorAll('.tab-btn, .game-tab, .tab-btn').forEach(btn => {
+    const txt = btn.textContent.trim();
+    if (tabMap[txt]) btn.textContent = tabMap[txt];
+  });
+  // Zone status
+  const zs = document.getElementById('zone-status');
+  if (zs && zs.textContent) {
+    if (zs.textContent.includes('In Zone') || zs.textContent.includes('En zona'))
+      zs.textContent = t.in_zone;
+    else if (zs.textContent)
+      zs.textContent = t.out_of_zone;
+  }
+  // Nav links
+  document.querySelectorAll('#nav-cta a').forEach(a => {
+    if (a.textContent.trim() === 'Log In' || a.textContent.trim() === 'Iniciar sesión')
+      a.textContent = t.log_in;
+    if (a.textContent.trim() === 'Sign Up' || a.textContent.trim() === 'Registrarse')
+      a.textContent = t.sign_up;
+  });
+  const dd = document.querySelector('.nav-dropdown');
+  if (dd) {
+    const links = dd.querySelectorAll('a');
+    const dropKeys = [['My Profile','my_profile'],['Favorites','favorites'],
+                      ['Notifications','notifications'],['Sign Out','sign_out']];
+    links.forEach(a => {
+      const base = a.textContent.replace(/^[^\w]+/,'').trim();
+      dropKeys.forEach(([en, k]) => {
+        if (base.includes(en.split(' ')[0])) {
+          const icon = a.textContent.match(/^[^\w]+/)?.[0] || '';
+          a.textContent = icon + t[k];
+        }
+      });
+    });
+  }
+}
+
+// Init on load
+(function() {
+  const saved = localStorage.getItem('ssc_lang') || 'en';
+  if (saved !== 'en') setLang(saved, null);
+  else document.querySelectorAll('.lang-btn[data-lang="en"]').forEach(b => b.classList.add('active'));
+})();
+
+</script>
+<script>
+
+function toggleMobileMenu() {
+  const menu = document.getElementById('mobile-menu');
+  const btn  = document.getElementById('hamburger-btn');
+  const open = menu.classList.toggle('open');
+  btn.textContent = open ? '✕' : '☰';
+}
+function closeMobileMenu() {
+  const menu = document.getElementById('mobile-menu');
+  const btn  = document.getElementById('hamburger-btn');
+  if (menu) { menu.classList.remove('open'); }
+  if (btn)  { btn.textContent = '☰'; }
+}
+// Close menu when clicking outside
+document.addEventListener('click', function(e) {
+  const menu = document.getElementById('mobile-menu');
+  const btn  = document.getElementById('hamburger-btn');
+  if (menu && menu.classList.contains('open') && !menu.contains(e.target) && e.target !== btn) {
+    menu.classList.remove('open');
+    if (btn) btn.textContent = '☰';
+  }
+});
+// Sync mobile lang buttons with desktop state
+const _origSetLang = typeof setLang !== 'undefined' ? setLang : null;
+function syncMobileLang(lang) {
+  document.querySelectorAll('.mobile-lang-btn').forEach(b => {
+    b.classList.toggle('active', b.getAttribute('data-lang') === lang);
+  });
+}
+</script>
+
+<script>
+// ── SSC LIVE GAMEDAY ───────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function() {
+  // ── FILE:// DETECTION ──────────────────────────────────────
+  const isFileProtocol = window.location.protocol === 'file:';
+  if (isFileProtocol) {
+    // Show friendly "needs hosting" notice instead of silent failure
+    const notice = document.getElementById('live-notice');
+    if (notice) notice.style.display = 'flex';
+    // Still render static demo data
+    return;
+  }
+  if (typeof SSCLive === 'undefined') return;
+  const params  = new URLSearchParams(window.location.search);
+  const eventId = params.get('event') || '401671789';
+  SSCLive.initGameday('nfl', eventId, {
+    pbpContainerId: 'pbp-feed',
+    interval: 15000,
+    onPlays: function(plays) {
+      if (!plays.length) return;
+      // Update PBP feed
+      
+    },
+  });
+});
+</script>
+</body>
+</html>

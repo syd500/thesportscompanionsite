@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Teams — The Sports Companion</title>
+  <link rel="icon" type="image/png" href="/assets/logo.png"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--ink:#0B0D0F;--ink-2:#181B1F;--ink-3:#262A30;--muted:#C8CDD6;--line:#2A2E35;--gold:#F2C230;--white:#FFFFFF}
+    body{font-family:'Inter',sans-serif;background:var(--ink);color:var(--white);min-height:100vh}
+    nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;background:rgba(11,13,15,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+    .nav-brand{display:flex;align-items:center;gap:8px;padding:0 20px;text-decoration:none;border-right:1px solid var(--line);height:56px;flex-shrink:0}
+    .nav-brand img{height:28px}.nav-brand span{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;color:var(--white)}
+    .nav-brand span em{font-style:normal;color:var(--gold)}
+    .nav-leagues{display:flex;align-items:center;list-style:none;overflow-x:auto;flex:1;scrollbar-width:none}
+    .nav-leagues::-webkit-scrollbar{display:none}
+    .nav-leagues a{display:flex;align-items:center;height:56px;padding:0 14px;font-size:.8rem;font-weight:600;color:var(--muted);text-decoration:none;border-right:1px solid var(--line);white-space:nowrap}
+    .nav-leagues a:hover{color:var(--white);background:var(--ink-2)}
+    .nav-cta{margin-left:auto;padding:0 14px;height:56px;display:flex;align-items:center;gap:8px;flex-shrink:0}
+    .nav-cta a{color:var(--muted);font-size:.8rem;font-weight:600;text-decoration:none;padding:7px 11px}
+    .nav-cta a.p{background:var(--gold);color:var(--ink);border-radius:5px}
+    .banner{background:var(--ink-2);border-bottom:1px solid var(--line);padding:28px 28px 0}
+    .sec-label{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;letter-spacing:.15em;color:var(--gold);text-transform:uppercase;margin-bottom:8px}
+    .sec-title{font-family:'Barlow Condensed',sans-serif;font-size:2.2rem;font-weight:900;text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
+    .sec-body{color:var(--muted);font-size:.88rem;line-height:1.6;margin-bottom:16px}
+    .sport-tabs{display:flex;border-top:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+    .sport-tabs::-webkit-scrollbar{display:none}
+    .stab{padding:13px 20px;font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:800;text-transform:uppercase;color:var(--muted);background:none;border:none;border-bottom:3px solid transparent;cursor:pointer;transition:all .2s;white-space:nowrap}
+    .stab.active{color:var(--gold);border-bottom-color:var(--gold);background:rgba(242,194,48,.04)}
+    .main{max-width:1100px;margin:0 auto;padding:28px 18px 60px}
+    .sp{display:none}.sp.active{display:block}
+    .team-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+    .team-card{background:var(--ink-2);border:1px solid var(--line);border-radius:12px;text-decoration:none;display:block;overflow:hidden;transition:border-color .2s,transform .18s}
+    .team-card:hover{border-color:var(--gold);transform:translateY(-2px)}
+    .tc-top{padding:18px 18px 14px;display:flex;align-items:center;gap:14px}
+    .tc-logo{width:48px;height:48px;object-fit:contain;flex-shrink:0}
+    .tc-info{flex:1;min-width:0}
+    .tc-name{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:900;text-transform:uppercase;color:var(--white);line-height:1.2;margin-bottom:3px}
+    .tc-meta{font-size:.72rem;color:var(--muted)}
+    .tc-ovr{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:900;padding:4px 10px;border-radius:5px;flex-shrink:0}
+    .ovr-hi{background:rgba(242,194,48,.12);color:var(--gold);border:1px solid rgba(242,194,48,.3)}
+    .ovr-mid{background:rgba(56,189,248,.1);color:#38BDF8;border:1px solid rgba(56,189,248,.25)}
+    .tc-bottom{padding:10px 18px;background:var(--ink-3);border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;font-size:.74rem;color:var(--muted)}
+    .tc-stat span{color:var(--white);font-weight:600}
+    .tc-arrow{color:var(--gold);font-size:.9rem}
+    footer{border-top:1px solid var(--line);padding:18px 28px;text-align:center;font-size:.72rem;color:var(--muted);margin-top:48px}
+    @media(max-width:600px){.team-grid{grid-template-columns:1fr}.banner{padding:18px 14px 0}.main{padding:18px 12px 48px}}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/index.html" class="nav-brand"><img src="/assets/logo.png" alt="SSC"/><span>The Sports <em>Companion</em></span></a>
+  <ul class="nav-leagues">
+    <li><a href="/nfl/index.html">🏈 NFL</a></li>
+    <li><a href="/mlb/index.html">⚾ MLB</a></li>
+    <li><a href="/nba/index.html">🏀 NBA</a></li>
+    <li><a href="/ncaa/index.html">🎓 NCAA</a></li>
+    <li><a href="/futbol/index.html">⚽ Fútbol</a></li>
+    <li><a href="/fantasy/index.html">🏆 Fantasy</a></li>
+    <li><a href="/brackets/index.html">🗂 Brackets</a></li>
+    <li><a href="/players/index.html">👤 Players</a></li>
+    <li><a href="/teams/index.html" style="color:var(--gold)">🏟 Teams</a></li>
+  </ul>
+  <div class="nav-cta"><a href="/login/index.html">Log In</a><a href="/signup/index.html" class="p">Sign Up</a></div>
+</nav>
+
+<div class="banner">
+  <div class="sec-label">// Team Profiles</div>
+  <div class="sec-title">🏟 Teams</div>
+  <div class="sec-body">Franchise profiles with records, stats, rosters, OVR ratings, and bios across NFL, MLB, NBA, NCAA, and Fútbol.</div>
+  <div class="sport-tabs">
+    <button class="stab active" onclick="ss('nfl',this)">🏈 NFL</button>
+    <button class="stab" onclick="ss('mlb',this)">⚾ MLB</button>
+    <button class="stab" onclick="ss('nba',this)">🏀 NBA</button>
+    <button class="stab" onclick="ss('ncaaf',this)">🏈 NCAAF</button>
+    <button class="stab" onclick="ss('ncaab',this)">🏀 NCAAB</button>
+    <button class="stab" onclick="ss('futbol',this)">⚽ Fútbol</button>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- NFL -->
+<div id="sp-nfl" class="sp active"><div class="team-grid">
+  <a href="/teams/nfl-chiefs.html" class="team-card"><div class="tc-top"><img class="tc-logo" src="/assets/nfl/chiefs.png" onerror="this.style.display='none'"/><div class="tc-info"><div class="tc-name">Kansas City Chiefs</div><div class="tc-meta">AFC West · Arrowhead Stadium</div></div><span class="tc-ovr ovr-hi">94</span></div><div class="tc-bottom"><span class="tc-stat">Record <span>11-2</span></span><span class="tc-stat">PPG <span>28.4</span></span><span class="tc-arrow">→</span></div></a>
+  <a href="/teams/nfl-eagles.html" class="team-card"><div class="tc-top"><img class="tc-logo" src="/assets/nfl/eagles.png" onerror="this.style.display='none'"/><div class="tc-info"><div class="tc-name">Philadelphia Eagles</div><div class="tc-meta">NFC East · Lincoln Financial Field</div></div><span class="tc-ovr ovr-hi">91</span></div><div class="tc-bottom"><span class="tc-stat">Record <span>10-3</span></span><span class="tc-stat">PPG <span>26.8</span></span><span class="tc-arrow">→</span></div></a>
+  <a href="/teams/nfl-ravens.html" class="team-card"><div class="tc-top"><img class="tc-logo" src="/assets/nfl/ravens.png" onerror="this.style.display='none'"/><div class="tc-info"><div class="tc-name">Baltimore Ravens</div><div class="tc-meta">AFC North · M&amp;T Bank Stadium</div></div><span class="tc-ovr ovr-hi">93</span></div><div class="tc-bottom"><span class="tc-stat">Record <span>11-2</span></span><span class="tc-stat">PPG <span>30.2</span></span><span class="tc-arrow">→</span></div></a>
+  <a href="/teams/nfl-49ers.html" class="team-card"><div class="tc-top"><img class="tc-logo" src="/assets/nfl/49ers.png" onerror="this.style.display='none'"/><div class="tc-info"><div class="tc-name">San Francisco 49ers</div><div class="tc-meta">NFC West · Levi's Stadium</div></div><span class="tc-ovr ovr-hi">90</span></div><div class="tc-bottom"><span class="tc-stat">Record <span>9-4</span></span><span class="tc-stat">PPG <span>27.4</span></span><span class="tc-arrow">→</span></div></a>
+</div></div>
+
+<!-- MLB -->
+<div id="sp-mlb" class="sp"><div class="team-grid">
+  <a href="/teams/mlb-dodgers.html" class="team-card"><div class="tc-top"><img class="tc-logo" src="/assets/mlb/dodgers.png" onerror="this.style.display='none'"/><div class="tc-info"><div class="tc-name">Los Angeles Dodgers</div><div class="tc-meta">NL West · Dodger Stadium</div></div><span class="tc-ovr ovr-hi">96</span></div><div class="tc-bottom"><span class="tc-stat">Record <span>88-54</span></span><span class="tc-stat">ERA <span>3.18</span></span><span class="tc-arrow">→</span></div></a>
+  <a href="/teams/mlb-yankees.html" class="team-card"><div class="tc-top"><img class="tc-logo" src="/assets/mlb/yankees.png" onerror="this.style.display='none'"/><div class="tc-info"><div class="tc-name">New York Yankees</div><div class="tc-meta">AL East · Yankee Stadium</div></div><span class="tc-ovr ovr-hi">91</span></div><div class="tc-bottom"><span class="tc-stat">Record <span>82-58</span></span><span class="tc-stat">ERA <span>3.64</span></span><span class="tc-arrow">→</span></div></a>
+  <a href="/teams/mlb-astros.html" class="team-card"><div class="tc-top"><img class="tc-logo" src="/assets/mlb/astros.png" onerror="this.style.display='none'"/><div class="tc-info"><div class="tc-name">Houston Astros</div><div class="tc-meta">AL West · Minute Maid Park</div></div><span class="tc-ovr ovr-hi">93</span></div><div class="tc-bottom"><span class="tc-stat">Record <span>86-56</span></span><span class="tc-stat">ERA <span>3.28</span></span><span class="tc-arrow">→</span></div></a>
+</div></div>
+
+<!-- NBA -->
+<div id="sp-nba" class="sp"><div class="team-grid">
+  <a href="/teams/nba-warriors.html" class="team-card"><div class="tc-top"><img class="tc-logo" src="/assets/nba/warriors.png" onerror="this.style.display='none'"/><div class="tc-info"><div class="tc-name">Golden State Warriors</div><div class="tc-meta">West · Pacific · Chase Center</div></div><span class="tc-ovr ovr-hi">94</span></div><div class="tc-bottom"><span class="tc-stat">Record <span>38-14</span></span><span class="tc-stat">PPG <span>118.4</span></span><span class="tc-arrow">→</span></div></a>
+  <a href="/teams/nba-celtics.html" class="team-card"><div class="tc-top"><img class="tc-logo" src="/assets/nba/celtics.png" onerror="this.style.display='none'"/><div class="tc-info"><div class="tc-name">Boston Celtics</div><div class="tc-meta">East · Atlantic · TD Garden</div></div><span class="tc-ovr ovr-hi">96</span></div><div class="tc-bottom"><span class="tc-stat">Record <span>42-10</span></span><span class="tc-stat">PPG <span>120.8</span></span><span class="tc-arrow">→</span></div></a>
+  <a href="/teams/nba-nuggets.html" class="team-card"><div class="tc-top"><img class="tc-logo" src="/assets/nba/nuggets.png" onerror="this.style.display='none'"/><div class="tc-info"><div class="tc-name">Denver Nuggets</div><div class="tc-meta">West · Northwest · Ball Arena</div></div><span class="tc-ovr ovr-hi">92</span></div><div class="tc-bottom"><span class="tc-stat">Record <span>36-16</span></span><span class="tc-stat">PPG <span>115.4</span></span><span class="tc-arrow">→</span></div></a>
+  <a href="/teams/nba-bucks.html" class="team-card"><div class="tc-top"><img class="tc-logo" src="/assets/nba/bucks.png" onerror="this.style.display='none'"/><div class="tc-info"><div class="tc-name">Milwaukee Bucks</div><div class="tc-meta">East · Central · Fiserv Forum</div></div><span class="tc-ovr ovr-hi">90</span></div><div class="tc-bottom"><span class="tc-stat">Record <span>34-18</span></span><span class="tc-stat">PPG <span>116.2</span></span><span class="tc-arrow">→</span></div></a>
+</div></div>
+
+<!-- NCAAF -->
+<div id="sp-ncaaf" class="sp"><div class="team-grid">
+  <a href="/teams/ncaaf-georgia.html" class="team-card"><div class="tc-top"><img class="tc-logo" src="/assets/ncaa/Georgia.png" onerror="this.style.display='none'"/><div class="tc-info"><div class="tc-name">Georgia Bulldogs</div><div class="tc-meta">SEC East · Sanford Stadium</div></div><span class="tc-ovr ovr-hi">97</span></div><div class="tc-bottom"><span class="tc-stat">Record <span>8-0</span></span><span class="tc-stat">PPG <span>40.2</span></span><span class="tc-arrow">→</span></div></a>
+  <a href="/teams/ncaaf-ohio-state.html" class="team-card"><div class="tc-top"><img class="tc-logo" src="/assets/ncaa/Ohio_State.png" onerror="this.style.display='none'"/><div class="tc-info"><div class="tc-name">Ohio State Buckeyes</div><div class="tc-meta">Big Ten East · Ohio Stadium</div></div><span class="tc-ovr ovr-hi">96</span></div><div class="tc-bottom"><span class="tc-stat">Record <span>8-0</span></span><span class="tc-stat">PPG <span>38.4</span></span><span class="tc-arrow">→</span></div></a>
+  <a href="/teams/ncaaf-alabama.html" class="team-card"><div class="tc-top"><img class="tc-logo" src="/assets/ncaa/Alabama.png" onerror="this.style.display='none'"/><div class="tc-info"><div class="tc-name">Alabama Crimson Tide</div><div class="tc-meta">SEC West · Bryant-Denny Stadium</div></div><span class="tc-ovr ovr-hi">94</span></div><div class="tc-bottom"><span class="tc-stat">Record <span>7-1</span></span><span class="tc-stat">PPG <span>36.8</span></span><span class="tc-arrow">→</span></div></a>
+  <a href="/teams/ncaaf-michigan.html" class="team-card"><div class="tc-top"><img class="tc-logo" src="/assets/ncaa/Michigan.png" onerror="this.style.display='none'"/><div class="tc-info"><div class="tc-name">Michigan Wolverines</div><div class="tc-meta">Big Ten East · Michigan Stadium</div></div><span class="tc-ovr ovr-hi">92</span></div><div class="tc-bottom"><span class="tc-stat">Record <span>7-1</span></span><span class="tc-stat">PPG <span>34.2</span></span><span class="tc-arrow">→</span></div></a>
+  <a href="/teams/ncaaf-texas.html" class="team-card"><div class="tc-top"><img class="tc-logo" src="/assets/ncaa/Texas.png" onerror="this.style.display='none'"/><div class="tc-info"><div class="tc-name">Texas Longhorns</div><div class="tc-meta">SEC East · Texas Memorial Stadium</div></div><span class="tc-ovr ovr-hi">91</span></div><div class="tc-bottom"><span class="tc-stat">Record <span>7-1</span></span><span class="tc-stat">PPG <span>36.4</span></span><span class="tc-arrow">→</span></div></a>
+</div></div>
+
+<!-- NCAAB -->
+<div id="sp-ncaab" class="sp"><div class="team-grid">
+  <a href="/teams/ncaab-south-carolina-w.html" class="team-card"><div class="tc-top"><img class="tc-logo" src="/assets/ncaa/South_Carolina.png" onerror="this.style.display='none'"/><div class="tc-info"><div class="tc-name">South Carolina (W)</div><div class="tc-meta">SEC · Women's · Colonial Life Arena</div></div><span class="tc-ovr ovr-hi">99</span></div><div class="tc-bottom"><span class="tc-stat">Record <span>28-0</span></span><span class="tc-stat">PPG <span>84.2</span></span><span class="tc-arrow">→</span></div></a>
+  <a href="/teams/ncaab-uconn.html" class="team-card"><div class="tc-top"><img class="tc-logo" src="/assets/ncaa/Connecticut.png" onerror="this.style.display='none'"/><div class="tc-info"><div class="tc-name">UConn Huskies</div><div class="tc-meta">Big East · Men's / Women's</div></div><span class="tc-ovr ovr-hi">96</span></div><div class="tc-bottom"><span class="tc-stat">Record <span>26-2</span></span><span class="tc-stat">PPG <span>82.4</span></span><span class="tc-arrow">→</span></div></a>
+  <a href="/teams/ncaab-iowa.html" class="team-card"><div class="tc-top"><img class="tc-logo" src="/assets/ncaa/Iowa.png" onerror="this.style.display='none'"/><div class="tc-info"><div class="tc-name">Iowa Hawkeyes (W)</div><div class="tc-meta">Big Ten · Women's · Carver-Hawkeye</div></div><span class="tc-ovr ovr-hi">94</span></div><div class="tc-bottom"><span class="tc-stat">Record <span>25-3</span></span><span class="tc-stat">PPG <span>92.4</span></span><span class="tc-arrow">→</span></div></a>
+  <a href="/teams/ncaab-kansas.html" class="team-card"><div class="tc-top"><img class="tc-logo" src="/assets/ncaa/Kansas.png" onerror="this.style.display='none'"/><div class="tc-info"><div class="tc-name">Kansas Jayhawks</div><div class="tc-meta">Big 12 · Men's · Allen Fieldhouse</div></div><span class="tc-ovr ovr-hi">88</span></div><div class="tc-bottom"><span class="tc-stat">Record <span>22-5</span></span><span class="tc-stat">PPG <span>78.4</span></span><span class="tc-arrow">→</span></div></a>
+  <a href="/teams/ncaab-duke.html" class="team-card"><div class="tc-top"><img class="tc-logo" src="/assets/ncaa/Duke.png" onerror="this.style.display='none'"/><div class="tc-info"><div class="tc-name">Duke Blue Devils</div><div class="tc-meta">ACC · Men's · Cameron Indoor</div></div><span class="tc-ovr ovr-hi">86</span></div><div class="tc-bottom"><span class="tc-stat">Record <span>21-6</span></span><span class="tc-stat">PPG <span>80.2</span></span><span class="tc-arrow">→</span></div></a>
+</div></div>
+
+<!-- FÚTBOL -->
+<div id="sp-futbol" class="sp"><div class="team-grid">
+  <a href="/teams/futbol-real-madrid.html" class="team-card"><div class="tc-top"><div style="width:48px;height:48px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;flex-shrink:0">🇪🇸</div><div class="tc-info"><div class="tc-name">Real Madrid</div><div class="tc-meta">La Liga · Santiago Bernabéu</div></div><span class="tc-ovr ovr-hi">98</span></div><div class="tc-bottom"><span class="tc-stat">Record <span>20-2-2</span></span><span class="tc-stat">xG <span>2.6</span></span><span class="tc-arrow">→</span></div></a>
+  <a href="/teams/futbol-man-city.html" class="team-card"><div class="tc-top"><div style="width:48px;height:48px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;flex-shrink:0">🏴󠁧󠁢󠁥󠁮󠁧󠁿</div><div class="tc-info"><div class="tc-name">Manchester City</div><div class="tc-meta">Premier League · Etihad Stadium</div></div><span class="tc-ovr ovr-hi">97</span></div><div class="tc-bottom"><span class="tc-stat">Record <span>18-3-3</span></span><span class="tc-stat">xG <span>2.8</span></span><span class="tc-arrow">→</span></div></a>
+  <a href="/teams/futbol-liverpool.html" class="team-card"><div class="tc-top"><div style="width:48px;height:48px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;flex-shrink:0">🏴󠁧󠁢󠁥󠁮󠁧󠁿</div><div class="tc-info"><div class="tc-name">Liverpool FC</div><div class="tc-meta">Premier League · Anfield</div></div><span class="tc-ovr ovr-hi">93</span></div><div class="tc-bottom"><span class="tc-stat">Record <span>17-4-3</span></span><span class="tc-stat">xG <span>2.4</span></span><span class="tc-arrow">→</span></div></a>
+  <a href="/teams/futbol-inter-miami.html" class="team-card"><div class="tc-top"><div style="width:48px;height:48px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;flex-shrink:0">🇺🇸</div><div class="tc-info"><div class="tc-name">Inter Miami CF</div><div class="tc-meta">MLS · Eastern Conference · Chase Stadium</div></div><span class="tc-ovr ovr-hi">88</span></div><div class="tc-bottom"><span class="tc-stat">Record <span>14-4-6</span></span><span class="tc-stat">xG <span>2.1</span></span><span class="tc-arrow">→</span></div></a>
+</div></div>
+
+</div>
+<footer>© 2026 The Sports Companion · Chris Cain</footer>
+<script>
+function ss(id,btn){
+  document.querySelectorAll('.sp').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.stab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sp-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>

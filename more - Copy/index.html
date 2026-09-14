@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>More Sports — The Sports Companion</title>
+  <link rel="icon" type="image/png" href="/assets/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}:root{--ink:#0B0D0F;--ink-2:#181B1F;--ink-3:#262A30;--muted:#C8CDD6;--line:#2A2E35;--gold:#F2C230;--white:#FFFFFF}
+    html{scroll-behavior:smooth}body{font-family:'Inter',sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+    nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;background:rgba(11,13,15,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+    .nav-brand{display:flex;align-items:center;gap:8px;padding:0 20px;text-decoration:none;border-right:1px solid var(--line);height:56px;flex-shrink:0}.nav-brand img{height:28px}.nav-brand span{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;letter-spacing:.04em;color:var(--white);white-space:nowrap}.nav-brand span em{font-style:normal;color:var(--gold)}
+    .nav-leagues{display:flex;align-items:center;list-style:none;overflow-x:auto;flex:1;scrollbar-width:none}.nav-leagues::-webkit-scrollbar{display:none}.nav-leagues a{display:flex;align-items:center;height:56px;padding:0 18px;font-size:.82rem;font-weight:600;color:var(--muted);text-decoration:none;border-right:1px solid var(--line);transition:color .2s,background .2s;white-space:nowrap}.nav-leagues a:hover{color:var(--white);background:var(--ink-2)}.nav-leagues a.active{color:var(--gold);background:var(--ink-2);border-bottom:2px solid var(--gold)}
+    .nav-cta{margin-left:auto;padding:0 20px;height:56px;display:flex;align-items:center;flex-shrink:0}.nav-cta a{background:var(--gold);color:var(--ink);font-weight:700;font-size:.8rem;padding:8px 18px;border-radius:5px;text-decoration:none}
+    .page-header{padding:40px 32px 32px;border-bottom:1px solid var(--line);background:var(--ink-2)}
+    .page-header-label{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;letter-spacing:.15em;color:var(--gold);text-transform:uppercase;margin-bottom:10px}
+    .page-header h1{font-family:'Barlow Condensed',sans-serif;font-size:2.4rem;font-weight:900;text-transform:uppercase}
+    .page-header p{color:var(--muted);font-size:.9rem;line-height:1.6;margin-top:8px;max-width:500px}
+    .leagues-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;padding:32px}
+    .league-card{background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:28px 24px;transition:all .2s;cursor:pointer}
+    .league-card:hover{border-color:var(--gold);transform:translateY(-2px)}
+    .lc-icon{font-size:2.4rem;margin-bottom:16px}
+    .lc-title{font-family:'Barlow Condensed',sans-serif;font-size:1.6rem;font-weight:800;text-transform:uppercase;margin-bottom:8px}
+    .lc-title span{color:var(--gold)}
+    .lc-desc{font-size:.85rem;color:var(--muted);line-height:1.6;margin-bottom:16px}
+    .lc-features{display:flex;flex-wrap:wrap;gap:6px}
+    .lc-feat{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:4px;background:var(--ink-3);color:var(--muted);border:1px solid var(--line)}
+    .lc-feat.gold{background:rgba(242,194,48,.1);color:var(--gold);border-color:rgba(242,194,48,.3)}
+    footer{background:var(--ink);border-top:1px solid var(--line);padding:28px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-top:0}.ft-brand{display:flex;align-items:center;gap:8px}.ft-brand img{height:22px}.ft-brand span{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem}.ft-brand span em{font-style:normal;color:var(--gold)}.ft-copy{font-size:.75rem;color:var(--muted)}.ft-links{display:flex;gap:18px}.ft-links a{font-size:.75rem;color:var(--muted);text-decoration:none}.ft-links a:hover{color:var(--white)}
+    @media(max-width:768px){.leagues-grid{padding:20px 16px}.page-header{padding:28px 16px}.nav-brand span{display:none}}
+  
+    /* SEASON SELECTOR */
+    .season-select {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em;
+      background: var(--ink-3); color: var(--gold);
+      border: 1px solid rgba(242,194,48,0.3);
+      border-radius: 4px; padding: 5px 10px;
+      cursor: pointer; outline: none;
+      appearance: none; -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23F2C230'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+      padding-right: 24px;
+    }
+    .season-select:hover { border-color: var(--gold); }
+    .season-select option { background: var(--ink-3); color: var(--white); }
+    .season-notice {
+      display: none; margin-top: 12px; padding: 8px 14px;
+      background: rgba(242,194,48,0.06); border: 1px solid rgba(242,194,48,0.2);
+      border-radius: 5px; font-size: 0.78rem; color: var(--muted);
+      font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em;
+    }
+    .season-notice.show { display: block; }
+  
+    /* LANGUAGE SWITCHER */
+    .lang-switch{display:flex;align-items:center;gap:2px;padding:0 12px;border-right:1px solid var(--line);height:56px;flex-shrink:0}
+    .lang-btn{background:none;border:1px solid transparent;border-radius:5px;padding:5px 9px;font-size:.75rem;font-weight:700;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;font-family:'Barlow Condensed',sans-serif;letter-spacing:.03em}
+    .lang-btn:hover{color:var(--white);border-color:var(--line)}
+    .lang-btn.active{color:var(--gold);border-color:rgba(242,194,48,.4);background:rgba(242,194,48,.08)}
+  
+    /* ── MOBILE NAV OVERHAUL ─────────────────────────────── */
+    .hamburger{display:none;align-items:center;justify-content:center;width:44px;height:56px;background:none;border:none;cursor:pointer;color:var(--white);font-size:1.4rem;flex-shrink:0;padding:0 12px}
+    .mobile-menu{display:none;position:absolute;top:56px;left:0;right:0;background:rgba(11,13,15,.98);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);z-index:999;max-height:calc(100vh - 56px);overflow-y:auto}
+    .mobile-menu.open{display:block}
+    .mobile-menu a{display:flex;align-items:center;gap:12px;padding:14px 20px;font-size:1rem;font-weight:600;color:var(--muted);text-decoration:none;border-bottom:1px solid rgba(255,255,255,.05);transition:background .15s,color .15s}
+    .mobile-menu a:hover,.mobile-menu a.active{background:var(--ink-2);color:var(--white)}
+    .mobile-menu a.active{color:var(--gold);border-left:3px solid var(--gold)}
+    .mobile-menu a:last-child{border-bottom:none}
+    .mobile-menu-footer{padding:14px 20px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .mobile-lang{display:flex;gap:6px}
+    .mobile-lang-btn{background:var(--ink-3);border:1px solid var(--line);border-radius:5px;padding:7px 12px;font-size:.82rem;font-weight:700;color:var(--muted);cursor:pointer;transition:all .2s}
+    .mobile-lang-btn.active{background:rgba(242,194,48,.1);border-color:var(--gold);color:var(--gold)}
+    .mobile-auth{display:flex;gap:8px}
+    .mobile-auth a{font-size:.82rem;font-weight:600;text-decoration:none;padding:8px 14px;border-radius:5px}
+    .mobile-auth a.login{color:var(--muted);border:1px solid var(--line)}
+    .mobile-auth a.signup{background:var(--gold);color:var(--ink)}
+
+    @media(max-width:768px){
+      .nav-leagues{display:none}
+      .lang-switch{display:none}
+      .hamburger{display:flex}
+      .nav-cta{display:none !important}
+      .nav-avatar-btn{margin-right:8px !important;padding:5px 10px !important}
+      .nav-brand span{display:none}
+      nav{position:relative}
+    }
+    @media(min-width:769px){
+      .hamburger{display:none}
+      .mobile-menu{display:none !important}
+    }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/index.html" class="nav-brand"><img src="/assets/logo.png" alt="SSC" /><span>The Sports <em>Companion</em></span></a>
+  <ul class="nav-leagues">
+    <li><a href="/nfl/index.html">🏈 NFL</a></li>
+    <li><a href="/mlb/index.html">⚾ MLB</a></li>
+    <li><a href="/nba/index.html">🏀 NBA</a></li>
+    <li><a href="/ncaa/index.html">🎓 NCAA</a></li>
+    <li><a href="/futbol/index.html">⚽ Fútbol</a></li>
+    <li><a href="/fantasy/index.html">🏆 Fantasy</a></li>
+    <li><a href="/more/index.html" class="active">• • •</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger-btn" onclick="toggleMobileMenu()" aria-label="Menu">☰</button>
+  <div class="lang-switch" id="lang-switch">
+    <button class="lang-btn active" data-lang="en" onclick="setLang('en',this)" aria-label="English">🇺🇸 EN</button>
+    <button class="lang-btn" data-lang="es" onclick="setLang('es',this)" aria-label="Español">🇪🇸 ES</button>
+  </div>
+  <div class="nav-cta" id="nav-cta">
+    <a href="/login/index.html" style="color:var(--muted);font-size:.8rem;font-weight:600;text-decoration:none;padding:8px 12px;">Log In</a>
+    <a href="/signup/index.html" style="background:var(--gold);color:var(--ink);font-weight:700;font-size:.8rem;padding:8px 18px;border-radius:5px;text-decoration:none;">Sign Up</a>
+  </div>
+  <div class="nav-avatar-btn" id="nav-avatar" style="display:none;align-items:center;gap:8px;background:var(--ink-2);border:1px solid var(--line);border-radius:6px;padding:6px 12px;cursor:pointer;margin-right:16px;position:relative" onclick="this.classList.toggle('open')">
+    <div class="nav-avatar-initials" id="nav-initials" style="width:24px;height:24px;border-radius:50%;background:var(--gold);color:var(--ink);font-family:'Barlow Condensed',sans-serif;font-size:.8rem;font-weight:800;display:flex;align-items:center;justify-content:center">?</div>
+    <span class="nav-avatar-name" id="nav-username" style="font-size:.8rem;font-weight:600;color:var(--white);max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Account</span>
+    <div style="display:none;position:absolute;top:calc(100% + 8px);right:0;background:var(--ink-2);border:1px solid var(--line);border-radius:8px;min-width:180px;z-index:200;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.4)" class="nav-dropdown">
+      <a href="/dashboard/index.html" style="display:block;padding:11px 16px;font-size:.82rem;color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line)">📊 Dashboard</a>
+      <a href="/profile/index.html" style="display:block;padding:11px 16px;font-size:.82rem;color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line)">⚙️ My Profile</a>
+      <a href="/profile/index.html#favorites" style="display:block;padding:11px 16px;font-size:.82rem;color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line)">⭐ Favorites</a>
+      <a href="/profile/index.html#notifications" style="display:block;padding:11px 16px;font-size:.82rem;color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line)">🔔 Notifications</a>
+      <a href="#" onclick="signOutUser(event)" style="display:block;padding:11px 16px;font-size:.82rem;color:#FF6B6B;text-decoration:none">↩ Sign Out</a>
+    </div>
+  </div>
+</nav>
+  <!-- MOBILE MENU (hamburger dropdown) -->
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="/nfl/index.html" class="" onclick="closeMobileMenu()">🏈 NFL</a>
+    <a href="/mlb/index.html" class="" onclick="closeMobileMenu()">⚾ MLB</a>
+    <a href="/nba/index.html" class="" onclick="closeMobileMenu()">🏀 NBA</a>
+    <a href="/ncaa/index.html" class="" onclick="closeMobileMenu()">🎓 NCAA</a>
+    <a href="/futbol/index.html" class="" onclick="closeMobileMenu()">⚽ Fútbol</a>
+    <a href="/fantasy/index.html" class="" onclick="closeMobileMenu()">🏆 Fantasy</a>
+    <a href="/brackets/index.html" class="" onclick="closeMobileMenu()">🗂 Brackets</a>
+    <a href="/more/index.html" class="active" onclick="closeMobileMenu()">• • • More</a>
+    <div class="mobile-menu-footer">
+      <div class="mobile-lang">
+        <button class="mobile-lang-btn active" data-lang="en" onclick="setLang('en',this);closeMobileMenu()">🇺🇸 EN</button>
+        <button class="mobile-lang-btn" data-lang="es" onclick="setLang('es',this);closeMobileMenu()">🇪🇸 ES</button>
+      </div>
+      <div class="mobile-auth" id="mobile-auth">
+        <a href="/login/index.html" class="login">Log In</a>
+        <a href="/signup/index.html" class="signup">Sign Up</a>
+      </div>
+    </div>
+  </div>
+
+<div class="page-header">
+  <div class="page-header-label">// More Sports</div>
+  <h1>All Leagues</h1>
+  <p>NHL, MLS, NCAA Football, NCAA Basketball, and PGA Golf — full stats, scores, and fantasy tools across every league.</p>
+</div>
+
+<div class="leagues-grid">
+  <div class="league-card">
+    <div class="lc-icon">🏒</div>
+    <div class="lc-title">NHL <span>Hockey</span></div>
+    <div class="lc-desc">Full NHL scores, standings, player stats and fantasy hockey tools. Track goals, assists, save percentages, and advanced metrics.</div>
+    <div class="lc-features">
+      <span class="lc-feat">Scores</span><span class="lc-feat">Standings</span><span class="lc-feat">Player Stats</span>
+      <span class="lc-feat gold">Fantasy</span>
+    </div>
+  </div>
+  <div class="league-card">
+    <div class="lc-icon">⚽</div>
+    <div class="lc-title">MLS <span>Soccer</span></div>
+    <div class="lc-desc">MLS scores, standings, player stats and team data across the entire league. Track goals, assists, expected goals, and defensive metrics.</div>
+    <div class="lc-features">
+      <span class="lc-feat">Scores</span><span class="lc-feat">Standings</span><span class="lc-feat">Player Stats</span>
+      <span class="lc-feat">xG Metrics</span>
+    </div>
+  </div>
+  <div class="league-card">
+    <div class="lc-icon">🏈</div>
+    <div class="lc-title">NCAAF <span>Football</span></div>
+    <div class="lc-desc">NCAA Football scores, rankings, and advanced stats. Includes Guess the Play using real college play-by-play data.</div>
+    <div class="lc-features">
+      <span class="lc-feat">Scores</span><span class="lc-feat">Rankings</span><span class="lc-feat">Player Stats</span>
+      <span class="lc-feat gold">Guess the Play</span>
+    </div>
+  </div>
+  <div class="league-card">
+    <div class="lc-icon">🏀</div>
+    <div class="lc-title">NCAAM <span>Basketball</span></div>
+    <div class="lc-desc">NCAA Men's Basketball including comprehensive stats, bracket tools, conference strength analysis, and rankings.</div>
+    <div class="lc-features">
+      <span class="lc-feat">Scores</span><span class="lc-feat">Bracket</span><span class="lc-feat">Conference Strength</span>
+      <span class="lc-feat gold">Rankings</span>
+    </div>
+  </div>
+  <div class="league-card">
+    <div class="lc-icon">🏀</div>
+    <div class="lc-title">NCAAW <span>Basketball</span></div>
+    <div class="lc-desc">NCAA Women's Basketball scores, standings and player stats.</div>
+    <div class="lc-features">
+      <span class="lc-feat">Scores</span><span class="lc-feat">Standings</span><span class="lc-feat">Stats</span>
+    </div>
+  </div>
+  <div class="league-card">
+    <div class="lc-icon">⛳</div>
+    <div class="lc-title">PGA <span>Golf</span></div>
+    <div class="lc-desc">PGA Tour leaderboards, player stats, course data, and tournament schedules. Track strokes gained, driving distance, and putting averages.</div>
+    <div class="lc-features">
+      <span class="lc-feat">Leaderboards</span><span class="lc-feat">Player Stats</span>
+      <span class="lc-feat">Strokes Gained</span>
+    </div>
+  </div>
+  <div class="league-card" onclick="window.location='/soccer/mls/index.html'" style="cursor:pointer">
+    <div class="lc-icon">⚽</div>
+    <div class="lc-title">MLS <span>Soccer</span></div>
+    <div class="lc-desc">Major League Soccer scores, standings, player stats, xG metrics and fantasy tools.</div>
+    <div class="lc-features"><span class="lc-feat">Scores</span><span class="lc-feat">Standings</span><span class="lc-feat gold">xG Metrics</span></div>
+  </div>
+  <div class="league-card" onclick="window.location='/soccer/epl/index.html'" style="cursor:pointer">
+    <div class="lc-icon">🏴󠁧󠁢󠁥󠁮󠁧󠁿</div>
+    <div class="lc-title">EPL <span>Premier League</span></div>
+    <div class="lc-desc">English Premier League scores, standings, top scorers and advanced analytics.</div>
+    <div class="lc-features"><span class="lc-feat">Scores</span><span class="lc-feat">Standings</span><span class="lc-feat gold">Analytics</span></div>
+  </div>
+  <div class="league-card" onclick="window.location='/soccer/laliga/index.html'" style="cursor:pointer">
+    <div class="lc-icon">🇪🇸</div>
+    <div class="lc-title">La <span>Liga</span></div>
+    <div class="lc-desc">Spain's top division — Real Madrid, Barcelona, Atletico and more with full stats coverage.</div>
+    <div class="lc-features"><span class="lc-feat">Scores</span><span class="lc-feat">Standings</span><span class="lc-feat">Stats</span></div>
+  </div>
+  <div class="league-card" onclick="window.location='/soccer/champions-league/index.html'" style="cursor:pointer">
+    <div class="lc-icon">🏆</div>
+    <div class="lc-title">Champions <span>League</span></div>
+    <div class="lc-desc">UEFA Champions League group stage, knockouts, and final coverage with full player stats.</div>
+    <div class="lc-features"><span class="lc-feat">Scores</span><span class="lc-feat">Groups</span><span class="lc-feat gold">Knockouts</span></div>
+  </div>
+  <div class="league-card" onclick="window.location='/soccer/fifa/index.html'" style="cursor:pointer">
+    <div class="lc-icon">🌍</div>
+    <div class="lc-title">FIFA <span>& International</span></div>
+    <div class="lc-desc">World Cup qualifiers, FIFA Club World Cup, and international rankings and stats.</div>
+    <div class="lc-features"><span class="lc-feat">World Cup</span><span class="lc-feat">Club WC</span><span class="lc-feat">Rankings</span></div>
+  </div>
+  <div class="league-card" onclick="window.location='/ncaaf/index.html'" style="cursor:pointer">
+    <div class="lc-icon">🏈</div>
+    <div class="lc-title">NCAAF <span>Football</span></div>
+    <div class="lc-desc">College Football scores, CFP rankings, conference standings and player stats.</div>
+    <div class="lc-features"><span class="lc-feat">Scores</span><span class="lc-feat">CFP Rankings</span><span class="lc-feat gold">Guess the Play</span></div>
+  </div>
+  <div class="league-card" onclick="window.location='/ncaab/mens/index.html'" style="cursor:pointer">
+    <div class="lc-icon">🏀</div>
+    <div class="lc-title">NCAA Men's <span>Basketball</span></div>
+    <div class="lc-desc">Men's college hoops scores, AP rankings, conference standings and March Madness bracket.</div>
+    <div class="lc-features"><span class="lc-feat">Scores</span><span class="lc-feat">Rankings</span><span class="lc-feat gold">Bracket</span></div>
+  </div>
+  <div class="league-card" onclick="window.location='/ncaab/womens/index.html'" style="cursor:pointer">
+    <div class="lc-icon">🏀</div>
+    <div class="lc-title">NCAA Women's <span>Basketball</span></div>
+    <div class="lc-desc">Women's college basketball with full stats, rankings and tournament coverage.</div>
+    <div class="lc-features"><span class="lc-feat">Scores</span><span class="lc-feat">Rankings</span><span class="lc-feat">Stats</span></div>
+  </div>
+  <div class="league-card" onclick="window.location='/ncaasoftball/index.html'" style="cursor:pointer">
+    <div class="lc-icon">🥎</div>
+    <div class="lc-title">NCAA <span>Softball</span></div>
+    <div class="lc-desc">College softball scores, WCWS standings, batting and pitching stats.</div>
+    <div class="lc-features"><span class="lc-feat">Scores</span><span class="lc-feat">WCWS</span><span class="lc-feat">Pitching Stats</span></div>
+  </div>
+  <div class="league-card" onclick="window.location='/ncaasoccer/mens/index.html'" style="cursor:pointer">
+    <div class="lc-icon">⚽</div>
+    <div class="lc-title">NCAA Men's <span>Soccer</span></div>
+    <div class="lc-desc">Men's college soccer scores, conference standings and player stats.</div>
+    <div class="lc-features"><span class="lc-feat">Scores</span><span class="lc-feat">Standings</span><span class="lc-feat">Stats</span></div>
+  </div>
+  <div class="league-card" onclick="window.location='/ncaasoccer/womens/index.html'" style="cursor:pointer">
+    <div class="lc-icon">⚽</div>
+    <div class="lc-title">NCAA Women's <span>Soccer</span></div>
+    <div class="lc-desc">Women's college soccer scores, rankings and advanced stats.</div>
+    <div class="lc-features"><span class="lc-feat">Scores</span><span class="lc-feat">Rankings</span><span class="lc-feat">Stats</span></div>
+  </div>
+</div>
+
+<footer>
+  <div class="ft-brand"><img src="/assets/logo.png" alt="SSC" /><span>The Sports <em>Companion</em></span></div>
+  <div class="ft-links"><a href="/index.html">Home</a><a href="/nfl/index.html">NFL</a><a href="/mlb/index.html">MLB</a><a href="/nba/index.html">NBA</a></div>
+  <div class="ft-copy">© 2026 The Sports Companion</div>
+</footer>
+<script>
+function changeSeason(yr) {
+  yr = parseInt(yr);
+  // Update all sec-label year references
+  document.querySelectorAll('.sec-label').forEach(el => {
+    el.textContent = el.textContent.replace(/20\d\d/, yr);
+  });
+  // Update badge
+  const badge = document.querySelector('.league-badge');
+  if (badge) badge.textContent = yr + ' Season';
+  // Show/hide historical notice
+  const notice = document.getElementById('season-notice');
+  if (notice) notice.classList.toggle('show', yr < 2025);
+}
+</script>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+    const firebaseConfig = {
+      apiKey:"AIzaSyC_hGMiHK3RaI54Dxm8_GmQPhRHLpjPO5U", authDomain:"fantasy-sports-1e6cf.firebaseapp.com",
+      projectId:"fantasy-sports-1e6cf", storageBucket:"fantasy-sports-1e6cf.firebasestorage.app",
+      messagingSenderId:"150042816249", appId:"1:150042816249:web:4de18353ba84f106fb3c28"
+    };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    onAuthStateChanged(auth, user => {
+      const cta = document.getElementById('nav-cta');
+      const av  = document.getElementById('nav-avatar');
+      if (!cta || !av) return;
+      if (user) {
+        cta.style.display = 'none'; av.style.display = 'flex';
+        const name = user.displayName || user.email || '';
+        const initials = name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+        const el = document.getElementById('nav-initials');
+        if (el) el.textContent = initials;
+        const nm = document.getElementById('nav-username');
+        if (nm) nm.textContent = name.split(' ')[0] || 'Account';
+        if (user.photoURL && el) el.innerHTML = `<img src="${user.photoURL}" style="width:24px;height:24px;border-radius:50%;object-fit:cover"/>`;
+        // open/close dropdown
+        av.addEventListener('click', () => {
+          const dd = av.querySelector('.nav-dropdown');
+          if (dd) dd.style.display = dd.style.display === 'block' ? 'none' : 'block';
+        });
+        document.addEventListener('click', e => {
+          if (!av.contains(e.target)) {
+            const dd = av.querySelector('.nav-dropdown');
+            if (dd) dd.style.display = 'none';
+          }
+        });
+      } else {
+        cta.style.display = 'flex'; av.style.display = 'none';
+      }
+    });
+    window.signOutUser = async (e) => { e.preventDefault(); await signOut(auth); window.location.href = '/index.html'; };
+  </script>
+<script>
+
+// ── LANGUAGE SYSTEM ─────────────────────────────────────────────
+const I18N = {
+  en: {
+    scores:'Scores', standings:'Standings', stats:'Stats',
+    gameday:'Gameday', box_score:'Box Score', play_by_play:'Play-by-Play',
+    player_stats:'\ud83d\udc64 Player Stats', team_stats:'\ud83c\udfd9\ufe0f Team Stats',
+    guess_the_play:'Guess the Play', guess_the_pitch:'Guess the Pitch',
+    pitch_zone:'Pitch Zone', in_zone:'In Zone', out_of_zone:'Out of Zone',
+    missed_spot:'Missed Spot', correct_spot:'Correct Spot',
+    next_play:'Next Play \u2192', next_pitch:'Next Pitch \u2192',
+    log_in:'Log In', sign_up:'Sign Up', my_profile:'My Profile',
+    favorites:'Favorites', notifications:'Notifications', sign_out:'Sign Out',
+    season:'Season', historical_view:'Historical view \u2014 representative stats.',
+    final:'Final', live:'Live', betting_lines:'Betting Lines',
+    game_summary:'Game Summary', line_score:'Line Score',
+  },
+  es: {
+    scores:'Marcadores', standings:'Clasificaci\u00f3n', stats:'Estad\u00edsticas',
+    gameday:'D\u00eda de juego', box_score:'Resumen', play_by_play:'Jugada a jugada',
+    player_stats:'\ud83d\udc64 Stats Jugadores', team_stats:'\ud83c\udfd9\ufe0f Stats Equipos',
+    guess_the_play:'Adivina la Jugada', guess_the_pitch:'Adivina el Lanzamiento',
+    pitch_zone:'Zona de lanzamiento', in_zone:'En zona', out_of_zone:'Fuera de zona',
+    missed_spot:'Punto fallado', correct_spot:'Punto correcto',
+    next_play:'Siguiente jugada \u2192', next_pitch:'Siguiente lanzamiento \u2192',
+    log_in:'Iniciar sesi\u00f3n', sign_up:'Registrarse', my_profile:'Mi perfil',
+    favorites:'Favoritos', notifications:'Notificaciones', sign_out:'Cerrar sesi\u00f3n',
+    season:'Temporada', historical_view:'Vista hist\u00f3rica \u2014 estad\u00edsticas representativas.',
+    final:'Final', live:'En vivo', betting_lines:'L\u00edneas de apuestas',
+    game_summary:'Resumen del partido', line_score:'Marcador por entradas',
+  }
+};
+
+function setLang(lang, btn) {
+  localStorage.setItem('ssc_lang', lang);
+  document.documentElement.setAttribute('lang', lang);
+  // Update buttons
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.lang-btn[data-lang="'+lang+'"]').forEach(b => b.classList.add('active'));
+  applyTranslations(lang);
+}
+
+function applyTranslations(lang) {
+  const t = I18N[lang] || I18N.en;
+  // Translate all elements with data-i18n attribute
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (t[key]) el.textContent = t[key];
+  });
+  // Tab buttons (match by text content proximity)
+  const tabMap = {
+    'Scores':t.scores, 'Standings':t.standings, 'Stats':t.stats,
+    'Gameday':t.gameday, 'Box Score':t.box_score, 'Play-by-Play':t.play_by_play,
+    'Fantasy & Games': lang==='es' ? 'Fantasy' : 'Fantasy & Games',
+  };
+  document.querySelectorAll('.tab-btn, .game-tab, .tab-btn').forEach(btn => {
+    const txt = btn.textContent.trim();
+    if (tabMap[txt]) btn.textContent = tabMap[txt];
+  });
+  // Zone status
+  const zs = document.getElementById('zone-status');
+  if (zs && zs.textContent) {
+    if (zs.textContent.includes('In Zone') || zs.textContent.includes('En zona'))
+      zs.textContent = t.in_zone;
+    else if (zs.textContent)
+      zs.textContent = t.out_of_zone;
+  }
+  // Nav links
+  document.querySelectorAll('#nav-cta a').forEach(a => {
+    if (a.textContent.trim() === 'Log In' || a.textContent.trim() === 'Iniciar sesión')
+      a.textContent = t.log_in;
+    if (a.textContent.trim() === 'Sign Up' || a.textContent.trim() === 'Registrarse')
+      a.textContent = t.sign_up;
+  });
+  const dd = document.querySelector('.nav-dropdown');
+  if (dd) {
+    const links = dd.querySelectorAll('a');
+    const dropKeys = [['My Profile','my_profile'],['Favorites','favorites'],
+                      ['Notifications','notifications'],['Sign Out','sign_out']];
+    links.forEach(a => {
+      const base = a.textContent.replace(/^[^\w]+/,'').trim();
+      dropKeys.forEach(([en, k]) => {
+        if (base.includes(en.split(' ')[0])) {
+          const icon = a.textContent.match(/^[^\w]+/)?.[0] || '';
+          a.textContent = icon + t[k];
+        }
+      });
+    });
+  }
+}
+
+// Init on load
+(function() {
+  const saved = localStorage.getItem('ssc_lang') || 'en';
+  if (saved !== 'en') setLang(saved, null);
+  else document.querySelectorAll('.lang-btn[data-lang="en"]').forEach(b => b.classList.add('active'));
+})();
+
+</script>
+</body></html>

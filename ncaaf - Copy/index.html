@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NCAAF — The Sports Companion</title>
+  <link rel="icon" type="image/png" href="/assets/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--ink:#0B0D0F;--ink-2:#181B1F;--ink-3:#262A30;--muted:#C8CDD6;--line:#2A2E35;--gold:#F2C230;--crimson:#C83A2B;--white:#FFFFFF;--accent:#F2C230}
+    html{scroll-behavior:smooth}body{font-family:'Inter',sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+    nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;background:rgba(11,13,15,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+    .nav-brand{display:flex;align-items:center;gap:8px;padding:0 20px;text-decoration:none;border-right:1px solid var(--line);height:56px;flex-shrink:0}
+    .nav-brand img{height:28px}.nav-brand span{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;color:var(--white);white-space:nowrap}
+    .nav-brand span em{font-style:normal;color:var(--gold)}
+    .nav-leagues{display:flex;align-items:center;list-style:none;overflow-x:auto;flex:1;scrollbar-width:none}
+    .nav-leagues::-webkit-scrollbar{display:none}
+    .nav-leagues a{display:flex;align-items:center;height:56px;padding:0 16px;font-size:.78rem;font-weight:600;color:var(--muted);text-decoration:none;border-right:1px solid var(--line);transition:color .2s,background .2s;white-space:nowrap}
+    .nav-leagues a:hover{color:var(--white);background:var(--ink-2)}
+    .nav-leagues a.active{color:var(--gold);background:var(--ink-2);border-bottom:2px solid var(--gold)}
+    .nav-cta{margin-left:auto;padding:0 20px;height:56px;display:flex;align-items:center;flex-shrink:0}
+    .nav-cta a{background:var(--gold);color:var(--ink);font-weight:700;font-size:.8rem;padding:8px 18px;border-radius:5px;text-decoration:none}
+    .league-banner{background:var(--ink-2);border-bottom:1px solid var(--line);padding:24px 32px 0}
+    .league-banner-top{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+    .league-banner-top h1{font-family:'Barlow Condensed',sans-serif;font-size:2.2rem;font-weight:900;text-transform:uppercase;letter-spacing:.04em}
+    .league-badge{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:4px;background:rgba(242,194,48,.12);color:var(--gold);border:1px solid rgba(242,194,48,.3)}
+    .tab-bar{display:flex;gap:0;border-top:1px solid var(--line)}
+    .tab-btn{padding:12px 22px;font-size:.82rem;font-weight:600;color:var(--muted);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;transition:all .2s;white-space:nowrap}
+    .tab-btn:hover{color:var(--white)}.tab-btn.active{color:var(--gold);border-bottom-color:var(--gold)}
+    .tab-panel{display:none;padding:28px 32px}.tab-panel.active{display:block}
+    .sec-label{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;letter-spacing:.15em;color:var(--gold);text-transform:uppercase;margin-bottom:10px}
+    .sec-title{font-family:'Barlow Condensed',sans-serif;font-size:1.6rem;font-weight:800;text-transform:uppercase;margin-bottom:6px}
+    .sec-body{color:var(--muted);font-size:.88rem;line-height:1.6;margin-bottom:20px}
+    .sub-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+    .sub-tab{background:var(--ink-2);border:1px solid var(--line);color:var(--muted);font-size:.78rem;font-weight:500;padding:7px 14px;border-radius:5px;cursor:pointer;transition:all .2s}
+    .sub-tab:hover{border-color:var(--gold);color:var(--white)}.sub-tab.active{background:var(--gold);border-color:var(--gold);color:var(--ink);font-weight:700}
+    .sub-panel{display:none}.sub-panel.active{display:block}
+    .scores-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+    .score-card{background:var(--ink-2);border:1px solid var(--line);border-radius:10px;padding:16px;cursor:pointer;transition:border-color .2s}
+    .score-card:hover{border-color:var(--gold)}
+    .score-hdr{font-family:'JetBrains Mono',monospace;font-size:.66rem;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;margin-bottom:12px}
+    .score-row{display:flex;align-items:center;justify-content:space-between;padding:5px 0}
+    .score-team{font-weight:600;font-size:.88rem;display:flex;align-items:center;gap:6px}
+    .score-team img{width:20px;height:20px;object-fit:contain}
+    .score-val{font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;font-weight:800}
+    .score-val.w{color:var(--gold)}.score-div{height:1px;background:var(--line);margin:4px 0}
+    .score-status{margin-top:10px;font-size:.7rem;font-family:'JetBrains Mono',monospace;letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
+    .live-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#22c55e;margin-right:5px;animation:pulse 1.5s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+    .tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+    .tbl{width:100%;border-collapse:collapse;font-size:.83rem}
+    .tbl thead tr{background:var(--ink-3);border-bottom:1px solid var(--line)}
+    .tbl th{font-family:'JetBrains Mono',monospace;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:11px 13px;text-align:left;white-space:nowrap}
+    .tbl tbody tr{border-bottom:1px solid rgba(255,255,255,.04);transition:background .15s}
+    .tbl tbody tr:hover{background:var(--ink-2)}.tbl tbody tr:last-child{border-bottom:none}
+    .tbl td{padding:10px 13px;color:var(--muted);white-space:nowrap}
+    .tbl td.pl{color:var(--white);font-weight:600}.tbl td.hi{color:var(--gold);font-weight:700}.tbl td.ng{color:#FF6B6B}
+    .tbl td.team-cell{display:flex;align-items:center;gap:8px}
+    .team-logo{width:20px;height:20px;object-fit:contain;flex-shrink:0}
+    .ovr{display:inline-block;font-family:'Barlow Condensed',sans-serif;font-size:.88rem;font-weight:800;padding:2px 7px;border-radius:4px}
+    .ovr-hi{background:rgba(242,194,48,.2);color:var(--gold)}.ovr-mid{background:rgba(56,189,248,.15);color:#38BDF8}.ovr-lo{background:rgba(255,107,107,.12);color:#FF6B6B}
+    .standings-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+    .s-div{background:var(--ink-2);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+    .s-div-hdr{padding:11px 16px;background:var(--ink-3);border-bottom:1px solid var(--line);font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em}
+    .s-row{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;padding:9px 16px;border-bottom:1px solid rgba(255,255,255,.04);font-size:.83rem;align-items:center}
+    .s-row:last-child{border-bottom:none}
+    .s-row.hdr{font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+    .s-row .team{font-weight:600;color:var(--white);display:flex;align-items:center;gap:6px}
+    .s-row .team img{width:18px;height:18px;object-fit:contain}
+    .s-row .val{color:var(--muted)}.s-row .hi{color:var(--gold);font-weight:700}
+    footer{background:var(--ink);border-top:1px solid var(--line);padding:28px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-top:48px}
+    .ft-brand{display:flex;align-items:center;gap:8px}.ft-brand img{height:22px}
+    .ft-brand span{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem}
+    .ft-brand span em{font-style:normal;color:var(--gold)}
+    .ft-copy{font-size:.75rem;color:var(--muted)}.ft-links{display:flex;gap:18px;flex-wrap:wrap}
+    .ft-links a{font-size:.75rem;color:var(--muted);text-decoration:none}.ft-links a:hover{color:var(--white)}
+    @media(max-width:768px){.tab-panel{padding:18px 16px}.league-banner{padding:18px 16px 0}.nav-brand span{display:none}}
+  
+    /* SEASON SELECTOR */
+    .season-select {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em;
+      background: var(--ink-3); color: var(--gold);
+      border: 1px solid rgba(242,194,48,0.3);
+      border-radius: 4px; padding: 5px 10px;
+      cursor: pointer; outline: none;
+      appearance: none; -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23F2C230'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+      padding-right: 24px;
+    }
+    .season-select:hover { border-color: var(--gold); }
+    .season-select option { background: var(--ink-3); color: var(--white); }
+    .season-notice {
+      display: none; margin-top: 12px; padding: 8px 14px;
+      background: rgba(242,194,48,0.06); border: 1px solid rgba(242,194,48,0.2);
+      border-radius: 5px; font-size: 0.78rem; color: var(--muted);
+      font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em;
+    }
+    .season-notice.show { display: block; }
+  
+    /* LANGUAGE SWITCHER */
+    .lang-switch{display:flex;align-items:center;gap:2px;padding:0 12px;border-right:1px solid var(--line);height:56px;flex-shrink:0}
+    .lang-btn{background:none;border:1px solid transparent;border-radius:5px;padding:5px 9px;font-size:.75rem;font-weight:700;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;font-family:'Barlow Condensed',sans-serif;letter-spacing:.03em}
+    .lang-btn:hover{color:var(--white);border-color:var(--line)}
+    .lang-btn.active{color:var(--gold);border-color:rgba(242,194,48,.4);background:rgba(242,194,48,.08)}
+  
+    /* ── MOBILE NAV OVERHAUL ─────────────────────────────── */
+    .hamburger{display:none;align-items:center;justify-content:center;width:44px;height:56px;background:none;border:none;cursor:pointer;color:var(--white);font-size:1.4rem;flex-shrink:0;padding:0 12px}
+    .mobile-menu{display:none;position:absolute;top:56px;left:0;right:0;background:rgba(11,13,15,.98);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);z-index:999;max-height:calc(100vh - 56px);overflow-y:auto}
+    .mobile-menu.open{display:block}
+    .mobile-menu a{display:flex;align-items:center;gap:12px;padding:14px 20px;font-size:1rem;font-weight:600;color:var(--muted);text-decoration:none;border-bottom:1px solid rgba(255,255,255,.05);transition:background .15s,color .15s}
+    .mobile-menu a:hover,.mobile-menu a.active{background:var(--ink-2);color:var(--white)}
+    .mobile-menu a.active{color:var(--gold);border-left:3px solid var(--gold)}
+    .mobile-menu a:last-child{border-bottom:none}
+    .mobile-menu-footer{padding:14px 20px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .mobile-lang{display:flex;gap:6px}
+    .mobile-lang-btn{background:var(--ink-3);border:1px solid var(--line);border-radius:5px;padding:7px 12px;font-size:.82rem;font-weight:700;color:var(--muted);cursor:pointer;transition:all .2s}
+    .mobile-lang-btn.active{background:rgba(242,194,48,.1);border-color:var(--gold);color:var(--gold)}
+    .mobile-auth{display:flex;gap:8px}
+    .mobile-auth a{font-size:.82rem;font-weight:600;text-decoration:none;padding:8px 14px;border-radius:5px}
+    .mobile-auth a.login{color:var(--muted);border:1px solid var(--line)}
+    .mobile-auth a.signup{background:var(--gold);color:var(--ink)}
+
+    @media(max-width:768px){
+      .nav-leagues{display:none}
+      .lang-switch{display:none}
+      .hamburger{display:flex}
+      .nav-cta{display:none !important}
+      .nav-avatar-btn{margin-right:8px !important;padding:5px 10px !important}
+      .nav-brand span{display:none}
+      nav{position:relative}
+    }
+    @media(min-width:769px){
+      .hamburger{display:none}
+      .mobile-menu{display:none !important}
+    }
+  
+    .tbl-wrap{position:relative}
+    .csv-btn{
+      position:absolute;top:-26px;right:0;
+      display:inline-flex;align-items:center;gap:3px;
+      background:rgba(242,194,48,.08);border:1px solid rgba(242,194,48,.25);
+      color:var(--gold);font-family:'JetBrains Mono',monospace;
+      font-size:.55rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+      padding:3px 8px;border-radius:4px;cursor:pointer;
+      transition:background .18s,border-color .18s;white-space:nowrap
+    }
+    .csv-btn:hover{background:rgba(242,194,48,.18);border-color:rgba(242,194,48,.5)}
+    .csv-btn svg{width:9px;height:9px;flex-shrink:0}
+  
+    .tbl th{cursor:pointer;user-select:none;position:relative;white-space:nowrap}
+    .tbl th:hover{background:rgba(242,194,48,.08)}
+    .tbl th.sort-asc::after{content:' ▲';font-size:.55rem;color:var(--gold);opacity:.9}
+    .tbl th.sort-desc::after{content:' ▼';font-size:.55rem;color:var(--gold);opacity:.9}
+    .tbl th:not(.sort-asc):not(.sort-desc)::after{content:' ⇅';font-size:.5rem;color:var(--muted);opacity:.5}
+  </style>
+  <script src="/assets/ssc-live.js"></script>
+</head>
+<body>
+<nav>
+  <a href="/index.html" class="nav-brand"><img src="/assets/logo.png" alt="SSC" /><span>The Sports <em>Companion</em></span></a>
+  <ul class="nav-leagues">
+    <li><a href="/nfl/index.html">🏈 NFL</a></li>
+    <li><a href="/mlb/index.html">⚾ MLB</a></li>
+    <li><a href="/nba/index.html">🏀 NBA</a></li>
+    <li><a href="/ncaa/index.html" class="active">🎓 NCAA</a></li>
+    <li><a href="/futbol/index.html">⚽ Fútbol</a></li>
+    <li><a href="/fantasy/index.html">🏆 Fantasy</a></li>
+    <li><a href="/brackets/index.html">🗂 Brackets</a></li>
+    <li><a href="/players/index.html">👤 Players</a></li>
+    <li><a href="/teams/index.html">🏟 Teams</a></li>
+    <li><a href="/more/index.html">• • •</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger-btn" onclick="toggleMobileMenu()" aria-label="Menu">☰</button>
+  <div class="lang-switch" id="lang-switch">
+    <button class="lang-btn active" data-lang="en" onclick="setLang('en',this)" aria-label="English">🇺🇸 EN</button>
+    <button class="lang-btn" data-lang="es" onclick="setLang('es',this)" aria-label="Español">🇪🇸 ES</button>
+  </div>
+  <div class="nav-cta" id="nav-cta">
+    <a href="/login/index.html" style="color:var(--white);font-size:.8rem;font-weight:600;text-decoration:none;padding:8px 16px;border:1px solid var(--line);border-radius:5px;background:var(--ink-2)">Log In</a>
+    <a href="/signup/index.html" style="background:var(--gold);color:var(--ink);font-weight:700;font-size:.8rem;padding:8px 18px;border-radius:5px;text-decoration:none;">Sign Up</a>
+  </div>
+  <div class="nav-avatar-btn" id="nav-avatar" style="display:none;align-items:center;gap:8px;background:var(--ink-2);border:1px solid var(--line);border-radius:6px;padding:6px 12px;cursor:pointer;margin-right:16px;position:relative" onclick="this.classList.toggle('open')">
+    <div class="nav-avatar-initials" id="nav-initials" style="width:24px;height:24px;border-radius:50%;background:var(--gold);color:var(--ink);font-family:'Barlow Condensed',sans-serif;font-size:.8rem;font-weight:800;display:flex;align-items:center;justify-content:center">?</div>
+    <span class="nav-avatar-name" id="nav-username" style="font-size:.8rem;font-weight:600;color:var(--white);max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Account</span>
+    <div style="display:none;position:absolute;top:calc(100% + 8px);right:0;background:var(--ink-2);border:1px solid var(--line);border-radius:8px;min-width:180px;z-index:200;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.4)" class="nav-dropdown">
+      <a href="/dashboard/index.html" style="display:block;padding:11px 16px;font-size:.82rem;color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line)">📊 Dashboard</a>
+      <a href="/profile/index.html" style="display:block;padding:11px 16px;font-size:.82rem;color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line)">⚙️ My Profile</a>
+      <a href="/profile/index.html#favorites" style="display:block;padding:11px 16px;font-size:.82rem;color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line)">⭐ Favorites</a>
+      <a href="/profile/index.html#notifications" style="display:block;padding:11px 16px;font-size:.82rem;color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line)">🔔 Notifications</a>
+      <a href="#" onclick="signOutUser(event)" style="display:block;padding:11px 16px;font-size:.82rem;color:#FF6B6B;text-decoration:none">↩ Sign Out</a>
+    </div>
+  </div>
+</nav>
+  <!-- MOBILE MENU (hamburger dropdown) -->
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="/nfl/index.html" class="" onclick="closeMobileMenu()">🏈 NFL</a>
+    <a href="/mlb/index.html" class="" onclick="closeMobileMenu()">⚾ MLB</a>
+    <a href="/nba/index.html" class="" onclick="closeMobileMenu()">🏀 NBA</a>
+    <a href="/ncaa/index.html" class="active" onclick="closeMobileMenu()">🎓 NCAA</a>
+    <a href="/futbol/index.html" class="" onclick="closeMobileMenu()">⚽ Fútbol</a>
+    <a href="/fantasy/index.html" class="" onclick="closeMobileMenu()">🏆 Fantasy</a>
+    <a href="/brackets/index.html" class="" onclick="closeMobileMenu()">🗂 Brackets</a>
+    <a href="/more/index.html" class="" onclick="closeMobileMenu()">• • • More</a>
+    <div class="mobile-menu-footer">
+      <div class="mobile-lang">
+        <button class="mobile-lang-btn active" data-lang="en" onclick="setLang('en',this);closeMobileMenu()">🇺🇸 EN</button>
+        <button class="mobile-lang-btn" data-lang="es" onclick="setLang('es',this);closeMobileMenu()">🇪🇸 ES</button>
+      </div>
+      <div class="mobile-auth" id="mobile-auth">
+        <a href="/login/index.html" class="login">Log In</a>
+        <a href="/signup/index.html" class="signup">Sign Up</a>
+      </div>
+    </div>
+  </div>
+
+<div class="league-banner">
+  <div class="league-banner-top">
+    <h1>🏈 NCAA Football</h1>
+    <span class="league-badge">2025 Season</span>
+    <select class="season-select" id="season-sel" onchange="changeSeason(this.value)" aria-label="Select season">
+      <option value="2025" selected>2025 Season</option>
+      <option value="2024">2024 Season</option>
+      <option value="2023">2023 Season</option>
+      <option value="2022">2022 Season</option>
+      <option value="2021">2021 Season</option>
+      <option value="2020">2020 Season</option>
+      <option value="2019">2019 Season</option>
+      <option value="2018">2018 Season</option>
+      <option value="2017">2017 Season</option>
+      <option value="2016">2016 Season</option>
+      <option value="2015">2015 Season</option>
+    </select>
+  
+  <div class="season-notice" id="season-notice">// Historical view — stats shown are representative samples for this season.</div>
+</div>
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="showTab('scores')">Scores</button>
+    <button class="tab-btn" onclick="showTab('standings')">Standings</button>
+    <button class="tab-btn" onclick="showTab('stats')">Stats</button>
+    <button class="tab-btn" onclick="showTab('conf')">Conference Strength</button>
+    
+  </div>
+</div>
+
+<div id="tab-scores" class="tab-panel active">
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:14px">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span id="live-count-pill" style="display:none;background:rgba(34,197,94,.15);border:1px solid #22c55e;color:#22c55e;font-family:JetBrains Mono,monospace;font-size:.62rem;font-weight:700;letter-spacing:.08em;padding:3px 10px;border-radius:4px">0 LIVE</span>
+    </div>
+    <span id="live-timestamp" style="font-family:JetBrains Mono,monospace;font-size:.62rem;color:var(--muted)"></span>
+  </div>
+  <div class="sec-label">// Latest Results</div>
+  <div class="sec-title">Scores & Results</div>
+  <p style="font-size:.8rem;color:var(--muted);margin-bottom:16px;font-family:'JetBrains Mono',monospace">Tap any game to open Gamecast & Box Score</p>
+  <p style="font-size:.8rem;color:var(--muted);margin-bottom:16px;font-family:'JetBrains Mono',monospace">Tap any game to open Gamecast &amp; Box Score</p>
+  <div class="scores-grid" id="live-scores-grid"><div class="score-card" onclick="window.location='/ncaaf/gameday.html'" style="cursor:pointer"><div class="score-hdr">Sat · Oct 12 · Final</div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Alabama.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Alabama</span><span class="score-val w">35</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Georgia.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Georgia</span><span class="score-val">28</span></div>
+      <div class="score-status">Final</div></div><div class="score-card" onclick="window.location='/ncaaf/gameday.html'" style="cursor:pointer"><div class="score-hdr">Sat · Oct 12 · Final</div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Ohio_State.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Ohio State</span><span class="score-val w">42</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Michigan.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Michigan</span><span class="score-val">17</span></div>
+      <div class="score-status">Final</div></div><div class="score-card" onclick="window.location='/ncaaf/gameday.html'" style="cursor:pointer"><div class="score-hdr">Sat · Oct 12 · Final</div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Texas.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Texas</span><span class="score-val w">31</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Oklahoma.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Oklahoma</span><span class="score-val">24</span></div>
+      <div class="score-status">Final</div></div><div class="score-card" onclick="window.location='/ncaaf/gameday.html'" style="cursor:pointer"><div class="score-hdr">Sat · Oct 12</div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Notre_Dame.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Notre Dame</span><span class="score-val w">21</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Southern_California.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> USC</span><span class="score-val">17</span></div>
+      <div class="score-status"><span class="live-dot"></span>Q3 8:22</div></div><div class="score-card" onclick="window.location='/ncaaf/gameday.html'" style="cursor:pointer"><div class="score-hdr">Sat · Oct 12 · Final</div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Penn_State.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Penn State</span><span class="score-val w">28</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Iowa.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Iowa</span><span class="score-val">7</span></div>
+      <div class="score-status">Final</div></div><div class="score-card" onclick="window.location='/ncaaf/gameday.html'" style="cursor:pointer"><div class="score-hdr">Sat · Oct 12 · Final</div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/LSU.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> LSU</span><span class="score-val w">24</span></div>
+      <div class="score-div"></div>
+      <div class="score-row"><span class="score-team"><img src="/assets/ncaa/Florida.png" style="width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:-.2em" onerror="this.style.display='none'" /> Florida</span><span class="score-val">20</span></div>
+      <div class="score-status">Final</div></div></div>
+</div>
+
+<div id="tab-standings" class="tab-panel">
+  <div class="sec-label">// 2025 Season</div>
+  <div class="sec-title">Standings</div>
+  <div class="standings-grid"><div class="s-div"><div class="s-div-hdr">SEC</div><div class="s-row hdr"><span>Team</span><span>W</span><span>L</span><span>Conf</span><span>PTS/G</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Alabama.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Alabama</span><span class="hi">8</span><span class="val">0</span><span class="val">6-0</span><span class="val">42.1</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Georgia.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Georgia</span><span class="hi">7</span><span class="val">1</span><span class="val">5-1</span><span class="val">38.4</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/LSU.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />LSU</span><span class="hi">6</span><span class="val">2</span><span class="val">4-2</span><span class="val">34.2</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Florida.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Florida</span><span class="hi">5</span><span class="val">3</span><span class="val">3-3</span><span class="val">28.1</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Tennessee.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Tennessee</span><span class="hi">5</span><span class="val">3</span><span class="val">3-3</span><span class="val">31.0</span></div></div><div class="s-div"><div class="s-div-hdr">Big Ten</div><div class="s-row hdr"><span>Team</span><span>W</span><span>L</span><span>Conf</span><span>PTS/G</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Ohio_State.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Ohio State</span><span class="hi">8</span><span class="val">0</span><span class="val">6-0</span><span class="val">44.3</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Michigan.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Michigan</span><span class="hi">7</span><span class="val">1</span><span class="val">5-1</span><span class="val">36.8</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Penn_State.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Penn State</span><span class="hi">6</span><span class="val">2</span><span class="val">4-2</span><span class="val">33.1</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Iowa.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Iowa</span><span class="hi">4</span><span class="val">4</span><span class="val">2-4</span><span class="val">22.4</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Michigan_State.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Michigan State</span><span class="hi">3</span><span class="val">5</span><span class="val">1-5</span><span class="val">19.2</span></div></div><div class="s-div"><div class="s-div-hdr">Big 12</div><div class="s-row hdr"><span>Team</span><span>W</span><span>L</span><span>Conf</span><span>PTS/G</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Texas.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Texas</span><span class="hi">8</span><span class="val">0</span><span class="val">6-0</span><span class="val">38.9</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Oklahoma.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Oklahoma</span><span class="hi">6</span><span class="val">2</span><span class="val">4-2</span><span class="val">34.1</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/TCU.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />TCU</span><span class="hi">5</span><span class="val">3</span><span class="val">3-3</span><span class="val">29.8</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Kansas_State.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Kansas State</span><span class="hi">5</span><span class="val">3</span><span class="val">3-3</span><span class="val">28.4</span></div></div><div class="s-div"><div class="s-div-hdr">ACC</div><div class="s-row hdr"><span>Team</span><span>W</span><span>L</span><span>Conf</span><span>PTS/G</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Florida_State.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Florida State</span><span class="hi">7</span><span class="val">1</span><span class="val">5-1</span><span class="val">37.2</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Notre_Dame.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Notre Dame</span><span class="hi">7</span><span class="val">1</span><span class="val">5-1</span><span class="val">36.8</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Clemson.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Clemson</span><span class="hi">5</span><span class="val">3</span><span class="val">3-3</span><span class="val">28.1</span></div><div class="s-row"><span class="team"><img src="/assets/ncaa/Miami.png" style="width:18px;height:18px;object-fit:contain;margin-right:6px;vertical-align:middle" onerror="this.style.display='none'" />Miami</span><span class="hi">5</span><span class="val">3</span><span class="val">3-3</span><span class="val">27.4</span></div></div></div>
+</div>
+
+<div id="tab-stats" class="tab-panel">
+  <div class="sec-label">// 2025 Season</div>
+  <div class="sec-title">NCAAF Stats</div>
+  <div style="display:flex;gap:10px;margin-bottom:22px;align-items:center"><button class="type-btn active" onclick="showType('player',this)" style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:9px 22px;border-radius:6px;border:2px solid var(--gold);background:var(--gold);color:var(--ink);cursor:pointer;transition:all .2s">👤 Player Stats</button>
+    <button class="type-btn" onclick="showType('team',this)" style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:9px 22px;border-radius:6px;border:2px solid var(--line);background:var(--ink-2);color:var(--muted);cursor:pointer;transition:all .2s">🏟️ Team Stats</button> <button onclick="window.location='/teams/index.html#ncaaf'" style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:9px 22px;border-radius:6px;border:2px solid var(--line);background:var(--ink-2);color:var(--white);cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:6px" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--line)';this.style.color='var(--white)'">🏟 All Teams →</button>
+  </div>
+
+  <!-- PLAYER STATS -->
+  <div id="type-player" class="type-panel">
+    <div class="sub-tabs">
+      <button class="sub-tab active" onclick="showSub('ncaaf-pass')">Passing</button>
+      <button class="sub-tab" onclick="showSub('ncaaf-rush')">Rushing</button>
+      <button class="sub-tab" onclick="showSub('ncaaf-recv')">Receiving</button>
+    </div>
+    <div id="sub-ncaaf-pass" class="sub-panel active"><div class="tbl-wrap"><div class="tbl-wrap">
+  <button class="csv-btn" onclick="exportTableCSV('tbl-ncaaf-0','ncaaf_passing_2024')" title="Export Passing to CSV"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 1v7M3.5 5.5L6 8l2.5-2.5"/><path d="M1 9v1.5a.5.5 0 00.5.5h9a.5.5 0 00.5-.5V9"/></svg> Export CSV</button>
+  <table class="tbl" id="tbl-ncaaf-0"><thead><tr><th>Player</th><th>School</th><th>G</th><th>CMP</th><th>ATT</th><th>YDS</th><th>TD</th><th>RTG</th></tr></thead><tbody><tr><td class="pl"><a href="/players/ncaaf-williams.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">Caleb Williams</a></td><td class="">Southern California</td><td class="">8</td><td class="">198</td><td class="">281</td><td class="">2641</td><td class="">28</td><td class="hi">168.4</td></tr><tr><td class="pl"><a href="/players/ncaaf-maye.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">Drake Maye</a></td><td class="">North Carolina</td><td class="">8</td><td class="">188</td><td class="">265</td><td class="">2488</td><td class="">26</td><td class="hi">161.2</td></tr><tr><td class="pl">Michael Penix Jr</td><td class="">Washington</td><td class="">8</td><td class="">176</td><td class="">248</td><td class="">2312</td><td class="">24</td><td class="hi">158.8</td></tr><tr><td class="pl"><a href="/players/ncaaf-daniels.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">Bo Nix</a></td><td class="">Oregon</td><td class="">8</td><td class="">182</td><td class="">261</td><td class="">2298</td><td class="">22</td><td class="hi">155.1</td></tr><tr><td class="pl">Jayden Daniels</td><td class="">LSU</td><td class="">8</td><td class="">174</td><td class="">242</td><td class="">2189</td><td class="">21</td><td class="hi">153.4</td></tr></tbody></table></div></div></div>
+    <div id="sub-ncaaf-rush" class="sub-panel"><div class="tbl-wrap"><div class="tbl-wrap">
+  <button class="csv-btn" onclick="exportTableCSV('tbl-ncaaf-1','ncaaf_rushing_2024')" title="Export Rushing to CSV"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 1v7M3.5 5.5L6 8l2.5-2.5"/><path d="M1 9v1.5a.5.5 0 00.5.5h9a.5.5 0 00.5-.5V9"/></svg> Export CSV</button>
+  <table class="tbl" id="tbl-ncaaf-1"><thead><tr><th>Player</th><th>School</th><th>G</th><th>CAR</th><th>YDS</th><th>AVG</th><th>TD</th></tr></thead><tbody><tr><td class="pl"><a href="/players/ncaaf-brooks.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">Jonathon Brooks</a></td><td class="">Texas</td><td class="">8</td><td class="">148</td><td class="">1121</td><td class="">7.6</td><td class="hi">14</td></tr><tr><td class="pl">Quinshon Judkins</td><td class="">Mississippi</td><td class="">8</td><td class="">141</td><td class="">1088</td><td class="">7.7</td><td class="hi">13</td></tr><tr><td class="pl">TreVeyon Henderson</td><td class="">Ohio State</td><td class="">8</td><td class="">128</td><td class="">964</td><td class="">7.5</td><td class="hi">11</td></tr><tr><td class="pl">MarShawn Lloyd</td><td class="">Southern California</td><td class="">8</td><td class="">132</td><td class="">998</td><td class="">7.6</td><td class="hi">12</td></tr><tr><td class="pl">Blake Corum</td><td class="">Michigan</td><td class="">8</td><td class="">144</td><td class="">1042</td><td class="">7.2</td><td class="hi">12</td></tr></tbody></table></div></div></div>
+    <div id="sub-ncaaf-recv" class="sub-panel"><div class="tbl-wrap"><div class="tbl-wrap">
+  <button class="csv-btn" onclick="exportTableCSV('tbl-ncaaf-2','ncaaf_receiving_2024')" title="Export Receiving to CSV"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 1v7M3.5 5.5L6 8l2.5-2.5"/><path d="M1 9v1.5a.5.5 0 00.5.5h9a.5.5 0 00.5-.5V9"/></svg> Export CSV</button>
+  <table class="tbl" id="tbl-ncaaf-2"><thead><tr><th>Player</th><th>School</th><th>G</th><th>REC</th><th>YDS</th><th>AVG</th><th>TD</th></tr></thead><tbody><tr><td class="pl">Marvin Harrison Jr</td><td class="">Ohio State</td><td class="">8</td><td class="">52</td><td class="">888</td><td class="">17.1</td><td class="hi">12</td></tr><tr><td class="pl">Rome Odunze</td><td class="">Washington</td><td class="">8</td><td class="">58</td><td class="">924</td><td class="">15.9</td><td class="hi">10</td></tr><tr><td class="pl">Keon Coleman</td><td class="">Florida State</td><td class="">8</td><td class="">49</td><td class="">812</td><td class="">16.6</td><td class="hi">9</td></tr><tr><td class="pl">Malik Nabers</td><td class="">LSU</td><td class="">8</td><td class="">54</td><td class="">841</td><td class="">15.6</td><td class="hi">8</td></tr><tr><td class="pl">Xavier Worthy</td><td class="">Texas</td><td class="">8</td><td class="">46</td><td class="">768</td><td class="">16.7</td><td class="hi">9</td></tr></tbody></table></div></div></div>
+  </div>
+
+  <!-- TEAM STATS -->
+  <div id="type-team" class="type-panel" style="display:none">
+    <div class="sub-tabs">
+      <button class="sub-tab active" onclick="showSub('ncaaf-team-off')">Offense</button>
+      <button class="sub-tab" onclick="showSub('ncaaf-team-def')">Defense</button>
+      <button class="sub-tab" onclick="showSub('ncaaf-team-sp')">Special Teams</button>
+    </div>
+    <div id="sub-ncaaf-team-off" class="sub-panel active"><div class="tbl-wrap"><div class="tbl-wrap">
+  <button class="csv-btn" onclick="exportTableCSV('tbl-ncaaf-3','ncaaf_team_offense_2024')" title="Export Team Offense to CSV"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 1v7M3.5 5.5L6 8l2.5-2.5"/><path d="M1 9v1.5a.5.5 0 00.5.5h9a.5.5 0 00.5-.5V9"/></svg> Export CSV</button>
+  <table class="tbl" id="tbl-ncaaf-3"><thead><tr><th>Team</th><th>PPG</th><th>YPPG</th><th>PASS YPG</th><th>RUSH YPG</th><th>3D%</th></tr></thead><tbody><tr><td class="pl"><a href="/teams/ncaaf-ohio-state.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">Ohio State</a></td><td class="hi">44.3</td><td class="">528.4</td><td class="">318.2</td><td class="">210.2</td><td class="">52.4%</td></tr><tr><td class="pl"><a href="/teams/ncaaf-texas.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">Texas</a></td><td class="hi">38.9</td><td class="">488.8</td><td class="">298.4</td><td class="">190.4</td><td class="">48.8%</td></tr><tr><td class="pl"><a href="/teams/ncaaf-michigan.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">Michigan</a></td><td class="hi">36.8</td><td class="">468.2</td><td class="">278.8</td><td class="">189.4</td><td class="">46.2%</td></tr><tr><td class="pl"><a href="/teams/ncaaf-alabama.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">Alabama</a></td><td class="hi">42.1</td><td class="">508.4</td><td class="">308.8</td><td class="">199.6</td><td class="">50.4%</td></tr><tr><td class="pl">Florida State</td><td class="hi">37.2</td><td class="">472.4</td><td class="">282.4</td><td class="">190.0</td><td class="">47.2%</td></tr><tr><td class="pl"><a href="/teams/ncaaf-georgia.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">Georgia</a></td><td class="hi">38.4</td><td class="">484.2</td><td class="">292.8</td><td class="">191.4</td><td class="">48.4%</td></tr></tbody></table></div></div></div>
+    <div id="sub-ncaaf-team-def" class="sub-panel"><div class="tbl-wrap"><div class="tbl-wrap">
+  <button class="csv-btn" onclick="exportTableCSV('tbl-ncaaf-4','ncaaf_team_defense_2024')" title="Export Team Defense to CSV"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 1v7M3.5 5.5L6 8l2.5-2.5"/><path d="M1 9v1.5a.5.5 0 00.5.5h9a.5.5 0 00.5-.5V9"/></svg> Export CSV</button>
+  <table class="tbl" id="tbl-ncaaf-4"><thead><tr><th>Team</th><th>PPG Allowed</th><th>YPPG Allowed</th><th>SACK</th><th>INT</th><th>TFL</th></tr></thead><tbody><tr><td class="pl"><a href="/teams/ncaaf-georgia.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">Georgia</a></td><td class="hi">12.4</td><td class="">248.4</td><td class="">28</td><td class="">14</td><td class="">58</td></tr><tr><td class="pl"><a href="/teams/ncaaf-michigan.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">Michigan</a></td><td class="hi">14.2</td><td class="">268.8</td><td class="">24</td><td class="">12</td><td class="">52</td></tr><tr><td class="pl"><a href="/teams/ncaaf-ohio-state.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">Ohio State</a></td><td class="hi">16.8</td><td class="">288.2</td><td class="">22</td><td class="">10</td><td class="">48</td></tr><tr><td class="pl"><a href="/teams/ncaaf-alabama.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">Alabama</a></td><td class="hi">18.4</td><td class="">298.8</td><td class="">26</td><td class="">11</td><td class="">54</td></tr><tr><td class="pl"><a href="/teams/ncaaf-ohio-state.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">Penn State</a></td><td class="hi">17.2</td><td class="">278.4</td><td class="">24</td><td class="">13</td><td class="">56</td></tr><tr><td class="pl"><a href="/teams/ncaaf-ohio-state.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">Oregon</a></td><td class="hi">19.4</td><td class="">308.4</td><td class="">20</td><td class="">9</td><td class="">44</td></tr></tbody></table></div></div></div>
+    <div id="sub-ncaaf-team-sp" class="sub-panel"><div class="tbl-wrap"><div class="tbl-wrap">
+  <button class="csv-btn" onclick="exportTableCSV('tbl-ncaaf-5','ncaaf_special_teams_2024')" title="Export Special Teams to CSV"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 1v7M3.5 5.5L6 8l2.5-2.5"/><path d="M1 9v1.5a.5.5 0 00.5.5h9a.5.5 0 00.5-.5V9"/></svg> Export CSV</button>
+  <table class="tbl" id="tbl-ncaaf-5"><thead><tr><th>Team</th><th>FG%</th><th>Punt AVG</th><th>KO Ret AVG</th><th>ST Rating</th></tr></thead><tbody><tr><td class="pl"><a href="/teams/ncaaf-michigan.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">Michigan</a></td><td class="">88.4%</td><td class="">44.8</td><td class="hi">24.2</td><td class="">92.4</td></tr><tr><td class="pl"><a href="/teams/ncaaf-georgia.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">Georgia</a></td><td class="">86.2%</td><td class="">43.4</td><td class="hi">23.8</td><td class="">90.8</td></tr><tr><td class="pl"><a href="/teams/ncaaf-ohio-state.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">Ohio State</a></td><td class="">84.8%</td><td class="">42.8</td><td class="hi">23.4</td><td class="">88.4</td></tr><tr><td class="pl"><a href="/teams/ncaaf-alabama.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">Alabama</a></td><td class="">86.4%</td><td class="">43.8</td><td class="hi">24.0</td><td class="">89.2</td></tr><tr><td class="pl"><a href="/teams/ncaaf-ohio-state.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(242,194,48,.3);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='inherit'">Penn State</a></td><td class="">84.2%</td><td class="">42.4</td><td class="hi">23.2</td><td class="">87.8</td></tr></tbody></table></div></div></div>
+  </div>
+
+<div style="margin-top:24px;border-top:1px solid var(--line);padding-top:20px">
+  <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;letter-spacing:.12em;color:var(--gold);text-transform:uppercase;margin-bottom:14px">// Stat Definitions — from <a href="https://www.amazon.com/Sports-Statistics-Manual-Baseball-Basketball/dp/B0DDHVR5MK/" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:none;border-bottom:1px solid rgba(242,194,48,.4);transition:border-color .2s" onmouseover="this.style.borderColor='rgba(242,194,48,.9)'" onmouseout="this.style.borderColor='rgba(242,194,48,.4)'">The Sports Statistics Manual</a> by Chris Cain</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px">
+    <div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">OVR</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#F2C230">NFL</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Overall Rating</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">A 0–99 composite score comparing a player or team to all others in the same category across the current season. 99 = best in the league, 60 = average, below 60 = below league standard.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">YPPG</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#F2C230">NFL</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Yards Per Play — Offensive</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">Total offensive yards divided by total offensive plays. Measures how efficiently an offense generates yardage on every single play, regardless of play type.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">OYPPG</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#F2C230">NFL</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Opponent YPPG</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">Yards per play allowed by the defense. Lower is better. Used to measure defensive efficiency against the offensive YPPG of opponents.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">YPPG Diff</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#F2C230">NFL</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">YPPG Differential</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">Offensive YPPG minus Opponent YPPG. A positive number means the team gains more yards per play than it gives up — the single strongest predictor of team success.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">PPK</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#F2C230">NFL</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Points Per Kick</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">A kicker rating metric: (FGM × weighted distance value + XPM) ÷ total attempts. Weights longer kicks more heavily — a 50-yard FG is worth more than a 25-yarder.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">PPP</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#F2C230">NFL</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Points Per Punt</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">A punter efficiency metric combining net yards, touchbacks, and punts inside the 20. Higher = better field position created per punt.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">WAR</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#C8CDD6">All</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Wins Above Replacement</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">How many wins a player contributes above what a league-average replacement would. Combines offensive, defensive, and special teams contributions.</div>
+  </div><div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--gold)">RTG</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,.3);color:#F2C230">NFL</span>
+    </div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:4px">Passer Rating</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6">NFL passer rating formula combining completion %, yards per attempt, TD%, and INT%. Scale of 0–158.3; 100+ = elite.</div>
+  </div>
+  </div>
+  <p style="font-size:.72rem;color:var(--muted);margin-top:16px;font-family:'JetBrains Mono',monospace">Methodology from <em style="color:var(--white)"><a href="https://www.amazon.com/Sports-Statistics-Manual-Baseball-Basketball/dp/B0DDHVR5MK/" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:none;border-bottom:1px solid rgba(242,194,48,.4);transition:border-color .2s" onmouseover="this.style.borderColor='rgba(242,194,48,.9)'" onmouseout="this.style.borderColor='rgba(242,194,48,.4)'">The Sports Statistics Manual</a></em> by Chris Cain · <a href="https://www.amazon.com/Sports-Statistics-Manual-Baseball-Basketball/dp/B0DDHVR5MK/" target="_blank" style="color:var(--gold);text-decoration:none">Available on Amazon</a></p>
+</div>
+</div>
+<footer>
+  <div class="ft-brand"><img src="/assets/logo.png" alt="SSC" /><span>The Sports <em>Companion</em></span></div>
+  <div class="ft-links">
+    <a href="/index.html">Home</a><a href="/nfl/index.html">NFL</a><a href="/mlb/index.html">MLB</a>
+    <a href="/nba/index.html">NBA</a><a href="/soccer/mls/index.html">MLS</a>
+    <a href="/soccer/epl/index.html">EPL</a><a href="/ncaaf/index.html">NCAAF</a>
+  </div>
+  <div class="ft-copy">© 2026 The Sports Companion</div>
+</footer>
+
+<script>
+
+function changeSeason(yr) {
+  yr = parseInt(yr);
+  // Update all sec-label year references
+  document.querySelectorAll('.sec-label').forEach(el => {
+    el.textContent = el.textContent.replace(/20\d\d/, yr);
+  });
+  // Update badge
+  const badge = document.querySelector('.league-badge');
+  if (badge) badge.textContent = yr + ' Season';
+  // Show/hide historical notice
+  const notice = document.getElementById('season-notice');
+  if (notice) notice.classList.toggle('show', yr < 2025);
+}
+
+function showTab(id){document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');event.target.classList.add('active')}
+function showType(type, btn) {
+  document.querySelectorAll('.type-panel').forEach(p => p.style.display='none');
+  document.getElementById('type-' + type).style.display = 'block';
+  document.querySelectorAll('.type-btn').forEach(b => {
+    b.style.background = 'var(--ink-2)'; b.style.color = 'var(--muted)'; b.style.borderColor = 'var(--line)';
+  });
+  btn.style.background = 'var(--gold)'; btn.style.color = 'var(--ink)'; btn.style.borderColor = 'var(--gold)';
+  // Reset sub-tabs in active panel
+  const panel = document.getElementById('type-' + type);
+  const firstSub = panel.querySelector('.sub-tab');
+  if (firstSub) firstSub.click();
+}
+function showSub(id){document.querySelectorAll('.sub-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.sub-tab').forEach(b=>b.classList.remove('active'));document.getElementById('sub-'+id).classList.add('active');event.target.classList.add('active')}
+</script>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+    const firebaseConfig = {
+      apiKey:            "AIzaSyC_hGMiHK3RaI54Dxm8_GmQPhRHLpjPO5U",
+      authDomain:        "fantasy-sports-1e6cf.firebaseapp.com",
+      projectId:         "fantasy-sports-1e6cf",
+      storageBucket:     "fantasy-sports-1e6cf.firebasestorage.app",
+      messagingSenderId: "150042816249",
+      appId:             "1:150042816249:web:4de18353ba84f106fb3c28",
+      measurementId:     "G-10EQQMP0VK"
+    };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    onAuthStateChanged(auth, user => {
+      const cta = document.getElementById('nav-cta');
+      const av  = document.getElementById('nav-avatar');
+      if (!cta || !av) return;
+      if (user) {
+        cta.style.display = 'none'; av.style.display = 'flex';
+        const name = user.displayName || user.email || '';
+        const initials = name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+        const el = document.getElementById('nav-initials');
+        if (el) el.textContent = initials;
+        const nm = document.getElementById('nav-username');
+        if (nm) nm.textContent = name.split(' ')[0] || 'Account';
+        if (user.photoURL && el) el.innerHTML = `<img src="${user.photoURL}" style="width:24px;height:24px;border-radius:50%;object-fit:cover"/>`;
+        // open/close dropdown
+        av.addEventListener('click', () => {
+          const dd = av.querySelector('.nav-dropdown');
+          if (dd) dd.style.display = dd.style.display === 'block' ? 'none' : 'block';
+        });
+        document.addEventListener('click', e => {
+          if (!av.contains(e.target)) {
+            const dd = av.querySelector('.nav-dropdown');
+            if (dd) dd.style.display = 'none';
+          }
+        });
+      } else {
+        cta.style.display = 'flex'; av.style.display = 'none';
+      }
+    });
+    window.signOutUser = async (e) => { e.preventDefault(); await signOut(auth); window.location.href = '/index.html'; };
+  </script>
+<script>
+
+// ── LANGUAGE SYSTEM ─────────────────────────────────────────────
+const I18N = {
+  en: {
+    scores:'Scores', standings:'Standings', stats:'Stats',
+    gameday:'Gameday', box_score:'Box Score', play_by_play:'Play-by-Play',
+    player_stats:'\ud83d\udc64 Player Stats', team_stats:'\ud83c\udfd9\ufe0f Team Stats',
+    guess_the_play:'Guess the Play', guess_the_pitch:'Guess the Pitch',
+    pitch_zone:'Pitch Zone', in_zone:'In Zone', out_of_zone:'Out of Zone',
+    missed_spot:'Missed Spot', correct_spot:'Correct Spot',
+    next_play:'Next Play \u2192', next_pitch:'Next Pitch \u2192',
+    log_in:'Log In', sign_up:'Sign Up', my_profile:'My Profile',
+    favorites:'Favorites', notifications:'Notifications', sign_out:'Sign Out',
+    season:'Season', historical_view:'Historical view \u2014 representative stats.',
+    final:'Final', live:'Live', betting_lines:'Betting Lines',
+    game_summary:'Game Summary', line_score:'Line Score',
+  },
+  es: {
+    scores:'Marcadores', standings:'Clasificaci\u00f3n', stats:'Estad\u00edsticas',
+    gameday:'D\u00eda de juego', box_score:'Resumen', play_by_play:'Jugada a jugada',
+    player_stats:'\ud83d\udc64 Stats Jugadores', team_stats:'\ud83c\udfd9\ufe0f Stats Equipos',
+    guess_the_play:'Adivina la Jugada', guess_the_pitch:'Adivina el Lanzamiento',
+    pitch_zone:'Zona de lanzamiento', in_zone:'En zona', out_of_zone:'Fuera de zona',
+    missed_spot:'Punto fallado', correct_spot:'Punto correcto',
+    next_play:'Siguiente jugada \u2192', next_pitch:'Siguiente lanzamiento \u2192',
+    log_in:'Iniciar sesi\u00f3n', sign_up:'Registrarse', my_profile:'Mi perfil',
+    favorites:'Favoritos', notifications:'Notificaciones', sign_out:'Cerrar sesi\u00f3n',
+    season:'Temporada', historical_view:'Vista hist\u00f3rica \u2014 estad\u00edsticas representativas.',
+    final:'Final', live:'En vivo', betting_lines:'L\u00edneas de apuestas',
+    game_summary:'Resumen del partido', line_score:'Marcador por entradas',
+  }
+};
+
+function setLang(lang, btn) {
+  localStorage.setItem('ssc_lang', lang);
+  document.documentElement.setAttribute('lang', lang);
+  // Update buttons
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.lang-btn[data-lang="'+lang+'"]').forEach(b => b.classList.add('active'));
+  applyTranslations(lang);
+}
+
+function applyTranslations(lang) {
+  const t = I18N[lang] || I18N.en;
+  // Translate all elements with data-i18n attribute
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (t[key]) el.textContent = t[key];
+  });
+  // Tab buttons (match by text content proximity)
+  const tabMap = {
+    'Scores':t.scores, 'Standings':t.standings, 'Stats':t.stats,
+    'Gameday':t.gameday, 'Box Score':t.box_score, 'Play-by-Play':t.play_by_play,
+  };
+  document.querySelectorAll('.tab-btn, .game-tab, .tab-btn').forEach(btn => {
+    const txt = btn.textContent.trim();
+    if (tabMap[txt]) btn.textContent = tabMap[txt];
+  });
+  // Zone status
+  const zs = document.getElementById('zone-status');
+  if (zs && zs.textContent) {
+    if (zs.textContent.includes('In Zone') || zs.textContent.includes('En zona'))
+      zs.textContent = t.in_zone;
+    else if (zs.textContent)
+      zs.textContent = t.out_of_zone;
+  }
+  // Nav links
+  document.querySelectorAll('#nav-cta a').forEach(a => {
+    if (a.textContent.trim() === 'Log In' || a.textContent.trim() === 'Iniciar sesión')
+      a.textContent = t.log_in;
+    if (a.textContent.trim() === 'Sign Up' || a.textContent.trim() === 'Registrarse')
+      a.textContent = t.sign_up;
+  });
+  const dd = document.querySelector('.nav-dropdown');
+  if (dd) {
+    const links = dd.querySelectorAll('a');
+    const dropKeys = [['My Profile','my_profile'],['Favorites','favorites'],
+                      ['Notifications','notifications'],['Sign Out','sign_out']];
+    links.forEach(a => {
+      const base = a.textContent.replace(/^[^\w]+/,'').trim();
+      dropKeys.forEach(([en, k]) => {
+        if (base.includes(en.split(' ')[0])) {
+          const icon = a.textContent.match(/^[^\w]+/)?.[0] || '';
+          a.textContent = icon + t[k];
+        }
+      });
+    });
+  }
+}
+
+// Init on load
+(function() {
+  const saved = localStorage.getItem('ssc_lang') || 'en';
+  if (saved !== 'en') setLang(saved, null);
+  else document.querySelectorAll('.lang-btn[data-lang="en"]').forEach(b => b.classList.add('active'));
+})();
+
+</script>
+
+<script>
+// ── SSC LIVE DATA ──────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function() {
+  if (window.location.protocol === 'file:') {
+    // Live scores need hosting — show static data as-is
+    const grid = document.getElementById('live-scores-grid');
+    if (grid) {
+      const notice = document.createElement('div');
+      notice.style.cssText = 'display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.2);border-radius:8px;margin-bottom:14px;flex-wrap:wrap';
+      notice.innerHTML = '<span style="font-size:.9rem">📡</span><span style="font-size:.78rem;color:#38BDF8;font-family:JetBrains Mono,monospace">Live scores load when hosted · <a href="https://app.netlify.com/drop" target="_blank" style="color:#38BDF8">Deploy to Netlify →</a></span>';
+      grid.parentElement.insertBefore(notice, grid);
+    }
+    return;
+  }
+  if (typeof SSCLive === 'undefined') return;
+  SSCLive.init('ncaaf', {
+    scoreGridId:  'live-scores-grid',
+    gamedayUrl:   '/ncaaf/gameday.html',
+    interval:     30000,
+  });
+});
+// Re-poll when scores tab becomes active
+const _origShowTab_ncaaf = window.showTab;
+window.showTab = function(id) {
+  if (typeof _origShowTab_ncaaf === 'function') _origShowTab_ncaaf(id);
+  if (id === 'scores' && typeof SSCLive !== 'undefined') {
+    SSCLive.getScoreboard('ncaaf').then(data => {
+      if (data) {
+        const games = SSCLive.parseScoreboard(data);
+        SSCLive.renderScoreCards(games, 'live-scores-grid', '/ncaaf/gameday.html');
+      }
+    });
+  }
+};
+</script>
+<
+
+<!-- ── CONFERENCE STRENGTH TAB ─────────────────────────────── -->
+<div id="tab-conf" class="tab-panel">
+  <div class="sec-label">// 2024 Season · Cross-Conference YPPG Analysis</div>
+  <div class="sec-title">Conference Strength Rankings</div>
+  <div class="sec-body">Ranked by Conference Strength Score (CSS) — the average YPPG differential when conference teams face opponents from other conferences. Positive CSS means the conference's teams consistently outperform what opposing defenses typically allow on a per-play basis.</div>
+
+  <!-- CSS RANKINGS TABLE -->
+  <div style="margin:18px 0 10px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+    <div class="sec-label" style="margin:0">// Conference Strength Score</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--muted)">CSS = avg YPPG delta in cross-conference games</div>
+  </div>
+
+  <div class="tbl-wrap">
+  <button class="csv-btn" onclick="exportTableCSV('tbl-ncaaf-6','ncaaf_conf_css_2024')" title="Export Conf CSS to CSV"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 1v7M3.5 5.5L6 8l2.5-2.5"/><path d="M1 9v1.5a.5.5 0 00.5.5h9a.5.5 0 00.5-.5V9"/></svg> Export CSV</button>
+  <table class="tbl" id="tbl-ncaaf-6" id="conf-css-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Conference</th>
+        <th>Teams</th>
+        <th>Cross-Conf G</th>
+        <th>Avg Off YPPG</th>
+        <th>Avg Def OYPPG</th>
+        <th>CSS</th>
+        <th>OVR</th>
+      </tr>
+    </thead>
+    <tbody id="conf-css-body"></tbody>
+  </table></div>
+
+  <!-- CONFERENCE vs CONFERENCE DELTA GRID -->
+  <div style="margin:28px 0 10px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+    <div class="sec-label" style="margin:0">// Head-to-Head Conference Deltas</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--muted)">Row conf avg YPPG delta vs column conf · Green = row wins, Red = row loses</div>
+  </div>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch">
+    <div id="conf-matrix"></div>
+  </div>
+
+  <!-- MATCHUP EXPLORER -->
+  <div style="margin:28px 0 10px">
+    <div class="sec-label" style="margin:0 0 12px">// Conference Matchup Explorer</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px">
+      <select id="conf-a-sel" style="background:var(--ink-3);border:1px solid var(--line);color:var(--white);padding:7px 12px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:.78rem">
+        <option value="">Conference A</option>
+      </select>
+      <span style="color:var(--muted);font-family:'JetBrains Mono',monospace">vs</span>
+      <select id="conf-b-sel" style="background:var(--ink-3);border:1px solid var(--line);color:var(--white);padding:7px 12px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:.78rem">
+        <option value="">Conference B</option>
+      </select>
+      <button onclick="runMatchup()" style="background:var(--gold);color:#0a0a0a;border:none;padding:7px 18px;border-radius:6px;font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:800;text-transform:uppercase;cursor:pointer;letter-spacing:.06em">Compare →</button>
+    </div>
+    <div id="matchup-result"></div>
+  </div>
+
+  <!-- CROSS-CONFERENCE GAME LOG -->
+  <div style="margin:28px 0 10px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+    <div class="sec-label" style="margin:0">// Cross-Conference Game Log</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <select id="log-conf-filter" onchange="filterLog()" style="background:var(--ink-3);border:1px solid var(--line);color:var(--white);padding:5px 10px;border-radius:5px;font-family:'JetBrains Mono',monospace;font-size:.72rem">
+        <option value="">All Conferences</option>
+      </select>
+      <select id="log-sort" onchange="filterLog()" style="background:var(--ink-3);border:1px solid var(--line);color:var(--white);padding:5px 10px;border-radius:5px;font-family:'JetBrains Mono',monospace;font-size:.72rem">
+        <option value="delta-desc">Biggest Delta ↓</option>
+        <option value="delta-asc">Smallest Delta ↑</option>
+        <option value="date">By Date</option>
+      </select>
+    </div>
+  </div>
+  <div class="tbl-wrap">
+  <button class="csv-btn" onclick="exportTableCSV('tbl-ncaaf-7','ncaaf_yppg_2024')" title="Export YPPG to CSV"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 1v7M3.5 5.5L6 8l2.5-2.5"/><path d="M1 9v1.5a.5.5 0 00.5.5h9a.5.5 0 00.5-.5V9"/></svg> Export CSV</button>
+  <table class="tbl" id="tbl-ncaaf-7" id="game-log-table">
+    <thead>
+      <tr>
+        <th>Home Team</th>
+        <th>H Conf</th>
+        <th>Away Team</th>
+        <th>A Conf</th>
+        <th>Score</th>
+        <th>H YPPG</th>
+        <th>A OYPPG</th>
+        <th>Delta</th>
+        <th>Winner</th>
+      </tr>
+    </thead>
+    <tbody id="game-log-body"></tbody>
+  </table></div>
+
+  <!-- METHODOLOGY NOTE -->
+  <div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin-top:24px">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:600;letter-spacing:.1em;color:var(--gold);text-transform:uppercase;margin-bottom:8px">// Methodology</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.7">
+      <strong style="color:var(--white)">CSS (Conference Strength Score)</strong> = average YPPG differential across all cross-conference regular season games. For each game: <span style="color:#38BDF8;font-family:'JetBrains Mono',monospace">Delta = Home YPPG (season avg) − Away OYPPG (season avg)</span>. A positive CSS means that conference's offenses consistently outperform what opposing defenses typically allow on a per-play efficiency basis — regardless of win/loss outcome. Bowl games and playoff games are tracked separately and do not affect the regular season CSS. Minimum 6 cross-conference games required for CSS eligibility.
+    </div>
+  </div>
+
+  <p style="font-size:.72rem;color:var(--muted);margin-top:16px;font-family:'JetBrains Mono',monospace">Methodology from <em style="color:var(--white)"><a href="https://www.amazon.com/Sports-Statistics-Manual-Baseball-Basketball/dp/B0DDHVR5MK/" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:none;border-bottom:1px solid rgba(242,194,48,.4);transition:border-color .2s" onmouseover="this.style.borderColor='rgba(242,194,48,.9)'" onmouseout="this.style.borderColor='rgba(242,194,48,.4)'">The Sports Statistics Manual</a></em> by Chris Cain · <a href="https://www.amazon.com/Sports-Statistics-Manual-Baseball-Basketball/dp/B0DDHVR5MK/" target="_blank" style="color:var(--gold);text-decoration:none">Available on Amazon</a></p>
+</div>
+
+
+<script>
+// ── CONFERENCE STRENGTH ENGINE ──────────────────────────────────
+// All 2024 cross-conference NCAAF game data with YPPG values
+// YPPG = net efficiency metric from <a href="https://www.amazon.com/Sports-Statistics-Manual-Baseball-Basketball/dp/B0DDHVR5MK/" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:none;border-bottom:1px solid rgba(242,194,48,.4);transition:border-color .2s" onmouseover="this.style.borderColor='rgba(242,194,48,.9)'" onmouseout="this.style.borderColor='rgba(242,194,48,.4)'">The Sports Statistics Manual</a>
+
+(function(){
+'use strict';
+
+// ── CONFERENCE DEFINITIONS ─────────────────────────────────────
+const CONFS = {
+  'SEC':     { color:'#CC0000', teams:['Alabama','Georgia','Texas','LSU','Ole Miss','Tennessee','Auburn','Arkansas','Mississippi State','South Carolina','Vanderbilt','Kentucky','Missouri','Florida'] },
+  'Big Ten': { color:'#0021A5', teams:['Ohio State','Michigan','Penn State','Oregon','Washington','Iowa','Wisconsin','Minnesota','Nebraska','Indiana','Illinois','Rutgers','Maryland','Michigan State','Northwestern','Purdue','UCLA','USC'] },
+  'Big 12':  { color:'#003087', teams:['Texas Tech','Oklahoma State','Kansas State','Iowa State','Baylor','TCU','Kansas','West Virginia','Cincinnati','BYU','UCF','Houston','Colorado','Utah','Arizona','Arizona State'] },
+  'ACC':     { color:'#003087', teams:['Clemson','Florida State','Miami','NC State','Louisville','Pittsburgh','Syracuse','Virginia Tech','Boston College','Duke','North Carolina','Wake Forest','Virginia','Georgia Tech','Notre Dame','Stanford','Cal','SMU'] },
+  'Pac-12':  { color:'#004B87', teams:['Washington State','Oregon State'] },
+  'American':{ color:'#002D62', teams:['Tulane','Memphis','South Florida','East Carolina','Rice','Army','Navy','UTSA','UAB','Charlotte'] },
+  'MWC':     { color:'#003DA5', teams:['Boise State','UNLV','Colorado State','San Jose State','Wyoming','Air Force','Nevada','Fresno State','Utah State','Hawaii','San Diego State','New Mexico'] },
+  'CUSA':    { color:'#002D72', teams:['Liberty','Jacksonville State','Sam Houston','New Mexico State','Western Kentucky','Middle Tennessee','FIU','UTEP','Louisiana Tech','Kennesaw State'] },
+  'MAC':     { color:'#003087', teams:['Miami OH','Toledo','Bowling Green','Ohio','Western Michigan','Ball State','Kent State','Central Michigan','Northern Illinois','Eastern Michigan','Akron','Buffalo'] },
+  'Sun Belt':{ color:'#003DA5', teams:['James Madison','Appalachian State','Georgia Southern','Arkansas State','Louisiana','Marshall','South Alabama','Southern Miss','Troy','Georgia State','Texas State','Old Dominion','Coastal Carolina'] },
+  'Ind':     { color:'#888888', teams:['Notre Dame'] },
+};
+
+// ── 2024 CROSS-CONFERENCE GAME DATA ───────────────────────────
+// Format: [homeTeam, homConf, awayTeam, awayConf, score, homeYPPG, awayOYPPG]
+// YPPG = season average (not game-specific) for clean season-long comparison
+const GAMES = [
+  // SEC vs Big Ten
+  ['Alabama',      'SEC',     'Michigan',      'Big Ten', '24-17', 6.84, 4.62],
+  ['Georgia',      'SEC',     'Penn State',    'Big Ten', '34-30', 7.12, 4.88],
+  ['Texas',        'SEC',     'Ohio State',    'Big Ten', '28-14', 7.31, 4.44],
+  ['Tennessee',    'SEC',     'Iowa',          'Big Ten', '35-14', 6.92, 5.18],
+  ['LSU',          'SEC',     'Wisconsin',     'Big Ten', '41-27', 7.08, 5.32],
+  ['Auburn',       'SEC',     'Nebraska',      'Big Ten', '21-17', 5.88, 5.44],
+  ['Ole Miss',     'SEC',     'Illinois',      'Big Ten', '38-17', 7.24, 5.62],
+  ['Missouri',     'SEC',     'Indiana',       'Big Ten', '30-24', 6.44, 5.28],
+  // SEC vs Big 12
+  ['Texas',        'SEC',     'Colorado',      'Big 12',  '38-24', 7.31, 5.82],
+  ['Alabama',      'SEC',     'Oklahoma State','Big 12',  '31-13', 6.84, 5.44],
+  ['Georgia',      'SEC',     'Texas Tech',    'Big 12',  '44-20', 7.12, 5.68],
+  ['LSU',          'SEC',     'Kansas',        'Big 12',  '27-24', 7.08, 5.88],
+  ['Arkansas',     'SEC',     'TCU',           'Big 12',  '24-22', 5.92, 5.72],
+  // SEC vs ACC
+  ['Florida',      'SEC',     'Miami',         'ACC',     '41-17', 5.44, 5.12],
+  ['Vanderbilt',   'SEC',     'NC State',      'ACC',     '35-14', 5.28, 5.48],
+  ['Kentucky',     'SEC',     'Virginia',      'ACC',     '38-21', 5.62, 5.84],
+  ['Tennessee',    'SEC',     'NC State',      'ACC',     '51-10', 6.92, 5.48],
+  ['Mississippi State','SEC', 'Florida State', 'ACC',     '35-31', 5.44, 5.64],
+  // Big Ten vs Big 12
+  ['Ohio State',   'Big Ten', 'Texas Tech',    'Big 12',  '41-20', 7.44, 5.68],
+  ['Penn State',   'Big Ten', 'Iowa State',    'Big 12',  '31-24', 6.88, 5.52],
+  ['Michigan',     'Big Ten', 'Oklahoma State','Big 12',  '21-14', 6.12, 5.44],
+  ['Oregon',       'Big Ten', 'Baylor',        'Big 12',  '38-17', 7.22, 5.38],
+  ['Iowa',         'Big Ten', 'Kansas State',  'Big 12',  '20-17', 5.18, 5.12],
+  ['Wisconsin',    'Big Ten', 'Utah',          'Big 12',  '28-22', 5.32, 5.28],
+  ['USC',          'Big Ten', 'Arizona State', 'Big 12',  '34-27', 6.44, 5.48],
+  ['UCLA',         'Big Ten', 'Colorado',      'Big 12',  '31-28', 5.88, 5.82],
+  // Big Ten vs ACC
+  ['Ohio State',   'Big Ten', 'Notre Dame',    'ACC',     '34-23', 7.44, 5.88],
+  ['Michigan',     'Big Ten', 'Clemson',       'ACC',     '24-21', 6.12, 5.24],
+  ['Penn State',   'Big Ten', 'Louisville',    'ACC',     '33-14', 6.88, 5.62],
+  ['Oregon',       'Big Ten', 'Boston College','ACC',     '43-14', 7.22, 5.78],
+  // Big 12 vs ACC
+  ['BYU',          'Big 12',  'SMU',           'ACC',     '35-31', 6.18, 5.92],
+  ['TCU',          'Big 12',  'Clemson',       'ACC',     '34-27', 5.72, 5.24],
+  ['Kansas State', 'Big 12',  'Florida State', 'ACC',     '28-24', 5.12, 5.64],
+  ['Iowa State',   'Big 12',  'Notre Dame',    'ACC',     '24-21', 5.52, 5.88],
+  ['Oklahoma State','Big 12', 'Pitt',          'ACC',     '31-24', 5.44, 5.44],
+  ['Texas Tech',   'Big 12',  'NC State',      'ACC',     '38-21', 5.68, 5.48],
+  // Power vs Group of 5
+  ['Alabama',      'SEC',     'Tulane',        'American','34-14', 6.84, 6.12],
+  ['Georgia',      'SEC',     'Memphis',       'American','49-21', 7.12, 6.24],
+  ['Ohio State',   'Big Ten', 'Akron',         'MAC',     '52-6',  7.44, 4.88],
+  ['Michigan',     'Big Ten', 'Bowling Green', 'MAC',     '31-14', 6.12, 5.12],
+  ['Oregon',       'Big Ten', 'San Jose State','MWC',     '44-14', 7.22, 5.44],
+  ['Penn State',   'Big Ten', 'Bowling Green', 'MAC',     '34-13', 6.88, 5.12],
+  ['Texas',        'SEC',     'UTSA',          'CUSA',    '44-20', 7.31, 5.62],
+  ['LSU',          'SEC',     'South Alabama', 'Sun Belt','42-10', 7.08, 5.88],
+  ['Ole Miss',     'SEC',     'Georgia Southern','Sun Belt','42-17',7.24, 6.12],
+  ['Boise State',  'MWC',    'Oregon State',  'Pac-12',  '45-29', 6.82, 5.44],
+  ['UNLV',         'MWC',    'Kansas',        'Big 12',  '24-24', 5.94, 5.88],
+  ['Colorado State','MWC',   'San Jose State','MWC',     '31-28', 6.12, 5.68],
+  ['Tulane',       'American','Kansas State', 'Big 12',  '28-21', 6.12, 5.12],
+  ['Memphis',      'American','Iowa State',   'Big 12',  '34-31', 6.24, 5.52],
+  ['James Madison','Sun Belt','Virginia Tech', 'ACC',     '27-22', 6.44, 5.82],
+  ['Appalachian State','Sun Belt','Miami',    'ACC',     '20-17', 5.88, 5.12],
+  ['Coastal Carolina','Sun Belt','Clemson',   'ACC',     '14-34', 4.88, 5.24],
+  ['Marshall',     'Sun Belt','Notre Dame',   'ACC',     '10-49', 4.62, 5.88],
+  // Bowl Games (flagged, not counted in CSS)
+  ['Ohio State',   'Big Ten', 'Notre Dame',    'ACC',     '34-23', 7.44, 5.88, 'bowl'],
+  ['Georgia',      'SEC',     'Texas',         'SEC',     '22-19', 7.12, 7.31, 'same-conf'],
+  ['Penn State',   'Big Ten', 'Boise State',   'MWC',     '31-14', 6.88, 6.82, 'bowl'],
+  ['Texas',        'SEC',     'Arizona State', 'Big 12',  '39-31', 7.31, 5.48, 'bowl'],
+  ['Indiana',      'Big Ten', 'Notre Dame',    'ACC',     '20-27', 5.28, 5.88, 'bowl'],
+  ['Clemson',      'ACC',     'Texas',         'SEC',     '34-13', 5.24, 7.31, 'bowl'],
+  ['Boise State',  'MWC',    'Penn State',    'Big Ten', '14-31', 6.82, 6.88, 'bowl'],
+];
+
+// ── COMPUTE CSS ────────────────────────────────────────────────
+function computeCSS() {
+  // Only regular season cross-conference games (no 'bowl', no 'same-conf')
+  const reg = GAMES.filter(g => !g[7]);
+  
+  // Per-conference accumulator
+  const acc = {};
+  Object.keys(CONFS).forEach(c => {
+    acc[c] = { deltas: [], wins: 0, games: 0, totalYPPG: 0, totalOYPPG: 0 };
+  });
+
+  reg.forEach(([homeTeam, homeConf, awayTeam, awayConf, score, homeYPPG, awayOYPPG]) => {
+    if (homeConf === awayConf) return;
+    const delta = homeYPPG - awayOYPPG;
+    const [hs, as] = score.split('-').map(Number);
+    const homeWon  = hs > as;
+
+    // Home conference gets +delta, away conference gets -delta
+    if (acc[homeConf]) {
+      acc[homeConf].deltas.push(delta);
+      acc[homeConf].totalYPPG  += homeYPPG;
+      acc[homeConf].totalOYPPG += awayOYPPG;
+      acc[homeConf].games++;
+      if (homeWon) acc[homeConf].wins++;
+    }
+    if (acc[awayConf]) {
+      acc[awayConf].deltas.push(-delta); // away conf sees the inverse
+      acc[awayConf].totalYPPG  += awayOYPPG;
+      acc[awayConf].totalOYPPG += homeYPPG;
+      acc[awayConf].games++;
+      if (!homeWon) acc[awayConf].wins++;
+    }
+  });
+
+  // Build result array
+  const results = [];
+  Object.entries(acc).forEach(([conf, d]) => {
+    if (d.games < 3) return;
+    const css = d.deltas.reduce((a,b)=>a+b,0) / d.deltas.length;
+    const avgYPPG  = d.totalYPPG  / d.games;
+    const avgOYPPG = d.totalOYPPG / d.games;
+    results.push({ conf, css, avgYPPG, avgOYPPG, games: d.games, wins: d.wins });
+  });
+
+  results.sort((a,b) => b.css - a.css);
+
+  // Assign OVR (60-99)
+  const min = Math.min(...results.map(r=>r.css));
+  const max = Math.max(...results.map(r=>r.css));
+  results.forEach(r => {
+    const norm = max === min ? 0.5 : (r.css - min) / (max - min);
+    r.ovr = Math.round(Math.max(60, Math.min(99, 60 + 39 * Math.pow(norm, 1.35))));
+  });
+
+  return results;
+}
+
+// ── HEAD-TO-HEAD MATRIX ────────────────────────────────────────
+function computeMatrix() {
+  const confs = Object.keys(CONFS).filter(c => c !== 'Ind');
+  const matrix = {};
+  confs.forEach(a => {
+    matrix[a] = {};
+    confs.forEach(b => { matrix[a][b] = { deltas: [] }; });
+  });
+
+  const reg = GAMES.filter(g => !g[7]);
+  reg.forEach(([homeTeam, homeConf, awayTeam, awayConf, score, homeYPPG, awayOYPPG]) => {
+    if (homeConf === awayConf) return;
+    if (!matrix[homeConf] || !matrix[awayConf]) return;
+    const delta = homeYPPG - awayOYPPG;
+    matrix[homeConf][awayConf].deltas.push(delta);
+    matrix[awayConf][homeConf].deltas.push(-delta);
+  });
+
+  // Average
+  confs.forEach(a => {
+    confs.forEach(b => {
+      const d = matrix[a][b].deltas;
+      matrix[a][b].avg = d.length ? d.reduce((x,y)=>x+y,0)/d.length : null;
+      matrix[a][b].n   = d.length;
+    });
+  });
+  return { matrix, confs };
+}
+
+// ── RENDER FUNCTIONS ───────────────────────────────────────────
+function ovrBadge(ovr) {
+  const col = ovr >= 80 ? 'var(--gold)' : ovr >= 65 ? '#38BDF8' : '#FF6B6B';
+  return `<span style="background:rgba(0,0,0,.35);color:${col};font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;padding:2px 7px;border-radius:3px">${ovr}</span>`;
+}
+
+function deltaCell(val, n) {
+  if (val === null) return `<td style="color:var(--muted);text-align:center;font-size:.68rem">—</td>`;
+  const col = val > 0.3 ? '#4caf50' : val < -0.3 ? '#ef5350' : 'var(--muted)';
+  const sign = val > 0 ? '+' : '';
+  return `<td style="text-align:center;color:${col};font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:600">${sign}${val.toFixed(2)}${n ? `<div style="font-size:.6rem;color:var(--muted)">(${n}g)</div>` : ''}</td>`;
+}
+
+function renderCSS(results) {
+  const tbody = document.getElementById('conf-css-body');
+  if (!tbody) return;
+  tbody.innerHTML = results.map((r, i) => {
+    const cssSign = r.css > 0 ? '+' : '';
+    const cssCol  = r.css > 0.5 ? '#4caf50' : r.css < -0.3 ? '#ef5350' : 'var(--muted)';
+    const medal   = i===0?'🥇':i===1?'🥈':i===2?'🥉':'';
+    return `<tr>
+      <td style="font-family:'JetBrains Mono',monospace;color:var(--muted)">${i+1}</td>
+      <td><span style="font-weight:700;color:var(--white)">${medal} ${r.conf}</span></td>
+      <td style="color:var(--muted);font-size:.8rem">${(CONFS[r.conf]?.teams||[]).length}</td>
+      <td style="font-family:'JetBrains Mono',monospace">${r.games}</td>
+      <td style="font-family:'JetBrains Mono',monospace;color:#38BDF8">${r.avgYPPG.toFixed(2)}</td>
+      <td style="font-family:'JetBrains Mono',monospace;color:#ab47bc">${r.avgOYPPG.toFixed(2)}</td>
+      <td style="font-family:'JetBrains Mono',monospace;color:${cssCol};font-weight:700;font-size:.9rem">${cssSign}${r.css.toFixed(3)}</td>
+      <td>${ovrBadge(r.ovr)}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderMatrix({ matrix, confs }) {
+  const el = document.getElementById('conf-matrix');
+  if (!el) return;
+
+  // Short labels
+  const labels = { 'SEC':'SEC','Big Ten':'B10','Big 12':'B12','ACC':'ACC','Pac-12':'P12','American':'AAC','MWC':'MWC','CUSA':'CUSA','MAC':'MAC','Sun Belt':'SB' };
+
+  let html = `<table style="border-collapse:collapse;font-size:.7rem;white-space:nowrap;min-width:600px">
+    <thead><tr>
+      <th style="padding:6px 10px;background:var(--ink-3);border:1px solid var(--line);font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--muted)">← vs →</th>`;
+  confs.forEach(c => {
+    html += `<th style="padding:5px 8px;background:var(--ink-3);border:1px solid var(--line);font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--gold)">${labels[c]||c}</th>`;
+  });
+  html += `</tr></thead><tbody>`;
+
+  confs.forEach(a => {
+    html += `<tr><th style="padding:5px 10px;background:var(--ink-3);border:1px solid var(--line);font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--gold);text-align:left">${labels[a]||a}</th>`;
+    confs.forEach(b => {
+      if (a === b) {
+        html += `<td style="background:var(--ink-2);border:1px solid var(--line);text-align:center;color:var(--muted)">—</td>`;
+      } else {
+        const v = matrix[a][b];
+        html += `<td style="border:1px solid var(--line);text-align:center;padding:4px 6px">`;
+        if (v.n === 0) {
+          html += `<span style="color:var(--muted);font-size:.65rem">n/a</span>`;
+        } else {
+          const col = v.avg > 0.3 ? '#4caf50' : v.avg < -0.3 ? '#ef5350' : '#9aa8c4';
+          const sign = v.avg > 0 ? '+' : '';
+          html += `<span style="color:${col};font-family:'JetBrains Mono',monospace;font-weight:600">${sign}${v.avg.toFixed(2)}</span>
+            <div style="font-size:.58rem;color:var(--muted)">${v.n}g</div>`;
+        }
+        html += `</td>`;
+      }
+    });
+    html += `</tr>`;
+  });
+
+  html += `</tbody></table>`;
+  el.innerHTML = html;
+}
+
+function renderLog(games) {
+  const tbody = document.getElementById('game-log-body');
+  if (!tbody) return;
+  tbody.innerHTML = games.map(g => {
+    const [homeTeam, homeConf, awayTeam, awayConf, score, homeYPPG, awayOYPPG, flag] = g;
+    const delta   = homeYPPG - awayOYPPG;
+    const sign    = delta > 0 ? '+' : '';
+    const dCol    = delta > 0.5 ? '#4caf50' : delta < -0.3 ? '#ef5350' : 'var(--muted)';
+    const [hs, as] = score.split('-').map(Number);
+    const winner  = hs > as ? homeTeam : as > hs ? awayTeam : 'TIE';
+    const isBowl  = flag === 'bowl';
+    return `<tr style="${isBowl?'opacity:.6':''}">
+      <td class="pl">${homeTeam}${isBowl?' <span style="font-size:.6rem;color:var(--gold)">[Bowl]</span>':''}</td>
+      <td style="font-size:.75rem;color:var(--muted)">${homeConf}</td>
+      <td class="pl">${awayTeam}</td>
+      <td style="font-size:.75rem;color:var(--muted)">${awayConf}</td>
+      <td style="font-family:'JetBrains Mono',monospace;font-size:.8rem">${score}</td>
+      <td style="font-family:'JetBrains Mono',monospace;color:#38BDF8">${homeYPPG.toFixed(2)}</td>
+      <td style="font-family:'JetBrains Mono',monospace;color:#ab47bc">${awayOYPPG.toFixed(2)}</td>
+      <td style="font-family:'JetBrains Mono',monospace;color:${dCol};font-weight:700">${sign}${delta.toFixed(2)}</td>
+      <td style="font-size:.78rem;color:var(--white)">${winner}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ── MATCHUP EXPLORER ───────────────────────────────────────────
+function populateSelects(results) {
+  ['conf-a-sel','conf-b-sel','log-conf-filter'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const isLog = id === 'log-conf-filter';
+    results.forEach(r => {
+      const opt = document.createElement('option');
+      opt.value = r.conf;
+      opt.textContent = r.conf;
+      el.appendChild(opt);
+    });
+  });
+}
+
+window.runMatchup = function() {
+  const a = document.getElementById('conf-a-sel').value;
+  const b = document.getElementById('conf-b-sel').value;
+  const el = document.getElementById('matchup-result');
+  if (!a || !b || a === b) {
+    el.innerHTML = '<div style="color:var(--muted);font-size:.82rem">Select two different conferences to compare.</div>';
+    return;
+  }
+
+  const games = GAMES.filter(g =>
+    !g[7] &&
+    ((g[1]===a && g[3]===b) || (g[1]===b && g[3]===a))
+  );
+
+  if (!games.length) {
+    el.innerHTML = `<div style="color:var(--muted);font-size:.82rem">No cross-conference matchups recorded between ${a} and ${b} this season.</div>`;
+    return;
+  }
+
+  let aWins=0, bWins=0, aDeltas=[], bDeltas=[];
+  games.forEach(g => {
+    const [,hc,,ac,score,hY,aY] = g;
+    const [hs,as] = score.split('-').map(Number);
+    const delta = hY - aY;
+    if (hc===a) { aDeltas.push(delta); if(hs>as) aWins++; else bWins++; }
+    else         { bDeltas.push(-delta); if(as>hs) aWins++; else bWins++; }
+  });
+
+  const aCSS = aDeltas.length ? aDeltas.reduce((x,y)=>x+y,0)/aDeltas.length : 0;
+  const bCSS = bDeltas.length ? bDeltas.reduce((x,y)=>x+y,0)/bDeltas.length : 0;
+  const winner = aCSS > bCSS ? a : bCSS > aCSS ? b : 'Even';
+  const wCol   = '#4caf50';
+
+  el.innerHTML = `
+    <div style="background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:16px 20px;margin-bottom:12px">
+      <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center;text-align:center">
+        <div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:900;color:var(--white)">${a}</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:1.1rem;font-weight:700;color:${aCSS>=bCSS?'#4caf50':'#ef5350'};margin-top:4px">${aCSS>=0?'+':''}${aCSS.toFixed(3)} CSS</div>
+          <div style="font-size:.75rem;color:var(--muted);margin-top:4px">${aWins}W · ${aDeltas.length} games</div>
+        </div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:900;color:var(--muted)">VS</div>
+        <div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:900;color:var(--white)">${b}</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:1.1rem;font-weight:700;color:${bCSS>=aCSS?'#4caf50':'#ef5350'};margin-top:4px">${bCSS>=0?'+':''}${bCSS.toFixed(3)} CSS</div>
+          <div style="font-size:.75rem;color:var(--muted);margin-top:4px">${bWins}W · ${bDeltas.length} games</div>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:14px;padding-top:14px;border-top:1px solid var(--line)">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--muted)">YPPG Edge → </span>
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;color:${wCol}">${winner === 'Even' ? 'EVEN' : winner + ' +' + Math.abs(aCSS-bCSS).toFixed(3)}</span>
+      </div>
+    </div>
+    <div class="tbl-wrap">
+  <button class="csv-btn" onclick="exportTableCSV('tbl-ncaaf-8','ncaaf_game_log_2024')" title="Export Game Log to CSV"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 1v7M3.5 5.5L6 8l2.5-2.5"/><path d="M1 9v1.5a.5.5 0 00.5.5h9a.5.5 0 00.5-.5V9"/></svg> Export CSV</button>
+  <table class="tbl" id="tbl-ncaaf-8"><thead><tr><th>Home</th><th>Away</th><th>Score</th><th>Delta</th></tr></thead><tbody>
+    ${games.map(g => {
+      const delta = g[5]-g[6];
+      const sign  = delta>0?'+':'';
+      const col   = delta>0?'#4caf50':'#ef5350';
+      return `<tr><td class="pl">${g[0]} <span style="font-size:.7rem;color:var(--muted)">(${g[1]})</span></td><td class="pl">${g[2]} <span style="font-size:.7rem;color:var(--muted)">(${g[3]})</span></td><td style="font-family:'JetBrains Mono',monospace">${g[4]}</td><td style="color:${col};font-family:'JetBrains Mono',monospace;font-weight:700">${sign}${delta.toFixed(2)}</td></tr>`;
+    }).join('')}
+    </tbody></table></div>`;
+};
+
+window.filterLog = function() {
+  const conf  = document.getElementById('log-conf-filter').value;
+  const sort  = document.getElementById('log-sort').value;
+  let filtered = GAMES.filter(g => {
+    if (conf && g[1] !== conf && g[3] !== conf) return false;
+    return true;
+  });
+  if (sort === 'delta-desc') filtered.sort((a,b)=>((b[5]-b[6])-(a[5]-a[6])));
+  else if (sort === 'delta-asc') filtered.sort((a,b)=>((a[5]-a[6])-(b[5]-b[6])));
+  renderLog(filtered);
+};
+
+// ── BOOT ──────────────────────────────────────────────────────
+function boot() {
+  const results = computeCSS();
+  const { matrix, confs } = computeMatrix();
+  renderCSS(results);
+  renderMatrix({ matrix, confs });
+  renderLog(GAMES.filter(g=>!g[7]||g[7]==='bowl'));
+  populateSelects(results);
+}
+
+// Boot when conf tab becomes visible
+const _origShowTabConf = window.showTab;
+window.showTab = function(id) {
+  if (typeof _origShowTabConf === 'function') _origShowTabConf(id);
+  if (id === 'conf' && !window._confBooted) {
+    window._confBooted = true;
+    boot();
+  }
+};
+
+// Also boot if tab is already visible
+document.addEventListener('DOMContentLoaded', () => {
+  const panel = document.getElementById('tab-conf');
+  if (panel && panel.classList.contains('active')) boot();
+});
+
+})();
+
+</script>
+<script>
+// ── Sortable Tables ─────────────────────────────────────────────
+function sortTable(th, tableId) {
+  const tbl  = document.getElementById(tableId);
+  if (!tbl) return;
+  const tbody = tbl.querySelector('tbody');
+  const thead = tbl.querySelector('thead');
+  const ths   = Array.from(thead.querySelectorAll('th'));
+  const colIdx= ths.indexOf(th);
+  const rows  = Array.from(tbody.querySelectorAll('tr'));
+
+  // Determine sort direction
+  const wasAsc = th.classList.contains('sort-asc');
+  // Clear all sort indicators
+  ths.forEach(t => t.classList.remove('sort-asc','sort-desc'));
+  const asc = !wasAsc;
+  th.classList.add(asc ? 'sort-asc' : 'sort-desc');
+
+  // Sort rows
+  rows.sort((a, b) => {
+    const av = a.cells[colIdx]?.textContent.trim() || '';
+    const bv = b.cells[colIdx]?.textContent.trim() || '';
+    // Try numeric (strip commas, +, %)
+    const an = parseFloat(av.replace(/[,%+]/g,''));
+    const bn = parseFloat(bv.replace(/[,%+]/g,''));
+    if (!isNaN(an) && !isNaN(bn)) return asc ? an-bn : bn-an;
+    // String compare
+    return asc ? av.localeCompare(bv) : bv.localeCompare(av);
+  });
+  rows.forEach(r => tbody.appendChild(r));
+}
+
+// Auto-attach sort handlers to all .tbl tables
+function initSortableTables() {
+  document.querySelectorAll('table.tbl').forEach(tbl => {
+    const id = tbl.id;
+    if (!id) return;
+    tbl.querySelectorAll('thead th').forEach((th, i) => {
+      th.style.cursor = 'pointer';
+      th.title = 'Click to sort';
+      th.addEventListener('click', () => sortTable(th, id));
+    });
+  });
+}
+document.addEventListener('DOMContentLoaded', initSortableTables);
+</script>
+</body>
+</html>
