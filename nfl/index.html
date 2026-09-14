@@ -1197,8 +1197,26 @@ id="tab-standings" class="tab-panel">
         <div><div class="score-bar-label">Correct</div><div class="score-bar-val" id="correct">0 / 0</div></div>
         <div><div class="score-bar-label">Streak</div><div class="score-bar-val" id="streak">0</div></div>
       </div>
+      <!-- Game Picker -->
+      <div id="guess-game-picker" style="margin-bottom:16px;padding:14px 16px;background:var(--ink-3);border-radius:10px;border:1px solid var(--line)">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--gold);text-transform:uppercase;letter-spacing:.12em;margin-bottom:10px">// Choose a Game</div>
+        <div id="guess-game-list" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--muted)">Click the Guess the Play tab to load games…</div>
+        </div>
+        <div id="guess-status" style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--muted);min-height:16px;margin-top:4px"></div>
+        <div style="margin-top:12px">
+          <button onclick="initGame()" style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:10px 24px;border-radius:7px;border:none;background:var(--gold);color:var(--ink);cursor:pointer;transition:all .2s">
+            ▶ Start Game
+          </button>
+          <button onclick="loadGamePicker()" style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:600;padding:8px 16px;border-radius:6px;border:1px solid var(--line);background:none;color:var(--muted);cursor:pointer;margin-left:10px;transition:all .2s">
+            ↻ Refresh Games
+          </button>
+        </div>
+      </div>
+
       <div class="guess-game">
-        <div class="guess-ctx" id="ctx">Loading scenario...</div>
+        <div id="guess-game-label" style="font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:700;color:var(--gold);margin-bottom:6px;min-height:18px"></div>
+        <div class="guess-ctx" id="ctx">Select a game above and press Start Game</div>
         <div class="guess-q">What does the offense call?</div>
         <div class="timer-row"><div class="timer-track"><div class="timer-fill" id="timer-fill" style="width:100%"></div></div><div class="timer-num" id="timer-num">15</div></div>
         <div class="opts" id="opts"></div>
@@ -1241,7 +1259,9 @@ function showTab(id) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('tab-' + id).classList.add('active');
   event.target && event.target.classList.add('active');
-  if (id === 'guess' && !gameStarted) initGame();
+  if (id === 'guess') {
+    if (!gameStarted) loadGamePicker();
+  }
 }
 
 // Sub-tab switching
@@ -1270,16 +1290,18 @@ let plays        = FALLBACK_PLAYS;
 let liveGameName = '';
 
 // ── ESPN Play-by-Play fetcher ─────────────────────────────────
-async function fetchLivePlays() {
+async function fetchLivePlays(forcedGameId) {
   const statusEl = document.getElementById('guess-status');
   try {
     // Step 1: Get live scoreboard to find active game IDs
-    const sbRes  = await fetch('https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard');
+    const sbRes  = await espnFetch(ESPN_NFL_RAW);
     const sbData = await sbRes.json();
     const events = sbData.events || [];
 
-    // Prefer live games, fall back to most recent completed
-    let target = events.find(e => e.status.type.started && !e.status.type.completed);
+    // Use selected game or auto-pick
+    let target = forcedGameId
+      ? events.find(e => e.id === forcedGameId)
+      : events.find(e => e.status.type.started && !e.status.type.completed);
     if (!target) target = events.filter(e => e.status.type.completed).pop();
     if (!target) {
       if (statusEl) statusEl.textContent = 'No live games — using practice scenarios';
@@ -1292,7 +1314,7 @@ async function fetchLivePlays() {
     liveGameName   = gameDesc;
 
     // Step 2: Fetch play-by-play for that game
-    const pbpRes  = await fetch('https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=' + gameId);
+    const pbpRes  = await espnFetch(ESPN_SUM_RAW + gameId);
     const pbpData = await pbpRes.json();
 
     // Extract plays from drives
@@ -1380,6 +1402,80 @@ async function fetchLivePlays() {
 
 let idx = 0, score = 0, correctCount = 0, total = 0, streak = 0, timer, timeLeft = 15, gameStarted = false;
 
+// ── Load available games into picker ─────────────────────────
+let selectedGameId = null;
+
+async function loadGamePicker() {
+  const listEl = document.getElementById('guess-game-list');
+  if (!listEl) return;
+  try {
+    const data   = await espnFetch(ESPN_NFL_RAW);
+    const events = data.events || [];
+    if (!events.length) {
+      listEl.innerHTML = '<div style="color:var(--muted);font-size:.72rem;font-family:monospace">No games this week yet</div>';
+      return;
+    }
+    listEl.innerHTML = events.map(function(e) {
+      const comps = e.competitions[0];
+      const home  = comps.competitors.find(t => t.homeAway === 'home');
+      const away  = comps.competitors.find(t => t.homeAway === 'away');
+      const hAbbr = home.team.abbreviation;
+      const aAbbr = away.team.abbreviation;
+      const live  = e.status.type.started && !e.status.type.completed;
+      const done  = e.status.type.completed;
+      const label = aAbbr + ' vs ' + hAbbr;
+      const badge = live ? '<span style="color:#4caf50;font-size:.55rem"> 🔴LIVE</span>'
+                  : done ? '<span style="color:var(--muted);font-size:.55rem"> Final</span>'
+                  : '<span style="color:#4fc3f7;font-size:.55rem"> Upcoming</span>';
+      const disabled = !done && !live ? 'opacity:.5;cursor:not-allowed' : 'cursor:pointer';
+      return '<button onclick="selectGame('' + e.id + '','' + label + '')" '
+        + 'id="game-btn-' + e.id + '" '
+        + 'style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:600;'
+        + 'padding:6px 12px;border-radius:5px;border:1px solid var(--line);'
+        + 'background:var(--ink-3);color:var(--white);' + disabled + ';transition:all .2s">'
+        + label + badge + '</button>';
+    }).join('') + 
+    '<button onclick="selectGame(null,'Practice Scenarios')" '
+    + 'id="game-btn-practice" '
+    + 'style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:600;'
+    + 'padding:6px 12px;border-radius:5px;border:1px solid rgba(242,194,48,.4);'
+    + 'background:rgba(242,194,48,.08);color:var(--gold);cursor:pointer;transition:all .2s">'
+    + '🎯 Practice Scenarios</button>';
+
+    // Auto-select first live game or practice
+    const liveGame = events.find(e => e.status.type.started && !e.status.type.completed);
+    if (liveGame) selectGame(liveGame.id, 
+      events.find(e=>e.id===liveGame.id).competitions[0].competitors.map(t=>t.team.abbreviation).join(' vs '));
+    else selectGame(null, 'Practice Scenarios');
+
+  } catch(err) {
+    console.error('Game picker error:', err);
+    listEl.innerHTML = '<div style="color:var(--muted);font-size:.72rem;font-family:monospace">Could not load games — using practice scenarios</div>';
+  }
+}
+
+function selectGame(gameId, label) {
+  selectedGameId = gameId;
+  // Update button styles
+  document.querySelectorAll('[id^="game-btn-"]').forEach(function(btn) {
+    btn.style.background = 'var(--ink-3)';
+    btn.style.borderColor = 'var(--line)';
+    btn.style.color = 'var(--white)';
+  });
+  const activeId = gameId ? 'game-btn-' + gameId : 'game-btn-practice';
+  const activeBtn = document.getElementById(activeId);
+  if (activeBtn) {
+    activeBtn.style.background = 'var(--gold)';
+    activeBtn.style.borderColor = 'var(--gold)';
+    activeBtn.style.color = 'var(--ink)';
+  }
+  // Update status
+  const statusEl = document.getElementById('guess-status');
+  if (statusEl) statusEl.textContent = gameId
+    ? 'Selected: ' + label + ' — press Start Game to load plays'
+    : 'Using practice scenarios';
+}
+
 async function initGame() {
   gameStarted = true;
   // Show loading state
@@ -1388,7 +1484,7 @@ async function initGame() {
   const optsEl = document.getElementById('opts');
   if (optsEl) optsEl.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted);font-family:monospace;font-size:.8rem">Fetching ESPN play-by-play…</div>';
 
-  await fetchLivePlays();
+  await fetchLivePlays(selectedGameId);
 
   idx = Math.floor(Math.random() * plays.length);
   renderPlay();
@@ -5179,7 +5275,22 @@ window.fllSendInvites     = fllSendInvites;
 <script>
 // ── NFL Live Scores via ESPN API ──────────────────────────────
 (function(){
-  const ESPN_NFL = 'https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard';
+  // ESPN API via CORS proxy (needed for GitHub Pages hosting)
+  const ESPN_NFL_RAW  = 'https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard';
+  const ESPN_SUM_RAW  = 'https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=';
+  const CORS_PROXY    = 'https://api.allorigins.win/get?url=';
+
+  function espnFetch(url) {
+    // Try direct first (works on localhost), fall back to CORS proxy
+    return fetch(url).then(r => {
+      if (!r.ok) throw new Error('Direct fetch failed');
+      return r.json();
+    }).catch(() =>
+      fetch(CORS_PROXY + encodeURIComponent(url))
+        .then(r => r.json())
+        .then(d => JSON.parse(d.contents))
+    );
+  }
   const TEAM_SLUGS = {
     'ARI':'cardinals','ATL':'falcons','BAL':'ravens','BUF':'bills',
     'CAR':'panthers','CHI':'bears','CIN':'bengals','CLE':'browns',
@@ -5278,7 +5389,7 @@ window.fllSendInvites     = fllSendInvites;
     if (!grid) return;
 
     try {
-      const res  = await fetch(ESPN_NFL);
+      const res  = await espnFetch(ESPN_NFL_RAW);
       const data = await res.json();
       const events = data.events || [];
 
