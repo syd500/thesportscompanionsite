@@ -1202,7 +1202,9 @@ id="tab-standings" class="tab-panel">
         <div class="guess-q">What does the offense call?</div>
         <div class="timer-row"><div class="timer-track"><div class="timer-fill" id="timer-fill" style="width:100%"></div></div><div class="timer-num" id="timer-num">15</div></div>
         <div class="opts" id="opts"></div>
-        <button class="next-btn" id="next-btn" onclick="nextPlay()">Next Play →</button>
+        
+    <div id="play-result" style="display:none;background:rgba(242,194,48,.08);border:1px solid rgba(242,194,48,.2);border-radius:6px;padding:10px 14px;font-size:.82rem;color:var(--white);margin-bottom:10px;line-height:1.5"></div>
+    <button class="next-btn" id="next-btn" onclick="nextPlay()">Next Play →</button>
       </div>
     </div>
   </div>
@@ -1250,34 +1252,166 @@ function showSub(id) {
   event.target.classList.add('active');
 }
 
-// GUESS THE PLAY GAME
-const plays = [
-  { ctx: "3rd & 7 · Own 35 · Q2 · Tied 7-7 · 2 min warning", correct: "Short Pass — Crossing Route", opts: ["Short Pass — Crossing Route","Outside Zone Run","QB Draw","Deep Shot"] },
-  { ctx: "1st & 10 · Opp 25 · Q4 · Down by 3 · 5:30 left", correct: "Play Action Pass", opts: ["Play Action Pass","Inside Zone Run","Screen Pass","QB Sneak"] },
-  { ctx: "4th & 1 · Opp 2 · Q4 · Up by 4 · 1:10 left", correct: "QB Sneak", opts: ["QB Sneak","Outside Run","Pass — Fade Route","Field Goal"] },
-  { ctx: "2nd & 8 · Own 22 · Q1 · 0-0 · 12:45 left", correct: "Short Pass — Slant", opts: ["Short Pass — Slant","Draw Run","Deep Pass — Post","Screen Pass"] },
-  { ctx: "3rd & 2 · Own 48 · Q3 · Up by 7 · 8:20 left", correct: "Inside Zone Run", opts: ["Inside Zone Run","Play Action Deep","Short Pass — Out","Punt"] },
-  { ctx: "1st & 10 · Opp 40 · Q2 · Down by 10 · 6:00 left", correct: "Deep Pass — Corner Route", opts: ["Deep Pass — Corner Route","Inside Run","Screen Pass","Short Pass — Flat"] },
-  { ctx: "2nd & 4 · Opp 15 · Q4 · Tied · 2:45 left", correct: "Run — Power Right", opts: ["Run — Power Right","Pass — Slant","Pass — Fade","Play Action Boot"] },
+// ── GUESS THE PLAY — Live ESPN Play-by-Play ──────────────────
+// Fallback plays used when no live games are available
+const FALLBACK_PLAYS = [
+  { ctx:"3rd & 7 · Own 35 · Q2 · Tied 7-7 · 2 min warning", game:"Fallback Scenario", correct:"Short Pass — Crossing Route", opts:["Short Pass — Crossing Route","Outside Zone Run","QB Draw","Deep Shot"], result:"Completed for 9 yards — First Down!" },
+  { ctx:"1st & 10 · Opp 25 · Q4 · Down by 3 · 5:30 left",   game:"Fallback Scenario", correct:"Play Action Pass", opts:["Play Action Pass","Inside Zone Run","Screen Pass","QB Sneak"], result:"Play action fake suckers LB — 18 yard gain!" },
+  { ctx:"4th & 1 · Opp 2 · Q4 · Up by 4 · 1:10 left",       game:"Fallback Scenario", correct:"QB Sneak", opts:["QB Sneak","Outside Run","Pass — Fade Route","Field Goal"], result:"QB sneaks for the TD — game over!" },
+  { ctx:"2nd & 8 · Own 22 · Q1 · 0-0 · 12:45 left",         game:"Fallback Scenario", correct:"Short Pass — Slant", opts:["Short Pass — Slant","Draw Run","Deep Pass — Post","Screen Pass"], result:"Quick slant gains 7, sets up manageable 3rd down." },
+  { ctx:"3rd & 2 · Own 48 · Q3 · Up by 7 · 8:20 left",      game:"Fallback Scenario", correct:"Inside Zone Run", opts:["Inside Zone Run","Play Action Deep","Short Pass — Out","Punt"], result:"Inside zone gets 4 — First Down! Clock running." },
+  { ctx:"1st & 10 · Opp 40 · Q2 · Down by 10 · 6:00 left",  game:"Fallback Scenario", correct:"Deep Pass — Corner Route", opts:["Deep Pass — Corner Route","Inside Run","Screen Pass","Short Pass — Flat"], result:"Corner route beats CB — 28 yard gain!" },
+  { ctx:"2nd & 4 · Opp 15 · Q4 · Tied · 2:45 left",         game:"Fallback Scenario", correct:"Run — Power Right", opts:["Run — Power Right","Pass — Slant","Pass — Fade","Play Action Boot"], result:"Power right gets 6 — inside the 10!" },
 ];
+
+// Live plays fetched from ESPN
+let livePlays    = [];
+let plays        = FALLBACK_PLAYS;
+let liveGameName = '';
+
+// ── ESPN Play-by-Play fetcher ─────────────────────────────────
+async function fetchLivePlays() {
+  const statusEl = document.getElementById('guess-status');
+  try {
+    // Step 1: Get live scoreboard to find active game IDs
+    const sbRes  = await fetch('https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard');
+    const sbData = await sbRes.json();
+    const events = sbData.events || [];
+
+    // Prefer live games, fall back to most recent completed
+    let target = events.find(e => e.status.type.started && !e.status.type.completed);
+    if (!target) target = events.filter(e => e.status.type.completed).pop();
+    if (!target) {
+      if (statusEl) statusEl.textContent = 'No live games — using practice scenarios';
+      plays = FALLBACK_PLAYS;
+      return;
+    }
+
+    const gameId   = target.id;
+    const gameDesc = target.name || target.shortName || '';
+    liveGameName   = gameDesc;
+
+    // Step 2: Fetch play-by-play for that game
+    const pbpRes  = await fetch('https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=' + gameId);
+    const pbpData = await pbpRes.json();
+
+    // Extract plays from drives
+    const drives   = pbpData.drives?.previous || pbpData.drives?.current || [];
+    const allPlays = [];
+
+    drives.forEach(function(drive) {
+      (drive.plays || []).forEach(function(play) {
+        // Only use scrimmage plays (not timeouts, penalties, kickoffs)
+        const type = play.type?.text || '';
+        const skip = ['Timeout','Kickoff','Extra Point','Two-Point','End of','Coin Toss','End Period'];
+        if (skip.some(s => type.includes(s))) return;
+        if (!play.start) return;
+
+        const down    = play.start.down;
+        const dist    = play.start.distance;
+        const ydline  = play.start.yardsToEndzone;
+        const quarter = play.period?.number || 1;
+        const clock   = play.clock?.displayValue || '';
+        const homeScore = drive.homeScore || 0;
+        const awayScore = drive.awayScore || 0;
+        const scoreDiff = homeScore - awayScore;
+        const scoreCtx  = scoreDiff === 0 ? 'Tied ' + homeScore + '-' + awayScore
+          : scoreDiff > 0 ? 'Up by ' + Math.abs(scoreDiff)
+          : 'Down by ' + Math.abs(scoreDiff);
+
+        // Build context string
+        const downStr = ['','1st','2nd','3rd','4th'][down] || down + 'th';
+        const yardStr = ydline <= 50 ? 'Opp ' + (100 - ydline) : 'Own ' + ydline;
+        const ctx = downStr + ' & ' + dist + ' · ' + yardStr + ' · Q' + quarter + ' · ' + scoreCtx + ' · ' + clock;
+
+        // Determine actual play type from description
+        const desc  = (play.text || play.description || '').toLowerCase();
+        let correct = '';
+        let result  = play.text || play.description || '';
+        let opts    = [];
+
+        if (desc.includes('pass') || desc.includes('incomplete') || desc.includes('complete')) {
+          if (desc.includes('screen')) { correct = 'Screen Pass'; }
+          else if (desc.includes('deep') || ydline > 25) { correct = 'Deep Pass'; }
+          else if (desc.includes('play action') || desc.includes('fake')) { correct = 'Play Action Pass'; }
+          else { correct = 'Short Pass'; }
+          opts = ['Short Pass','Deep Pass','Play Action Pass','Screen Pass','Inside Run','Outside Run'];
+        } else if (desc.includes('rush') || desc.includes('run') || desc.includes('scramble')) {
+          if (desc.includes('sneak') || dist <= 1) { correct = 'QB Sneak'; }
+          else if (desc.includes('outside') || desc.includes('sweep')) { correct = 'Outside Run'; }
+          else { correct = 'Inside Run'; }
+          opts = ['Inside Run','Outside Run','QB Sneak','Short Pass','Screen Pass','Play Action Pass'];
+        } else if (desc.includes('punt')) {
+          correct = 'Punt';
+          opts = ['Punt','Field Goal','QB Sneak','Short Pass','Inside Run','Outside Run'];
+        } else if (desc.includes('field goal') || desc.includes('fg')) {
+          correct = 'Field Goal';
+          opts = ['Field Goal','Punt','QB Sneak','Short Pass','Inside Run','Outside Run'];
+        } else {
+          return; // Skip unclassifiable plays
+        }
+
+        // Shuffle and limit options to 4
+        const pool = opts.filter(o => o !== correct).sort(() => Math.random() - 0.5).slice(0,3);
+        const finalOpts = [correct, ...pool].sort(() => Math.random() - 0.5);
+
+        allPlays.push({ ctx, game: gameDesc, correct, opts: finalOpts, result });
+      });
+    });
+
+    if (allPlays.length >= 5) {
+      livePlays = allPlays.sort(() => Math.random() - 0.5); // shuffle
+      plays     = livePlays;
+      const isLiveGame = target.status.type.started && !target.status.type.completed;
+      if (statusEl) {
+        statusEl.innerHTML = (isLiveGame ? '🔴 <strong>LIVE</strong>' : '📋 Recent')
+          + ' · ' + gameDesc + ' · ' + allPlays.length + ' plays loaded';
+      }
+    } else {
+      if (statusEl) statusEl.textContent = 'Limited play data — supplementing with scenarios';
+      plays = [...allPlays, ...FALLBACK_PLAYS].sort(() => Math.random() - 0.5);
+    }
+  } catch(e) {
+    console.error('ESPN play-by-play error:', e);
+    if (statusEl) statusEl.textContent = 'Using practice scenarios (ESPN API unavailable)';
+    plays = FALLBACK_PLAYS;
+  }
+}
 
 let idx = 0, score = 0, correctCount = 0, total = 0, streak = 0, timer, timeLeft = 15, gameStarted = false;
 
-function initGame() {
+async function initGame() {
   gameStarted = true;
+  // Show loading state
+  const ctxEl = document.getElementById('ctx');
+  if (ctxEl) ctxEl.textContent = 'Loading live play data…';
+  const optsEl = document.getElementById('opts');
+  if (optsEl) optsEl.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted);font-family:monospace;font-size:.8rem">Fetching ESPN play-by-play…</div>';
+
+  await fetchLivePlays();
+
   idx = Math.floor(Math.random() * plays.length);
   renderPlay();
 }
 
 function renderPlay() {
   const p = plays[idx % plays.length];
+  // Update game label if available
+  const gameLabel = document.getElementById('guess-game-label');
+  if (gameLabel && p.game) gameLabel.textContent = p.game;
+
   document.getElementById('ctx').textContent = p.ctx;
   const shuffled = [...p.opts].sort(() => Math.random() - 0.5);
   const optsEl = document.getElementById('opts');
-  optsEl.innerHTML = shuffled.map(o =>
-    `<button class="opt" onclick="pick(this,'${o.replace(/'/g,"\\'")}','${p.correct.replace(/'/g,"\\'")}')">${o}</button>`
-  ).join('');
+  optsEl.innerHTML = shuffled.map(function(o) {
+    const safeO       = o.replace(/'/g, "\'");
+    const safeCorrect = p.correct.replace(/'/g, "\'");
+    return '<button class="opt" onclick="pick(this,\'' + safeO + '\',\'' + safeCorrect + '\')">' + o + '</button>';
+  }).join('');
   document.getElementById('next-btn').classList.remove('show');
+  // Hide result from previous play
+  const resEl = document.getElementById('play-result');
+  if (resEl) resEl.style.display = 'none';
   startTimer();
 }
 
@@ -1285,7 +1419,7 @@ function startTimer() {
   clearInterval(timer);
   timeLeft = 15;
   updateTimer();
-  timer = setInterval(() => {
+  timer = setInterval(function() {
     timeLeft--;
     updateTimer();
     if (timeLeft <= 0) { clearInterval(timer); timeUp(); }
@@ -1297,14 +1431,23 @@ function updateTimer() {
   document.getElementById('timer-fill').style.width = (timeLeft / 15 * 100) + '%';
 }
 
+function showResult(p) {
+  const resEl = document.getElementById('play-result');
+  if (resEl && p.result) {
+    resEl.textContent = '▶ ' + p.result;
+    resEl.style.display = 'block';
+  }
+}
+
 function timeUp() {
   total++;
   streak = 0;
-  document.querySelectorAll('.opt').forEach(b => b.disabled = true);
+  document.querySelectorAll('.opt').forEach(function(b) { b.disabled = true; });
   const p = plays[idx % plays.length];
-  document.querySelectorAll('.opt').forEach(b => {
-    if (b.textContent === p.correct) b.classList.add('correct');
+  document.querySelectorAll('.opt').forEach(function(b) {
+    if (b.textContent.trim() === p.correct) b.classList.add('correct');
   });
+  showResult(p);
   updateScores();
   document.getElementById('next-btn').classList.add('show');
 }
@@ -1312,7 +1455,8 @@ function timeUp() {
 function pick(btn, choice, correct) {
   clearInterval(timer);
   total++;
-  document.querySelectorAll('.opt').forEach(b => b.disabled = true);
+  document.querySelectorAll('.opt').forEach(function(b) { b.disabled = true; });
+  const p = plays[idx % plays.length];
   if (choice === correct) {
     btn.classList.add('correct');
     score += 1 + (timeLeft / 15);
@@ -1321,10 +1465,11 @@ function pick(btn, choice, correct) {
   } else {
     btn.classList.add('wrong');
     streak = 0;
-    document.querySelectorAll('.opt').forEach(b => {
-      if (b.textContent === correct) b.classList.add('correct');
+    document.querySelectorAll('.opt').forEach(function(b) {
+      if (b.textContent.trim() === correct) b.classList.add('correct');
     });
   }
+  showResult(p);
   updateScores();
   document.getElementById('next-btn').classList.add('show');
 }
@@ -1336,8 +1481,13 @@ function updateScores() {
 }
 
 function nextPlay() {
-  idx++;
-  renderPlay();
+  idx = (idx + 1) % plays.length;
+  // Refresh live plays every 10 plays
+  if (total > 0 && total % 10 === 0) {
+    fetchLivePlays().then(function() { renderPlay(); });
+  } else {
+    renderPlay();
+  }
 }
 </script>
 
